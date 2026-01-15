@@ -1239,9 +1239,10 @@ void MainWindow::slotCompress(const QVariant &val)
     options.iCPUTheadNum = m_stCompressParameter.iCPUTheadNum;
 
     bool bUseLibarchive = false;
-#ifdef __aarch64__ // 华为arm平台 zip压缩 性能提升. 在多线程场景下使用7z,单线程场景下使用libarchive
-// 此处先限制一下v25上还是使用原有的逻辑
+#ifdef __aarch64__ // 华为arm平台 zip压缩 性能提升
+// Qt6 环境下使用 pzip 插件处理 ZIP 压缩，不需要强制使用 libarchive
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    // Qt5: 保留原有逻辑
     // 最大文件超过50MB使用libarchive
     if (maxFileSize_ > 50 * 1024 * 1024) {
         bUseLibarchive = true;
@@ -1259,9 +1260,6 @@ void MainWindow::slotCompress(const QVariant &val)
         double maxFileSizeProportion = static_cast<double>(maxFileSize_) / static_cast<double>(m_stCompressParameter.qSize);
         bUseLibarchive = maxFileSizeProportion > 0.6;
     }
-#else
-    double maxFileSizeProportion = static_cast<double>(maxFileSize_) / static_cast<double>(m_stCompressParameter.qSize);
-    bUseLibarchive = maxFileSizeProportion > 0.6;
 #endif
 
 #else

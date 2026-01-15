@@ -180,75 +180,52 @@ Error Archiver::compressFile(FileTask* task) {
 }
 
 Error Archiver::compress(FileTask* task) {
-    // 目录不需要压缩
     if (fs::is_directory(task->status)) {
         return Error();
     }
     
-    // 打开源文件
     std::ifstream file(task->path, std::ios::binary);
     if (!file.is_open()) {
         return Error(ErrorCode::FILE_OPEN_ERROR, "Cannot open file: " + task->path.string());
     }
     
-    // 读取整个文件到内存
-    std::vector<uint8_t> fileData(task->fileSize);
-    file.read(reinterpret_cast<char*>(fileData.data()), task->fileSize);
-    if (static_cast<size_t>(file.gcount()) != task->fileSize) {
-        return Error(ErrorCode::FILE_READ_ERROR, "Failed to read file: " + task->path.string());
+    FlateWriter writer([task](const uint8_t* data, size_t size) {
+        task->write(data, size);
+    });
+    
+    constexpr size_t BUFFER_SIZE = 32 * 1024;
+    std::vector<uint8_t> buf(BUFFER_SIZE);
+    uint32_t crc = 0;
+    uint64_t totalBytesRead = 0;
+    
+    while (file.good() && !file.eof()) {
+        file.read(reinterpret_cast<char*>(buf.data()), buf.size());
+        auto bytesRead = file.gcount();
+        if (bytesRead > 0) {
+            crc = ::crc32(crc, buf.data(), bytesRead);
+            writer.write(buf.data(), bytesRead);
+            totalBytesRead += bytesRead;
+        }
     }
+    
+    // 检查 I/O 错误（bad() 表示严重错误，fail() 在 eof 时也会设置所以需要排除）
+    if (file.bad()) {
+        file.close();
+        return Error(ErrorCode::FILE_READ_ERROR, "I/O error reading file: " + task->path.string());
+    }
+    
+    // 检查是否读取了完整文件（防止静默截断）
+    if (totalBytesRead != task->fileSize) {
+        file.close();
+        return Error(ErrorCode::FILE_READ_ERROR, 
+            "Short read: expected " + std::to_string(task->fileSize) + 
+            " bytes, got " + std::to_string(totalBytesRead) + " for: " + task->path.string());
+    }
+    
     file.close();
     
-#ifdef USE_LIBDEFLATE
-    // 使用 libdeflate（高性能）
-    // 注意：libdeflate level 1 最快，level 12 压缩率最高
-    // 默认使用 level 1（最快），用户可以通过 -6 等参数调整
-    task->header.crc32 = libdeflate_crc32(0, fileData.data(), fileData.size());
-    
-    int level = options_.compressionLevel;
-    if (level < 1 || level > 12) level = 1;  // 默认使用最快级别
-    
-    struct libdeflate_compressor* compressor = libdeflate_alloc_compressor(level);
-    if (!compressor) {
-        return Error(ErrorCode::COMPRESSION_ERROR, "Failed to create compressor");
-    }
-    
-    size_t maxCompressedSize = libdeflate_deflate_compress_bound(compressor, fileData.size());
-    std::vector<uint8_t> compressed(maxCompressedSize);
-    
-    size_t compressedSize = libdeflate_deflate_compress(
-        compressor, 
-        fileData.data(), fileData.size(),
-        compressed.data(), compressed.size()
-    );
-    
-    libdeflate_free_compressor(compressor);
-    
-    if (compressedSize == 0 && !fileData.empty()) {
-        return Error(ErrorCode::COMPRESSION_ERROR, "Compression failed");
-    }
-    
-    task->write(compressed.data(), compressedSize);
-#else
-    // 使用内置压缩器 - 使用 thread_local 避免每次创建新对象
-    task->header.crc32 = ::crc32(0L, fileData.data(), fileData.size());
-    
-    // thread_local 压缩器（使用最快级别）和输出缓冲区，避免重复分配
-    thread_local FastDeflate deflate(CompressionLevel::BestSpeed);
-    thread_local std::vector<uint8_t> compressed;
-    
-    // 重置压缩器状态并清空缓冲区
-    deflate.reset();
-    compressed.clear();
-    
-    size_t compressedSize = deflate.compress(fileData.data(), fileData.size(), compressed);
-    
-    if (compressedSize == 0 && !fileData.empty()) {
-        return Error(ErrorCode::COMPRESSION_ERROR, "Compression failed");
-    }
-    
-    task->write(compressed.data(), compressed.size());
-#endif
+    task->header.crc32 = crc;
+    writer.close();
     
     return Error();
 }

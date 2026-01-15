@@ -17,10 +17,12 @@
 
 #include <cstdint>
 #include <cstring>
+#include <functional>
 #include <vector>
 #include <array>
 #include <algorithm>
 #include <memory>
+#include <utility>
 
 #if defined(__GNUC__) || defined(__clang__)
 #define PZIP_FORCE_INLINE __attribute__((always_inline)) inline
@@ -304,6 +306,13 @@ private:
 class HuffmanBitWriter {
 public:
     explicit HuffmanBitWriter();
+    ~HuffmanBitWriter() = default;
+    
+    HuffmanBitWriter(const HuffmanBitWriter&) = delete;
+    HuffmanBitWriter& operator=(const HuffmanBitWriter&) = delete;
+    
+    HuffmanBitWriter(HuffmanBitWriter&&) = default;
+    HuffmanBitWriter& operator=(HuffmanBitWriter&&) = default;
     
     void reset();
     void flush();
@@ -330,11 +339,14 @@ public:
     
     void writeBlock(Tokens* tokens, bool eof, const uint8_t* input, size_t inputLen);
     void writeBlockDynamic(Tokens* tokens, bool eof, const uint8_t* input, size_t inputLen, bool sync);
+    void writeBlockHuff(bool eof, const uint8_t* input, size_t inputLen, bool sync);
     
     void writeTokens(const Token* tokens, size_t n, const HCode* leCodes, const HCode* oeCodes);
     
     const std::vector<uint8_t>& data() const { return output_; }
     std::vector<uint8_t>& data() { return output_; }
+    
+    void setLogNewTablePenalty(int penalty) { logNewTablePenalty_ = penalty; }
     
 private:
     void writeOutBits();
@@ -343,19 +355,30 @@ private:
     int extraBitSize();
     int fixedSize(int extraBits);
     int storedSize(const uint8_t* input, size_t len, bool* storable);
+    void histogram(const uint8_t* input, size_t len);
+    std::pair<int, int> headerSize();
+    void generateCodegen(int numLiterals, int numOffsets, HuffmanEncoder* litEnc, HuffmanEncoder* offEnc);
+    int codegens();
+    void writeDynamicHeader(int numLiterals, int numOffsets, int numCodegens, bool isEof);
     
     std::vector<uint8_t> output_;
     uint64_t bits_ = 0;
     uint8_t nbits_ = 0;
     uint8_t nbytes_ = 0;
     int lastHeader_ = 0;
+    bool lastHuffMan_ = false;
+    int logNewTablePenalty_ = 7;
     
     std::array<uint8_t, 256 + 8> bytes_;
     std::array<uint16_t, LENGTH_CODES_START + 32> literalFreq_;
     std::array<uint16_t, 32> offsetFreq_;
+    std::array<uint16_t, 19> codegenFreq_;
+    std::array<uint8_t, LITERAL_COUNT + OFFSET_CODE_COUNT + 1> codegen_;
     
     std::unique_ptr<HuffmanEncoder> literalEncoding_;
     std::unique_ptr<HuffmanEncoder> offsetEncoding_;
+    std::unique_ptr<HuffmanEncoder> tmpLitEncoding_;
+    std::unique_ptr<HuffmanEncoder> codegenEncoding_;
 };
 
 // ============================================================================
@@ -375,9 +398,13 @@ public:
     FastGen() : cur_(MAX_STORE_BLOCK_SIZE) {
         hist_.reserve(ALLOC_HISTORY);
     }
+    virtual ~FastGen() = default;
     
     int32_t addBlock(const uint8_t* src, size_t len);
-    void reset();
+    virtual void reset();
+    
+    // 纯虚函数，由子类实现
+    virtual void encode(Tokens* dst, const uint8_t* src, size_t len) = 0;
     
 protected:
     std::vector<uint8_t> hist_;
@@ -392,8 +419,8 @@ class FastEncL1 : public FastGen {
 public:
     FastEncL1() { table_.fill({}); }
     
-    void encode(Tokens* dst, const uint8_t* src, size_t len);
-    void reset();
+    void encode(Tokens* dst, const uint8_t* src, size_t len) override;
+    void reset() override;
     
 private:
     std::array<TableEntry, TABLE_SIZE> table_;
@@ -410,8 +437,8 @@ public:
         bTable_.fill({});
     }
     
-    void encode(Tokens* dst, const uint8_t* src, size_t len);
-    void reset();
+    void encode(Tokens* dst, const uint8_t* src, size_t len) override;
+    void reset() override;
     
 private:
     std::array<TableEntry, TABLE_SIZE> table_;
@@ -448,22 +475,46 @@ size_t deflateCompress(const uint8_t* input, size_t inputSize,
                        CompressionLevel level = CompressionLevel::DefaultCompression);
 
 // ============================================================================
-// DeflateStream
+// FlateWriter - 流式压缩器（参照 Go klauspost/compress flate.Writer）
 // ============================================================================
 
-class DeflateStream {
+// 输出回调类型（参照 Go io.Writer）
+using WriteFunc = std::function<void(const uint8_t*, size_t)>;
+
+class FlateWriter {
 public:
-    explicit DeflateStream(CompressionLevel level = CompressionLevel::DefaultCompression);
-    ~DeflateStream();
+    // 接收输出目标（参照 Go flate.NewWriter(w io.Writer, level int)）
+    explicit FlateWriter(WriteFunc output, CompressionLevel level = CompressionLevel::BestSpeed);
+    ~FlateWriter() = default;
     
+    // 流式写入数据（参照 Go compressor.write）
     size_t write(const uint8_t* data, size_t size);
-    size_t finish(std::vector<uint8_t>& output);
-    void reset();
+    
+    // 完成压缩（参照 Go compressor.Close）
+    void close();
+    
+    // 重置并设置新的输出目标（参照 Go compressor.Reset）
+    void reset(WriteFunc output);
 
 private:
-    std::unique_ptr<FastDeflate> deflate_;
-    std::vector<uint8_t> buffer_;
-    static constexpr size_t BUFFER_SIZE = 128 * 1024;
+    void storeFast();
+    size_t fillBlock(const uint8_t* data, size_t size);
+    void flushOutput();
+    
+    // 获取当前使用的编码器
+    FastGen* encoder() const { return useL1_ ? static_cast<FastGen*>(encoderL1_.get()) 
+                                             : static_cast<FastGen*>(encoderL4_.get()); }
+    
+    WriteFunc output_;
+    std::vector<uint8_t> window_;
+    size_t windowEnd_ = 0;
+    
+    CompressionLevel level_;
+    bool useL1_ = true;  // Level 1-3 使用 L1，Level 4+ 使用 L4
+    std::unique_ptr<FastEncL1> encoderL1_;
+    std::unique_ptr<FastEncL4> encoderL4_;
+    std::unique_ptr<HuffmanBitWriter> writer_;
+    Tokens tokens_;
 };
 
 } // namespace pzip

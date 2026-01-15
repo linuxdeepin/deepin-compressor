@@ -584,6 +584,8 @@ HuffmanBitWriter::HuffmanBitWriter() {
     output_.reserve(256 * 1024);
     literalEncoding_ = std::make_unique<HuffmanEncoder>(LITERAL_COUNT);
     offsetEncoding_ = std::make_unique<HuffmanEncoder>(OFFSET_CODE_COUNT);
+    tmpLitEncoding_ = std::make_unique<HuffmanEncoder>(LITERAL_COUNT);
+    codegenEncoding_ = std::make_unique<HuffmanEncoder>(19);
     reset();
 }
 
@@ -593,6 +595,7 @@ void HuffmanBitWriter::reset() {
     nbits_ = 0;
     nbytes_ = 0;
     lastHeader_ = 0;
+    lastHuffMan_ = false;
 }
 
 void HuffmanBitWriter::writeOutBits() {
@@ -874,6 +877,180 @@ void HuffmanBitWriter::writeBlockDynamic(Tokens* tokens, bool eof,
                 fixedLiteralEncoding->codes.data(), fixedOffsetEncoding->codes.data());
 }
 
+void HuffmanBitWriter::histogram(const uint8_t* input, size_t len) {
+    for (size_t i = 0; i < len; i++) {
+        literalFreq_[input[i]]++;
+    }
+}
+
+// codegenOrder 表 - 来自 RFC 1951
+static const uint8_t codegenOrder[19] = {
+    16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15
+};
+
+std::pair<int, int> HuffmanBitWriter::headerSize() {
+    int numCodegens = 19;
+    while (numCodegens > 4 && codegenFreq_[codegenOrder[numCodegens - 1]] == 0) {
+        numCodegens--;
+    }
+    
+    int size = 3 + 5 + 5 + 4 + (3 * numCodegens) +
+               codegenEncoding_->bitLength(codegenFreq_.data(), 19) +
+               static_cast<int>(codegenFreq_[16]) * 2 +
+               static_cast<int>(codegenFreq_[17]) * 3 +
+               static_cast<int>(codegenFreq_[18]) * 7;
+    
+    return {size, numCodegens};
+}
+
+void HuffmanBitWriter::generateCodegen(int numLiterals, int numOffsets, 
+                                        HuffmanEncoder* litEnc, HuffmanEncoder* offEnc) {
+    codegenFreq_.fill(0);
+    
+    size_t n = 0;
+    // 写入字面量码长
+    for (int i = 0; i < numLiterals; i++) {
+        uint8_t bits = litEnc->codes[i].len();
+        codegen_[n++] = bits;
+        codegenFreq_[bits]++;
+    }
+    // 写入偏移量码长
+    for (int i = 0; i < numOffsets; i++) {
+        uint8_t bits = offEnc->codes[i].len();
+        codegen_[n++] = bits;
+        codegenFreq_[bits]++;
+    }
+}
+
+int HuffmanBitWriter::codegens() {
+    // 返回需要编码的 codegen 数量
+    int n = 19;
+    while (n > 4 && codegenFreq_[codegenOrder[n - 1]] == 0) {
+        n--;
+    }
+    return n;
+}
+
+void HuffmanBitWriter::writeDynamicHeader(int numLiterals, int numOffsets, int numCodegens, bool isEof) {
+    // BFINAL + BTYPE
+    writeBits(isEof ? 5 : 4, 3);  // BTYPE = 10 (dynamic)
+    
+    // HLIT, HDIST, HCLEN
+    writeBits(numLiterals - 257, 5);
+    writeBits(numOffsets - 1, 5);
+    writeBits(numCodegens - 4, 4);
+    
+    // 写入 codegen 码长
+    for (int i = 0; i < numCodegens; i++) {
+        writeBits(codegenEncoding_->codes[codegenOrder[i]].len(), 3);
+    }
+    
+    // 写入字面量和偏移量码长
+    for (int i = 0; i < numLiterals + numOffsets; i++) {
+        writeCode(codegenEncoding_->codes[codegen_[i]]);
+    }
+}
+
+void HuffmanBitWriter::writeBlockHuff(bool eof, const uint8_t* input, size_t inputLen, bool sync) {
+    // 清空频率表
+    literalFreq_.fill(0);
+    if (!lastHuffMan_) {
+        offsetFreq_.fill(0);
+    }
+    
+    constexpr int numLiterals = END_BLOCK_MARKER + 1;
+    constexpr int numOffsets = 1;
+    constexpr int guessHeaderSizeBits = 70 * 8;
+    
+    // 统计字面量频率
+    histogram(input, inputLen);
+    
+    bool storable;
+    int ssize = storedSize(input, inputLen, &storable);
+    
+    // 快速检测不可压缩内容
+    if (storable && inputLen > 1024) {
+        double abs_val = 0;
+        double avg = static_cast<double>(inputLen) / 256.0;
+        double max_val = static_cast<double>(inputLen * 2);
+        
+        for (int i = 0; i < 256; i++) {
+            double diff = static_cast<double>(literalFreq_[i]) - avg;
+            abs_val += diff * diff;
+            if (abs_val > max_val) {
+                break;
+            }
+        }
+        
+        if (abs_val < max_val) {
+            // 数据分布均匀，不可压缩
+            writeStoredHeader(static_cast<int>(inputLen), eof);
+            writeBytes(input, inputLen);
+            return;
+        }
+    }
+    
+    literalFreq_[END_BLOCK_MARKER] = 1;
+    tmpLitEncoding_->generate(literalFreq_.data(), numLiterals, 15);
+    int estBits = tmpLitEncoding_->bitLength(literalFreq_.data(), numLiterals);
+    
+    if (estBits < INT32_MAX) {
+        estBits += lastHeader_;
+        if (lastHeader_ == 0) {
+            estBits += guessHeaderSizeBits;
+        }
+        estBits += estBits >> logNewTablePenalty_;
+    }
+    
+    // 如果 stored 更好，使用 stored
+    if (storable && ssize <= estBits) {
+        writeStoredHeader(static_cast<int>(inputLen), eof);
+        writeBytes(input, inputLen);
+        return;
+    }
+    
+    // 检查是否可以复用上一个编码表
+    if (lastHeader_ > 0) {
+        // 必须包含 END_BLOCK_MARKER (256) 以保持与 estBits 比较的一致性
+        int reuseSize = literalEncoding_->bitLength(literalFreq_.data(), numLiterals);
+        
+        if (estBits < reuseSize) {
+            // 使用新表
+            writeCode(literalEncoding_->codes[END_BLOCK_MARKER]);
+            lastHeader_ = 0;
+        }
+    }
+    
+    if (lastHeader_ == 0) {
+        // 使用临时编码器
+        std::swap(literalEncoding_, tmpLitEncoding_);
+        
+        // 生成 codegen
+        // 使用预定义的静态距离编码表（Huffman-only 模式不使用距离码，但 DEFLATE 要求至少有一个有效距离符号）
+        generateCodegen(numLiterals, numOffsets, literalEncoding_.get(), fixedOffsetEncoding.get());
+        codegenEncoding_->generate(codegenFreq_.data(), 19, 7);
+        int numCodegens = codegens();
+        
+        // 写入动态头
+        writeDynamicHeader(numLiterals, numOffsets, numCodegens, eof);
+        lastHuffMan_ = true;
+        lastHeader_ = headerSize().first;
+    }
+    
+    // 写入字面量
+    const auto& encoding = literalEncoding_->codes;
+    for (size_t i = 0; i < inputLen; i++) {
+        writeCode(encoding[input[i]]);
+    }
+    
+    // 写入 EOB（如果需要）
+    if (eof || sync) {
+        writeCode(literalEncoding_->codes[END_BLOCK_MARKER]);
+        lastHeader_ = 0;
+        lastHuffMan_ = false;
+    }
+}
+
 // ============================================================================
 // FastDeflate 实现
 // ============================================================================
@@ -911,6 +1088,8 @@ size_t FastDeflate::compress(const uint8_t* input, size_t inputSize,
         size_t blockSize = std::min(inputSize - pos, MAX_STORE_BLOCK_SIZE);
         bool isLast = (pos + blockSize >= inputSize);
         
+        // 参照 Go klauspost/compress storeFast：
+        // 先 encode，再根据 tokens.n 决定使用哪种模式
         tokens_.reset();
         
         if (useL1_) {
@@ -919,9 +1098,14 @@ size_t FastDeflate::compress(const uint8_t* input, size_t inputSize,
             encoderL4_->encode(&tokens_, input + pos, blockSize);
         }
         
-        if (tokens_.n == 0 || tokens_.n >= static_cast<uint16_t>(blockSize)) {
+        // 三级判断（参照 klauspost/compress storeFast deflate.go:738-748）
+        if (tokens_.n == 0) {
+            // If we made zero matches, store the block as is.
             writer_->writeStoredHeader(static_cast<int>(blockSize), isLast);
             writer_->writeBytes(input + pos, blockSize);
+        } else if (static_cast<size_t>(tokens_.n) > blockSize - (blockSize >> 4)) {
+            // If we removed less than 1/16th, huffman compress the block.
+            writer_->writeBlockHuff(isLast, input + pos, blockSize, isLast);
         } else {
             writer_->writeBlockDynamic(&tokens_, isLast, input + pos, blockSize, isLast);
         }
@@ -946,28 +1130,124 @@ size_t deflateCompress(const uint8_t* input, size_t inputSize,
 }
 
 // ============================================================================
-// DeflateStream 实现
+// FlateWriter 实现（参照 Go klauspost/compress flate compressor）
 // ============================================================================
 
-DeflateStream::DeflateStream(CompressionLevel level)
-    : deflate_(std::make_unique<FastDeflate>(level)) {
-    buffer_.reserve(BUFFER_SIZE);
+FlateWriter::FlateWriter(WriteFunc output, CompressionLevel level)
+    : output_(std::move(output))
+    , window_(MAX_STORE_BLOCK_SIZE)  // 64KB window
+    , level_(level)
+    , useL1_(static_cast<int>(level) <= 3)
+    , encoderL1_(std::make_unique<FastEncL1>())
+    , encoderL4_(std::make_unique<FastEncL4>())
+    , writer_(std::make_unique<HuffmanBitWriter>()) {
+    // 根据压缩级别调整新表惩罚因子
+    // Level 1-3: 更高惩罚（减少表切换，更快）
+    // Level 4-6: 中等惩罚
+    // Level 7-9: 更低惩罚（允许更多表切换，更好压缩率）
+    int penalty = 7;  // 默认值
+    int lvl = static_cast<int>(level);
+    if (lvl <= 3) {
+        penalty = 8;
+    } else if (lvl >= 7) {
+        penalty = 6;
+    }
+    writer_->setLogNewTablePenalty(penalty);
 }
 
-DeflateStream::~DeflateStream() = default;
-
-size_t DeflateStream::write(const uint8_t* data, size_t size) {
-    buffer_.insert(buffer_.end(), data, data + size);
-    return size;
+void FlateWriter::reset(WriteFunc output) {
+    output_ = std::move(output);
+    windowEnd_ = 0;
+    encoder()->reset();
+    writer_->reset();
+    tokens_.reset();
 }
 
-size_t DeflateStream::finish(std::vector<uint8_t>& output) {
-    return deflate_->compress(buffer_.data(), buffer_.size(), output);
+size_t FlateWriter::fillBlock(const uint8_t* data, size_t size) {
+    size_t n = std::min(size, window_.size() - windowEnd_);
+    std::memcpy(window_.data() + windowEnd_, data, n);
+    windowEnd_ += n;
+    return n;
 }
 
-void DeflateStream::reset() {
-    buffer_.clear();
-    deflate_->reset();
+// 将 writer_ 中的数据刷新到输出目标
+void FlateWriter::flushOutput() {
+    auto& buf = writer_->data();
+    if (!buf.empty() && output_) {
+        output_(buf.data(), buf.size());
+        buf.clear();
+    }
+}
+
+// 参照 Go compressor.storeFast
+void FlateWriter::storeFast() {
+    if (windowEnd_ == 0) {
+        return;
+    }
+    
+    if (windowEnd_ < 128) {
+        if (windowEnd_ <= 32) {
+            writer_->writeStoredHeader(static_cast<int>(windowEnd_), false);
+            writer_->writeBytes(window_.data(), windowEnd_);
+        } else {
+            writer_->writeBlockHuff(false, window_.data(), windowEnd_, false);
+        }
+        tokens_.reset();
+        windowEnd_ = 0;
+        encoder()->reset();
+        flushOutput();  // 立即刷新到输出
+        return;
+    }
+    
+    encoder()->encode(&tokens_, window_.data(), windowEnd_);
+    
+    if (tokens_.n == 0) {
+        writer_->writeStoredHeader(static_cast<int>(windowEnd_), false);
+        writer_->writeBytes(window_.data(), windowEnd_);
+    } else if (static_cast<size_t>(tokens_.n) > windowEnd_ - (windowEnd_ >> 4)) {
+        writer_->writeBlockHuff(false, window_.data(), windowEnd_, false);
+    } else {
+        writer_->writeBlockDynamic(&tokens_, false, window_.data(), windowEnd_, false);
+    }
+    
+    tokens_.reset();
+    windowEnd_ = 0;
+    flushOutput();  // 立即刷新到输出
+}
+
+// 参照 Go compressor.write
+size_t FlateWriter::write(const uint8_t* data, size_t size) {
+    size_t total = size;
+    while (size > 0) {
+        if (windowEnd_ == window_.size()) {
+            storeFast();
+        }
+        size_t n = fillBlock(data, size);
+        data += n;
+        size -= n;
+    }
+    return total;
+}
+
+// 参照 Go compressor.Close
+void FlateWriter::close() {
+    if (windowEnd_ > 0) {
+        encoder()->encode(&tokens_, window_.data(), windowEnd_);
+        
+        if (tokens_.n == 0) {
+            writer_->writeStoredHeader(static_cast<int>(windowEnd_), true);
+            writer_->writeBytes(window_.data(), windowEnd_);
+        } else if (static_cast<size_t>(tokens_.n) > windowEnd_ - (windowEnd_ >> 4)) {
+            writer_->writeBlockHuff(true, window_.data(), windowEnd_, true);
+        } else {
+            writer_->writeBlockDynamic(&tokens_, true, window_.data(), windowEnd_, true);
+        }
+    } else {
+        writer_->writeStoredHeader(0, true);
+    }
+    
+    writer_->flush();
+    flushOutput();  // 最后刷新
 }
 
 } // namespace pzip
