@@ -1170,8 +1170,18 @@ size_t FlateWriter::fillBlock(const uint8_t* data, size_t size) {
     return n;
 }
 
-// 将 writer_ 中的数据刷新到输出目标
+// 将 writer_ 中的数据刷新到输出目标（当缓冲区足够大时）
 void FlateWriter::flushOutput() {
+    auto& buf = writer_->data();
+    // 只在缓冲区超过 256KB 时才刷新，减少系统调用次数
+    if (buf.size() >= 256 * 1024 && output_) {
+        output_(buf.data(), buf.size());
+        buf.clear();
+    }
+}
+
+// 强制刷新所有数据
+void FlateWriter::forceFlush() {
     auto& buf = writer_->data();
     if (!buf.empty() && output_) {
         output_(buf.data(), buf.size());
@@ -1212,7 +1222,7 @@ void FlateWriter::storeFast() {
     
     tokens_.reset();
     windowEnd_ = 0;
-    flushOutput();  // 立即刷新到输出
+    flushOutput();
 }
 
 // 参照 Go compressor.write
@@ -1247,7 +1257,7 @@ void FlateWriter::close() {
     }
     
     writer_->flush();
-    flushOutput();  // 最后刷新
+    forceFlush();  // 强制刷新所有剩余数据
 }
 
 } // namespace pzip

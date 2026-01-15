@@ -500,6 +500,7 @@ private:
     void storeFast();
     size_t fillBlock(const uint8_t* data, size_t size);
     void flushOutput();
+    void forceFlush();
     
     // 获取当前使用的编码器
     FastGen* encoder() const { return useL1_ ? static_cast<FastGen*>(encoderL1_.get()) 
