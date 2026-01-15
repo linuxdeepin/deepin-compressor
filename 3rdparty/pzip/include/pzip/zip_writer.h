@@ -96,7 +96,7 @@ private:
     Error writeLocalFileHeader(const ZipFileHeader& header);
     Error writeDataDescriptor(const ZipFileHeader& header);
     Error writeCentralDirectory();
-    Error writeEndOfCentralDirectory();
+    Error writeEndOfCentralDirectory(uint64_t centralDirOffset, uint64_t centralDirSize);
 
     // DOS 时间转换
     static void timeToDos(time_t t, uint16_t& date, uint16_t& time);

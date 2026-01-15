@@ -18,6 +18,11 @@ namespace fs = std::filesystem;
 /**
  * @brief ZIP 文件头信息
  */
+// ZIP64 阈值常量 (对应 Go 的 uint32max)
+constexpr uint32_t ZIP_UINT32_MAX = 0xFFFFFFFF;
+constexpr uint16_t ZIP_UINT16_MAX = 0xFFFF;
+constexpr uint16_t ZIP_VERSION_45 = 45;  // ZIP64 需要版本 4.5
+
 struct ZipFileHeader {
     std::string name;           // 文件名（相对路径）
     uint16_t versionMadeBy = 0;
@@ -34,6 +39,11 @@ struct ZipFileHeader {
     
     bool isDirectory() const {
         return !name.empty() && name.back() == '/';
+    }
+    
+    // 对应 Go 的 isZip64() 方法
+    bool isZip64() const {
+        return compressedSize >= ZIP_UINT32_MAX || uncompressedSize >= ZIP_UINT32_MAX;
     }
 };
 

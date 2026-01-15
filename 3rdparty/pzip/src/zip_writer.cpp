@@ -114,6 +114,7 @@ void ZipWriter::timeToDos(time_t t, uint16_t& date, uint16_t& dosTime) {
 }
 
 Error ZipWriter::writeLocalFileHeader(const ZipFileHeader& header) {
+    // 对应 Go archive/zip 的 CreateRaw/CreateHeader 写入本地文件头的逻辑
     std::vector<uint8_t> buf;
     buf.reserve(30 + header.name.size() + header.extra.size());
     
@@ -132,8 +133,9 @@ Error ZipWriter::writeLocalFileHeader(const ZipFileHeader& header) {
     // Signature
     write32(LOCAL_FILE_HEADER_SIG);
     
-    // Version needed
-    write16(header.versionNeeded);
+    // Version needed (ZIP64 需要版本 4.5)
+    // 对应 Go: if fh.isZip64() { fh.ReaderVersion = zipVersion45 }
+    write16(header.isZip64() ? ZIP_VERSION_45 : header.versionNeeded);
     
     // Flags
     write16(header.flags);
@@ -155,6 +157,8 @@ Error ZipWriter::writeLocalFileHeader(const ZipFileHeader& header) {
     // Compressed size (0 if using data descriptor)
     if (header.flags & ZIP_FLAG_DATA_DESCRIPTOR) {
         write32(0);
+    } else if (header.isZip64()) {
+        write32(ZIP_UINT32_MAX);
     } else {
         write32(static_cast<uint32_t>(header.compressedSize));
     }
@@ -162,6 +166,8 @@ Error ZipWriter::writeLocalFileHeader(const ZipFileHeader& header) {
     // Uncompressed size (0 if using data descriptor)
     if (header.flags & ZIP_FLAG_DATA_DESCRIPTOR) {
         write32(0);
+    } else if (header.isZip64()) {
+        write32(ZIP_UINT32_MAX);
     } else {
         write32(static_cast<uint32_t>(header.uncompressedSize));
     }
@@ -189,8 +195,9 @@ Error ZipWriter::writeLocalFileHeader(const ZipFileHeader& header) {
 }
 
 Error ZipWriter::writeDataDescriptor(const ZipFileHeader& header) {
+    // 对应 Go archive/zip 的 writeDataDescriptor
+    // 如果 isZip64()，使用 24 字节（4+4+8+8），否则使用 16 字节（4+4+4+4）
     std::vector<uint8_t> buf;
-    buf.reserve(16);
     
     auto write32 = [&buf](uint32_t v) {
         buf.push_back(v & 0xFF);
@@ -199,17 +206,38 @@ Error ZipWriter::writeDataDescriptor(const ZipFileHeader& header) {
         buf.push_back((v >> 24) & 0xFF);
     };
     
-    // Signature (optional but recommended)
+    auto write64 = [&buf](uint64_t v) {
+        buf.push_back(v & 0xFF);
+        buf.push_back((v >> 8) & 0xFF);
+        buf.push_back((v >> 16) & 0xFF);
+        buf.push_back((v >> 24) & 0xFF);
+        buf.push_back((v >> 32) & 0xFF);
+        buf.push_back((v >> 40) & 0xFF);
+        buf.push_back((v >> 48) & 0xFF);
+        buf.push_back((v >> 56) & 0xFF);
+    };
+    
+    if (header.isZip64()) {
+        buf.reserve(24);  // dataDescriptor64Len
+    } else {
+        buf.reserve(16);  // dataDescriptorLen
+    }
+    
+    // Signature (de-facto standard, required by OS X)
     write32(DATA_DESCRIPTOR_SIG);
     
     // CRC32
     write32(header.crc32);
     
-    // Compressed size
-    write32(static_cast<uint32_t>(header.compressedSize));
-    
-    // Uncompressed size
-    write32(static_cast<uint32_t>(header.uncompressedSize));
+    if (header.isZip64()) {
+        // 64 位大小
+        write64(header.compressedSize);
+        write64(header.uncompressedSize);
+    } else {
+        // 32 位大小
+        write32(static_cast<uint32_t>(header.compressedSize));
+        write32(static_cast<uint32_t>(header.uncompressedSize));
+    }
     
     file_.write(reinterpret_cast<const char*>(buf.data()), buf.size());
     
@@ -292,28 +320,39 @@ Error ZipWriter::createDirectory(const ZipFileHeader& header) {
 }
 
 Error ZipWriter::writeCentralDirectory() {
-    auto write16 = [this](uint16_t v) {
-        uint8_t buf[2] = {
-            static_cast<uint8_t>(v & 0xFF),
-            static_cast<uint8_t>((v >> 8) & 0xFF)
-        };
-        file_.write(reinterpret_cast<const char*>(buf), 2);
-        currentOffset_ += 2;
+    // 对应 Go archive/zip 的 Close() 中写入中央目录的逻辑
+    std::vector<uint8_t> buf;
+    buf.reserve(46);  // directoryHeaderLen
+    
+    auto write16 = [&buf](uint16_t v) {
+        buf.push_back(v & 0xFF);
+        buf.push_back((v >> 8) & 0xFF);
     };
     
-    auto write32 = [this](uint32_t v) {
-        uint8_t buf[4] = {
-            static_cast<uint8_t>(v & 0xFF),
-            static_cast<uint8_t>((v >> 8) & 0xFF),
-            static_cast<uint8_t>((v >> 16) & 0xFF),
-            static_cast<uint8_t>((v >> 24) & 0xFF)
-        };
-        file_.write(reinterpret_cast<const char*>(buf), 4);
-        currentOffset_ += 4;
+    auto write32 = [&buf](uint32_t v) {
+        buf.push_back(v & 0xFF);
+        buf.push_back((v >> 8) & 0xFF);
+        buf.push_back((v >> 16) & 0xFF);
+        buf.push_back((v >> 24) & 0xFF);
     };
     
-    for (const auto& entry : centralDir_) {
-        const auto& h = entry.header;
+    auto write64 = [&buf](uint64_t v) {
+        buf.push_back(v & 0xFF);
+        buf.push_back((v >> 8) & 0xFF);
+        buf.push_back((v >> 16) & 0xFF);
+        buf.push_back((v >> 24) & 0xFF);
+        buf.push_back((v >> 32) & 0xFF);
+        buf.push_back((v >> 40) & 0xFF);
+        buf.push_back((v >> 48) & 0xFF);
+        buf.push_back((v >> 56) & 0xFF);
+    };
+    
+    for (auto& entry : centralDir_) {
+        auto& h = entry.header;
+        buf.clear();
+        
+        // 检查是否需要 ZIP64 extra 字段
+        bool needZip64 = h.isZip64() || entry.localHeaderOffset >= ZIP_UINT32_MAX;
         
         // Signature
         write32(CENTRAL_DIR_HEADER_SIG);
@@ -321,8 +360,8 @@ Error ZipWriter::writeCentralDirectory() {
         // Version made by
         write16(h.versionMadeBy);
         
-        // Version needed
-        write16(h.versionNeeded);
+        // Version needed (ZIP64 需要版本 4.5)
+        write16(needZip64 ? ZIP_VERSION_45 : h.versionNeeded);
         
         // Flags
         write16(h.flags);
@@ -337,17 +376,47 @@ Error ZipWriter::writeCentralDirectory() {
         // CRC32
         write32(h.crc32);
         
-        // Compressed size
-        write32(static_cast<uint32_t>(h.compressedSize));
-        
-        // Uncompressed size
-        write32(static_cast<uint32_t>(h.uncompressedSize));
+        if (needZip64) {
+            // 对应 Go: "the file needs a zip64 header. store maxint in both
+            // 32 bit size fields (and offset later) to signal that the
+            // zip64 extra header should be used."
+            write32(ZIP_UINT32_MAX);  // compressed size
+            write32(ZIP_UINT32_MAX);  // uncompressed size
+        } else {
+            write32(static_cast<uint32_t>(h.compressedSize));
+            write32(static_cast<uint32_t>(h.uncompressedSize));
+        }
         
         // Filename length
         write16(static_cast<uint16_t>(h.name.size()));
         
-        // Extra field length
-        write16(static_cast<uint16_t>(h.extra.size()));
+        // 构建 ZIP64 extra 字段
+        std::vector<uint8_t> zip64Extra;
+        if (needZip64) {
+            // 28 bytes: 2x uint16 + 3x uint64
+            // Header ID
+            zip64Extra.push_back(EXTRA_ID_ZIP64 & 0xFF);
+            zip64Extra.push_back((EXTRA_ID_ZIP64 >> 8) & 0xFF);
+            // Data size = 24 (3x uint64)
+            zip64Extra.push_back(24);
+            zip64Extra.push_back(0);
+            // Uncompressed size
+            for (int i = 0; i < 8; i++) {
+                zip64Extra.push_back((h.uncompressedSize >> (i * 8)) & 0xFF);
+            }
+            // Compressed size
+            for (int i = 0; i < 8; i++) {
+                zip64Extra.push_back((h.compressedSize >> (i * 8)) & 0xFF);
+            }
+            // Local header offset
+            for (int i = 0; i < 8; i++) {
+                zip64Extra.push_back((entry.localHeaderOffset >> (i * 8)) & 0xFF);
+            }
+        }
+        
+        // Extra field length (原有 extra + ZIP64 extra)
+        size_t extraLen = h.extra.size() + zip64Extra.size();
+        write16(static_cast<uint16_t>(extraLen));
         
         // Comment length
         write16(0);
@@ -362,16 +431,30 @@ Error ZipWriter::writeCentralDirectory() {
         write32(h.externalAttr);
         
         // Relative offset of local header
-        write32(static_cast<uint32_t>(entry.localHeaderOffset));
+        if (entry.localHeaderOffset > ZIP_UINT32_MAX) {
+            write32(ZIP_UINT32_MAX);
+        } else {
+            write32(static_cast<uint32_t>(entry.localHeaderOffset));
+        }
+        
+        // 写入固定部分
+        file_.write(reinterpret_cast<const char*>(buf.data()), buf.size());
+        currentOffset_ += buf.size();
         
         // Filename
         file_.write(h.name.c_str(), h.name.size());
         currentOffset_ += h.name.size();
         
-        // Extra field
+        // 原有 Extra field
         if (!h.extra.empty()) {
             file_.write(reinterpret_cast<const char*>(h.extra.data()), h.extra.size());
             currentOffset_ += h.extra.size();
+        }
+        
+        // ZIP64 extra field
+        if (!zip64Extra.empty()) {
+            file_.write(reinterpret_cast<const char*>(zip64Extra.data()), zip64Extra.size());
+            currentOffset_ += zip64Extra.size();
         }
     }
     
@@ -382,42 +465,110 @@ Error ZipWriter::writeCentralDirectory() {
     return Error();
 }
 
-Error ZipWriter::writeEndOfCentralDirectory() {
-    uint64_t centralDirStart = currentOffset_;
+Error ZipWriter::writeEndOfCentralDirectory(uint64_t centralDirOffset, uint64_t centralDirSize) {
+    // 对应 Go archive/zip 的 Close() 中写入 EOCD 的逻辑
     
-    // 先计算中央目录的开始偏移
-    for (const auto& entry : centralDir_) {
-        centralDirStart -= 46 + entry.header.name.size() + entry.header.extra.size();
-    }
-    centralDirStart = centralDir_.empty() ? currentOffset_ : 
-                      centralDir_[0].localHeaderOffset;
+    uint64_t records = centralDir_.size();
+    uint64_t size = centralDirSize;
+    uint64_t offset = centralDirOffset;
     
-    // 实际上我们需要记录中央目录开始位置
-    // 这里简化处理，假设 centralDirStart 在写入中央目录前记录
+    std::vector<uint8_t> buf;
     
-    auto write16 = [this](uint16_t v) {
-        uint8_t buf[2] = {
-            static_cast<uint8_t>(v & 0xFF),
-            static_cast<uint8_t>((v >> 8) & 0xFF)
-        };
-        file_.write(reinterpret_cast<const char*>(buf), 2);
+    auto write16 = [&buf](uint16_t v) {
+        buf.push_back(v & 0xFF);
+        buf.push_back((v >> 8) & 0xFF);
     };
     
-    auto write32 = [this](uint32_t v) {
-        uint8_t buf[4] = {
-            static_cast<uint8_t>(v & 0xFF),
-            static_cast<uint8_t>((v >> 8) & 0xFF),
-            static_cast<uint8_t>((v >> 16) & 0xFF),
-            static_cast<uint8_t>((v >> 24) & 0xFF)
-        };
-        file_.write(reinterpret_cast<const char*>(buf), 4);
+    auto write32 = [&buf](uint32_t v) {
+        buf.push_back(v & 0xFF);
+        buf.push_back((v >> 8) & 0xFF);
+        buf.push_back((v >> 16) & 0xFF);
+        buf.push_back((v >> 24) & 0xFF);
     };
     
-    // 计算中央目录大小
-    uint64_t centralDirSize = 0;
-    for (const auto& entry : centralDir_) {
-        centralDirSize += 46 + entry.header.name.size() + entry.header.extra.size();
+    auto write64 = [&buf](uint64_t v) {
+        buf.push_back(v & 0xFF);
+        buf.push_back((v >> 8) & 0xFF);
+        buf.push_back((v >> 16) & 0xFF);
+        buf.push_back((v >> 24) & 0xFF);
+        buf.push_back((v >> 32) & 0xFF);
+        buf.push_back((v >> 40) & 0xFF);
+        buf.push_back((v >> 48) & 0xFF);
+        buf.push_back((v >> 56) & 0xFF);
+    };
+    
+    // 检查是否需要 ZIP64 EOCD
+    // 对应 Go: if records >= uint16max || size >= uint32max || offset >= uint32max
+    bool needZip64 = (records >= ZIP_UINT16_MAX || 
+                      size >= ZIP_UINT32_MAX || 
+                      offset >= ZIP_UINT32_MAX);
+    
+    if (needZip64) {
+        // 写入 ZIP64 End of Central Directory Record (56 bytes)
+        // directory64EndLen = 56
+        buf.clear();
+        buf.reserve(56 + 20);  // directory64EndLen + directory64LocLen
+        
+        // ZIP64 EOCD signature
+        write32(ZIP64_END_OF_CENTRAL_DIR_SIG);
+        
+        // Size of ZIP64 EOCD record (excluding signature and this field)
+        // = 56 - 12 = 44
+        write64(44);
+        
+        // Version made by
+        write16(ZIP_VERSION_45);
+        
+        // Version needed to extract
+        write16(ZIP_VERSION_45);
+        
+        // Number of this disk
+        write32(0);
+        
+        // Number of the disk with the start of the central directory
+        write32(0);
+        
+        // Total number of entries in the central directory on this disk
+        write64(records);
+        
+        // Total number of entries in the central directory
+        write64(records);
+        
+        // Size of the central directory
+        write64(size);
+        
+        // Offset of start of central directory
+        write64(offset);
+        
+        // 写入 ZIP64 End of Central Directory Locator (20 bytes)
+        // directory64LocLen = 20
+        
+        // ZIP64 EOCD Locator signature
+        write32(ZIP64_END_OF_CENTRAL_DIR_LOCATOR_SIG);
+        
+        // Number of the disk with the start of the zip64 end of central directory
+        write32(0);
+        
+        // Relative offset of the zip64 end of central directory record
+        // (currentOffset_ 已经指向 central directory 结束位置)
+        write64(currentOffset_);
+        
+        // Total number of disks
+        write32(1);
+        
+        file_.write(reinterpret_cast<const char*>(buf.data()), buf.size());
+        currentOffset_ += buf.size();
+        
+        // 在普通 EOCD 中使用 max 值表示应使用 ZIP64 值
+        records = ZIP_UINT16_MAX;
+        size = ZIP_UINT32_MAX;
+        offset = ZIP_UINT32_MAX;
     }
+    
+    // 写入普通 End of Central Directory Record (22 bytes)
+    // directoryEndLen = 22
+    buf.clear();
+    buf.reserve(22 + comment_.size());
     
     // Signature
     write32(END_OF_CENTRAL_DIR_SIG);
@@ -429,19 +580,21 @@ Error ZipWriter::writeEndOfCentralDirectory() {
     write16(0);
     
     // Number of central directory records on this disk
-    write16(static_cast<uint16_t>(centralDir_.size()));
+    write16(static_cast<uint16_t>(records));
     
     // Total number of central directory records
-    write16(static_cast<uint16_t>(centralDir_.size()));
+    write16(static_cast<uint16_t>(records));
     
     // Size of central directory
-    write32(static_cast<uint32_t>(centralDirSize));
+    write32(static_cast<uint32_t>(size));
     
     // Offset of start of central directory
-    write32(static_cast<uint32_t>(currentOffset_ - centralDirSize));
+    write32(static_cast<uint32_t>(offset));
     
     // Comment length
     write16(static_cast<uint16_t>(comment_.size()));
+    
+    file_.write(reinterpret_cast<const char*>(buf.data()), buf.size());
     
     // Comment
     if (!comment_.empty()) {
@@ -460,15 +613,18 @@ Error ZipWriter::close() {
         return Error();
     }
     
-    // 记录中央目录开始位置
+    // 记录中央目录开始位置 (对应 Go 的 start := w.cw.count)
     uint64_t centralDirOffset = currentOffset_;
     
     // 写入中央目录
     Error err = writeCentralDirectory();
     if (err) return err;
     
+    // 计算中央目录大小 (对应 Go 的 size := uint64(end - start))
+    uint64_t centralDirSize = currentOffset_ - centralDirOffset;
+    
     // 写入结束记录
-    err = writeEndOfCentralDirectory();
+    err = writeEndOfCentralDirectory(centralDirOffset, centralDirSize);
     if (err) return err;
     
     file_.close();
