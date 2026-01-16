@@ -1,3 +1,9 @@
+deepin-compressor (6.5.19) unstable; urgency=medium
+
+  * fix: Simplify header name assignment in FileTask 
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Fri, 16 Jan 2026 13:28:40 +0800
+
 deepin-compressor (6.5.18) unstable; urgency=medium
 
   * C++ port of Go's pzip for parallel ZIP compression with streaming I/O and ZIP64 support.
