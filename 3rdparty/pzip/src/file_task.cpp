@@ -111,9 +111,7 @@ Error FileTask::reset(const fs::path& filePath, const fs::path& relativeTo) {
             // 如果无法计算相对路径，使用文件名
             header.name = path.filename().string();
         } else {
-            // 加上基础目录名
-            fs::path baseName = relativeTo.filename();
-            header.name = utils::toZipPath(baseName / relPath);
+            header.name = utils::toZipPath(relPath);
         }
     } else {
         header.name = utils::toZipPath(path.filename());
