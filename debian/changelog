@@ -1,3 +1,9 @@
+deepin-compressor (6.5.20) unstable; urgency=medium
+
+  * fix: Add support for symbolic links in file compression
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Fri, 16 Jan 2026 15:23:54 +0800
+
 deepin-compressor (6.5.19) unstable; urgency=medium
 
   * fix: Simplify header name assignment in FileTask 
