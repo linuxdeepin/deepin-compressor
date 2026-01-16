@@ -82,17 +82,29 @@ Error FileTask::reset(const fs::path& filePath, const fs::path& relativeTo) {
     
     bufferUsed_ = 0;
     written_ = 0;
+    isSymlink = false;
+    symlinkTarget.clear();
     
     // 设置新文件信息
     path = filePath;
     
     std::error_code ec;
-    status = fs::status(path, ec);
+    // 使用 symlink_status 不跟随符号链接
+    status = fs::symlink_status(path, ec);
     if (ec) {
         return Error(ErrorCode::FILE_NOT_FOUND, "Cannot stat file: " + path.string());
     }
     
-    if (fs::is_regular_file(status)) {
+    // 检测符号链接
+    isSymlink = fs::is_symlink(status);
+    if (isSymlink) {
+        // 读取符号链接目标
+        symlinkTarget = fs::read_symlink(path, ec).string();
+        if (ec) {
+            return Error(ErrorCode::FILE_READ_ERROR, "Cannot read symlink target: " + path.string());
+        }
+        fileSize = symlinkTarget.size();
+    } else if (fs::is_regular_file(status)) {
         fileSize = fs::file_size(path, ec);
         if (ec) {
             return Error(ErrorCode::FILE_READ_ERROR, "Cannot get file size: " + path.string());
@@ -105,13 +117,27 @@ Error FileTask::reset(const fs::path& filePath, const fs::path& relativeTo) {
     header = ZipFileHeader();
     
     // 设置相对路径名
+    // 注意：fs::relative() 会解析符号链接，所以使用 path 迭代器手动计算
     if (!relativeTo.empty()) {
-        fs::path relPath = fs::relative(path, relativeTo, ec);
-        if (ec) {
-            // 如果无法计算相对路径，使用文件名
-            header.name = path.filename().string();
-        } else {
+        // 使用 path 迭代器跳过共同前缀
+        auto pathIt = path.begin();
+        auto relIt = relativeTo.begin();
+        
+        while (pathIt != path.end() && relIt != relativeTo.end() && *pathIt == *relIt) {
+            ++pathIt;
+            ++relIt;
+        }
+        
+        // 构建相对路径
+        fs::path relPath;
+        for (; pathIt != path.end(); ++pathIt) {
+            relPath /= *pathIt;
+        }
+        
+        if (!relPath.empty()) {
             header.name = utils::toZipPath(relPath);
+        } else {
+            header.name = utils::toZipPath(path.filename());
         }
     } else {
         header.name = utils::toZipPath(path.filename());

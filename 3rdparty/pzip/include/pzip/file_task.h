@@ -106,6 +106,8 @@ public:
     fs::file_status status;     // 文件状态
     uintmax_t fileSize = 0;     // 原始文件大小
     ZipFileHeader header;       // ZIP 头信息
+    bool isSymlink = false;     // 是否是符号链接
+    std::string symlinkTarget;  // 符号链接目标路径
     
     // 压缩器（由 Archiver 管理）
     z_stream* compressor = nullptr;

@@ -184,6 +184,13 @@ Error Archiver::compress(FileTask* task) {
         return Error();
     }
     
+    if (task->isSymlink) {
+        const auto& target = task->symlinkTarget;
+        task->write(reinterpret_cast<const uint8_t*>(target.data()), target.size());
+        task->header.crc32 = ::crc32(0, reinterpret_cast<const Bytef*>(target.data()), target.size());
+        return Error();
+    }
+    
     std::ifstream file(task->path, std::ios::binary);
     if (!file.is_open()) {
         return Error(ErrorCode::FILE_OPEN_ERROR, "Cannot open file: " + task->path.string());
@@ -271,6 +278,14 @@ void Archiver::populateHeader(FileTask* task) {
         h.uncompressedSize = 0;
         h.compressedSize = 0;
         h.crc32 = 0;
+    } else if (task->isSymlink) {
+        // 符号链接：存储链接目标
+        h.method = ZIP_METHOD_STORE;
+        h.flags &= ~ZIP_FLAG_DATA_DESCRIPTOR;
+        h.uncompressedSize = task->symlinkTarget.size();
+        h.compressedSize = task->symlinkTarget.size();
+        // 设置 Unix 符号链接属性
+        h.externalAttr = static_cast<uint32_t>(S_IFLNK | 0777) << 16;
     } else {
         h.method = ZIP_METHOD_DEFLATE;
         h.flags |= ZIP_FLAG_DATA_DESCRIPTOR;
