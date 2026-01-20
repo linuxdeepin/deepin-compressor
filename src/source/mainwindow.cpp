@@ -1270,20 +1270,15 @@ void MainWindow::slotCompress(const QVariant &val)
     bUseLibarchive = false;
 #endif
 
-    // 判断zip格式是否使用了中文加密
-    bool zipPasswordIsChinese = false;
+    bool useLibzipForPassword = false;
     if ("application/zip" == m_stCompressParameter.strMimeType) {
-        for (const QChar &ch : m_stCompressParameter.strPassword) {
-            if (ch.unicode() >= 0x4E00 && ch.unicode() <= 0x9FA5) {
-                zipPasswordIsChinese = true;
-                break;
-            }
+        if (!m_stCompressParameter.strPassword.isEmpty()) {
+            useLibzipForPassword = true;
         }
     }
 
     UiTools::AssignPluginType eType = UiTools::APT_Auto;        // 默认自动选择插件
-    if (true == zipPasswordIsChinese) {
-        // 对zip的中文加密使用libzip插件
+    if (true == useLibzipForPassword) {
         eType = UiTools::APT_Libzip;
     } else if ((false == options.bSplit) && true == bUseLibarchive && "application/zip" == m_stCompressParameter.strMimeType) {
         // 考虑到华为arm平台 zip压缩 性能提升，只针对zip类型的压缩才会考虑到是否特殊处理arm平台，分卷情况不做此处理

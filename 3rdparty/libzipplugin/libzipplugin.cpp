@@ -206,7 +206,8 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
                         return PFT_Error;
                     }
 
-                    PasswordNeededQuery query(strFileName);
+                    // 全部解压时显示压缩包名称
+                    PasswordNeededQuery query(m_strArchiveName);
                     emit signalQuery(&query);
                     query.waitForResponse();
 
@@ -260,7 +261,9 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
                 // 判断是否需要密码，若需要密码，弹出密码输入对话框，用户输入密码之后，重新解压当前文件
                 if (ET_WrongPassword == m_eErrorType || ET_NeedPassword == m_eErrorType) {
 
-                    PasswordNeededQuery query(strFileName);
+                    // 根据解压文件数量决定显示的名称：单文件显示文件名，多文件显示压缩包名
+                    QString displayName = (m_listCurIndex.count() == 1) ? strFileName : m_strArchiveName;
+                    PasswordNeededQuery query(displayName);
                     emit signalQuery(&query);
                     query.waitForResponse();
 
