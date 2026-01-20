@@ -4,12 +4,12 @@
 <context>
     <name>AppendDialog</name>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="441"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="472"/>
         <source>Add files to the current archive</source>
         <translation>Dodaj datoteke v trenutni arhiv</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="446"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="477"/>
         <source>Use password</source>
         <translation>Uporabi geslo</translation>
     </message>
@@ -17,17 +17,20 @@
 <context>
     <name>CalculateSizeThread</name>
     <message>
-        <location filename="../src/source/common/calculatesizethread.cpp" line="62"/>
+        <location filename="../src/source/common/calculatesizethread.cpp" line="63"/>
+        <location filename="../src/source/common/calculatesizethread.cpp" line="148"/>
         <source>The original file of %1 does not exist, please check and try again</source>
         <translation>Izvirna datoteka za %1 ne obstaja - preverite in poskusite znova</translation>
     </message>
     <message>
-        <location filename="../src/source/common/calculatesizethread.cpp" line="64"/>
+        <location filename="../src/source/common/calculatesizethread.cpp" line="65"/>
+        <location filename="../src/source/common/calculatesizethread.cpp" line="150"/>
         <source>%1 does not exist on the disk, please check and try again</source>
         <translation>%1 ne obstaja na disku - preverite in poskusite znova</translation>
     </message>
     <message>
-        <location filename="../src/source/common/calculatesizethread.cpp" line="74"/>
+        <location filename="../src/source/common/calculatesizethread.cpp" line="75"/>
+        <location filename="../src/source/common/calculatesizethread.cpp" line="160"/>
         <source>You do not have permission to compress %1</source>
         <translation>Nimate pravic za stiskanje %1</translation>
     </message>
@@ -43,17 +46,17 @@
 <context>
     <name>CompressPage</name>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="76"/>
+        <location filename="../src/source/page/compresspage.cpp" line="77"/>
         <source>Next</source>
         <translation>Naprej</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="117"/>
+        <location filename="../src/source/page/compresspage.cpp" line="120"/>
         <source>Please add files</source>
         <translation>Dodajte datoteke</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="117"/>
+        <location filename="../src/source/page/compresspage.cpp" line="120"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>V redu</translation>
@@ -62,206 +65,209 @@
 <context>
     <name>CompressSettingPage</name>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="141"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="147"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="252"/>
         <source>New Archive</source>
         <translation>Nov arhiv</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="223"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="230"/>
         <source>Advanced Options</source>
         <translation>Napredne možnosti</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="227"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="234"/>
         <source>Compression method</source>
         <translation>Način stiskanja</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="230"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="237"/>
         <source>Encrypt the archive</source>
         <translation>Šifriraj arhiv</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="232"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="239"/>
         <source>CPU threads</source>
         <translation>Niti procesorja</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="234"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="241"/>
         <source>Encrypt the file list too</source>
         <translation>Šifriraj tudi seznam datotek</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="236"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="243"/>
         <source>Split to volumes</source>
         <translation>Razdeli na nosilce</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="238"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="245"/>
         <source>Comment</source>
         <translation>Komentar</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="240"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
         <source>Compress</source>
         <comment>button</comment>
         <translation>Stisni</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="259"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="266"/>
         <source>Store</source>
         <translation>Shrani</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="259"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="266"/>
         <source>Fastest</source>
         <translation>Najhitreje</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="259"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="266"/>
         <source>Fast</source>
         <translation>Hitro</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="259"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="266"/>
         <source>Normal</source>
         <translation>Navadno</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="259"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="266"/>
         <source>Good</source>
         <translation>Dobro</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="259"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="266"/>
         <source>Best</source>
         <translation>Najboljše</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="266"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="273"/>
         <source>Single thread</source>
         <translation>Posamična nit</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="266"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="273"/>
         <source>2 threads</source>
         <translation>2 vlakna</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="266"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="273"/>
         <source>4 threads</source>
         <translation>4 vlakna</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="266"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="273"/>
         <source>8 threads</source>
         <translation>8 vlakna</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="276"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="283"/>
         <source>Support zip, 7z type only</source>
         <translation>Podpira zgolj zip in 7z datoteke</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="279"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="286"/>
         <source>Support 7z type only</source>
         <translation>Podpira zgolj 7z datoteke</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="291"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="298"/>
         <source>Enter up to %1 characters</source>
         <translation>Vnesite do največ %1 znakov</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="311"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="318"/>
         <source>Name</source>
         <translation>Ime</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="312"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="319"/>
         <source>Save to</source>
         <translation>Shrani v</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="591"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="621"/>
         <source>Invalid file name</source>
         <translation>Napačno ime datoteke</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="597"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="628"/>
         <source>Please enter the path</source>
         <translation>Vnesite pot</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="602"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="634"/>
         <source>The path does not exist, please retry</source>
         <translation>Pot ne obstaja. Poskusite znova.</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="607"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="640"/>
         <source>You do not have permission to save files here, please change and retry</source>
         <translation>Nimate pravic za shranjevanje datotek na to mesto. Spremenite lokacijo in poskusite znova.</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="615"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="649"/>
         <source>Too many volumes, please change and retry</source>
         <translation>Preveč nosilcev. Spremenite število in poskusite znova</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="624"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="659"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="691"/>
         <source>%1 does not exist on the disk, please check and try again</source>
         <translation>%1 ne obstaja na disku - preverite in poskusite znova</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="630"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="666"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="699"/>
         <source>You do not have permission to compress %1</source>
         <translation>Nimate pravic za stiskanje %1</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="650"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="688"/>
         <source>The original file of %1 does not exist, please check and try again</source>
         <translation>Izvirna datoteka za %1 ne obstaja - preverite in poskusite znova</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="685"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="727"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>V redu</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="942"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="989"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Prekini</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="942"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="989"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>Zamenjaj</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="844"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="891"/>
         <source>Total size: %1</source>
         <translation>Skupna velikost: %1</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="865"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="912"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
         <translation>Ime je enako imenu stisnjene datoteke. Uporabite drugo ime</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="875"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="922"/>
         <source>The password for ZIP volumes cannot be in Chinese</source>
         <translation>Gesla za ZIP nosilce ne morejo biti v kitajščini</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="942"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="989"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Obstaja druga datoteka s tem imenom. Ali naj jo zamenjam?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="985"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="1036"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
         <translation>Podprti so le nagleški in kitajski znaki ter nekaj posebnih znakov</translation>
     </message>
@@ -269,60 +275,62 @@
 <context>
     <name>CompressView</name>
     <message>
-        <location filename="../src/source/tree/compressview.cpp" line="291"/>
+        <location filename="../src/source/tree/compressview.cpp" line="312"/>
         <source>Open</source>
         <translation>Odpri</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/compressview.cpp" line="304"/>
+        <location filename="../src/source/tree/compressview.cpp" line="325"/>
         <source>Rename</source>
         <translation>Preimenuj</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/compressview.cpp" line="309"/>
+        <location filename="../src/source/tree/compressview.cpp" line="330"/>
         <source>Delete</source>
         <translation>Izbriši</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/compressview.cpp" line="312"/>
+        <location filename="../src/source/tree/compressview.cpp" line="333"/>
         <source>Open with</source>
         <translation>Odpri z</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/compressview.cpp" line="316"/>
+        <location filename="../src/source/tree/compressview.cpp" line="337"/>
+        <location filename="../src/source/tree/compressview.cpp" line="536"/>
         <source>Select default program</source>
         <translation>Določi privzeti program</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/compressview.cpp" line="360"/>
+        <location filename="../src/source/tree/compressview.cpp" line="383"/>
         <source>It will permanently delete the file(s). Are you sure you want to continue?</source>
         <translation>Datoteke bodo trajno izbrisane. Aii želite nadaljevati?</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/compressview.cpp" line="360"/>
+        <location filename="../src/source/tree/compressview.cpp" line="383"/>
+        <location filename="../src/source/tree/compressview.cpp" line="505"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Prekini</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/compressview.cpp" line="360"/>
+        <location filename="../src/source/tree/compressview.cpp" line="383"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>Potrdi</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/compressview.cpp" line="480"/>
+        <location filename="../src/source/tree/compressview.cpp" line="506"/>
         <source>Add</source>
         <comment>button</comment>
         <translation>Dodaj</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/compressview.cpp" line="478"/>
+        <location filename="../src/source/tree/compressview.cpp" line="504"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
         <translation>Želite arhiv dodati v seznam ali ga želite odpreti v novem oknu?</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/compressview.cpp" line="481"/>
+        <location filename="../src/source/tree/compressview.cpp" line="507"/>
         <source>Open in new window</source>
         <translation>Odpri v novem oknu</translation>
     </message>
@@ -330,23 +338,23 @@
 <context>
     <name>ConvertDialog</name>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="310"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="333"/>
         <source>Changes to archives in this file type are not supported. Please convert the archive format to save the changes.</source>
         <translation>Za to vrsto datotek spreminjanje arhivov ni podprto. Pretvorite vrsto arhiva, da bi shranili spremembe.</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="318"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="341"/>
         <source>Convert the format to:</source>
         <translation>Pretvori format v:</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="342"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="365"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Prekini</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="343"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="366"/>
         <source>Convert</source>
         <comment>button</comment>
         <translation>Pretvori</translation>
@@ -429,6 +437,7 @@
     <name>Main</name>
     <message>
         <location filename="../src/main.cpp" line="146"/>
+        <location filename="../src/main.cpp" line="147"/>
         <source>Archive Manager</source>
         <translation>Upravitelj arhivov</translation>
     </message>
@@ -441,391 +450,463 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="194"/>
+        <location filename="../src/source/mainwindow.cpp" line="249"/>
         <source>Open file</source>
         <translation>Odpri datoteko</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="195"/>
+        <location filename="../src/source/mainwindow.cpp" line="250"/>
         <source>Settings</source>
         <translation>Nastavitve</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="308"/>
+        <location filename="../src/source/mainwindow.cpp" line="363"/>
+        <location filename="../src/source/mainwindow.cpp" line="375"/>
         <source>Create New Archive</source>
         <translation>Ustvari nov arhiv</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="384"/>
+        <location filename="../src/source/mainwindow.cpp" line="443"/>
         <source>Converting</source>
         <translation>Pretvarjanje</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="391"/>
+        <location filename="../src/source/mainwindow.cpp" line="451"/>
         <source>Updating comments</source>
         <translation>Posodabljanje komentarjev</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="593"/>
+        <location filename="../src/source/mainwindow.cpp" line="660"/>
+        <location filename="../src/source/mainwindow.cpp" line="2475"/>
+        <location filename="../src/source/mainwindow.cpp" line="2509"/>
+        <location filename="../src/source/mainwindow.cpp" line="2538"/>
         <source>Plugin error</source>
         <translation>Napaka vtičnika</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1457"/>
+        <location filename="../src/source/mainwindow.cpp" line="1560"/>
         <source>Adding successful</source>
         <translation>Dodajanje je uspelo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1491"/>
+        <location filename="../src/source/mainwindow.cpp" line="1594"/>
+        <location filename="../src/source/mainwindow.cpp" line="2562"/>
         <source>No data in it</source>
         <translation>Ne vsebuje podatkov</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1696"/>
+        <location filename="../src/source/mainwindow.cpp" line="1800"/>
         <source>Adding canceled</source>
         <translation>Dodajanje je bilo prekinjeno</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1798"/>
+        <location filename="../src/source/mainwindow.cpp" line="1906"/>
         <source>Adding failed</source>
         <translation>Dodajanje ni uspelo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1851"/>
+        <location filename="../src/source/mainwindow.cpp" line="1963"/>
         <source>Extraction failed: the file name is too long</source>
         <translation>Izvlačenje ni uspelo: ime datoteke je pre dolgo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1878"/>
-        <source>Failed to create "%1"</source>
-        <translation>Neuspelo ustvarjanje "%1"</translation>
+        <location filename="../src/source/mainwindow.cpp" line="1990"/>
+        <location filename="../src/source/mainwindow.cpp" line="2558"/>
+        <source>Failed to create &quot;%1&quot;</source>
+        <translation>Neuspelo ustvarjanje &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2000"/>
+        <location filename="../src/source/mainwindow.cpp" line="2116"/>
         <source>Open failed: the file name is too long</source>
         <translation>Odprtje ni uspelo: ime datoteke je pre dolgo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2244"/>
+        <location filename="../src/source/mainwindow.cpp" line="2448"/>
         <source>Compression successful</source>
         <translation>Stiskanje je uspelo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2250"/>
+        <location filename="../src/source/mainwindow.cpp" line="2454"/>
         <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
         <translation>Ime datoteke je pre dolgo, zato so bile prva 60 znakov presejane kot ime datoteke.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2279"/>
+        <location filename="../src/source/mainwindow.cpp" line="2483"/>
+        <location filename="../src/source/mainwindow.cpp" line="2566"/>
         <source>Insufficient disk space</source>
         <translation>Na disku ni dovolj prostora</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2309"/>
+        <location filename="../src/source/mainwindow.cpp" line="2521"/>
+        <location filename="../src/source/mainwindow.cpp" line="2546"/>
         <source>Some volumes are missing</source>
         <translation>Nekateri pogoni manjkajo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2334"/>
+        <location filename="../src/source/mainwindow.cpp" line="2550"/>
         <source>Wrong password, please retry</source>
         <translation>Napačno geslo, poskusite znova</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2338"/>
+        <location filename="../src/source/mainwindow.cpp" line="2495"/>
+        <location filename="../src/source/mainwindow.cpp" line="2554"/>
+        <location filename="../src/source/mainwindow.cpp" line="2582"/>
         <source>The file name is too long. Keep the name within 60 characters please.</source>
         <translation>Ime datoteke je pre dolgo. Prosimo, ohranite ime v 60 znakih.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2359"/>
+        <location filename="../src/source/mainwindow.cpp" line="2579"/>
         <source>Conversion failed</source>
         <translation>Pretvorba ni uspela</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2518"/>
+        <location filename="../src/source/mainwindow.cpp" line="2777"/>
         <source>Select file</source>
         <translation>Izberite datoteko</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3420"/>
+        <location filename="../src/source/mainwindow.cpp" line="3689"/>
         <source>Enter up to %1 characters</source>
         <translation>Vnesite do %1 znakov</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3292"/>
+        <location filename="../src/source/mainwindow.cpp" line="3561"/>
         <source>File info</source>
         <translation>Podatki o datoteki</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1568"/>
+        <location filename="../src/source/mainwindow.cpp" line="1671"/>
         <source>Do you want to delete the archive?</source>
         <translation>Ali želite izbrisati arhiv?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="628"/>
+        <location filename="../src/source/mainwindow.cpp" line="696"/>
         <source>%1 was changed on the disk, please import it again.</source>
         <translation>%1 na disku je bil spremenjen. Uvozite ga znova.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="66"/>
+        <location filename="../src/source/mainwindow.cpp" line="106"/>
         <source>Archive Manager</source>
         <translation>Upravitelj arhivov</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="149"/>
+        <location filename="../src/source/mainwindow.cpp" line="202"/>
         <source>You do not have permission to save files here, please change and retry</source>
         <translation>Nimate pravic za shranjevanje na to mesto. Spremenite lokacijo in poskusite znova.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="345"/>
+        <location filename="../src/source/mainwindow.cpp" line="403"/>
         <source>Adding files to %1</source>
         <translation>Dodajanje datotek v %1</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="353"/>
+        <location filename="../src/source/mainwindow.cpp" line="411"/>
         <source>Compressing</source>
         <translation>Stiskanje</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="361"/>
+        <location filename="../src/source/mainwindow.cpp" line="419"/>
         <source>Extracting</source>
         <translation>Razširjanje</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="369"/>
+        <location filename="../src/source/mainwindow.cpp" line="427"/>
         <source>Deleting</source>
         <translation>Brisanje</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="582"/>
+        <location filename="../src/source/mainwindow.cpp" line="649"/>
+        <location filename="../src/source/mainwindow.cpp" line="3377"/>
         <source>Loading, please wait...</source>
         <translation>Nalaganje, počakajte...</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="670"/>
+        <location filename="../src/source/mainwindow.cpp" line="739"/>
         <source>Are you sure you want to stop the ongoing task?</source>
         <translation>Želite zaustaviti trenutno opravilo?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1464"/>
+        <location filename="../src/source/mainwindow.cpp" line="1567"/>
+        <location filename="../src/source/mainwindow.cpp" line="1695"/>
+        <location filename="../src/source/mainwindow.cpp" line="1711"/>
         <source>Updating, please wait...</source>
         <translation>Posodabljanje. Počakajte...</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1873"/>
+        <location filename="../src/source/mainwindow.cpp" line="1985"/>
         <source>File name too long</source>
         <translation>Predolgo ime datoteke</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2275"/>
+        <location filename="../src/source/mainwindow.cpp" line="2479"/>
         <source>Failed to create file</source>
         <translation>Neuspešno ustvarjanje datoteke</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2268"/>
+        <location filename="../src/source/mainwindow.cpp" line="2472"/>
         <source>Compression failed</source>
         <translation>Stiskanje ni uspelo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2638"/>
+        <location filename="../src/source/mainwindow.cpp" line="2907"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>Zamenjaj</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2702"/>
+        <location filename="../src/source/mainwindow.cpp" line="2971"/>
         <source>Find directory</source>
         <translation>Poišči mapo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2294"/>
+        <location filename="../src/source/mainwindow.cpp" line="2506"/>
         <source>Open failed</source>
         <translation>Odpiranje ni uspelo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1794"/>
+        <location filename="../src/source/mainwindow.cpp" line="1902"/>
+        <location filename="../src/source/mainwindow.cpp" line="1980"/>
+        <location filename="../src/source/mainwindow.cpp" line="2059"/>
+        <location filename="../src/source/mainwindow.cpp" line="2114"/>
+        <location filename="../src/source/mainwindow.cpp" line="2517"/>
         <source>Wrong password</source>
         <translation>Napačno geslo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="715"/>
+        <location filename="../src/source/mainwindow.cpp" line="784"/>
+        <location filename="../src/source/mainwindow.cpp" line="823"/>
         <source>The file format is not supported by Archive Manager</source>
         <translation>Upravitelj arhivov ne podpira formata datoteke</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="149"/>
+        <location filename="../src/source/mainwindow.cpp" line="202"/>
+        <location filename="../src/source/mainwindow.cpp" line="582"/>
+        <location filename="../src/source/mainwindow.cpp" line="660"/>
+        <location filename="../src/source/mainwindow.cpp" line="699"/>
+        <location filename="../src/source/mainwindow.cpp" line="769"/>
+        <location filename="../src/source/mainwindow.cpp" line="775"/>
+        <location filename="../src/source/mainwindow.cpp" line="784"/>
+        <location filename="../src/source/mainwindow.cpp" line="830"/>
+        <location filename="../src/source/mainwindow.cpp" line="1118"/>
+        <location filename="../src/source/mainwindow.cpp" line="1594"/>
+        <location filename="../src/source/mainwindow.cpp" line="2737"/>
+        <location filename="../src/source/mainwindow.cpp" line="2757"/>
+        <location filename="../src/source/mainwindow.cpp" line="3065"/>
+        <location filename="../src/source/mainwindow.cpp" line="3236"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>V redu</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="377"/>
+        <location filename="../src/source/mainwindow.cpp" line="435"/>
         <source>Renaming</source>
         <translation>Preimenovanje</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="515"/>
+        <location filename="../src/source/mainwindow.cpp" line="582"/>
+        <location filename="../src/source/mainwindow.cpp" line="775"/>
         <source>You do not have permission to load %1</source>
         <translation>Nimate dovoljenja za nalaganje %1</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="670"/>
+        <location filename="../src/source/mainwindow.cpp" line="739"/>
+        <location filename="../src/source/mainwindow.cpp" line="1671"/>
+        <location filename="../src/source/mainwindow.cpp" line="2907"/>
+        <location filename="../src/source/mainwindow.cpp" line="3407"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Prekini</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="670"/>
+        <location filename="../src/source/mainwindow.cpp" line="739"/>
+        <location filename="../src/source/mainwindow.cpp" line="1671"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>Potrdi</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="700"/>
+        <location filename="../src/source/mainwindow.cpp" line="769"/>
         <source>No such file or directory</source>
         <translation>Datoteka li mapa ne obstaja</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1507"/>
+        <location filename="../src/source/mainwindow.cpp" line="1118"/>
+        <source>Unable to add system files or network files, please select files on local devices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1610"/>
         <source>Extraction successful</source>
         <comment>提取成功</comment>
         <translation>Razširjanje je uspelo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1717"/>
+        <location filename="../src/source/mainwindow.cpp" line="1821"/>
         <source>Extraction canceled</source>
         <comment>取消提取</comment>
         <translation>Razširjanje je bilo prekinjeno</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1863"/>
+        <location filename="../src/source/mainwindow.cpp" line="1975"/>
+        <location filename="../src/source/mainwindow.cpp" line="2054"/>
+        <location filename="../src/source/mainwindow.cpp" line="2513"/>
+        <location filename="../src/source/mainwindow.cpp" line="2542"/>
         <source>The archive is damaged</source>
         <translation>Arhiv je poškodovan</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2248"/>
+        <location filename="../src/source/mainwindow.cpp" line="2374"/>
+        <location filename="../src/source/mainwindow.cpp" line="2379"/>
+        <source>Failed to create temporary directory, please check and try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2390"/>
+        <location filename="../src/source/mainwindow.cpp" line="2400"/>
+        <source>Failed to prepare renamed item &quot;%1&quot; for compression, please check permissions and available space.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2452"/>
         <source>Extraction successful</source>
         <comment>解压成功</comment>
         <translation>Razširjanje je uspelo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2254"/>
+        <location filename="../src/source/mainwindow.cpp" line="2458"/>
         <source>Conversion successful</source>
         <translation>Pretvorba je uspela</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2283"/>
+        <location filename="../src/source/mainwindow.cpp" line="2487"/>
         <source>The compressed volumes already exist</source>
         <translation>Stiskane zbirke so že obstajali</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2319"/>
+        <location filename="../src/source/mainwindow.cpp" line="2491"/>
+        <source>No compression support in current directory. Download the files to a local device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2525"/>
+        <source>Can&apos;t open compressed packages in current directory. Download the compressed package to a local device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2535"/>
         <source>Extraction failed</source>
         <comment>解压失败</comment>
         <translation>Razširanje ni uspelo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2510"/>
+        <location filename="../src/source/mainwindow.cpp" line="2570"/>
+        <source>No extraction support in current directory. Download the compressed package to a local device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2769"/>
         <source>Close</source>
         <translation>Zapri</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2514"/>
+        <location filename="../src/source/mainwindow.cpp" line="2773"/>
         <source>Help</source>
         <translation>Pomoč</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2522"/>
+        <location filename="../src/source/mainwindow.cpp" line="2781"/>
         <source>Delete</source>
         <translation>Izbriši</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2530"/>
+        <location filename="../src/source/mainwindow.cpp" line="2789"/>
         <source>Display shortcuts</source>
         <translation>Prikaži bljižnice</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2542"/>
+        <location filename="../src/source/mainwindow.cpp" line="2801"/>
         <source>Shortcuts</source>
         <translation>Bljižnice</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2630"/>
+        <location filename="../src/source/mainwindow.cpp" line="2899"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
         <translation>Ime je enako imenu stisnjene datoteke. Uporabite drugo ime</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2638"/>
+        <location filename="../src/source/mainwindow.cpp" line="2907"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Obstaja druga datoteka s tem imenom. Ali naj jo zamenjam?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2781"/>
+        <location filename="../src/source/mainwindow.cpp" line="3050"/>
         <source>You cannot add the archive to itself</source>
         <translation>Arhiva ne morete dodajati samega vase</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2796"/>
+        <location filename="../src/source/mainwindow.cpp" line="3065"/>
         <source>You cannot add files to archives in this file type</source>
         <translation>Arhivom ne morete dodajati datotek te vrste</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3138"/>
+        <location filename="../src/source/mainwindow.cpp" line="3407"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>Posodobi</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3316"/>
+        <location filename="../src/source/mainwindow.cpp" line="3585"/>
         <source>Basic info</source>
         <translation>Osnovni podatki</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3332"/>
+        <location filename="../src/source/mainwindow.cpp" line="3601"/>
         <source>Size</source>
         <translation>Velikost</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3333"/>
+        <location filename="../src/source/mainwindow.cpp" line="3602"/>
         <source>Type</source>
         <translation>Vrsta</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3334"/>
+        <location filename="../src/source/mainwindow.cpp" line="3603"/>
         <source>Location</source>
         <translation>Lokacija</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3335"/>
+        <location filename="../src/source/mainwindow.cpp" line="3604"/>
         <source>Time created</source>
         <translation>Čas stvarjenja</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3336"/>
+        <location filename="../src/source/mainwindow.cpp" line="3605"/>
         <source>Time accessed</source>
         <translation>Čas dostopa</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3337"/>
+        <location filename="../src/source/mainwindow.cpp" line="3606"/>
         <source>Time modified</source>
         <translation>Čas spremembe</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3347"/>
+        <location filename="../src/source/mainwindow.cpp" line="3616"/>
         <source>Archive</source>
         <translation>Arhiv</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3382"/>
+        <location filename="../src/source/mainwindow.cpp" line="3651"/>
         <source>Comment</source>
         <translation>Komentar</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="750"/>
+        <location filename="../src/source/mainwindow.cpp" line="819"/>
         <source>Please check the file association type in the settings of Archive Manager</source>
         <translation>Preverite povezano vrsto datotek v nastavitvah Upravitelja arhivov</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2478"/>
+        <location filename="../src/source/mainwindow.cpp" line="2737"/>
+        <location filename="../src/source/mainwindow.cpp" line="2757"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>Arhiv na disku je bil spremenjen. Uvozite ga znova.</translation>
     </message>
@@ -886,39 +967,39 @@
 <context>
     <name>OpenWithDialog</name>
     <message>
-        <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="274"/>
+        <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="302"/>
         <source>Open with</source>
         <translation>Odpri z</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="294"/>
+        <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="322"/>
         <source>Add other programs</source>
         <translation>Dodaj druge programe</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="295"/>
+        <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="323"/>
         <source>Set as default</source>
         <translation>Določi za privzeto</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="297"/>
+        <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="325"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Prekini</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="298"/>
+        <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="326"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>Potrdi</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="303"/>
+        <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="331"/>
         <source>Recommended Applications</source>
         <translation>Priporočeni programi</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="305"/>
+        <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="333"/>
         <source>Other Applications</source>
         <translation>Drugi programi</translation>
     </message>
@@ -934,12 +1015,12 @@
 <context>
     <name>PreviousLabel</name>
     <message>
-        <location filename="../src/source/tree/treeheaderview.cpp" line="37"/>
+        <location filename="../src/source/tree/treeheaderview.cpp" line="39"/>
         <source>Current path:</source>
         <translation>Trenutna pot:</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/treeheaderview.cpp" line="45"/>
+        <location filename="../src/source/tree/treeheaderview.cpp" line="48"/>
         <source>Back to: %1</source>
         <translation>Nazaj na: %1</translation>
     </message>
@@ -953,11 +1034,13 @@
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="49"/>
+        <location filename="../src/source/dialog/progressdialog.cpp" line="93"/>
         <source>Task</source>
         <translation>Opravilo</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="55"/>
+        <location filename="../src/source/dialog/progressdialog.cpp" line="106"/>
         <source>Extracting</source>
         <translation>Razširjam</translation>
     </message>
@@ -983,115 +1066,141 @@
     <name>ProgressPage</name>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="46"/>
+        <location filename="../src/source/page/progresspage.cpp" line="344"/>
+        <location filename="../src/source/page/progresspage.cpp" line="347"/>
+        <location filename="../src/source/page/progresspage.cpp" line="350"/>
         <source>Speed</source>
         <comment>compress</comment>
         <translation>Hitrost</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="46"/>
+        <location filename="../src/source/page/progresspage.cpp" line="48"/>
+        <location filename="../src/source/page/progresspage.cpp" line="50"/>
+        <location filename="../src/source/page/progresspage.cpp" line="52"/>
+        <location filename="../src/source/page/progresspage.cpp" line="56"/>
+        <location filename="../src/source/page/progresspage.cpp" line="59"/>
+        <location filename="../src/source/page/progresspage.cpp" line="156"/>
         <source>Calculating...</source>
         <translation>Preračunavanje...</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="48"/>
+        <location filename="../src/source/page/progresspage.cpp" line="355"/>
+        <location filename="../src/source/page/progresspage.cpp" line="357"/>
         <source>Speed</source>
         <comment>delete</comment>
         <translation>Hitrost</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="50"/>
+        <location filename="../src/source/page/progresspage.cpp" line="362"/>
+        <location filename="../src/source/page/progresspage.cpp" line="364"/>
         <source>Speed</source>
         <comment>rename</comment>
         <translation>Hitrost</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="52"/>
+        <location filename="../src/source/page/progresspage.cpp" line="378"/>
+        <location filename="../src/source/page/progresspage.cpp" line="380"/>
+        <location filename="../src/source/page/progresspage.cpp" line="382"/>
         <source>Speed</source>
         <comment>convert</comment>
         <translation>Hitrost</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="56"/>
+        <location filename="../src/source/page/progresspage.cpp" line="369"/>
+        <location filename="../src/source/page/progresspage.cpp" line="371"/>
+        <location filename="../src/source/page/progresspage.cpp" line="373"/>
         <source>Speed</source>
         <comment>uncompress</comment>
         <translation>Hitrost</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="59"/>
+        <location filename="../src/source/page/progresspage.cpp" line="339"/>
         <source>Time left</source>
         <translation>Preostali čas</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="123"/>
+        <location filename="../src/source/page/progresspage.cpp" line="126"/>
         <source>Compressing</source>
         <translation>Stiskam</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="125"/>
+        <location filename="../src/source/page/progresspage.cpp" line="128"/>
         <source>Deleting</source>
         <translation>Brisanje</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="127"/>
+        <location filename="../src/source/page/progresspage.cpp" line="130"/>
         <source>Renaming</source>
         <translation>Preimenovanje</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="129"/>
+        <location filename="../src/source/page/progresspage.cpp" line="132"/>
         <source>Converting</source>
         <translation>Pretvarjanje</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="131"/>
+        <location filename="../src/source/page/progresspage.cpp" line="134"/>
+        <location filename="../src/source/page/progresspage.cpp" line="154"/>
         <source>Updating the comment...</source>
         <translation>Posodabljanje komentarja...</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="133"/>
+        <location filename="../src/source/page/progresspage.cpp" line="136"/>
         <source>Extracting</source>
         <translation>Razširjanje</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="144"/>
+        <location filename="../src/source/page/progresspage.cpp" line="148"/>
+        <location filename="../src/source/page/progresspage.cpp" line="194"/>
+        <location filename="../src/source/page/progresspage.cpp" line="402"/>
         <source>Pause</source>
         <comment>button</comment>
         <translation>Premor</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="185"/>
+        <location filename="../src/source/page/progresspage.cpp" line="193"/>
+        <location filename="../src/source/page/progresspage.cpp" line="438"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Prekini</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="173"/>
+        <location filename="../src/source/page/progresspage.cpp" line="180"/>
+        <location filename="../src/source/page/progresspage.cpp" line="397"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>Nadaljuj</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="407"/>
+        <location filename="../src/source/page/progresspage.cpp" line="438"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>Potrdi</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="396"/>
+        <location filename="../src/source/page/progresspage.cpp" line="424"/>
         <source>Are you sure you want to stop the decompression?</source>
         <translation>Želite res zaustaviti razširjanje?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="398"/>
+        <location filename="../src/source/page/progresspage.cpp" line="427"/>
         <source>Are you sure you want to stop the deletion?</source>
         <translation>Želite res zaustaviti brisanje?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="394"/>
+        <location filename="../src/source/page/progresspage.cpp" line="421"/>
+        <location filename="../src/source/page/progresspage.cpp" line="430"/>
         <source>Are you sure you want to stop the compression?</source>
         <translation>Ali želite zaustaviti stiskanje?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="402"/>
+        <location filename="../src/source/page/progresspage.cpp" line="433"/>
         <source>Are you sure you want to stop the conversion?</source>
         <translation>Želite zaustaviti pretvorbo?</translation>
     </message>
@@ -1119,161 +1228,124 @@
         <translation>Velikost</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3135"/>
+        <location filename="../src/source/mainwindow.cpp" line="3404"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
         <translation>Sprememba v %1. Želite shraniti spremembe v arhiv?</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="10"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="12"/>
         <source>General</source>
         <translation>Splošno</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="11"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="13"/>
         <source>Extraction</source>
         <translation>Razširjanje</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="12"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="14"/>
         <source>Auto create a folder for multiple extracted files</source>
         <translation>Samodejno ustvari mapo za več razširjenih datotek</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="13"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="15"/>
         <source>Show extracted files when completed</source>
         <translation>Ko končaš, prikaži razširjene datoteke</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="14"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="16"/>
         <source>File Management</source>
         <translation>Upravljanje datotek</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="15"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="17"/>
         <source>Delete files after compression</source>
         <translation>Po stiskanju izbriši datoteke</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="16"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="18"/>
         <source>Files Associated</source>
         <translation>Povezane datoteke</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="17"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="19"/>
         <source>File Type</source>
         <translation>Vrsta datoteke</translation>
     </message>
     <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="213"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="219"/>
         <location filename="../3rdparty/interface/queries.cpp" line="236"/>
         <source>Skip</source>
         <comment>button</comment>
         <translation>Preskoči</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="202"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="214"/>
         <source>Merge</source>
         <comment>button</comment>
         <translation>Združi</translation>
     </message>
     <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="217"/>
         <location filename="../3rdparty/interface/queries.cpp" line="213"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Obstaja druga datoteka s tem imenom. Ali naj jo zamenjam?</translation>
     </message>
     <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="220"/>
         <location filename="../3rdparty/interface/queries.cpp" line="237"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>Zamenjaj</translation>
     </message>
     <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="517"/>
         <location filename="../3rdparty/interface/queries.cpp" line="397"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Prekini</translation>
     </message>
     <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="518"/>
         <location filename="../3rdparty/interface/queries.cpp" line="398"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>V redu</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="199"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="211"/>
         <source>Another folder with the same name already exists, replace it?</source>
         <translation>Mapa s tem imenom že obstaja. Jo zamenjam?</translation>
     </message>
     <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="223"/>
         <location filename="../3rdparty/interface/queries.cpp" line="218"/>
         <source>Apply to all</source>
         <translation>Uveljavi na vseh</translation>
-    </message>
-    <message>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="44"/>
-        <source>Speed</source>
-        <comment>compress</comment>
-        <translation type="unfinished">Hitrost</translation>
-    </message>
-    <message>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="44"/>
-        <source>Calculating...</source>
-        <translation type="unfinished">Preračunavanje...</translation>
-    </message>
-    <message>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="50"/>
-        <source>Speed</source>
-        <comment>delete</comment>
-        <translation type="unfinished">Hitrost</translation>
-    </message>
-    <message>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="56"/>
-        <source>Speed</source>
-        <comment>convert</comment>
-        <translation type="unfinished">Hitrost</translation>
-    </message>
-    <message>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="68"/>
-        <source>Speed</source>
-        <comment>uncompress</comment>
-        <translation type="unfinished">Hitrost</translation>
-    </message>
-    <message>
-        <location filename="../tests/UnitTest/src/source/tree/ut_compressview.cpp" line="383"/>
-        <source>Select default program</source>
-        <translation type="unfinished">Določi privzeti program</translation>
-    </message>
-    <message>
-        <location filename="../tests/UnitTest/src/source/tree/ut_compressview.cpp" line="394"/>
-        <source>other</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tests/UnitTest/src/source/tree/ut_datamodel.cpp" line="163"/>
-        <source>item(s)</source>
-        <translation type="unfinished">Predmet(ov)</translation>
     </message>
 </context>
 <context>
     <name>RenameDialog</name>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="577"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="619"/>
         <source>Rename</source>
         <translation>Preimenuj</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="628"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="670"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Prekliči</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="629"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="671"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>Potrdi</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="639"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="681"/>
         <source>The name already exists</source>
         <translation>Ime že obstaja</translation>
     </message>
@@ -1281,58 +1353,64 @@
 <context>
     <name>SettingDialog</name>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="171"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="174"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="203"/>
         <source>Current directory</source>
         <translation>Trenutni imenik</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="130"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="132"/>
         <source>Clear All</source>
         <translation>Počisti vse</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="129"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="131"/>
         <source>Select All</source>
         <comment>button</comment>
         <translation>Izberi vse</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="131"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="133"/>
         <source>Recommended</source>
         <translation>Priporočeno</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="165"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="168"/>
         <source>Extract archives to</source>
         <translation>Razširi arhive v</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="171"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="174"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="213"/>
         <source>Other directory</source>
         <translation>Drug imenik</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="171"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="174"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="208"/>
         <source>Desktop</source>
         <translation>Namizje</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="277"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="281"/>
         <source>Delete archives after extraction</source>
         <translation>Po razširitvi izbriši arhiv</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="283"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="287"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="308"/>
         <source>Never</source>
         <translation>Nikoli</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="283"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="287"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="311"/>
         <source>Ask for confirmation</source>
         <translation>Vprašaj za potrditev</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="283"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="287"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="314"/>
         <source>Always</source>
         <translation>Vedno</translation>
     </message>
@@ -1358,17 +1436,18 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3601"/>
+        <location filename="../src/source/mainwindow.cpp" line="3871"/>
+        <location filename="../src/source/mainwindow.cpp" line="3926"/>
         <source>Open file</source>
         <translation>Odpri datoteko</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3604"/>
+        <location filename="../src/source/mainwindow.cpp" line="3874"/>
         <source>Back</source>
         <translation>Nazaj</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3660"/>
+        <location filename="../src/source/mainwindow.cpp" line="3930"/>
         <source>File info</source>
         <translation>Podatki o datoteki</translation>
     </message>
@@ -1377,33 +1456,35 @@
     <name>UnCompressPage</name>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="68"/>
+        <location filename="../src/source/page/uncompresspage.cpp" line="82"/>
+        <location filename="../src/source/page/uncompresspage.cpp" line="116"/>
         <source>Extract to:</source>
         <translation>Razširi v:</translation>
     </message>
     <message>
-        <location filename="../src/source/page/uncompresspage.cpp" line="110"/>
+        <location filename="../src/source/page/uncompresspage.cpp" line="117"/>
         <source>Extract</source>
         <comment>button</comment>
         <translation>Razširi</translation>
     </message>
     <message>
-        <location filename="../src/source/page/uncompresspage.cpp" line="194"/>
+        <location filename="../src/source/page/uncompresspage.cpp" line="202"/>
         <source>The default extraction path does not exist, please retry</source>
         <translation>Privzeta pot za razširitev ne obstaja. Poskusite znova</translation>
     </message>
     <message>
-        <location filename="../src/source/page/uncompresspage.cpp" line="197"/>
+        <location filename="../src/source/page/uncompresspage.cpp" line="205"/>
         <source>You do not have permission to save files here, please change and retry</source>
         <translation>Nimate pravic za shranjevanje na to mesto. Spremenite lokacijo in poskusite znova.</translation>
     </message>
     <message>
-        <location filename="../src/source/page/uncompresspage.cpp" line="201"/>
+        <location filename="../src/source/page/uncompresspage.cpp" line="209"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>V redu</translation>
     </message>
     <message>
-        <location filename="../src/source/page/uncompresspage.cpp" line="217"/>
+        <location filename="../src/source/page/uncompresspage.cpp" line="225"/>
         <source>Find directory</source>
         <translation>Iskanje mape</translation>
     </message>
@@ -1411,66 +1492,67 @@
 <context>
     <name>UnCompressView</name>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="393"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="424"/>
         <source>You cannot add the archive to itself</source>
         <translation>Arhiva ne morete dodajati samega vase</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="393"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="424"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>V redu</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="622"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="664"/>
         <source>Extract</source>
         <comment>提取</comment>
         <translation>Razširi</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="624"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="666"/>
         <source>Extract to current directory</source>
         <translation>Razširi v trenutni imenik</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="626"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="668"/>
         <source>Open</source>
         <translation>Odpri</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="628"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="670"/>
         <source>Rename</source>
         <translation>Preimenuj</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="636"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="678"/>
         <source>Delete</source>
         <translation>Izbriši</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="645"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="687"/>
         <source>Open with</source>
         <translation>Odpri z</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="649"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="691"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="856"/>
         <source>Select default program</source>
         <translation>Določi privzeti program</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="706"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="751"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Prekini</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="706"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="751"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>Potrdi</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="706"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="751"/>
         <source>Do you want to delete the selected file(s)?</source>
         <translation>Želite izbrisati izbrane datoteke?</translation>
     </message>

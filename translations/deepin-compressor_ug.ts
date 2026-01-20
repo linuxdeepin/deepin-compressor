@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="ug">
+<TS version="2.1" language="ug_CN">
 <context>
     <name>AppendDialog</name>
     <message>
@@ -477,105 +477,105 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="660"/>
-        <location filename="../src/source/mainwindow.cpp" line="2466"/>
-        <location filename="../src/source/mainwindow.cpp" line="2500"/>
-        <location filename="../src/source/mainwindow.cpp" line="2529"/>
+        <location filename="../src/source/mainwindow.cpp" line="2475"/>
+        <location filename="../src/source/mainwindow.cpp" line="2509"/>
+        <location filename="../src/source/mainwindow.cpp" line="2538"/>
         <source>Plugin error</source>
         <translation>قىستۇرما بىنورمال</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1551"/>
+        <location filename="../src/source/mainwindow.cpp" line="1560"/>
         <source>Adding successful</source>
         <translation>قوشۇلدى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1585"/>
-        <location filename="../src/source/mainwindow.cpp" line="2553"/>
+        <location filename="../src/source/mainwindow.cpp" line="1594"/>
+        <location filename="../src/source/mainwindow.cpp" line="2562"/>
         <source>No data in it</source>
         <translation>بولاق قۇرۇق</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1791"/>
+        <location filename="../src/source/mainwindow.cpp" line="1800"/>
         <source>Adding canceled</source>
         <translation>قوشۇش بىكار قىلىندى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1897"/>
+        <location filename="../src/source/mainwindow.cpp" line="1906"/>
         <source>Adding failed</source>
         <translation>قوشالمىدى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1954"/>
+        <location filename="../src/source/mainwindow.cpp" line="1963"/>
         <source>Extraction failed: the file name is too long</source>
         <translation>تاقىمىشنىڭ ئەمەلەتى: فايل نىسىمىسى كۆپ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1981"/>
-        <location filename="../src/source/mainwindow.cpp" line="2549"/>
+        <location filename="../src/source/mainwindow.cpp" line="1990"/>
+        <location filename="../src/source/mainwindow.cpp" line="2558"/>
         <source>Failed to create &quot;%1&quot;</source>
         <translation>«%1”» ھۆججەت قۇرۇش مەغلۇپ بولدى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2107"/>
+        <location filename="../src/source/mainwindow.cpp" line="2116"/>
         <source>Open failed: the file name is too long</source>
         <translation>ئەچىشنىڭ ئەمەلەتى: فايل نىسىمىسى كۆپ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2439"/>
+        <location filename="../src/source/mainwindow.cpp" line="2448"/>
         <source>Compression successful</source>
         <translation>مۇۋەپپەقىيەتلىك پىرىسلاندى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2445"/>
+        <location filename="../src/source/mainwindow.cpp" line="2454"/>
         <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
         <translation>فايل نىسىمىسى كۆپ، بۇ ئەۋ az 60 ئىشارة ئەمەلەتىنىڭ ئاپتىسى ئەمەلەتىنىڭ نىسىمىسى كۆپ بولۇپ، ئاپتىسى ئەمەلەتىنىڭ ئاپتىسى ئەمەلەتىنىڭ نىسىمىسى بىلەن ئاپتىسى ئەمەلەتىنىڭ نىسىمىسى ئىشەتىلىدۇ.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2474"/>
-        <location filename="../src/source/mainwindow.cpp" line="2557"/>
+        <location filename="../src/source/mainwindow.cpp" line="2483"/>
+        <location filename="../src/source/mainwindow.cpp" line="2566"/>
         <source>Insufficient disk space</source>
         <translation>دىسكا بوشلۇقى يەتمىدى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2512"/>
-        <location filename="../src/source/mainwindow.cpp" line="2537"/>
+        <location filename="../src/source/mainwindow.cpp" line="2521"/>
+        <location filename="../src/source/mainwindow.cpp" line="2546"/>
         <source>Some volumes are missing</source>
         <translation>ھەجىمى كەمچىل</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2541"/>
+        <location filename="../src/source/mainwindow.cpp" line="2550"/>
         <source>Wrong password, please retry</source>
         <translation>بولاق پارولى خاتا، قايتا سىناڭ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2486"/>
-        <location filename="../src/source/mainwindow.cpp" line="2545"/>
-        <location filename="../src/source/mainwindow.cpp" line="2573"/>
+        <location filename="../src/source/mainwindow.cpp" line="2495"/>
+        <location filename="../src/source/mainwindow.cpp" line="2554"/>
+        <location filename="../src/source/mainwindow.cpp" line="2582"/>
         <source>The file name is too long. Keep the name within 60 characters please.</source>
         <translation>فايل نىسىمىسى كۆپ. لەكىن نىسىمىسىنى 60 ئىشارة ئىچىدە قىلىڭ.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2570"/>
+        <location filename="../src/source/mainwindow.cpp" line="2579"/>
         <source>Conversion failed</source>
         <translation>تەشكىللىشنى ئەمەلەتى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2768"/>
+        <location filename="../src/source/mainwindow.cpp" line="2777"/>
         <source>Select file</source>
         <translation>ھۆججەتنى تاللاڭ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3680"/>
+        <location filename="../src/source/mainwindow.cpp" line="3689"/>
         <source>Enter up to %1 characters</source>
         <translation>ئىزاھات مەزمۇنى %1 خەتتىن ئېشىپ كەتمىسۇن</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3552"/>
+        <location filename="../src/source/mainwindow.cpp" line="3561"/>
         <source>File info</source>
         <translation>ھۆججەت ئۇچۇرى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1662"/>
+        <location filename="../src/source/mainwindow.cpp" line="1671"/>
         <source>Do you want to delete the archive?</source>
         <translation>تاللانغان ئارخىپىنى يۇيۇۋەتمەكچىمۇ؟</translation>
     </message>
@@ -616,7 +616,7 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="649"/>
-        <location filename="../src/source/mainwindow.cpp" line="3368"/>
+        <location filename="../src/source/mainwindow.cpp" line="3377"/>
         <source>Loading, please wait...</source>
         <translation>يۈكلەۋاتىدۇ،كۈتۈپ تۇرۇڭ...</translation>
     </message>
@@ -626,49 +626,49 @@
         <translation>داۋاملىشىۋاتقان ۋەزىپىنى توختاتماقچىمۇ؟</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1558"/>
-        <location filename="../src/source/mainwindow.cpp" line="1686"/>
-        <location filename="../src/source/mainwindow.cpp" line="1702"/>
+        <location filename="../src/source/mainwindow.cpp" line="1567"/>
+        <location filename="../src/source/mainwindow.cpp" line="1695"/>
+        <location filename="../src/source/mainwindow.cpp" line="1711"/>
         <source>Updating, please wait...</source>
         <translation>يېڭىلىنىۋاتىدۇ، سەل ساقلاڭ...</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1976"/>
+        <location filename="../src/source/mainwindow.cpp" line="1985"/>
         <source>File name too long</source>
         <translation>ھۆججەت نامى بەك ئۇزۇن</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2470"/>
+        <location filename="../src/source/mainwindow.cpp" line="2479"/>
         <source>Failed to create file</source>
         <translation>ھۆججەت قۇرۇش مەغلۇپ بولدى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2463"/>
+        <location filename="../src/source/mainwindow.cpp" line="2472"/>
         <source>Compression failed</source>
         <translation>پىرىسلاش مەغلۇپ بولدى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2898"/>
+        <location filename="../src/source/mainwindow.cpp" line="2907"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>ئالماشتۇرۇڭ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2962"/>
+        <location filename="../src/source/mainwindow.cpp" line="2971"/>
         <source>Find directory</source>
         <translation>مۇندەرىجىنى تېپىڭ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2497"/>
+        <location filename="../src/source/mainwindow.cpp" line="2506"/>
         <source>Open failed</source>
         <translation>ئاچالمىدى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1893"/>
-        <location filename="../src/source/mainwindow.cpp" line="1971"/>
-        <location filename="../src/source/mainwindow.cpp" line="2050"/>
-        <location filename="../src/source/mainwindow.cpp" line="2105"/>
-        <location filename="../src/source/mainwindow.cpp" line="2508"/>
+        <location filename="../src/source/mainwindow.cpp" line="1902"/>
+        <location filename="../src/source/mainwindow.cpp" line="1980"/>
+        <location filename="../src/source/mainwindow.cpp" line="2059"/>
+        <location filename="../src/source/mainwindow.cpp" line="2114"/>
+        <location filename="../src/source/mainwindow.cpp" line="2517"/>
         <source>Wrong password</source>
         <translation>مەخپىي نومۇر خاتا</translation>
     </message>
@@ -687,11 +687,12 @@
         <location filename="../src/source/mainwindow.cpp" line="775"/>
         <location filename="../src/source/mainwindow.cpp" line="784"/>
         <location filename="../src/source/mainwindow.cpp" line="830"/>
-        <location filename="../src/source/mainwindow.cpp" line="1585"/>
-        <location filename="../src/source/mainwindow.cpp" line="2728"/>
-        <location filename="../src/source/mainwindow.cpp" line="2748"/>
-        <location filename="../src/source/mainwindow.cpp" line="3056"/>
-        <location filename="../src/source/mainwindow.cpp" line="3227"/>
+        <location filename="../src/source/mainwindow.cpp" line="1118"/>
+        <location filename="../src/source/mainwindow.cpp" line="1594"/>
+        <location filename="../src/source/mainwindow.cpp" line="2737"/>
+        <location filename="../src/source/mainwindow.cpp" line="2757"/>
+        <location filename="../src/source/mainwindow.cpp" line="3065"/>
+        <location filename="../src/source/mainwindow.cpp" line="3236"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>تاماملاندى</translation>
@@ -709,16 +710,16 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="739"/>
-        <location filename="../src/source/mainwindow.cpp" line="1662"/>
-        <location filename="../src/source/mainwindow.cpp" line="2898"/>
-        <location filename="../src/source/mainwindow.cpp" line="3398"/>
+        <location filename="../src/source/mainwindow.cpp" line="1671"/>
+        <location filename="../src/source/mainwindow.cpp" line="2907"/>
+        <location filename="../src/source/mainwindow.cpp" line="3407"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>ئەمەلدىن قالدۇرۇش</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="739"/>
-        <location filename="../src/source/mainwindow.cpp" line="1662"/>
+        <location filename="../src/source/mainwindow.cpp" line="1671"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>جەزىملەشتۈرۈڭ</translation>
@@ -729,167 +730,172 @@
         <translation>نىشان ھۆججەت ياكى مۇندەرىجە يوق</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1601"/>
+        <location filename="../src/source/mainwindow.cpp" line="1118"/>
+        <source>Unable to add system files or network files, please select files on local devices</source>
+        <translation>سىستېما ھۆججەتلىرىنى ياكى تور ھۆججەتلىرىنى قوشالمىدى، لۇتپەن يېرىلىك ئۈسكۈنىدىكى ھۆججەتنى تاللاڭ</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1610"/>
         <source>Extraction successful</source>
         <comment>提取成功</comment>
         <translation>ئېلىش مۇۋەپپەقىيەتلىك بولدى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1812"/>
+        <location filename="../src/source/mainwindow.cpp" line="1821"/>
         <source>Extraction canceled</source>
         <comment>取消提取</comment>
         <translation>ئېلىش مەغلۇپ بولدى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1966"/>
-        <location filename="../src/source/mainwindow.cpp" line="2045"/>
-        <location filename="../src/source/mainwindow.cpp" line="2504"/>
-        <location filename="../src/source/mainwindow.cpp" line="2533"/>
+        <location filename="../src/source/mainwindow.cpp" line="1975"/>
+        <location filename="../src/source/mainwindow.cpp" line="2054"/>
+        <location filename="../src/source/mainwindow.cpp" line="2513"/>
+        <location filename="../src/source/mainwindow.cpp" line="2542"/>
         <source>The archive is damaged</source>
         <translation>بولاق بۇزۇلغان</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2365"/>
-        <location filename="../src/source/mainwindow.cpp" line="2370"/>
+        <location filename="../src/source/mainwindow.cpp" line="2374"/>
+        <location filename="../src/source/mainwindow.cpp" line="2379"/>
         <source>Failed to create temporary directory, please check and try again.</source>
         <translation>ۋاقىتلىق ھۆججەت قىسقۇچ قۇرالمىدى، تەكشۈرۈپ قايتا سىناڭ.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2381"/>
-        <location filename="../src/source/mainwindow.cpp" line="2391"/>
+        <location filename="../src/source/mainwindow.cpp" line="2390"/>
+        <location filename="../src/source/mainwindow.cpp" line="2400"/>
         <source>Failed to prepare renamed item &quot;%1&quot; for compression, please check permissions and available space.</source>
         <translation>%1دىن قىسقۇچ قىلىشقا نامىنى ئۆزگەرتەلمىدى، ئىجازەت ۋە بوشلۇقنى تەكشۈرۈڭ.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2443"/>
+        <location filename="../src/source/mainwindow.cpp" line="2452"/>
         <source>Extraction successful</source>
         <comment>解压成功</comment>
         <translation>ئېلىش مۇۋەپپەقىيەتلىك بولدى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2449"/>
+        <location filename="../src/source/mainwindow.cpp" line="2458"/>
         <source>Conversion successful</source>
         <translation>ئۆزگەرتىش مۇۋەپپەقىيەتلىك</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2478"/>
+        <location filename="../src/source/mainwindow.cpp" line="2487"/>
         <source>The compressed volumes already exist</source>
         <translation>تاقىمىش ئەمەلەتى ئەمەلەتى بار</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2482"/>
+        <location filename="../src/source/mainwindow.cpp" line="2491"/>
         <source>No compression support in current directory. Download the files to a local device.</source>
         <translation>جۈددىكى كاتالوگدا ئارشىپلەش ئەمەلى قوللينىلمايدۇ. فايىللەرنى لوكال قورۇلمىڭىزغا يۈكلەپ ئاندىن ئامالغا ئاشۇرۇڭ.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2516"/>
+        <location filename="../src/source/mainwindow.cpp" line="2525"/>
         <source>Can&apos;t open compressed packages in current directory. Download the compressed package to a local device.</source>
         <translation>جۈددىكى كاتالوگدا ئارشىپ پاكىتىنى ئاچىلمايدۇ. ئارشىپ پاكىتىنى لوكال قورۇلمىڭىزغا يۈكلەپ ئاندىن ئاچىڭ.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2526"/>
+        <location filename="../src/source/mainwindow.cpp" line="2535"/>
         <source>Extraction failed</source>
         <comment>解压失败</comment>
         <translation>ئېلىش مەغلۇب بولدى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2561"/>
+        <location filename="../src/source/mainwindow.cpp" line="2570"/>
         <source>No extraction support in current directory. Download the compressed package to a local device.</source>
         <translation>جۈددىكى كاتالوگدا ئارشىپتىن ئازات قىلىش ئەمەلى قوللينىلمايدۇ. ئارشىپ پاكىتىنى لوكال قورۇلمىڭىزغا يۈكلەپ ئاندىن ئازات قىلىڭ.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2760"/>
+        <location filename="../src/source/mainwindow.cpp" line="2769"/>
         <source>Close</source>
         <translation>تاقاش</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2764"/>
+        <location filename="../src/source/mainwindow.cpp" line="2773"/>
         <source>Help</source>
         <translation>ياردەم</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2772"/>
+        <location filename="../src/source/mainwindow.cpp" line="2781"/>
         <source>Delete</source>
         <translation>ئۆچۈرۈش</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2780"/>
+        <location filename="../src/source/mainwindow.cpp" line="2789"/>
         <source>Display shortcuts</source>
         <translation>تېزلەتمە كۆرسىتىش</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2792"/>
+        <location filename="../src/source/mainwindow.cpp" line="2801"/>
         <source>Shortcuts</source>
         <translation>تېزلەتمە</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2890"/>
+        <location filename="../src/source/mainwindow.cpp" line="2899"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
         <translation>ھۆججەت نامى پىرىسلانغان ھۆججەتنىڭ نامى بىلەن ئوخشاش قالدى، ھۆججەت نامىنى ئۆزگەرتىڭ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2898"/>
+        <location filename="../src/source/mainwindow.cpp" line="2907"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>ئوخشاش ئىسىمدىكى باشقا بىر ھۆججەت بۇرۇنلا مەۋجۇت ، ئۇنى ئالماشتۇرامسىز؟</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3041"/>
+        <location filename="../src/source/mainwindow.cpp" line="3050"/>
         <source>You cannot add the archive to itself</source>
         <translation>ئارخىپنى ئۆزىگە قوشالمايسىز</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3056"/>
+        <location filename="../src/source/mainwindow.cpp" line="3065"/>
         <source>You cannot add files to archives in this file type</source>
         <translation>بۇ پىرىسلانغان بوغچا فورماتى ھۆججەت قوشۇشنى قوللىمايدۇ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3398"/>
+        <location filename="../src/source/mainwindow.cpp" line="3407"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>يىڭىلاش</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3576"/>
+        <location filename="../src/source/mainwindow.cpp" line="3585"/>
         <source>Basic info</source>
         <translation>ئاساسىي ئۇچۇر</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3592"/>
+        <location filename="../src/source/mainwindow.cpp" line="3601"/>
         <source>Size</source>
         <translation>سىغىمى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3593"/>
+        <location filename="../src/source/mainwindow.cpp" line="3602"/>
         <source>Type</source>
         <translation>تىپى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3594"/>
+        <location filename="../src/source/mainwindow.cpp" line="3603"/>
         <source>Location</source>
         <translation>ئورۇن</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3595"/>
+        <location filename="../src/source/mainwindow.cpp" line="3604"/>
         <source>Time created</source>
         <translation>قۇرۇلغان ۋاقىت</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3596"/>
+        <location filename="../src/source/mainwindow.cpp" line="3605"/>
         <source>Time accessed</source>
         <translation>زىيارەت ۋاقتى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3597"/>
+        <location filename="../src/source/mainwindow.cpp" line="3606"/>
         <source>Time modified</source>
         <translation>ۋاقىت ئۆزگەرتىلدى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3607"/>
+        <location filename="../src/source/mainwindow.cpp" line="3616"/>
         <source>Archive</source>
         <translation>ئارخىپ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3642"/>
+        <location filename="../src/source/mainwindow.cpp" line="3651"/>
         <source>Comment</source>
         <translation>ئىزاھات</translation>
     </message>
@@ -899,8 +905,8 @@
         <translation>ئارخىپ باشقۇرغۇچىنىڭ تەڭشەكلىرىدىكى ھۆججەت بىرلەشمىسىنىڭ تۈرىنى تەكشۈرۈپ بېقىڭ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2728"/>
-        <location filename="../src/source/mainwindow.cpp" line="2748"/>
+        <location filename="../src/source/mainwindow.cpp" line="2737"/>
+        <location filename="../src/source/mainwindow.cpp" line="2757"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>ئارخىپ دىسكىدا ئۆزگەرتىلدى ، ئۇنى قايتا ئەكىرىڭ.</translation>
     </message>
@@ -1222,7 +1228,7 @@
         <translation>سىغىمى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3395"/>
+        <location filename="../src/source/mainwindow.cpp" line="3404"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
         <translation>% 1 ئۆزگەردى. ئارخىپقا ئۆزگەرتىش كىرگۈزمەكچىمۇ؟</translation>
     </message>
@@ -1430,18 +1436,18 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3862"/>
-        <location filename="../src/source/mainwindow.cpp" line="3917"/>
+        <location filename="../src/source/mainwindow.cpp" line="3871"/>
+        <location filename="../src/source/mainwindow.cpp" line="3926"/>
         <source>Open file</source>
         <translation>ھۆججەتنى ئېچىڭ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3865"/>
+        <location filename="../src/source/mainwindow.cpp" line="3874"/>
         <source>Back</source>
         <translation>قايتىش</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3921"/>
+        <location filename="../src/source/mainwindow.cpp" line="3930"/>
         <source>File info</source>
         <translation>ھۆججەت ئۇچۇرى</translation>
     </message>

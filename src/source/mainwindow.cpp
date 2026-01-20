@@ -1112,6 +1112,10 @@ void MainWindow::slotChoosefiles()
     for (const auto &url : listSelFiles) {
         if (!UiTools::isLocalDeviceFile(url)) {
             qWarning() << "Non-local file selected, aborting:" << url;
+            // 提示用户无法添加非本地设备文件
+            TipDialog dialog(this);
+            moveDialogToCenter(&dialog);
+            dialog.showDialog(tr("Unable to add system files or network files, please select files on local devices"), tr("OK", "button"), DDialog::ButtonNormal);
             return;
         }
 
