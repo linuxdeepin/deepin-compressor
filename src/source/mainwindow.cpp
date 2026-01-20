@@ -1269,8 +1269,11 @@ void MainWindow::slotCompress(const QVariant &val)
     // 判断zip格式是否使用了中文加密
     bool zipPasswordIsChinese = false;
     if ("application/zip" == m_stCompressParameter.strMimeType) {
-        if (m_stCompressParameter.strPassword.contains(REG_EXP("[\\x4e00-\\x9fa5]+"))) {
-            zipPasswordIsChinese = true;
+        for (const QChar &ch : m_stCompressParameter.strPassword) {
+            if (ch.unicode() >= 0x4E00 && ch.unicode() <= 0x9FA5) {
+                zipPasswordIsChinese = true;
+                break;
+            }
         }
     }
 

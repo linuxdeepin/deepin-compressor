@@ -216,7 +216,8 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
                         return PFT_Cancel;
                     } else {
                         setPassword(query.password());
-                        zip_set_default_password(archive, m_strPassword.toUtf8().constData());
+                        QByteArray passwordBytes = passwordUnicode(m_strPassword, 0);
+                        zip_set_default_password(archive, passwordBytes.constData());
                         lastNeedPasswordIndex = i;
                         i--;
                     }
@@ -269,7 +270,8 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
                         return PFT_Cancel;
                     } else {
                         setPassword(query.password());
-                        zip_set_default_password(archive, m_strPassword.toUtf8().constData());
+                        QByteArray passwordBytes = passwordUnicode(m_strPassword, 0);
+                        zip_set_default_password(archive, passwordBytes.constData());
                         i--;
                     }
                 } else {
@@ -668,12 +670,13 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &entry, const Compre
     // 设置压缩的加密算法
     if (options.bEncryption && !options.strEncryptionMethod.isEmpty()) { //ReadOnlyArchiveInterface::password()
         int ret = 0;
+        QByteArray passwordBytes = passwordUnicode(options.strPassword, 0);
         if (QLatin1String("AES128") == options.strEncryptionMethod) {
-            ret = zip_file_set_encryption(archive, uindex, ZIP_EM_AES_128, options.strPassword.toUtf8().constData());
+            ret = zip_file_set_encryption(archive, uindex, ZIP_EM_AES_128, passwordBytes.constData());
         } else if (QLatin1String("AES192") == options.strEncryptionMethod) {
-            ret = zip_file_set_encryption(archive, uindex, ZIP_EM_AES_192, options.strPassword.toUtf8().constData());
+            ret = zip_file_set_encryption(archive, uindex, ZIP_EM_AES_192, passwordBytes.constData());
         } else if (QLatin1String("AES256") == options.strEncryptionMethod) {
-            ret = zip_file_set_encryption(archive, uindex, ZIP_EM_AES_256, options.strPassword.toUtf8().constData());
+            ret = zip_file_set_encryption(archive, uindex, ZIP_EM_AES_256, passwordBytes.constData());
         }
         if (ret != 0) {
             emit error(("Failed to set compression options for entry: %1"));
