@@ -67,7 +67,7 @@ QString CliPzipPlugin::getPzipPath() const
 
     // 开发环境：尝试从应用程序目录查找
     QString appDir = QCoreApplication::applicationDirPath();
-    QString devPath = appDir + "/../3rdparty/pzip/pzip";
+    QString devPath = appDir + "/../src/pzip/pzip";
     if (QFileInfo::exists(devPath)) {
         return devPath;
     }
@@ -91,7 +91,7 @@ QString CliPzipPlugin::getPunzipPath() const
 
     // 开发环境：尝试从应用程序目录查找
     QString appDir = QCoreApplication::applicationDirPath();
-    QString devPath = appDir + "/../3rdparty/pzip/punzip";
+    QString devPath = appDir + "/../src/pzip/punzip";
     if (QFileInfo::exists(devPath)) {
         return devPath;
     }

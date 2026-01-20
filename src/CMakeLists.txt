@@ -143,3 +143,8 @@ install(FILES ${CMAKE_CURRENT_LIST_DIR}/com.deepin.Compressor.service
 # Install DBus interface XML file
 install(FILES ${CMAKE_CURRENT_LIST_DIR}/com.deepin.Compressor.xml
         DESTINATION ${CMAKE_INSTALL_DATADIR}/dbus-1/interfaces/)
+
+# pzip 高性能并行压缩工具（仅 x86/ARM + Qt6 环境启用）
+if((CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm|x86_64|amd64") AND (QT_VERSION_MAJOR EQUAL 6))
+    add_subdirectory(pzip)
+endif()

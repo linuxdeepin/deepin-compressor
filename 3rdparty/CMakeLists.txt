@@ -16,10 +16,9 @@ add_subdirectory(libzipplugin)
 
 add_subdirectory(libminizipplugin)
 
-# pzip 高性能并行压缩工具（仅 x86/ARM + Qt6 环境启用）
+# clipzipplugin（仅 x86/ARM + Qt6 环境启用，依赖 src/pzip）
 if((CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm|x86_64|amd64") AND (QT_VERSION_MAJOR EQUAL 6))
     message(STATUS "x86/ARM + Qt6 环境，启用 pzip 高性能压缩插件")
-    add_subdirectory(pzip)
     add_subdirectory(clipzipplugin)
 else()
     message(STATUS "非 x86/ARM + Qt6 环境，使用默认 libzip 插件")
