@@ -77,18 +77,25 @@ public:
     QString getComment() const;
 
     /**
+     * @brief 是否定制模式
+     * @return
+     */
+    bool isOrderMode();
+
+    /**
      * @brief eventFilter 事件过滤，处理键盘事件等
      * @param watched
      * @param event
      * @return
      */
     bool eventFilter(QObject *watched, QEvent *event) override;
-    /**
-     * @brief 是否定制模式
-     * @return
-     */
-    bool isOrderMode();
 
+protected:
+    /**
+     * @brief mousePressEvent 鼠标点击事件，点击空白区域取消输入框焦点
+     * @param event
+     */
+    void mousePressEvent(QMouseEvent *event) override;
 private:
     /**
      * @brief initUI    初始化界面

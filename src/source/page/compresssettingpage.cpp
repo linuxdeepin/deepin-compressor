@@ -1087,3 +1087,30 @@ TypeLabel *CompressSettingPage::getClickLbl() const
     // qDebug() << "getClickLbl called";
     return m_pClickLbl;
 }
+
+void CompressSettingPage::mousePressEvent(QMouseEvent *event)
+{
+    // 点击空白区域时，清除输入框焦点
+    if (m_pFileNameEdt && m_pFileNameEdt->lineEdit()->hasFocus()) {
+        qDebug() << "Clearing focus from file name edit";
+        m_pFileNameEdt->lineEdit()->clearFocus();
+    }
+    if (m_pSavePathEdt && m_pSavePathEdt->lineEdit()->hasFocus()) {
+        qDebug() << "Clearing focus from save path edit";
+        m_pSavePathEdt->lineEdit()->clearFocus();
+    }
+    if (m_pPasswordEdt && m_pPasswordEdt->lineEdit()->hasFocus()) {
+        qDebug() << "Clearing focus from password edit";
+        m_pPasswordEdt->lineEdit()->clearFocus();
+    }
+    if (m_pSplitValueEdt && m_pSplitValueEdt->hasFocus()) {
+        qDebug() << "Clearing focus from split value edit";
+        m_pSplitValueEdt->clearFocus();
+    }
+    if (m_pCommentEdt && m_pCommentEdt->hasFocus()) {
+        qDebug() << "Clearing focus from comment edit";
+        m_pCommentEdt->clearFocus();
+    }
+    
+    DWidget::mousePressEvent(event);
+}
