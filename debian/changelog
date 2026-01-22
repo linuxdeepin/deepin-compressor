@@ -1,3 +1,15 @@
+deepin-compressor (6.5.21) unstable; urgency=medium
+
+  * fix: Fix Chinese password compression failure
+  * fix: Fix issue where adding system files shows no prompt
+  * refactor: Remove pzip plugin and update CMake configuration
+  * fix: Fix incorrect names when extracting encrypted folders
+  * fix: Fix untranslated Japanese in the right-click menu
+  * fix: Fix the issue where the input box cannot lose focus
+  * fix: Fix tar.lzo compression format unavailable
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Thu, 22 Jan 2026 19:13:37 +0800
+
 deepin-compressor (6.5.20) unstable; urgency=medium
 
   * fix: Add support for symbolic links in file compression
