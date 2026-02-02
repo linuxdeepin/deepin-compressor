@@ -1110,6 +1110,59 @@ bool CliInterface::moveExtractTempFilesToDest(const QList<FileEntry> &files, con
     return moveSuccess;
 }
 
+void CliInterface::removeExtractedFilesOnFailure(const QString &strTargetPath, const QList<FileEntry> &entries)
+{
+    QList<FileEntry> listToRemove = entries;
+    if (listToRemove.isEmpty()) {
+        listToRemove = DataManager::get_instance().archiveData().mapFileEntry.values();
+    }
+    if (listToRemove.isEmpty()) {
+        return;
+    }
+
+    QDir targetDir(strTargetPath);
+    if (!targetDir.exists()) {
+        return;
+    }
+
+    QList<QPair<QString, bool> > paths;   // path, isDirectory
+    for (const FileEntry &entry : listToRemove) {
+        QString relPath = entry.strFullPath;
+        if (relPath.endsWith(QLatin1Char('/'))) {
+            relPath.chop(1);
+        }
+        if (relPath.isEmpty()) {
+            continue;
+        }
+        paths.append(qMakePair(targetDir.absoluteFilePath(relPath), entry.isDirectory));
+    }
+
+    for (const auto &p : paths) {
+        const QString &path = p.first;
+        if (!p.second) {   // 文件
+            QFileInfo fi(path);
+            if (fi.exists() && fi.isFile() && fi.size() == 0) {
+                QFile::remove(path);
+            }
+        }
+    }
+    // 空目录可能有多层，循环直到本轮没有可删的空目录
+    bool removed;
+    do {
+        removed = false;
+        for (const auto &p : paths) {
+            if (!p.second) {
+                continue;
+            }
+            QDir d(p.first);
+            if (d.exists() && d.isEmpty()) {
+                d.removeRecursively();
+                removed = true;
+            }
+        }
+    } while (removed);
+}
+
 bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
 {
     ExtractionOptions &options = m_extractOptions;
@@ -1284,6 +1337,7 @@ void CliInterface::readStdout(bool handleAll)
         // 第二个判断条件是处理rar的list，当rar文件含有comment信息的时候需要根据空行解析
         if (!line.isEmpty() || (m_listEmptyLines && m_workStatus == WT_List)) {
             if (!handleLine(QString::fromLocal8Bit(line), m_workStatus)) {
+                emit signalprogress(100);
                 killProcess();
                 return;
             }
@@ -1327,6 +1381,11 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
 
     m_indexOfListRootEntry = 0;
     m_isEmptyArchive = false;
+
+    // 解压失败（如分卷加密包输错密码）且为全部解压到目标路径时，清理已生成的 size 为 0 等残留文件
+    if (0 != exitCode && m_extractOptions.bAllExtract && !m_extractOptions.strTargetPath.isEmpty()) {
+        removeExtractedFilesOnFailure(m_extractOptions.strTargetPath, m_files);
+    }
 
     if (!m_extractOptions.bAllExtract && (!(m_extractOptions.strTargetPath.startsWith("/tmp") && m_extractOptions.strTargetPath.contains("/deepin-compressor-") && m_extractOptions.strDestination.isEmpty()))) {
         if (0 == exitCode) {   // job正常结束
