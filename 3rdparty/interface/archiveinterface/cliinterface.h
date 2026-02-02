@@ -193,6 +193,13 @@ private:
      */
     bool moveExtractTempFilesToDest(const QList<FileEntry> &files, const ExtractionOptions &options);
 
+    /**
+     * @brief removeExtractedFilesOnFailure 解压失败时清理已生成的文件（如分卷加密包输错密码时产生的 size 为 0 的文件）
+     * @param strTargetPath 解压目标路径
+     * @param entries 本次解压涉及的条目列表（可为空，为空时从 ArchiveData 获取全部）
+     */
+    void removeExtractedFilesOnFailure(const QString &strTargetPath, const QList<FileEntry> &entries);
+
     bool handleLongNameExtract(const QList<FileEntry> &files);
 
 private slots:
