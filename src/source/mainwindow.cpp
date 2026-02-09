@@ -3557,7 +3557,7 @@ void MainWindow::slotShowShortcutTip()
 void MainWindow::slotFinishCalculateSize(qint64 size, QString strArchiveFullPath, QList<FileEntry> listAddEntry, CompressOptions stOptions, QList<FileEntry> listAllEntry)
 {
     if (StartupType::ST_Compresstozip7z == m_eStartupType) {
-        stOptions.iCompressionLevel = 1;
+        stOptions.iCompressionLevel = 0;
 #ifdef DTKCORE_CLASS_DConfigFile
     if(m_pCompressSettingPage->isOrderMode()) {
         DConfig *dconfig = DConfig::create("org.deepin.compressor","org.deepin.compressor.method");
