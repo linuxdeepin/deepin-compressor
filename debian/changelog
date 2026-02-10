@@ -1,3 +1,10 @@
+deepin-compressor (6.5.22) unstable; urgency=medium
+
+  * fix: Specify plugin type for zip file handling in ArchiveManager
+  * build(debian): separate Qt5/Qt6 build configurations for V25/V20 support
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Tue, 10 Feb 2026 14:11:07 +0800
+
 deepin-compressor (6.5.21) unstable; urgency=medium
 
   * fix: Fix Chinese password compression failure
