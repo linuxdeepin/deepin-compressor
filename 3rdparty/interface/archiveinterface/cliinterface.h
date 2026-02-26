@@ -202,6 +202,8 @@ private:
 
     bool handleLongNameExtract(const QList<FileEntry> &files);
 
+    bool checkMoveCapability();
+
 private slots:
     /**
      * @brief readStdout  读取命令行输出

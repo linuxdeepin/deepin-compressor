@@ -201,6 +201,14 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
                 }
             }
         }
+
+        if (bHandleLongName && !checkMoveCapability()) {
+            qWarning() << "Long filename detected, but moveProgram (" << m_cliProps->property("moveProgram").toString() << ") is not available.";
+            qWarning() << "Archive format:" << m_mimetype.name() << "Skipping long name handling.";
+            qWarning() << "The extraction tool will report errors for files with names exceeding system limit (255 bytes).";
+            bHandleLongName = false;
+        }
+
         if (destPath.startsWith("/tmp") && destPath.contains("/deepin-compressor-")) {   // 打开解压列表文件
             if (!QDir(destPath).exists()) {
                 QDir(destPath).mkpath(destPath);
@@ -242,6 +250,7 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
         } else {
             password = options.password;
         }
+
         if (!bLnfs) {
             for (QMap<QString, FileEntry>::const_iterator iter = arcData.mapFileEntry.begin(); iter != arcData.mapFileEntry.end(); iter++) {
                 if (NAME_MAX < iter.value().strFileName.toLocal8Bit().length()) {
@@ -250,6 +259,14 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
                 }
             }
         }
+
+        if (bHandleLongName && !checkMoveCapability()) {
+            qWarning() << "Long filename detected, but moveProgram (" << m_cliProps->property("moveProgram").toString() << ") is not available.";
+            qWarning() << "Archive format:" << m_mimetype.name() << "Skipping long name handling.";
+            qWarning() << "The extraction tool will report errors for files with names exceeding system limit (255 bytes).";
+            bHandleLongName = false;
+        }
+
         if (bHandleLongName) {
             if (!handleLongNameExtract(arcData.mapFileEntry.values())) {
                 m_eErrorType = ET_FileWriteError;
@@ -1108,6 +1125,17 @@ bool CliInterface::moveExtractTempFilesToDest(const QList<FileEntry> &files, con
     }
 
     return moveSuccess;
+}
+
+bool CliInterface::checkMoveCapability()
+{
+    bool hasMoveCapability = false;
+    QString moveProgram = m_cliProps->property("moveProgram").toString();
+    if (!moveProgram.isEmpty()) {
+        QString moveProgramPath = QStandardPaths::findExecutable(moveProgram);
+        hasMoveCapability = !moveProgramPath.isEmpty();
+    }
+    return hasMoveCapability;
 }
 
 void CliInterface::removeExtractedFilesOnFailure(const QString &strTargetPath, const QList<FileEntry> &entries)
