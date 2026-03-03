@@ -257,16 +257,14 @@ Error ZipWriter::createRaw(const ZipFileHeader& header,
         return Error(ErrorCode::FILE_OPEN_ERROR, "File not open");
     }
     
-    // 保存本地文件头偏移
-    CentralDirEntry entry;
-    entry.header = header;
-    entry.localHeaderOffset = currentOffset_;
+    // 记录本地文件头偏移
+    uint64_t localHeaderOffset = currentOffset_;
     
     // 写入本地文件头
     Error err = writeLocalFileHeader(header);
     if (err) return err;
     
-    // 写入压缩数据
+    // 写入压缩数据（dataProvider 可能会更新 header 中的 CRC 等字段）
     dataProvider([this](const uint8_t* data, size_t size) {
         file_.write(reinterpret_cast<const char*>(data), size);
         currentOffset_ += size;
@@ -276,12 +274,16 @@ Error ZipWriter::createRaw(const ZipFileHeader& header,
         return Error(ErrorCode::FILE_WRITE_ERROR, "Failed to write compressed data");
     }
     
-    // 如果使用数据描述符，写入它
+    // 如果使用数据描述符，写入它（此时 header.crc32 已在 dataProvider 中更新）
     if (header.flags & ZIP_FLAG_DATA_DESCRIPTOR) {
         err = writeDataDescriptor(header);
         if (err) return err;
     }
     
+    // dataProvider 运行后再拷贝 header，确保 CRC 等字段是最新值
+    CentralDirEntry entry;
+    entry.header = header;
+    entry.localHeaderOffset = localHeaderOffset;
     centralDir_.push_back(entry);
     return Error();
 }

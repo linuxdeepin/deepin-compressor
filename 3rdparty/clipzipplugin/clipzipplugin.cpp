@@ -190,8 +190,12 @@ PluginFinishType CliPzipPlugin::addFiles(const QList<FileEntry> &files, const Co
     // 静默模式
     arguments << "-q";
 
-    arguments << "-l" << "1";
-    Q_UNUSED(options.iCompressionLevel);
+    // 压缩等级：0=Store(不压缩)，1-9=deflate 压缩级别
+    int level = options.iCompressionLevel;
+    if (level < 0 || level > 9) {
+        level = 1;
+    }
+    arguments << "-l" << QString::number(level);
 
     // 线程数：只有大于1时才指定，否则让 pzip 自动使用全部 CPU 核心
     if (options.iCPUTheadNum > 1) {

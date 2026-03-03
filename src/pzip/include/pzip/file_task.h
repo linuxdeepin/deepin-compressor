@@ -108,6 +108,7 @@ public:
     ZipFileHeader header;       // ZIP 头信息
     bool isSymlink = false;     // 是否是符号链接
     std::string symlinkTarget;  // 符号链接目标路径
+    bool streamFromSource = false; // Store 模式：写入时直接从源文件读取，跳过缓冲
     
     // 压缩器（由 Archiver 管理）
     z_stream* compressor = nullptr;

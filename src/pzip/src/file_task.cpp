@@ -36,6 +36,9 @@ FileTask::FileTask(FileTask&& other) noexcept
     , status(other.status)
     , fileSize(other.fileSize)
     , header(std::move(other.header))
+    , isSymlink(other.isSymlink)
+    , symlinkTarget(std::move(other.symlinkTarget))
+    , streamFromSource(other.streamFromSource)
     , compressor(other.compressor)
     , buffer_(std::move(other.buffer_))
     , bufferUsed_(other.bufferUsed_)
@@ -44,6 +47,8 @@ FileTask::FileTask(FileTask&& other) noexcept
     , written_(other.written_)
 {
     other.compressor = nullptr;
+    other.isSymlink = false;
+    other.streamFromSource = false;
     other.bufferUsed_ = 0;
     other.written_ = 0;
 }
@@ -54,6 +59,9 @@ FileTask& FileTask::operator=(FileTask&& other) noexcept {
         status = other.status;
         fileSize = other.fileSize;
         header = std::move(other.header);
+        isSymlink = other.isSymlink;
+        symlinkTarget = std::move(other.symlinkTarget);
+        streamFromSource = other.streamFromSource;
         compressor = other.compressor;
         buffer_ = std::move(other.buffer_);
         bufferUsed_ = other.bufferUsed_;
@@ -62,6 +70,8 @@ FileTask& FileTask::operator=(FileTask&& other) noexcept {
         written_ = other.written_;
         
         other.compressor = nullptr;
+        other.isSymlink = false;
+        other.streamFromSource = false;
         other.bufferUsed_ = 0;
         other.written_ = 0;
     }
@@ -84,6 +94,7 @@ Error FileTask::reset(const fs::path& filePath, const fs::path& relativeTo) {
     written_ = 0;
     isSymlink = false;
     symlinkTarget.clear();
+    streamFromSource = false;
     
     // 设置新文件信息
     path = filePath;
@@ -184,12 +195,17 @@ size_t FileTask::write(const uint8_t* data, size_t size) {
             );
             
             if (!overflow_->is_open()) {
+                overflow_.reset();
                 return totalWritten;
             }
         }
         
-        overflow_->write(reinterpret_cast<const char*>(data), size);
-        totalWritten += size;
+        if (overflow_ && overflow_->is_open()) {
+            overflow_->write(reinterpret_cast<const char*>(data), size);
+            if (overflow_->good()) {
+                totalWritten += size;
+            }
+        }
     }
     
     written_ += totalWritten;
@@ -197,13 +213,34 @@ size_t FileTask::write(const uint8_t* data, size_t size) {
 }
 
 void FileTask::readCompressedData(std::function<void(const uint8_t*, size_t)> callback) {
+    // Store 模式：直接从源文件流式读取，边读边算 CRC
+    if (streamFromSource) {
+        std::ifstream file(path, std::ios::binary);
+        if (!file.is_open()) return;
+        
+        uint32_t crc = 0;
+        std::vector<uint8_t> readBuf(READ_BUFFER_SIZE);
+        while (file.good() && !file.eof()) {
+            file.read(reinterpret_cast<char*>(readBuf.data()), readBuf.size());
+            auto bytesRead = file.gcount();
+            if (bytesRead > 0) {
+                crc = utils::crc32Update(crc, readBuf.data(), bytesRead);
+                callback(readBuf.data(), bytesRead);
+            }
+        }
+        header.crc32 = crc;
+        return;
+    }
+    
     // 先读取内存缓冲区
     if (bufferUsed_ > 0) {
         callback(buffer_.data(), bufferUsed_);
     }
     
     // 再读取溢出文件
-    if (overflow_) {
+    if (overflow_ && overflow_->is_open()) {
+        overflow_->flush();
+        overflow_->clear();
         overflow_->seekg(0, std::ios::beg);
         
         std::vector<uint8_t> readBuf(READ_BUFFER_SIZE);
