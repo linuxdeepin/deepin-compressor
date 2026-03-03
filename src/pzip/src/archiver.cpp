@@ -6,6 +6,7 @@
 #include "pzip/archiver.h"
 #include "pzip/fast_deflate.h"
 #include "pzip/utils.h"
+#include <algorithm>
 #include <fstream>
 #include <cstring>
 #include <sys/stat.h>
@@ -196,14 +197,27 @@ Error Archiver::compress(FileTask* task) {
         return Error(ErrorCode::FILE_OPEN_ERROR, "Cannot open file: " + task->path.string());
     }
     
-    FlateWriter writer([task](const uint8_t* data, size_t size) {
-        task->write(data, size);
-    });
+    const bool useStore = (options_.compressionLevel == 0);
     
     constexpr size_t BUFFER_SIZE = 32 * 1024;
     std::vector<uint8_t> buf(BUFFER_SIZE);
     uint32_t crc = 0;
     uint64_t totalBytesRead = 0;
+    
+    if (useStore) {
+        // Store 模式：跳过读文件，写入 ZIP 时直接从源文件流式读取并计算 CRC
+        file.close();
+        task->streamFromSource = true;
+        return Error();
+    }
+    
+    // Deflate 模式：使用 FlateWriter 按指定等级压缩
+    auto level = static_cast<CompressionLevel>(
+        std::clamp(options_.compressionLevel, 1, 9));
+    
+    FlateWriter writer([task](const uint8_t* data, size_t size) {
+        task->write(data, size);
+    }, level);
     
     while (file.good() && !file.eof()) {
         file.read(reinterpret_cast<char*>(buf.data()), buf.size());
@@ -215,13 +229,13 @@ Error Archiver::compress(FileTask* task) {
         }
     }
     
-    // 检查 I/O 错误（bad() 表示严重错误，fail() 在 eof 时也会设置所以需要排除）
+    writer.close();
+    
     if (file.bad()) {
         file.close();
         return Error(ErrorCode::FILE_READ_ERROR, "I/O error reading file: " + task->path.string());
     }
     
-    // 检查是否读取了完整文件（防止静默截断）
     if (totalBytesRead != task->fileSize) {
         file.close();
         return Error(ErrorCode::FILE_READ_ERROR, 
@@ -232,7 +246,6 @@ Error Archiver::compress(FileTask* task) {
     file.close();
     
     task->header.crc32 = crc;
-    writer.close();
     
     return Error();
 }
@@ -286,6 +299,12 @@ void Archiver::populateHeader(FileTask* task) {
         h.compressedSize = task->symlinkTarget.size();
         // 设置 Unix 符号链接属性
         h.externalAttr = static_cast<uint32_t>(S_IFLNK | 0777) << 16;
+    } else if (options_.compressionLevel == 0) {
+        // Store 模式：不压缩，CRC 在写入阶段边读边算，用 DATA_DESCRIPTOR 后置
+        h.method = ZIP_METHOD_STORE;
+        h.flags |= ZIP_FLAG_DATA_DESCRIPTOR;
+        h.uncompressedSize = task->fileSize;
+        h.compressedSize = task->fileSize;
     } else {
         h.method = ZIP_METHOD_DEFLATE;
         h.flags |= ZIP_FLAG_DATA_DESCRIPTOR;

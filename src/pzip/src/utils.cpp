@@ -12,6 +12,17 @@
 #include <cstring>
 #include <random>
 
+#if defined(__aarch64__)
+#include <sys/auxv.h>
+#include <asm/hwcap.h>
+#ifdef __ARM_FEATURE_CRC32
+#include <arm_acle.h>
+#define PZIP_HAS_ARM_CRC32_COMPILE 1
+#else
+#define PZIP_HAS_ARM_CRC32_COMPILE 0
+#endif
+#endif
+
 namespace pzip {
 namespace utils {
 
@@ -97,11 +108,70 @@ fs::path fromZipPath(const std::string& zipPath) {
     return fs::path(result);
 }
 
+#if defined(__aarch64__) && PZIP_HAS_ARM_CRC32_COMPILE
+static uint32_t crc32_arm_hw(uint32_t crc, const uint8_t* data, size_t size) {
+    uint32_t c = crc ^ 0xFFFFFFFF;
+
+    // 逐字节对齐到 8 字节边界
+    while (size > 0 && (reinterpret_cast<uintptr_t>(data) & 7)) {
+        c = __crc32b(c, *data++);
+        size--;
+    }
+
+    // 每次处理 8 字节
+    while (size >= 64) {
+        c = __crc32d(c, *reinterpret_cast<const uint64_t*>(data));
+        c = __crc32d(c, *reinterpret_cast<const uint64_t*>(data + 8));
+        c = __crc32d(c, *reinterpret_cast<const uint64_t*>(data + 16));
+        c = __crc32d(c, *reinterpret_cast<const uint64_t*>(data + 24));
+        c = __crc32d(c, *reinterpret_cast<const uint64_t*>(data + 32));
+        c = __crc32d(c, *reinterpret_cast<const uint64_t*>(data + 40));
+        c = __crc32d(c, *reinterpret_cast<const uint64_t*>(data + 48));
+        c = __crc32d(c, *reinterpret_cast<const uint64_t*>(data + 56));
+        data += 64;
+        size -= 64;
+    }
+
+    while (size >= 8) {
+        c = __crc32d(c, *reinterpret_cast<const uint64_t*>(data));
+        data += 8;
+        size -= 8;
+    }
+
+    while (size > 0) {
+        c = __crc32b(c, *data++);
+        size--;
+    }
+
+    return c ^ 0xFFFFFFFF;
+}
+
+static bool hasArmCrc32() {
+    static bool checked = false;
+    static bool supported = false;
+    if (!checked) {
+        supported = (getauxval(AT_HWCAP) & HWCAP_CRC32) != 0;
+        checked = true;
+    }
+    return supported;
+}
+#endif
+
 uint32_t crc32(const uint8_t* data, size_t size) {
+#if defined(__aarch64__) && PZIP_HAS_ARM_CRC32_COMPILE
+    if (hasArmCrc32()) {
+        return crc32_arm_hw(0, data, size);
+    }
+#endif
     return ::crc32(0L, data, size);
 }
 
 uint32_t crc32Update(uint32_t crc, const uint8_t* data, size_t size) {
+#if defined(__aarch64__) && PZIP_HAS_ARM_CRC32_COMPILE
+    if (hasArmCrc32()) {
+        return crc32_arm_hw(crc, data, size);
+    }
+#endif
     return ::crc32(crc, data, size);
 }
 

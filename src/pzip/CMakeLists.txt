@@ -35,7 +35,7 @@ target_link_libraries(pzip_core_lib ${ZLIB_LIBRARIES} Threads::Threads)
 target_compile_features(pzip_core_lib PUBLIC cxx_std_17)
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm")
-    target_compile_options(pzip_core_lib PRIVATE -O3 -funroll-loops)
+    target_compile_options(pzip_core_lib PRIVATE -O3 -funroll-loops -march=armv8-a+crc)
 else()
     target_compile_options(pzip_core_lib PRIVATE -O3 -mtune=generic -funroll-loops)
 endif()
