@@ -1,3 +1,9 @@
+deepin-compressor (6.5.23) unstable; urgency=medium
+
+  * fix: Enhance compression options and ARM CRC32 support
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Thu, 05 Mar 2026 09:57:17 +0800
+
 deepin-compressor (6.5.22) unstable; urgency=medium
 
   * fix: Specify plugin type for zip file handling in ArchiveManager
