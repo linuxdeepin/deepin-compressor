@@ -470,23 +470,47 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
                                                 QFileInfo(m_strArchiveName).path(),
                                                 sRenameList);
 
-    if (options.bTar_7z) {   // 压缩tar.7z文件
+    if (options.bTar_7z) {   // 压缩tar.7z：用两个 QProcess 管道，避免 shell 拼接与密码特殊字符问题
         m_isTar7z = true;
-        m_filesSize = options.qTotalSize;   // 待压缩文件总大小
-        m_scriptPath = QDir::tempPath() + "/tempScript_" + QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch()) + ".sh";
-        QFile scriptFile(m_scriptPath);
-        if (scriptFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            QTextStream out(&scriptFile);
-            out << "#!/bin/bash\n";
-            for (const QString &arg : arguments) {
-                out << arg << "\n";
-            }
-            scriptFile.close();
-            QProcess::execute("chmod", { "+x", m_scriptPath });
-            ret = runProcess(m_scriptPath, QStringList());
-        } else {
-            qWarning() << "Failed to create temporary script file.";
+        m_filesSize = options.qTotalSize;
+        const QString archivePath = temp_archiveName.isEmpty() ? m_strArchiveName : temp_archiveName;
+        QStringList tarArgs = m_cliProps->getTar7zTarArgs(fileList, sRenameList);
+        QStringList sevenZArgs = m_cliProps->getTar7z7zArgs(archivePath, password, options.bHeaderEncryption,
+                                                           options.iCompressionLevel, options.strCompressionMethod,
+                                                           options.strEncryptionMethod, options.iVolumeSize);
+        QString tarPath = QStandardPaths::findExecutable(QStringLiteral("tar"));
+        QString sevenZPath = QStandardPaths::findExecutable(m_cliProps->property("addProgram").toString());
+        if (tarPath.isEmpty() || sevenZPath.isEmpty()) {
             ret = false;
+        } else {
+            m_tar7z_7z = new QProcess();
+            m_tarProcess = new QProcess();
+            m_tarProcess->setStandardOutputProcess(m_tar7z_7z);
+            m_tar7z_7z->setProcessChannelMode(QProcess::MergedChannels);
+            connect(m_tar7z_7z, &QProcess::readyReadStandardOutput, this, [this]() { readStdout(); });
+            connect(m_tar7z_7z, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &CliInterface::processFinished);
+            m_stdOutData.clear();
+            m_isProcessKilled = false;
+            m_tarProcess->start(tarPath, tarArgs);
+            if (m_tarProcess->waitForStarted(5000)) {
+                m_tar7z_7z->start(sevenZPath, sevenZArgs);
+                // 不在此处 waitForStarted(7z)，避免 7z 等 stdin 时阻塞主线程导致卡死
+                ret = m_tar7z_7z->state() == QProcess::Starting || m_tar7z_7z->state() == QProcess::Running;
+                if (ret) {
+                    m_processId = m_tar7z_7z->processId();
+                    m_childProcessId = QVector<qint64>() << m_tarProcess->processId();
+                }
+                connect(m_tar7z_7z, &QProcess::errorOccurred, this, [this](QProcess::ProcessError) {
+                    if (m_tar7z_7z && m_tar7z_7z->state() == QProcess::NotRunning) {
+                        processFinished(-1, QProcess::CrashExit);
+                    }
+                });
+            } else {
+                ret = false;
+            }
+            if (!ret) {
+                deleteProcess();
+            }
         }
     } else {
         QString processName = m_cliProps->property("addProgram").toString();
@@ -507,7 +531,11 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
         qInfo() << "mtp 压缩完成,现在开始移动";
         QStringList args_list;
         args_list << temp_archiveName << m_strArchiveName;
-        m_process->waitForFinished();
+        if (m_tar7z_7z) {
+            m_tar7z_7z->waitForFinished(-1);
+        } else if (m_process) {
+            m_process->waitForFinished();
+        }
         QProcess mover;
         ret = 0 == mover.execute("mv", args_list);
         ret = mover.exitCode() == QProcess::NormalExit;
@@ -795,22 +823,53 @@ bool CliInterface::runProcess(const QString &programName, const QStringList &arg
     return true;
 }
 
+bool CliInterface::killTar7zPipelineIfActive()
+{
+    if (!m_tar7z_7z) {
+        return false;
+    }
+    if (m_tarProcess && m_tarProcess->state() != QProcess::NotRunning) {
+        m_tarProcess->kill();
+    }
+    if (m_tar7z_7z->state() != QProcess::NotRunning) {
+        m_tar7z_7z->kill();
+    }
+    m_isProcessKilled = true;
+    return true;
+}
+
 void CliInterface::deleteProcess()
 {
+    if (m_tar7z_7z) {
+        m_tar7z_7z->blockSignals(true);
+        if (m_tar7z_7z->state() != QProcess::NotRunning) {
+            m_tar7z_7z->kill();
+            m_tar7z_7z->waitForFinished(500);
+        }
+        delete m_tar7z_7z;
+        m_tar7z_7z = nullptr;
+        if (m_tarProcess) {
+            m_tarProcess->blockSignals(true);
+            if (m_tarProcess->state() != QProcess::NotRunning) {
+                m_tarProcess->kill();
+                m_tarProcess->waitForFinished(500);
+            }
+            delete m_tarProcess;
+            m_tarProcess = nullptr;
+        }
+        return;
+    }
     if (m_process) {
         readStdout(true);
         m_process->blockSignals(true);   // delete m_process之前需要断开所有m_process信号，防止重复处理
         delete m_process;
         m_process = nullptr;
-        if(!m_scriptPath.isEmpty()) {
-            QFile::remove(m_scriptPath);
-        }
     }
 }
 
 void CliInterface::handleProgress(const QString &line)
 {
-    if (m_process && m_process->program().at(0).contains("7z")) {   // 解析7z相关进度、文件名
+    if (m_tar7z_7z || (m_process && m_process->program().at(0).contains("7z"))) {   // 解析7z相关进度、文件名（含 tar.7z 管道）
         int pos = line.indexOf(QLatin1Char('%'));
         if (pos > 1) {
             int percentage = line.midRef(pos - 3, 3).toInt();
@@ -903,24 +962,6 @@ void CliInterface::handleProgress(const QString &line)
             }
 
             emit signalCurFileName(fileName);
-        }
-    } else if (m_process && m_process->program().at(0).contains("tempScript")) {
-        // 处理tar.7z进度
-        // "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b                \b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b  7M + [Content]"
-        // "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b                  \b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b274M 1 + [Content]"
-        int pos = line.lastIndexOf(" + [Content]");
-        if (pos > 1) {
-            int mPos = line.lastIndexOf("M ");
-            int bPos = line.lastIndexOf("\b", mPos);
-            QString tempLine = line.left(mPos);
-            // 已经压缩的文件大小
-            qint64 compressedSize = tempLine.right(tempLine.size() - bPos - 1).toLongLong();
-            // 计算文件大小计算百分比
-            qint64 percentage = compressedSize * 1024 * 1024 * 100 / m_filesSize;
-
-            emit signalprogress(percentage);
-            // 无法获取正在压缩的某个文件名
-            //            emit signalCurFileName();
         }
     }
 }
@@ -1031,9 +1072,14 @@ PluginFinishType CliInterface::handleCorrupt()
 
 void CliInterface::writeToProcess(const QByteArray &data)
 {
-    Q_ASSERT(m_process);
     Q_ASSERT(!data.isNull());
-
+    // tar.7z 管道下 stdin 为 tar 输出，不能写入，密码已通过命令行传入
+    if (m_tar7z_7z) {
+        return;
+    }
+    if (!m_process) {
+        return;
+    }
     //    m_process->write(data);
     m_process->pty()->write(data);
 }
@@ -1290,14 +1336,17 @@ void CliInterface::readStdout(bool handleAll)
         return;
     }
 
-    Q_ASSERT(m_process);
+    QProcess *outProcess = m_tar7z_7z ? m_tar7z_7z : m_process;
+    if (!outProcess) {
+        return;
+    }
 
-    if (!m_process->bytesAvailable()) {   // 无数据
+    if (!outProcess->bytesAvailable()) {   // 无数据
         return;
     }
 
     // 获取命令行输出
-    QByteArray dd = m_process->readAllStandardOutput();
+    QByteArray dd = outProcess->readAllStandardOutput();
     m_stdOutData += dd;
 
     // 换行分割
@@ -1309,12 +1358,10 @@ void CliInterface::readStdout(bool handleAll)
     //    }
     bool isWrongPwd = isWrongPasswordMsg(lines.last());
 
-    if ((m_process->program().at(0).contains("7z") && m_process->program().at(1) != "l") && !isWrongPwd) {
-        handleAll = true;   // 7z进度行结束无\n
-    }
-
-    if ((m_process->program().at(0).contains("tempScript")) && !isWrongPwd) {
-        handleAll = true;   // compress .tar.7z progressline has no \n
+    // 7z 或 tar.7z 管道：进度行结束无 \n
+    bool is7zAdd = m_tar7z_7z || (m_process && m_process->program().at(0).contains("7z") && m_process->program().at(1) != "l");
+    if (is7zAdd && !isWrongPwd) {
+        handleAll = true;
     }
 
     bool foundErrorMessage = (isWrongPwd || isDiskFullMsg(QLatin1String(lines.last()))
@@ -1331,7 +1378,7 @@ void CliInterface::readStdout(bool handleAll)
         // because the last line might be incomplete we leave it for now
         // note, this last line may be an empty string if the stdoutdata ends
         // with a newline
-        if (m_process->program().at(0).contains("unrar")) {   // 针对unrar的命令行截取
+        if (m_process && m_process->program().at(0).contains("unrar")) {   // 针对unrar的命令行截取
             m_stdOutData.clear();
             if (lines.count() > 0) {
                 if (!(lines[lines.count() - 1].endsWith("%") || lines[lines.count() - 1].endsWith("OK "))) {
