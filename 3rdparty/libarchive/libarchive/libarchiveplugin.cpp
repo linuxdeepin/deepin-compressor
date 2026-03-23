@@ -826,6 +826,8 @@ int LibarchivePlugin::extractionFlags() const
 {
     int result = ARCHIVE_EXTRACT_TIME;
     result |= ARCHIVE_EXTRACT_SECURE_NODOTDOT;
+    result |= ARCHIVE_EXTRACT_SECURE_SYMLINKS;
+    result |= ARCHIVE_EXTRACT_SECURE_NOABSOLUTEPATHS;
 
     // TODO: Don't use arksettings here
     /*if ( ArkSettings::preservePerms() )

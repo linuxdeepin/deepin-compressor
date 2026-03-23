@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -57,5 +57,15 @@ private:
  * /root/.gvfs/mtp:xxxxxxxxx/xxx
 */
 bool IsMtpFileOrDirectory(QString path) noexcept;
+
+/**
+ * 解压安全：校验目标绝对路径在真实文件系统解析后仍位于解压根目录内（防止符号链接路径逃逸）。
+ */
+bool extractPathIsWithinTarget(const QString &extractRoot, const QString &absoluteDestPath);
+
+/**
+ * 解压安全：ZIP 内符号链接目标解析后须位于解压根目录内。
+ */
+bool symlinkTargetIsWithinTarget(const QString &extractRoot, const QString &symlinkFilePath, const QString &symlinkTarget);
 
 #endif
