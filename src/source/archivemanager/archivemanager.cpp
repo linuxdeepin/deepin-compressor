@@ -119,6 +119,7 @@ bool ArchiveManager::loadArchive(const QString &strArchiveFullPath, UiTools::Ass
         // 连接槽函数
         connect(pLoadJob, &LoadJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
         connect(pLoadJob, &LoadJob::signalQuery, this, &ArchiveManager::signalQuery);
+        connect(pLoadJob, &LoadJob::signalTempMessage, this, &ArchiveManager::signalTempMessage);
 
         m_pArchiveJob = pLoadJob;
         pLoadJob->start();
@@ -154,6 +155,7 @@ bool ArchiveManager::addFiles(const QString &strArchiveFullPath, const QList<Fil
         connect(pAddJob, &AddJob::signalprogress, this, &ArchiveManager::signalprogress);
         connect(pAddJob, &AddJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
         connect(pAddJob, &AddJob::signalQuery, this, &ArchiveManager::signalQuery);
+        connect(pAddJob, &AddJob::signalTempMessage, this, &ArchiveManager::signalTempMessage);
 
         m_pArchiveJob = pAddJob;
         pAddJob->start();
@@ -185,6 +187,7 @@ bool ArchiveManager::extractFiles(const QString &strArchiveFullPath, const QList
             connect(pExtractJob, &ExtractJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
             connect(pExtractJob, &ExtractJob::signalFileWriteErrorName, this, &ArchiveManager::signalFileWriteErrorName);
             connect(pExtractJob, &ExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
+            connect(pExtractJob, &ExtractJob::signalTempMessage, this, &ArchiveManager::signalTempMessage);
 
             m_pArchiveJob = pExtractJob;
             pExtractJob->start();
@@ -201,6 +204,7 @@ bool ArchiveManager::extractFiles(const QString &strArchiveFullPath, const QList
             connect(pStepExtractJob, &StepExtractJob::signalprogress, this, &ArchiveManager::signalprogress);
             connect(pStepExtractJob, &StepExtractJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
             connect(pStepExtractJob, &StepExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
+            connect(pStepExtractJob, &StepExtractJob::signalTempMessage, this, &ArchiveManager::signalTempMessage);
 
             pStepExtractJob->start();
             qDebug() << "StepExtractJob started successfully";
@@ -231,6 +235,7 @@ bool ArchiveManager::extractFiles2Path(const QString &strArchiveFullPath, const 
         connect(pExtractJob, &ExtractJob::signalprogress, this, &ArchiveManager::signalprogress);
         connect(pExtractJob, &ExtractJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
         connect(pExtractJob, &ExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
+        connect(pExtractJob, &ExtractJob::signalTempMessage, this, &ArchiveManager::signalTempMessage);
 
         m_pArchiveJob = pExtractJob;
         pExtractJob->start();
@@ -260,6 +265,7 @@ bool ArchiveManager::deleteFiles(const QString &strArchiveFullPath, const QList<
         connect(pDeleteJob, &DeleteJob::signalprogress, this, &ArchiveManager::signalprogress);
         connect(pDeleteJob, &DeleteJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
         connect(pDeleteJob, &DeleteJob::signalQuery, this, &ArchiveManager::signalQuery);
+        connect(pDeleteJob, &DeleteJob::signalTempMessage, this, &ArchiveManager::signalTempMessage);
 
         m_pArchiveJob = pDeleteJob;
         pDeleteJob->start();
@@ -289,6 +295,7 @@ bool ArchiveManager::renameFiles(const QString &strArchiveFullPath, const QList<
         connect(pRenameJob, &RenameJob::signalprogress, this, &ArchiveManager::signalprogress);
         connect(pRenameJob, &RenameJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
         connect(pRenameJob, &RenameJob::signalQuery, this, &ArchiveManager::signalQuery);
+        connect(pRenameJob, &RenameJob::signalTempMessage, this, &ArchiveManager::signalTempMessage);
 
         m_pArchiveJob = pRenameJob;
         pRenameJob->start();
@@ -315,6 +322,7 @@ bool ArchiveManager::batchExtractFiles(const QStringList &listFiles, const QStri
         connect(pBatchExtractJob, &BatchExtractJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
         connect(pBatchExtractJob, &BatchExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
         connect(pBatchExtractJob, &BatchExtractJob::signalCurArchiveName, this, &ArchiveManager::signalCurArchiveName);
+        connect(pBatchExtractJob, &BatchExtractJob::signalTempMessage, this, &ArchiveManager::signalTempMessage);
 
         m_pArchiveJob = pBatchExtractJob;
         pBatchExtractJob->start();
@@ -343,6 +351,7 @@ bool ArchiveManager::openFile(const QString &strArchiveFullPath, const FileEntry
         // 连接槽函数
         connect(pOpenJob, &OpenJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
         connect(pOpenJob, &OpenJob::signalQuery, this, &ArchiveManager::signalQuery);
+        connect(pOpenJob, &OpenJob::signalTempMessage, this, &ArchiveManager::signalTempMessage);
 
 
         m_pArchiveJob = pOpenJob;
@@ -412,6 +421,7 @@ bool ArchiveManager::convertArchive(const QString &strOriginalArchiveFullPath, c
     connect(pConvertJob, &ConvertJob::signalprogress, this, &ArchiveManager::signalprogress);
     connect(pConvertJob, &ConvertJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
     connect(pConvertJob, &ConvertJob::signalQuery, this, &ArchiveManager::signalQuery);
+    connect(pConvertJob, &ConvertJob::signalTempMessage, this, &ArchiveManager::signalTempMessage);
 
     pConvertJob->start();
     qDebug() << "ConvertJob started successfully";

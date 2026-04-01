@@ -326,6 +326,7 @@ void MainWindow::initConnections()
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalFileWriteErrorName, this, &MainWindow::slotReceiveFileWriteErrorName);
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalCurArchiveName, this, &MainWindow::slotReceiveCurArchiveName);
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalQuery, this, &MainWindow::slotQuery);
+    connect(ArchiveManager::get_instance(), &ArchiveManager::signalTempMessage, this, &MainWindow::slotReceiveTempMessage);
 
     qDebug() << "Connecting file watcher signals";
     connect(m_pOpenFileWatcher, &OpenFileWatcher::fileChanged, this, &MainWindow::slotOpenFileChanged);
@@ -1445,6 +1446,13 @@ void MainWindow::slotReceiveFileWriteErrorName(const QString &strName)
 {
     qDebug() << "MainWindow::slotReceiveFileWriteErrorName" << strName;
     m_fileWriteErrorName = strName;
+}
+
+void MainWindow::slotReceiveTempMessage(const QString &strMessage)
+{
+    qInfo() << "Temp message:" << strMessage;
+    QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
+    sendMessage(new CustomFloatingMessage(icon, strMessage, 2000, this));
 }
 
 void MainWindow::slotQuery(Query *query)

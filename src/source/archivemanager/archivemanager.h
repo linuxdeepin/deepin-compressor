@@ -213,6 +213,12 @@ Q_SIGNALS:
      */
     void signalCurArchiveName(const QString &strArchiveName);
 
+    /**
+     * @brief signalTempMessage 发送临时消息（不中断操作）
+     * @param message 消息内容
+     */
+    void signalTempMessage(const QString &message);
+
 private:
     explicit ArchiveManager(QObject *parent = nullptr);
     ~ArchiveManager() override;
