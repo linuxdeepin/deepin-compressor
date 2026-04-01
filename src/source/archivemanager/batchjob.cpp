@@ -186,6 +186,7 @@ bool BatchExtractJob::addExtractItem(const QFileInfo &fileInfo)
             connect(pExtractJob, &ExtractJob::signalCurFileName, this, &BatchExtractJob::slotHandleSingleJobCurFileName);
             connect(pExtractJob, &ExtractJob::signalQuery, this, &BatchExtractJob::signalQuery);
             connect(pExtractJob, &ExtractJob::signalJobFinshed, this, &BatchExtractJob::slotHandleSingleJobFinished);
+            connect(pExtractJob, &ExtractJob::signalTempMessage, this, &BatchExtractJob::signalTempMessage);
             addSubjob(pExtractJob);
         } else {
             StepExtractJob *pStepExtractJob = new StepExtractJob(fileInfo.absoluteFilePath(), stOptions);
@@ -193,6 +194,7 @@ bool BatchExtractJob::addExtractItem(const QFileInfo &fileInfo)
             connect(pStepExtractJob, &StepExtractJob::signalCurFileName, this, &BatchExtractJob::slotHandleSingleJobCurFileName);
             connect(pStepExtractJob, &StepExtractJob::signalQuery, this, &BatchExtractJob::signalQuery);
             connect(pStepExtractJob, &StepExtractJob::signalJobFinshed, this, &BatchExtractJob::slotHandleSingleJobFinished);
+            connect(pStepExtractJob, &StepExtractJob::signalTempMessage, this, &BatchExtractJob::signalTempMessage);
             addSubjob(pStepExtractJob);
         }
         return true;

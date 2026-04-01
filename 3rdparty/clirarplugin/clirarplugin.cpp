@@ -284,13 +284,14 @@ bool CliRarPlugin::handleLine(const QString &line, WorkType workStatus)
     }
 
     if (isWrongPasswordMsg(line)) {  // 提示密码错误
+        m_eErrorType = ET_WrongPassword;
+
         // RAR4密码错误直接结束
         if (line.startsWith(QLatin1String("Checksum error in the encrypted file"))) {
-            m_eErrorType = ET_WrongPassword;
             m_finishType = PFT_Error;
             return false;
-        } else { // RAR5密码错误反复输入新密码
-            m_eErrorType = ET_WrongPassword;
+        } else { // RAR5密码错误：发送错误提示但不中断进程，允许用户重新输入密码
+            emit error(tr("Wrong password"), tr("The password entered is incorrect. Please try again."));
             return true;
         }
     }
