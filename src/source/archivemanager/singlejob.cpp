@@ -116,6 +116,7 @@ void SingleJob::initConnections()
     connect(m_pInterface, &ReadOnlyArchiveInterface::signalCurFileName, this, &SingleJob::signalCurFileName, Qt::ConnectionType::UniqueConnection);
     connect(m_pInterface, &ReadOnlyArchiveInterface::signalFileWriteErrorName, this, &SingleJob::signalFileWriteErrorName, Qt::ConnectionType::UniqueConnection);
     connect(m_pInterface, &ReadOnlyArchiveInterface::signalQuery, this, &SingleJob::signalQuery, Qt::ConnectionType::AutoConnection);
+    connect(m_pInterface, &ReadOnlyArchiveInterface::error, this, &SingleJob::slotError, Qt::AutoConnection);
 }
 
 void SingleJob::slotFinished(PluginFinishType eType)
@@ -127,6 +128,13 @@ void SingleJob::slotFinished(PluginFinishType eType)
         m_eErrorType = m_pInterface->errorType();
 
     emit signalJobFinshed();
+}
+
+void SingleJob::slotError(const QString &message, const QString &details)
+{
+    Q_UNUSED(details);
+    // 传递临时消息信号，用于显示但不中断操作的非致命错误提示
+    emit signalTempMessage(message);
 }
 
 // 加载操作
@@ -361,6 +369,7 @@ OpenJob::OpenJob(const FileEntry &stEntry, const QString &strTempExtractPath, co
     m_eJobType = JT_Open;
     connect(m_pInterface, &ReadOnlyArchiveInterface::signalFinished, this, &OpenJob::slotFinished, Qt::ConnectionType::UniqueConnection);
     connect(m_pInterface, &ReadOnlyArchiveInterface::signalQuery, this, &SingleJob::signalQuery, Qt::ConnectionType::AutoConnection);
+    connect(m_pInterface, &ReadOnlyArchiveInterface::error, this, &SingleJob::slotError, Qt::AutoConnection);
 }
 
 OpenJob::~OpenJob()
