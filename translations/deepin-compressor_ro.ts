@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ro">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ro">
 <context>
     <name>AppendDialog</name>
     <message>
@@ -282,7 +280,7 @@
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="325"/>
         <source>Rename</source>
-        <translation>Redenumează</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="330"/>
@@ -450,6 +448,16 @@
 <context>
     <name>MainWindow</name>
     <message>
+        <location filename="../src/source/mainwindow.cpp" line="106"/>
+        <source>Archive Manager</source>
+        <translation>Managerul de Arhive</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="696"/>
+        <source>%1 was changed on the disk, please import it again.</source>
+        <translation>%1  a fost modificat pe disc, vă rog repetați procedura de import</translation>
+    </message>
+    <message>
         <location filename="../src/source/mainwindow.cpp" line="249"/>
         <source>Open file</source>
         <translation>Deschidere fișier</translation>
@@ -464,135 +472,6 @@
         <location filename="../src/source/mainwindow.cpp" line="375"/>
         <source>Create New Archive</source>
         <translation>Creare arhivă nouă</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="443"/>
-        <source>Converting</source>
-        <translation>Convertare</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="451"/>
-        <source>Updating comments</source>
-        <translation>Actualizare comentarii</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="660"/>
-        <location filename="../src/source/mainwindow.cpp" line="2475"/>
-        <location filename="../src/source/mainwindow.cpp" line="2509"/>
-        <location filename="../src/source/mainwindow.cpp" line="2538"/>
-        <source>Plugin error</source>
-        <translation>Plugin eroare</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1560"/>
-        <source>Adding successful</source>
-        <translation>Adăugare cu succes</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1594"/>
-        <location filename="../src/source/mainwindow.cpp" line="2562"/>
-        <source>No data in it</source>
-        <translation>Lipsesc datele</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1800"/>
-        <source>Adding canceled</source>
-        <translation>Adăugare anulată</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1906"/>
-        <source>Adding failed</source>
-        <translation>Adăugare eșuată</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1963"/>
-        <source>Extraction failed: the file name is too long</source>
-        <translation>Eșuare extragerea fișierului: denumirea prea lungă</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1990"/>
-        <location filename="../src/source/mainwindow.cpp" line="2558"/>
-        <source>Failed to create &quot;%1&quot;</source>
-        <translation>Eșuarea crearea &quot;%1&quot;</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2116"/>
-        <source>Open failed: the file name is too long</source>
-        <translation>Eșuare deschiderii fișierului: denumirea prea lungă</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2448"/>
-        <source>Compression successful</source>
-        <translation>Comprimare cu succes</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2454"/>
-        <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
-        <translation>Nume fișier prea lung, doar primele 60 de caractere vor fi folosite ca denumire.</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2483"/>
-        <location filename="../src/source/mainwindow.cpp" line="2566"/>
-        <source>Insufficient disk space</source>
-        <translation>Insuficient spațiu de stocare</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2521"/>
-        <location filename="../src/source/mainwindow.cpp" line="2546"/>
-        <source>Some volumes are missing</source>
-        <translation>Câteva volume lipsesc</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2550"/>
-        <source>Wrong password, please retry</source>
-        <translation>Parola eronată, încercați vă rog, din nou</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2495"/>
-        <location filename="../src/source/mainwindow.cpp" line="2554"/>
-        <location filename="../src/source/mainwindow.cpp" line="2582"/>
-        <source>The file name is too long. Keep the name within 60 characters please.</source>
-        <translation>Nume fișier prea lung, acesta trebiue să conțină până 60 de caractere.</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2579"/>
-        <source>Conversion failed</source>
-        <translation>Convertire eșuată</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2777"/>
-        <source>Select file</source>
-        <translation>Selectare fișier</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="3689"/>
-        <source>Enter up to %1 characters</source>
-        <translation>Introduceți până la %1 caractere</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="3561"/>
-        <source>File info</source>
-        <translation>Informație fișier</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1671"/>
-        <source>Do you want to delete the archive?</source>
-        <translation>Doriți să ștergeți arhiva?</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="696"/>
-        <source>%1 was changed on the disk, please import it again.</source>
-        <translation>%1  a fost modificat pe disc, vă rog repetați procedura de import</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="106"/>
-        <source>Archive Manager</source>
-        <translation>Managerul de Arhive</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="202"/>
-        <source>You do not have permission to save files here, please change and retry</source>
-        <translation>Nu aveți permisiunea de a salva fișiere aici, schimbați vă rog destinație și încercați din nou</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="403"/>
@@ -615,98 +494,34 @@
         <translation>Ștergere</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="649"/>
-        <location filename="../src/source/mainwindow.cpp" line="3377"/>
-        <source>Loading, please wait...</source>
-        <translation>Se încarcă, așteptați, vă rog</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="739"/>
-        <source>Are you sure you want to stop the ongoing task?</source>
-        <translation>Doriți să stopați procesul în derulare?</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1567"/>
-        <location filename="../src/source/mainwindow.cpp" line="1695"/>
-        <location filename="../src/source/mainwindow.cpp" line="1711"/>
-        <source>Updating, please wait...</source>
-        <translation>Actualizare, așteptați, vă rog...</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1985"/>
-        <source>File name too long</source>
-        <translation>Nume fișier prea lung</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2479"/>
-        <source>Failed to create file</source>
-        <translation>Eșuare creare fișierului</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2472"/>
-        <source>Compression failed</source>
-        <translation>Comprimare eșuată</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2907"/>
-        <source>Replace</source>
-        <comment>button</comment>
-        <translation>Înlocuire</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2971"/>
-        <source>Find directory</source>
-        <translation>Găsește directoriul</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2506"/>
-        <source>Open failed</source>
-        <translation>Deschidere eșuată</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1902"/>
-        <location filename="../src/source/mainwindow.cpp" line="1980"/>
-        <location filename="../src/source/mainwindow.cpp" line="2059"/>
-        <location filename="../src/source/mainwindow.cpp" line="2114"/>
-        <location filename="../src/source/mainwindow.cpp" line="2517"/>
-        <source>Wrong password</source>
-        <translation>Parola eronată</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="784"/>
-        <location filename="../src/source/mainwindow.cpp" line="823"/>
-        <source>The file format is not supported by Archive Manager</source>
-        <translation>Acest format de fișier nu este suportat de Manager de Arhivă</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="202"/>
-        <location filename="../src/source/mainwindow.cpp" line="582"/>
-        <location filename="../src/source/mainwindow.cpp" line="660"/>
-        <location filename="../src/source/mainwindow.cpp" line="699"/>
-        <location filename="../src/source/mainwindow.cpp" line="769"/>
-        <location filename="../src/source/mainwindow.cpp" line="775"/>
-        <location filename="../src/source/mainwindow.cpp" line="784"/>
-        <location filename="../src/source/mainwindow.cpp" line="830"/>
-        <location filename="../src/source/mainwindow.cpp" line="1118"/>
-        <location filename="../src/source/mainwindow.cpp" line="1594"/>
-        <location filename="../src/source/mainwindow.cpp" line="2737"/>
-        <location filename="../src/source/mainwindow.cpp" line="2757"/>
-        <location filename="../src/source/mainwindow.cpp" line="3065"/>
-        <location filename="../src/source/mainwindow.cpp" line="3236"/>
-        <source>OK</source>
-        <comment>button</comment>
-        <translation>OK</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="435"/>
-        <source>Renaming</source>
-        <translation>Renumerează</translation>
+        <location filename="../src/source/mainwindow.cpp" line="443"/>
+        <source>Converting</source>
+        <translation>Convertare</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="582"/>
         <location filename="../src/source/mainwindow.cpp" line="775"/>
         <source>You do not have permission to load %1</source>
         <translation>Nu aveți permisiunea de a încărca %1</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="649"/>
+        <location filename="../src/source/mainwindow.cpp" line="3377"/>
+        <source>Loading, please wait...</source>
+        <translation>Se încarcă, așteptați, vă rog</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="660"/>
+        <location filename="../src/source/mainwindow.cpp" line="2475"/>
+        <location filename="../src/source/mainwindow.cpp" line="2509"/>
+        <location filename="../src/source/mainwindow.cpp" line="2538"/>
+        <source>Plugin error</source>
+        <translation>Plugin eroare</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="739"/>
+        <source>Are you sure you want to stop the ongoing task?</source>
+        <translation>Doriți să stopați procesul în derulare?</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="739"/>
@@ -732,7 +547,19 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1118"/>
         <source>Unable to add system files or network files, please select files on local devices</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1560"/>
+        <source>Adding successful</source>
+        <translation>Adăugare cu succes</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1567"/>
+        <location filename="../src/source/mainwindow.cpp" line="1695"/>
+        <location filename="../src/source/mainwindow.cpp" line="1711"/>
+        <source>Updating, please wait...</source>
+        <translation>Actualizare, așteptați, vă rog...</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1610"/>
@@ -747,6 +574,11 @@
         <translation> Extragere  anulată</translation>
     </message>
     <message>
+        <location filename="../src/source/mainwindow.cpp" line="1963"/>
+        <source>Extraction failed: the file name is too long</source>
+        <translation>Eșuare extragerea fișierului: denumirea prea lungă</translation>
+    </message>
+    <message>
         <location filename="../src/source/mainwindow.cpp" line="1975"/>
         <location filename="../src/source/mainwindow.cpp" line="2054"/>
         <location filename="../src/source/mainwindow.cpp" line="2513"/>
@@ -755,16 +587,21 @@
         <translation>Arhivă este deteriorată</translation>
     </message>
     <message>
+        <location filename="../src/source/mainwindow.cpp" line="2116"/>
+        <source>Open failed: the file name is too long</source>
+        <translation>Eșuare deschiderii fișierului: denumirea prea lungă</translation>
+    </message>
+    <message>
         <location filename="../src/source/mainwindow.cpp" line="2374"/>
         <location filename="../src/source/mainwindow.cpp" line="2379"/>
         <source>Failed to create temporary directory, please check and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2390"/>
         <location filename="../src/source/mainwindow.cpp" line="2400"/>
         <source>Failed to prepare renamed item &quot;%1&quot; for compression, please check permissions and available space.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2452"/>
@@ -773,24 +610,30 @@
         <translation>Extragere cu succes</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2458"/>
-        <source>Conversion successful</source>
-        <translation>Convertare cu succes</translation>
+        <location filename="../src/source/mainwindow.cpp" line="2454"/>
+        <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
+        <translation>Nume fișier prea lung, doar primele 60 de caractere vor fi folosite ca denumire.</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2483"/>
+        <location filename="../src/source/mainwindow.cpp" line="2566"/>
+        <source>Insufficient disk space</source>
+        <translation>Insuficient spațiu de stocare</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2487"/>
         <source>The compressed volumes already exist</source>
-        <translation>Volumurile comprimate există deja</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2491"/>
         <source>No compression support in current directory. Download the files to a local device.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2525"/>
         <source>Can&apos;t open compressed packages in current directory. Download the compressed package to a local device.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2535"/>
@@ -799,9 +642,116 @@
         <translation> Extragere eșuată</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2570"/>
-        <source>No extraction support in current directory. Download the compressed package to a local device.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/source/mainwindow.cpp" line="2495"/>
+        <location filename="../src/source/mainwindow.cpp" line="2554"/>
+        <location filename="../src/source/mainwindow.cpp" line="2582"/>
+        <source>The file name is too long. Keep the name within 60 characters please.</source>
+        <translation>Nume fișier prea lung, acesta trebiue să conțină până 60 de caractere.</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2579"/>
+        <source>Conversion failed</source>
+        <translation>Convertire eșuată</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2899"/>
+        <source>The name is the same as that of the compressed archive, please use another one</source>
+        <translation>Nume fișier coincide cu numele arhivei comprimate, vă rugăm să utilizați alt nume</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2907"/>
+        <source>Another file with the same name already exists, replace it?</source>
+        <translation>Fișier cu așa nume deja există, să-l înlocuiesc?</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="3050"/>
+        <source>You cannot add the archive to itself</source>
+        <translation>Nu puteți să adăugați arhiva în ea însuși </translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="3065"/>
+        <source>You cannot add files to archives in this file type</source>
+        <translation>Nu puteți adăuga fișiere de așa tip în arhivă</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="3689"/>
+        <source>Enter up to %1 characters</source>
+        <translation>Introduceți până la %1 caractere</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1985"/>
+        <source>File name too long</source>
+        <translation>Nume fișier prea lung</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2479"/>
+        <source>Failed to create file</source>
+        <translation>Eșuare creare fișierului</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2448"/>
+        <source>Compression successful</source>
+        <translation>Comprimare cu succes</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2472"/>
+        <source>Compression failed</source>
+        <translation>Comprimare eșuată</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2971"/>
+        <source>Find directory</source>
+        <translation>Găsește directoriul</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2506"/>
+        <source>Open failed</source>
+        <translation>Deschidere eșuată</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2737"/>
+        <location filename="../src/source/mainwindow.cpp" line="2757"/>
+        <source>The archive was changed on the disk, please import it again.</source>
+        <translation>Arhiva a fost modificată pe disc, procedați repetat la importarea ei.</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1902"/>
+        <location filename="../src/source/mainwindow.cpp" line="1980"/>
+        <location filename="../src/source/mainwindow.cpp" line="2059"/>
+        <location filename="../src/source/mainwindow.cpp" line="2114"/>
+        <location filename="../src/source/mainwindow.cpp" line="2517"/>
+        <source>Wrong password</source>
+        <translation>Parola eronată</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="202"/>
+        <location filename="../src/source/mainwindow.cpp" line="582"/>
+        <location filename="../src/source/mainwindow.cpp" line="660"/>
+        <location filename="../src/source/mainwindow.cpp" line="699"/>
+        <location filename="../src/source/mainwindow.cpp" line="769"/>
+        <location filename="../src/source/mainwindow.cpp" line="775"/>
+        <location filename="../src/source/mainwindow.cpp" line="784"/>
+        <location filename="../src/source/mainwindow.cpp" line="830"/>
+        <location filename="../src/source/mainwindow.cpp" line="1118"/>
+        <location filename="../src/source/mainwindow.cpp" line="1594"/>
+        <location filename="../src/source/mainwindow.cpp" line="2737"/>
+        <location filename="../src/source/mainwindow.cpp" line="2757"/>
+        <location filename="../src/source/mainwindow.cpp" line="3065"/>
+        <location filename="../src/source/mainwindow.cpp" line="3236"/>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="784"/>
+        <location filename="../src/source/mainwindow.cpp" line="823"/>
+        <source>The file format is not supported by Archive Manager</source>
+        <translation>Acest format de fișier nu este suportat de Manager de Arhivă</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2458"/>
+        <source>Conversion successful</source>
+        <translation>Convertare cu succes</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2769"/>
@@ -829,24 +779,68 @@
         <translation>Comenzi rapide</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2899"/>
-        <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation>Nume fișier coincide cu numele arhivei comprimate, vă rugăm să utilizați alt nume</translation>
+        <location filename="../src/source/mainwindow.cpp" line="3561"/>
+        <source>File info</source>
+        <translation>Informație fișier</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="451"/>
+        <source>Updating comments</source>
+        <translation>Actualizare comentarii</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="435"/>
+        <source>Renaming</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1594"/>
+        <location filename="../src/source/mainwindow.cpp" line="2562"/>
+        <source>No data in it</source>
+        <translation>Lipsesc datele</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1800"/>
+        <source>Adding canceled</source>
+        <translation>Adăugare anulată</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1906"/>
+        <source>Adding failed</source>
+        <translation>Adăugare eșuată</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1990"/>
+        <location filename="../src/source/mainwindow.cpp" line="2558"/>
+        <source>Failed to create &quot;%1&quot;</source>
+        <translation>Eșuarea crearea &quot;%1&quot;</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2521"/>
+        <location filename="../src/source/mainwindow.cpp" line="2546"/>
+        <source>Some volumes are missing</source>
+        <translation>Câteva volume lipsesc</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2550"/>
+        <source>Wrong password, please retry</source>
+        <translation>Parola eronată, încercați vă rog, din nou</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2570"/>
+        <source>No extraction support in current directory. Download the compressed package to a local device.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2777"/>
+        <source>Select file</source>
+        <translation>Selectare fișier</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2907"/>
-        <source>Another file with the same name already exists, replace it?</source>
-        <translation>Fișier cu așa nume deja există, să-l înlocuiesc?</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="3050"/>
-        <source>You cannot add the archive to itself</source>
-        <translation>Nu puteți să adăugați arhiva în ea însuși </translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="3065"/>
-        <source>You cannot add files to archives in this file type</source>
-        <translation>Nu puteți adăuga fișiere de așa tip în arhivă</translation>
+        <source>Replace</source>
+        <comment>button</comment>
+        <translation>Înlocuire</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3407"/>
@@ -905,10 +899,14 @@
         <translation>Verificați tipul de asociere a fișierelor în setările Managerului de Arhive</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2737"/>
-        <location filename="../src/source/mainwindow.cpp" line="2757"/>
-        <source>The archive was changed on the disk, please import it again.</source>
-        <translation>Arhiva a fost modificată pe disc, procedați repetat la importarea ei.</translation>
+        <location filename="../src/source/mainwindow.cpp" line="202"/>
+        <source>You do not have permission to save files here, please change and retry</source>
+        <translation>Nu aveți permisiunea de a salva fișiere aici, schimbați vă rog destinație și încercați din nou</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1671"/>
+        <source>Do you want to delete the archive?</source>
+        <translation>Doriți să ștergeți arhiva?</translation>
     </message>
 </context>
 <context>
@@ -944,14 +942,14 @@
         <translation>Arhivă</translation>
     </message>
     <message>
-        <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="39"/>
-        <source>Executable</source>
-        <translation>Executabil</translation>
-    </message>
-    <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="38"/>
         <source>Document</source>
         <translation>Document</translation>
+    </message>
+    <message>
+        <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="39"/>
+        <source>Executable</source>
+        <translation>Executabil</translation>
     </message>
     <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="40"/>
@@ -1098,7 +1096,7 @@
         <location filename="../src/source/page/progresspage.cpp" line="364"/>
         <source>Speed</source>
         <comment>rename</comment>
-        <translation type="unfinished">Viteză</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="52"/>
@@ -1137,7 +1135,7 @@
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="130"/>
         <source>Renaming</source>
-        <translation>Renumerează</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="132"/>
@@ -1208,6 +1206,58 @@
 <context>
     <name>QObject</name>
     <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="213"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="219"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="236"/>
+        <source>Skip</source>
+        <comment>button</comment>
+        <translation>Ignoră</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="214"/>
+        <source>Merge</source>
+        <comment>button</comment>
+        <translation>Combinare</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="217"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="213"/>
+        <source>Another file with the same name already exists, replace it?</source>
+        <translation>Fișier cu așa nume deja există, doriți să-l înlocuiți?</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="220"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="237"/>
+        <source>Replace</source>
+        <comment>button</comment>
+        <translation>Înlocuire</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="517"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="397"/>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>Anulare</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="518"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="398"/>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="211"/>
+        <source>Another folder with the same name already exists, replace it?</source>
+        <translation>Directoriul cu așa nume deja există, doriți să-l înlocuiți?</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="223"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="218"/>
+        <source>Apply to all</source>
+        <translation>Aplică la tot</translation>
+    </message>
+    <message>
         <location filename="../src/source/tree/datamodel.h" line="56"/>
         <source>Name</source>
         <translation>Nume</translation>
@@ -1272,102 +1322,44 @@
         <source>File Type</source>
         <translation>Tip de fișier</translation>
     </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="213"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="219"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="236"/>
-        <source>Skip</source>
-        <comment>button</comment>
-        <translation>Ignoră</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="214"/>
-        <source>Merge</source>
-        <comment>button</comment>
-        <translation>Combinare</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="217"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="213"/>
-        <source>Another file with the same name already exists, replace it?</source>
-        <translation>Fișier cu așa nume deja există, doriți să-l înlocuiți?</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="220"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="237"/>
-        <source>Replace</source>
-        <comment>button</comment>
-        <translation>Înlocuire</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="517"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="397"/>
-        <source>Cancel</source>
-        <comment>button</comment>
-        <translation>Anulare</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="518"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="398"/>
-        <source>OK</source>
-        <comment>button</comment>
-        <translation>OK</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="211"/>
-        <source>Another folder with the same name already exists, replace it?</source>
-        <translation>Directoriul cu așa nume deja există, doriți să-l înlocuiți?</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="223"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="218"/>
-        <source>Apply to all</source>
-        <translation>Aplică la tot</translation>
-    </message>
 </context>
 <context>
     <name>RenameDialog</name>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="619"/>
         <source>Rename</source>
-        <translation>Redenumează</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="670"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Anulare</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="671"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished">OK</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="681"/>
         <source>The name already exists</source>
-        <translation>Numele există deja</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SettingDialog</name>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="174"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="203"/>
-        <source>Current directory</source>
-        <translation>Directoriul curent</translation>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="131"/>
+        <source>Select All</source>
+        <comment>button</comment>
+        <translation>Selectează tot</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="132"/>
         <source>Clear All</source>
         <translation>Golește tot</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="131"/>
-        <source>Select All</source>
-        <comment>button</comment>
-        <translation>Selectează tot</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="133"/>
@@ -1381,15 +1373,21 @@
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="174"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="213"/>
-        <source>Other directory</source>
-        <translation>Alt directoriu</translation>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="203"/>
+        <source>Current directory</source>
+        <translation>Directoriul curent</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="174"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="208"/>
         <source>Desktop</source>
         <translation>Masa de lucru</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="174"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="213"/>
+        <source>Other directory</source>
+        <translation>Alt directoriu</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="281"/>
@@ -1439,17 +1437,17 @@
         <location filename="../src/source/mainwindow.cpp" line="3871"/>
         <location filename="../src/source/mainwindow.cpp" line="3926"/>
         <source>Open file</source>
-        <translation type="unfinished">Deschidere fișier</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3874"/>
         <source>Back</source>
-        <translation type="unfinished">Înapoi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3930"/>
         <source>File info</source>
-        <translation type="unfinished">Informație fișier</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1521,7 +1519,7 @@
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="670"/>
         <source>Rename</source>
-        <translation>Redenumează</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="678"/>
