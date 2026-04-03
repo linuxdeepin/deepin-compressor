@@ -86,7 +86,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="239"/>
         <source>CPU threads</source>
-        <translation>Filat CPU</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="241"/>
@@ -142,22 +142,22 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="273"/>
         <source>Single thread</source>
-        <translation>Filat e poënë</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="273"/>
         <source>2 threads</source>
-        <translation>2 filat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="273"/>
         <source>4 threads</source>
-        <translation>4 filat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="273"/>
         <source>8 threads</source>
-        <translation>8 filat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="283"/>
