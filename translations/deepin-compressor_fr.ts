@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="fr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="fr">
 <context>
     <name>AppendDialog</name>
     <message>
@@ -83,12 +81,12 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="237"/>
         <source>Encrypt the archive</source>
-        <translation>Crypter l&apos;archive</translation>
+        <translation>Chiffrer l&apos;archive</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="239"/>
         <source>CPU threads</source>
-        <translation>CPU threads</translation>
+        <translation>Threads CPU</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="241"/>
@@ -144,7 +142,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="273"/>
         <source>Single thread</source>
-        <translation>Single thread</translation>
+        <translation>Thread unique</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="273"/>
@@ -450,6 +448,16 @@
 <context>
     <name>MainWindow</name>
     <message>
+        <location filename="../src/source/mainwindow.cpp" line="106"/>
+        <source>Archive Manager</source>
+        <translation>Gestionnaire d&apos;archives</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="696"/>
+        <source>%1 was changed on the disk, please import it again.</source>
+        <translation>%1 a été modifié sur le disque, veuillez l&apos;importer à nouveau.</translation>
+    </message>
+    <message>
         <location filename="../src/source/mainwindow.cpp" line="249"/>
         <source>Open file</source>
         <translation>Ouvrir un fichier</translation>
@@ -464,135 +472,6 @@
         <location filename="../src/source/mainwindow.cpp" line="375"/>
         <source>Create New Archive</source>
         <translation>Créer une nouvelle archive</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="443"/>
-        <source>Converting</source>
-        <translation>Conversion</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="451"/>
-        <source>Updating comments</source>
-        <translation>Mise à jour des commentaires</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="660"/>
-        <location filename="../src/source/mainwindow.cpp" line="2475"/>
-        <location filename="../src/source/mainwindow.cpp" line="2509"/>
-        <location filename="../src/source/mainwindow.cpp" line="2538"/>
-        <source>Plugin error</source>
-        <translation>Erreur de plug-in</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1560"/>
-        <source>Adding successful</source>
-        <translation>Ajout réussi</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1594"/>
-        <location filename="../src/source/mainwindow.cpp" line="2562"/>
-        <source>No data in it</source>
-        <translation>Aucune donnée dedans</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1800"/>
-        <source>Adding canceled</source>
-        <translation>Ajout annulé</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1906"/>
-        <source>Adding failed</source>
-        <translation>L&apos;ajout a échoué</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1963"/>
-        <source>Extraction failed: the file name is too long</source>
-        <translation>Échec de l&apos;extraction&#xa0;: le nom du fichier est trop long</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1990"/>
-        <location filename="../src/source/mainwindow.cpp" line="2558"/>
-        <source>Failed to create &quot;%1&quot;</source>
-        <translation>Échec de la création de &quot;%1&quot;</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2116"/>
-        <source>Open failed: the file name is too long</source>
-        <translation>Échec de l&apos;ouverture&#xa0;: le nom du fichier est trop long</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2448"/>
-        <source>Compression successful</source>
-        <translation>Compression réussie</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2454"/>
-        <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
-        <translation>Le nom de fichier est trop long, les 60 premiers caractères ont donc été interceptés comme nom de fichier.</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2483"/>
-        <location filename="../src/source/mainwindow.cpp" line="2566"/>
-        <source>Insufficient disk space</source>
-        <translation>Espace disque insuffisant</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2521"/>
-        <location filename="../src/source/mainwindow.cpp" line="2546"/>
-        <source>Some volumes are missing</source>
-        <translation>Certains volumes manquent</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2550"/>
-        <source>Wrong password, please retry</source>
-        <translation>Mot de passe incorrect, veuillez réessayer</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2495"/>
-        <location filename="../src/source/mainwindow.cpp" line="2554"/>
-        <location filename="../src/source/mainwindow.cpp" line="2582"/>
-        <source>The file name is too long. Keep the name within 60 characters please.</source>
-        <translation>Le nom du fichier est trop long. Garder le nom dans les 60 caractères, s&apos;il vous plaît.</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2579"/>
-        <source>Conversion failed</source>
-        <translation>Échec de la conversion</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2777"/>
-        <source>Select file</source>
-        <translation>Sélectionner un fichier</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="3689"/>
-        <source>Enter up to %1 characters</source>
-        <translation>Entrez jusqu&apos;à %1 caractères</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="3561"/>
-        <source>File info</source>
-        <translation>Informations sur le fichier</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1671"/>
-        <source>Do you want to delete the archive?</source>
-        <translation>Voulez-vous supprimer l&apos;archive ?</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="696"/>
-        <source>%1 was changed on the disk, please import it again.</source>
-        <translation>%1 a été modifié sur le disque, veuillez l&apos;importer à nouveau.</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="106"/>
-        <source>Archive Manager</source>
-        <translation>Gestionnaire d&apos;archives</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="202"/>
-        <source>You do not have permission to save files here, please change and retry</source>
-        <translation>Vous n&apos;êtes pas autorisé à enregistrer des fichiers ici, veuillez modifier et réessayer</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="403"/>
@@ -615,98 +494,34 @@
         <translation>Suppression</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="649"/>
-        <location filename="../src/source/mainwindow.cpp" line="3377"/>
-        <source>Loading, please wait...</source>
-        <translation>Chargement, veuillez patienter...</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="739"/>
-        <source>Are you sure you want to stop the ongoing task?</source>
-        <translation>Voulez-vous vraiment arrêter la tâche en cours ?</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1567"/>
-        <location filename="../src/source/mainwindow.cpp" line="1695"/>
-        <location filename="../src/source/mainwindow.cpp" line="1711"/>
-        <source>Updating, please wait...</source>
-        <translation>Mise à jour, veuillez patienter...</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1985"/>
-        <source>File name too long</source>
-        <translation>Nom de fichier trop long</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2479"/>
-        <source>Failed to create file</source>
-        <translation>La création du fichier a échoué</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2472"/>
-        <source>Compression failed</source>
-        <translation>Échec de la compression</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2907"/>
-        <source>Replace</source>
-        <comment>button</comment>
-        <translation>Remplacer</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2971"/>
-        <source>Find directory</source>
-        <translation>Rechercher un répertoire</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2506"/>
-        <source>Open failed</source>
-        <translation>Échec de l&apos;ouverture</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1902"/>
-        <location filename="../src/source/mainwindow.cpp" line="1980"/>
-        <location filename="../src/source/mainwindow.cpp" line="2059"/>
-        <location filename="../src/source/mainwindow.cpp" line="2114"/>
-        <location filename="../src/source/mainwindow.cpp" line="2517"/>
-        <source>Wrong password</source>
-        <translation>Mot de passe incorrect</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="784"/>
-        <location filename="../src/source/mainwindow.cpp" line="823"/>
-        <source>The file format is not supported by Archive Manager</source>
-        <translation>Le format de fichier n&apos;est pas pris en charge par Archive Manager</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="202"/>
-        <location filename="../src/source/mainwindow.cpp" line="582"/>
-        <location filename="../src/source/mainwindow.cpp" line="660"/>
-        <location filename="../src/source/mainwindow.cpp" line="699"/>
-        <location filename="../src/source/mainwindow.cpp" line="769"/>
-        <location filename="../src/source/mainwindow.cpp" line="775"/>
-        <location filename="../src/source/mainwindow.cpp" line="784"/>
-        <location filename="../src/source/mainwindow.cpp" line="830"/>
-        <location filename="../src/source/mainwindow.cpp" line="1118"/>
-        <location filename="../src/source/mainwindow.cpp" line="1594"/>
-        <location filename="../src/source/mainwindow.cpp" line="2737"/>
-        <location filename="../src/source/mainwindow.cpp" line="2757"/>
-        <location filename="../src/source/mainwindow.cpp" line="3065"/>
-        <location filename="../src/source/mainwindow.cpp" line="3236"/>
-        <source>OK</source>
-        <comment>button</comment>
-        <translation>OK</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="435"/>
-        <source>Renaming</source>
-        <translation>Renommage</translation>
+        <location filename="../src/source/mainwindow.cpp" line="443"/>
+        <source>Converting</source>
+        <translation>Conversion</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="582"/>
         <location filename="../src/source/mainwindow.cpp" line="775"/>
         <source>You do not have permission to load %1</source>
         <translation>Vous n&apos;êtes pas autorisé à charger %1</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="649"/>
+        <location filename="../src/source/mainwindow.cpp" line="3377"/>
+        <source>Loading, please wait...</source>
+        <translation>Chargement, veuillez patienter...</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="660"/>
+        <location filename="../src/source/mainwindow.cpp" line="2475"/>
+        <location filename="../src/source/mainwindow.cpp" line="2509"/>
+        <location filename="../src/source/mainwindow.cpp" line="2538"/>
+        <source>Plugin error</source>
+        <translation>Erreur de plug-in</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="739"/>
+        <source>Are you sure you want to stop the ongoing task?</source>
+        <translation>Voulez-vous vraiment arrêter la tâche en cours ?</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="739"/>
@@ -732,7 +547,19 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1118"/>
         <source>Unable to add system files or network files, please select files on local devices</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1560"/>
+        <source>Adding successful</source>
+        <translation>Ajout réussi</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1567"/>
+        <location filename="../src/source/mainwindow.cpp" line="1695"/>
+        <location filename="../src/source/mainwindow.cpp" line="1711"/>
+        <source>Updating, please wait...</source>
+        <translation>Mise à jour, veuillez patienter...</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1610"/>
@@ -747,6 +574,11 @@
         <translation>Extraction annulée</translation>
     </message>
     <message>
+        <location filename="../src/source/mainwindow.cpp" line="1963"/>
+        <source>Extraction failed: the file name is too long</source>
+        <translation>Échec de l&apos;extraction : le nom du fichier est trop long</translation>
+    </message>
+    <message>
         <location filename="../src/source/mainwindow.cpp" line="1975"/>
         <location filename="../src/source/mainwindow.cpp" line="2054"/>
         <location filename="../src/source/mainwindow.cpp" line="2513"/>
@@ -755,16 +587,21 @@
         <translation>L&apos;archive est endommagée</translation>
     </message>
     <message>
+        <location filename="../src/source/mainwindow.cpp" line="2116"/>
+        <source>Open failed: the file name is too long</source>
+        <translation>Échec de l&apos;ouverture : le nom du fichier est trop long</translation>
+    </message>
+    <message>
         <location filename="../src/source/mainwindow.cpp" line="2374"/>
         <location filename="../src/source/mainwindow.cpp" line="2379"/>
         <source>Failed to create temporary directory, please check and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2390"/>
         <location filename="../src/source/mainwindow.cpp" line="2400"/>
         <source>Failed to prepare renamed item &quot;%1&quot; for compression, please check permissions and available space.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2452"/>
@@ -773,24 +610,30 @@
         <translation>Extraction réussie</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2458"/>
-        <source>Conversion successful</source>
-        <translation>Conversion réussie</translation>
+        <location filename="../src/source/mainwindow.cpp" line="2454"/>
+        <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
+        <translation>Le nom de fichier est trop long, les 60 premiers caractères ont donc été utilisés comme nom de fichier.</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2483"/>
+        <location filename="../src/source/mainwindow.cpp" line="2566"/>
+        <source>Insufficient disk space</source>
+        <translation>Espace disque insuffisant</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2487"/>
         <source>The compressed volumes already exist</source>
-        <translation>Les volumes compressés existent déjà</translation>
+        <translation>Les volumes compressé existe déjà</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2491"/>
         <source>No compression support in current directory. Download the files to a local device.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2525"/>
         <source>Can&apos;t open compressed packages in current directory. Download the compressed package to a local device.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2535"/>
@@ -799,9 +642,116 @@
         <translation>Échec de l&apos;extraction</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2570"/>
-        <source>No extraction support in current directory. Download the compressed package to a local device.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/source/mainwindow.cpp" line="2495"/>
+        <location filename="../src/source/mainwindow.cpp" line="2554"/>
+        <location filename="../src/source/mainwindow.cpp" line="2582"/>
+        <source>The file name is too long. Keep the name within 60 characters please.</source>
+        <translation>Le nom du fichier est trop long. Gardez 60 caractères dans le nom s&apos;il vous plaît.</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2579"/>
+        <source>Conversion failed</source>
+        <translation>Échec de la conversion</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2899"/>
+        <source>The name is the same as that of the compressed archive, please use another one</source>
+        <translation>Le nom est le même que celui de l&apos;archive compressée, veuillez en utiliser un autre</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2907"/>
+        <source>Another file with the same name already exists, replace it?</source>
+        <translation>Un autre fichier du même nom existe déjà, le remplacer ?</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="3050"/>
+        <source>You cannot add the archive to itself</source>
+        <translation>Vous ne pouvez pas ajouter l&apos;archive à elle-même</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="3065"/>
+        <source>You cannot add files to archives in this file type</source>
+        <translation>Vous ne pouvez pas ajouter de fichiers aux archives dans ce type de fichier</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="3689"/>
+        <source>Enter up to %1 characters</source>
+        <translation>Entrez jusqu&apos;à %1 caractères</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1985"/>
+        <source>File name too long</source>
+        <translation>Nom de fichier trop long</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2479"/>
+        <source>Failed to create file</source>
+        <translation>La création du fichier a échoué</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2448"/>
+        <source>Compression successful</source>
+        <translation>Compression réussie</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2472"/>
+        <source>Compression failed</source>
+        <translation>Échec de la compression</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2971"/>
+        <source>Find directory</source>
+        <translation>Rechercher un répertoire</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2506"/>
+        <source>Open failed</source>
+        <translation>Échec de l&apos;ouverture</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2737"/>
+        <location filename="../src/source/mainwindow.cpp" line="2757"/>
+        <source>The archive was changed on the disk, please import it again.</source>
+        <translation>L&apos;archive a été modifiée sur le disque, veuillez l&apos;importer à nouveau.</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1902"/>
+        <location filename="../src/source/mainwindow.cpp" line="1980"/>
+        <location filename="../src/source/mainwindow.cpp" line="2059"/>
+        <location filename="../src/source/mainwindow.cpp" line="2114"/>
+        <location filename="../src/source/mainwindow.cpp" line="2517"/>
+        <source>Wrong password</source>
+        <translation>Mot de passe incorrect</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="202"/>
+        <location filename="../src/source/mainwindow.cpp" line="582"/>
+        <location filename="../src/source/mainwindow.cpp" line="660"/>
+        <location filename="../src/source/mainwindow.cpp" line="699"/>
+        <location filename="../src/source/mainwindow.cpp" line="769"/>
+        <location filename="../src/source/mainwindow.cpp" line="775"/>
+        <location filename="../src/source/mainwindow.cpp" line="784"/>
+        <location filename="../src/source/mainwindow.cpp" line="830"/>
+        <location filename="../src/source/mainwindow.cpp" line="1118"/>
+        <location filename="../src/source/mainwindow.cpp" line="1594"/>
+        <location filename="../src/source/mainwindow.cpp" line="2737"/>
+        <location filename="../src/source/mainwindow.cpp" line="2757"/>
+        <location filename="../src/source/mainwindow.cpp" line="3065"/>
+        <location filename="../src/source/mainwindow.cpp" line="3236"/>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="784"/>
+        <location filename="../src/source/mainwindow.cpp" line="823"/>
+        <source>The file format is not supported by Archive Manager</source>
+        <translation>Le format de fichier n&apos;est pas pris en charge par Archive Manager</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2458"/>
+        <source>Conversion successful</source>
+        <translation>Conversion réussie</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2769"/>
@@ -829,24 +779,68 @@
         <translation>Raccourcis</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2899"/>
-        <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation>Le nom est le même que celui de l&apos;archive compressée, veuillez en utiliser un autre</translation>
+        <location filename="../src/source/mainwindow.cpp" line="3561"/>
+        <source>File info</source>
+        <translation>Informations sur le fichier</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="451"/>
+        <source>Updating comments</source>
+        <translation>Mise à jour des commentaires</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="435"/>
+        <source>Renaming</source>
+        <translation>Renommage</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1594"/>
+        <location filename="../src/source/mainwindow.cpp" line="2562"/>
+        <source>No data in it</source>
+        <translation>Aucune donnée dedans</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1800"/>
+        <source>Adding canceled</source>
+        <translation>Ajout annulé</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1906"/>
+        <source>Adding failed</source>
+        <translation>L&apos;ajout a échoué</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1990"/>
+        <location filename="../src/source/mainwindow.cpp" line="2558"/>
+        <source>Failed to create &quot;%1&quot;</source>
+        <translation>Échec de la création de &quot;%1&quot;</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2521"/>
+        <location filename="../src/source/mainwindow.cpp" line="2546"/>
+        <source>Some volumes are missing</source>
+        <translation>Certains volumes manquent</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2550"/>
+        <source>Wrong password, please retry</source>
+        <translation>Mot de passe incorrect, veuillez réessayer</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2570"/>
+        <source>No extraction support in current directory. Download the compressed package to a local device.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2777"/>
+        <source>Select file</source>
+        <translation>Sélectionner un fichier</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2907"/>
-        <source>Another file with the same name already exists, replace it?</source>
-        <translation>Un autre fichier du même nom existe déjà, le remplacer ?</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="3050"/>
-        <source>You cannot add the archive to itself</source>
-        <translation>Vous ne pouvez pas ajouter l&apos;archive à elle-même</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="3065"/>
-        <source>You cannot add files to archives in this file type</source>
-        <translation>Vous ne pouvez pas ajouter de fichiers aux archives dans ce type de fichier</translation>
+        <source>Replace</source>
+        <comment>button</comment>
+        <translation>Remplacer</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3407"/>
@@ -905,10 +899,14 @@
         <translation>Veuillez vérifier le type d&apos;association de fichiers dans les paramètres d&apos;Archive Manager</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2737"/>
-        <location filename="../src/source/mainwindow.cpp" line="2757"/>
-        <source>The archive was changed on the disk, please import it again.</source>
-        <translation>L&apos;archive a été modifiée sur le disque, veuillez l&apos;importer à nouveau.</translation>
+        <location filename="../src/source/mainwindow.cpp" line="202"/>
+        <source>You do not have permission to save files here, please change and retry</source>
+        <translation>Vous n&apos;êtes pas autorisé à enregistrer des fichiers ici, veuillez modifier et réessayer</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1671"/>
+        <source>Do you want to delete the archive?</source>
+        <translation>Voulez-vous supprimer l&apos;archive ?</translation>
     </message>
 </context>
 <context>
@@ -944,14 +942,14 @@
         <translation>Archive</translation>
     </message>
     <message>
-        <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="39"/>
-        <source>Executable</source>
-        <translation>Exécutable</translation>
-    </message>
-    <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="38"/>
         <source>Document</source>
         <translation>Document</translation>
+    </message>
+    <message>
+        <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="39"/>
+        <source>Executable</source>
+        <translation>Exécutable</translation>
     </message>
     <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="40"/>
@@ -1009,7 +1007,7 @@
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="386"/>
         <source>Encrypted file, please enter the password</source>
-        <translation>Fichier crypté, veuillez saisir le mot de passe</translation>
+        <translation>Fichier chiffré, veuillez saisir le mot de passe</translation>
     </message>
 </context>
 <context>
@@ -1098,7 +1096,7 @@
         <location filename="../src/source/page/progresspage.cpp" line="364"/>
         <source>Speed</source>
         <comment>rename</comment>
-        <translation type="unfinished">Vitesse</translation>
+        <translation>Vitesse</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="52"/>
@@ -1208,6 +1206,58 @@
 <context>
     <name>QObject</name>
     <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="213"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="219"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="236"/>
+        <source>Skip</source>
+        <comment>button</comment>
+        <translation>Passer</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="214"/>
+        <source>Merge</source>
+        <comment>button</comment>
+        <translation>Fusionner</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="217"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="213"/>
+        <source>Another file with the same name already exists, replace it?</source>
+        <translation>Un autre fichier du même nom existe déjà, le remplacer ?</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="220"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="237"/>
+        <source>Replace</source>
+        <comment>button</comment>
+        <translation>Remplacer</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="517"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="397"/>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>Annuler</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="518"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="398"/>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="211"/>
+        <source>Another folder with the same name already exists, replace it?</source>
+        <translation>Un autre dossier avec le même nom existe déjà, le remplacer ?</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="223"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="218"/>
+        <source>Apply to all</source>
+        <translation>Appliquer à tous</translation>
+    </message>
+    <message>
         <location filename="../src/source/tree/datamodel.h" line="56"/>
         <source>Name</source>
         <translation>Nom</translation>
@@ -1272,58 +1322,6 @@
         <source>File Type</source>
         <translation>Type de fichier</translation>
     </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="213"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="219"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="236"/>
-        <source>Skip</source>
-        <comment>button</comment>
-        <translation>Passer</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="214"/>
-        <source>Merge</source>
-        <comment>button</comment>
-        <translation>Fusionner</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="217"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="213"/>
-        <source>Another file with the same name already exists, replace it?</source>
-        <translation>Un autre fichier du même nom existe déjà, le remplacer ?</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="220"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="237"/>
-        <source>Replace</source>
-        <comment>button</comment>
-        <translation>Remplacer</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="517"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="397"/>
-        <source>Cancel</source>
-        <comment>button</comment>
-        <translation>Annuler</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="518"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="398"/>
-        <source>OK</source>
-        <comment>button</comment>
-        <translation>OK</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="211"/>
-        <source>Another folder with the same name already exists, replace it?</source>
-        <translation>Un autre dossier avec le même nom existe déjà, le remplacer ?</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="223"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="218"/>
-        <source>Apply to all</source>
-        <translation>Appliquer à tous</translation>
-    </message>
 </context>
 <context>
     <name>RenameDialog</name>
@@ -1336,38 +1334,32 @@
         <location filename="../src/source/dialog/popupdialog.cpp" line="670"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Annuler</translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="671"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="681"/>
         <source>The name already exists</source>
-        <translation>Le nom existe déjà</translation>
+        <translation>Ce nom existe déjà</translation>
     </message>
 </context>
 <context>
     <name>SettingDialog</name>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="174"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="203"/>
-        <source>Current directory</source>
-        <translation>Répertoire actuel</translation>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="131"/>
+        <source>Select All</source>
+        <comment>button</comment>
+        <translation>Tout sélectionner</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="132"/>
         <source>Clear All</source>
         <translation>Tout effacer</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="131"/>
-        <source>Select All</source>
-        <comment>button</comment>
-        <translation>Tout sélectionner</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="133"/>
@@ -1381,15 +1373,21 @@
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="174"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="213"/>
-        <source>Other directory</source>
-        <translation>Autre répertoire</translation>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="203"/>
+        <source>Current directory</source>
+        <translation>Répertoire actuel</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="174"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="208"/>
         <source>Desktop</source>
         <translation>Bureau</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="174"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="213"/>
+        <source>Other directory</source>
+        <translation>Autre répertoire</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="281"/>
@@ -1439,17 +1437,17 @@
         <location filename="../src/source/mainwindow.cpp" line="3871"/>
         <location filename="../src/source/mainwindow.cpp" line="3926"/>
         <source>Open file</source>
-        <translation type="unfinished">Ouvrir un fichier</translation>
+        <translation>Ouvrir un fichier</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3874"/>
         <source>Back</source>
-        <translation type="unfinished">Retour</translation>
+        <translation>Retour</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3930"/>
         <source>File info</source>
-        <translation type="unfinished">Informations sur le fichier</translation>
+        <translation>Infos du fichier</translation>
     </message>
 </context>
 <context>
