@@ -1,17 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ja">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ja">
 <context>
     <name>AppendDialog</name>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="472"/>
         <source>Add files to the current archive</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="477"/>
         <source>Use password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -20,19 +18,19 @@
         <location filename="../src/source/common/calculatesizethread.cpp" line="63"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="148"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="65"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="150"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="75"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="160"/>
         <source>You do not have permission to compress %1</source>
-        <translation type="unfinished">%1を圧縮する権限がありません</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -40,7 +38,7 @@
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="232"/>
         <source>Updating the comment...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -59,7 +57,7 @@
         <location filename="../src/source/page/compresspage.cpp" line="120"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished">OK</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -78,7 +76,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="234"/>
         <source>Compression method</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="237"/>
@@ -88,7 +86,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="239"/>
         <source>CPU threads</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="241"/>
@@ -103,63 +101,63 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="245"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
         <source>Compress</source>
         <comment>button</comment>
-        <translation type="unfinished">圧縮</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="266"/>
         <source>Store</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="266"/>
         <source>Fastest</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="266"/>
         <source>Fast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="266"/>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="266"/>
         <source>Good</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="266"/>
         <source>Best</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="273"/>
         <source>Single thread</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="273"/>
         <source>2 threads</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="273"/>
         <source>4 threads</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="273"/>
         <source>8 threads</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="283"/>
@@ -174,7 +172,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="298"/>
         <source>Enter up to %1 characters</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="318"/>
@@ -215,7 +213,7 @@
         <location filename="../src/source/page/compresssettingpage.cpp" line="659"/>
         <location filename="../src/source/page/compresssettingpage.cpp" line="691"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="666"/>
@@ -226,25 +224,25 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="688"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="727"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished">OK</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="989"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">キャンセル</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="989"/>
         <source>Replace</source>
         <comment>button</comment>
-        <translation type="unfinished">置き換え</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="891"/>
@@ -254,12 +252,12 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="912"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="922"/>
         <source>The password for ZIP volumes cannot be in Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="989"/>
@@ -269,7 +267,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="1036"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -282,7 +280,7 @@
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="325"/>
         <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="330"/>
@@ -310,19 +308,19 @@
         <location filename="../src/source/tree/compressview.cpp" line="505"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">キャンセル</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="383"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation type="unfinished">確定</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="506"/>
         <source>Add</source>
         <comment>button</comment>
-        <translation type="unfinished">追加</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="504"/>
@@ -351,13 +349,13 @@
         <location filename="../src/source/dialog/popupdialog.cpp" line="365"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">キャンセル</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="366"/>
         <source>Convert</source>
         <comment>button</comment>
-        <translation type="unfinished">変換</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -374,18 +372,18 @@
         <location filename="../src/source/page/failurepage.cpp" line="79"/>
         <source>Extraction failed</source>
         <comment>解压失败</comment>
-        <translation>伸張に失敗しました</translation>
+        <translation>展開に失敗しました</translation>
     </message>
     <message>
         <location filename="../src/source/page/failurepage.cpp" line="92"/>
         <source>Damaged file, unable to extract</source>
-        <translation>ファイルが破損しています。伸張できません</translation>
+        <translation>ファイルが破損しているため、展開できませんでした。</translation>
     </message>
     <message>
         <location filename="../src/source/page/failurepage.cpp" line="97"/>
         <source>Retry</source>
         <comment>button</comment>
-        <translation type="unfinished">再試行</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/failurepage.cpp" line="100"/>
@@ -411,18 +409,18 @@
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="517"/>
         <source>The archive is damaged</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="520"/>
         <source>Open as read-only</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="521"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">キャンセル</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -444,11 +442,21 @@
     <message>
         <location filename="../src/main.cpp" line="148"/>
         <source>Archive Manager is a fast and lightweight application for creating and extracting archives.</source>
-        <translation>アーカイブ マネージャーは、アーカイブの作成および伸張するための高速で軽量なアプリケーションです。</translation>
+        <translation>アーカイブ マネージャーは、アーカイブの作成および展開するための高速で軽量なアプリケーションです。</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="106"/>
+        <source>Archive Manager</source>
+        <translation>アーカイブ マネージャー</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="696"/>
+        <source>%1 was changed on the disk, please import it again.</source>
+        <translation>%1はディスク上で変更されました。再度インポートしてください。</translation>
+    </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="249"/>
         <source>Open file</source>
@@ -466,135 +474,6 @@
         <translation>新規アーカイブの作成</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="443"/>
-        <source>Converting</source>
-        <translation>変換中</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="451"/>
-        <source>Updating comments</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="660"/>
-        <location filename="../src/source/mainwindow.cpp" line="2475"/>
-        <location filename="../src/source/mainwindow.cpp" line="2509"/>
-        <location filename="../src/source/mainwindow.cpp" line="2538"/>
-        <source>Plugin error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1560"/>
-        <source>Adding successful</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1594"/>
-        <location filename="../src/source/mainwindow.cpp" line="2562"/>
-        <source>No data in it</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1800"/>
-        <source>Adding canceled</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1906"/>
-        <source>Adding failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1963"/>
-        <source>Extraction failed: the file name is too long</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1990"/>
-        <location filename="../src/source/mainwindow.cpp" line="2558"/>
-        <source>Failed to create &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2116"/>
-        <source>Open failed: the file name is too long</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2448"/>
-        <source>Compression successful</source>
-        <translation>圧縮が完了しました</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2454"/>
-        <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2483"/>
-        <location filename="../src/source/mainwindow.cpp" line="2566"/>
-        <source>Insufficient disk space</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2521"/>
-        <location filename="../src/source/mainwindow.cpp" line="2546"/>
-        <source>Some volumes are missing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2550"/>
-        <source>Wrong password, please retry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2495"/>
-        <location filename="../src/source/mainwindow.cpp" line="2554"/>
-        <location filename="../src/source/mainwindow.cpp" line="2582"/>
-        <source>The file name is too long. Keep the name within 60 characters please.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2579"/>
-        <source>Conversion failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2777"/>
-        <source>Select file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="3689"/>
-        <source>Enter up to %1 characters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="3561"/>
-        <source>File info</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1671"/>
-        <source>Do you want to delete the archive?</source>
-        <translation>アーカイブを削除しますか？</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="696"/>
-        <source>%1 was changed on the disk, please import it again.</source>
-        <translation>%1はディスク上で変更されました。再度インポートしてください。</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="106"/>
-        <source>Archive Manager</source>
-        <translation>アーカイブ マネージャー</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="202"/>
-        <source>You do not have permission to save files here, please change and retry</source>
-        <translation>その場所にファイルを保存する権限がありません。変更して再試行してください</translation>
-    </message>
-    <message>
         <location filename="../src/source/mainwindow.cpp" line="403"/>
         <source>Adding files to %1</source>
         <translation>%1 にファイルを追加中</translation>
@@ -607,12 +486,23 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="419"/>
         <source>Extracting</source>
-        <translation>伸張中</translation>
+        <translation>展開中</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="427"/>
         <source>Deleting</source>
         <translation>削除中</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="443"/>
+        <source>Converting</source>
+        <translation>変換中</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="582"/>
+        <location filename="../src/source/mainwindow.cpp" line="775"/>
+        <source>You do not have permission to load %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="649"/>
@@ -621,37 +511,192 @@
         <translation>読み込んでいます。しばらくお待ちください...</translation>
     </message>
     <message>
+        <location filename="../src/source/mainwindow.cpp" line="660"/>
+        <location filename="../src/source/mainwindow.cpp" line="2475"/>
+        <location filename="../src/source/mainwindow.cpp" line="2509"/>
+        <location filename="../src/source/mainwindow.cpp" line="2538"/>
+        <source>Plugin error</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/source/mainwindow.cpp" line="739"/>
         <source>Are you sure you want to stop the ongoing task?</source>
         <translation>進行中のタスクを停止してもよろしいですか？</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="739"/>
+        <location filename="../src/source/mainwindow.cpp" line="1671"/>
+        <location filename="../src/source/mainwindow.cpp" line="2907"/>
+        <location filename="../src/source/mainwindow.cpp" line="3407"/>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="739"/>
+        <location filename="../src/source/mainwindow.cpp" line="1671"/>
+        <source>Confirm</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="769"/>
+        <source>No such file or directory</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1118"/>
+        <source>Unable to add system files or network files, please select files on local devices</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1560"/>
+        <source>Adding successful</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1567"/>
         <location filename="../src/source/mainwindow.cpp" line="1695"/>
         <location filename="../src/source/mainwindow.cpp" line="1711"/>
         <source>Updating, please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1610"/>
+        <source>Extraction successful</source>
+        <comment>提取成功</comment>
+        <translation>展開が完了しました</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1821"/>
+        <source>Extraction canceled</source>
+        <comment>取消提取</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1963"/>
+        <source>Extraction failed: the file name is too long</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1975"/>
+        <location filename="../src/source/mainwindow.cpp" line="2054"/>
+        <location filename="../src/source/mainwindow.cpp" line="2513"/>
+        <location filename="../src/source/mainwindow.cpp" line="2542"/>
+        <source>The archive is damaged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2116"/>
+        <source>Open failed: the file name is too long</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2374"/>
+        <location filename="../src/source/mainwindow.cpp" line="2379"/>
+        <source>Failed to create temporary directory, please check and try again.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2390"/>
+        <location filename="../src/source/mainwindow.cpp" line="2400"/>
+        <source>Failed to prepare renamed item &quot;%1&quot; for compression, please check permissions and available space.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2452"/>
+        <source>Extraction successful</source>
+        <comment>解压成功</comment>
+        <translation>展開が完了しました</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2454"/>
+        <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2483"/>
+        <location filename="../src/source/mainwindow.cpp" line="2566"/>
+        <source>Insufficient disk space</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2487"/>
+        <source>The compressed volumes already exist</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2491"/>
+        <source>No compression support in current directory. Download the files to a local device.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2525"/>
+        <source>Can&apos;t open compressed packages in current directory. Download the compressed package to a local device.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2535"/>
+        <source>Extraction failed</source>
+        <comment>解压失败</comment>
+        <translation>展開できませんでした</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2495"/>
+        <location filename="../src/source/mainwindow.cpp" line="2554"/>
+        <location filename="../src/source/mainwindow.cpp" line="2582"/>
+        <source>The file name is too long. Keep the name within 60 characters please.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2579"/>
+        <source>Conversion failed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2899"/>
+        <source>The name is the same as that of the compressed archive, please use another one</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2907"/>
+        <source>Another file with the same name already exists, replace it?</source>
+        <translation>同じ名前の別ファイルが既に存在します。置き換えますか？</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="3050"/>
+        <source>You cannot add the archive to itself</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="3065"/>
+        <source>You cannot add files to archives in this file type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="3689"/>
+        <source>Enter up to %1 characters</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1985"/>
         <source>File name too long</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2479"/>
         <source>Failed to create file</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2448"/>
+        <source>Compression successful</source>
+        <translation>圧縮が完了しました</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2472"/>
         <source>Compression failed</source>
         <translation>圧縮に失敗しました</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2907"/>
-        <source>Replace</source>
-        <comment>button</comment>
-        <translation type="unfinished">置き換え</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2971"/>
@@ -661,7 +706,13 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2506"/>
         <source>Open failed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2737"/>
+        <location filename="../src/source/mainwindow.cpp" line="2757"/>
+        <source>The archive was changed on the disk, please import it again.</source>
+        <translation>アーカイブはディスク上で変更されました。再度インポートしてください。</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1902"/>
@@ -671,12 +722,6 @@
         <location filename="../src/source/mainwindow.cpp" line="2517"/>
         <source>Wrong password</source>
         <translation>パスワードが違います</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="784"/>
-        <location filename="../src/source/mainwindow.cpp" line="823"/>
-        <source>The file format is not supported by Archive Manager</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="202"/>
@@ -695,113 +740,18 @@
         <location filename="../src/source/mainwindow.cpp" line="3236"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished">OK</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="435"/>
-        <source>Renaming</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="582"/>
-        <location filename="../src/source/mainwindow.cpp" line="775"/>
-        <source>You do not have permission to load %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="739"/>
-        <location filename="../src/source/mainwindow.cpp" line="1671"/>
-        <location filename="../src/source/mainwindow.cpp" line="2907"/>
-        <location filename="../src/source/mainwindow.cpp" line="3407"/>
-        <source>Cancel</source>
-        <comment>button</comment>
-        <translation type="unfinished">キャンセル</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="739"/>
-        <location filename="../src/source/mainwindow.cpp" line="1671"/>
-        <source>Confirm</source>
-        <comment>button</comment>
-        <translation type="unfinished">確定</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="769"/>
-        <source>No such file or directory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1118"/>
-        <source>Unable to add system files or network files, please select files on local devices</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1610"/>
-        <source>Extraction successful</source>
-        <comment>提取成功</comment>
-        <translation>伸張が完了しました</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1821"/>
-        <source>Extraction canceled</source>
-        <comment>取消提取</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1975"/>
-        <location filename="../src/source/mainwindow.cpp" line="2054"/>
-        <location filename="../src/source/mainwindow.cpp" line="2513"/>
-        <location filename="../src/source/mainwindow.cpp" line="2542"/>
-        <source>The archive is damaged</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2374"/>
-        <location filename="../src/source/mainwindow.cpp" line="2379"/>
-        <source>Failed to create temporary directory, please check and try again.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2390"/>
-        <location filename="../src/source/mainwindow.cpp" line="2400"/>
-        <source>Failed to prepare renamed item &quot;%1&quot; for compression, please check permissions and available space.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2452"/>
-        <source>Extraction successful</source>
-        <comment>解压成功</comment>
-        <translation>伸張が完了しました</translation>
+        <location filename="../src/source/mainwindow.cpp" line="784"/>
+        <location filename="../src/source/mainwindow.cpp" line="823"/>
+        <source>The file format is not supported by Archive Manager</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2458"/>
         <source>Conversion successful</source>
         <translation>変換が完了しました</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2487"/>
-        <source>The compressed volumes already exist</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2491"/>
-        <source>No compression support in current directory. Download the files to a local device.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2525"/>
-        <source>Can&apos;t open compressed packages in current directory. Download the compressed package to a local device.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2535"/>
-        <source>Extraction failed</source>
-        <comment>解压失败</comment>
-        <translation>伸張に失敗しました</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2570"/>
-        <source>No extraction support in current directory. Download the compressed package to a local device.</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2769"/>
@@ -829,35 +779,79 @@
         <translation>ショートカット</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2899"/>
-        <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/source/mainwindow.cpp" line="3561"/>
+        <source>File info</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="451"/>
+        <source>Updating comments</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="435"/>
+        <source>Renaming</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1594"/>
+        <location filename="../src/source/mainwindow.cpp" line="2562"/>
+        <source>No data in it</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1800"/>
+        <source>Adding canceled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1906"/>
+        <source>Adding failed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1990"/>
+        <location filename="../src/source/mainwindow.cpp" line="2558"/>
+        <source>Failed to create &quot;%1&quot;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2521"/>
+        <location filename="../src/source/mainwindow.cpp" line="2546"/>
+        <source>Some volumes are missing</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2550"/>
+        <source>Wrong password, please retry</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2570"/>
+        <source>No extraction support in current directory. Download the compressed package to a local device.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2777"/>
+        <source>Select file</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2907"/>
-        <source>Another file with the same name already exists, replace it?</source>
-        <translation type="unfinished">同じ名前の別ファイルが既に存在します。置き換えますか？</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="3050"/>
-        <source>You cannot add the archive to itself</source>
-        <translation type="unfinished">アーカイブに本体を追加することはできません</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="3065"/>
-        <source>You cannot add files to archives in this file type</source>
-        <translation type="unfinished"></translation>
+        <source>Replace</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3407"/>
         <source>Update</source>
         <comment>button</comment>
-        <translation type="unfinished">更新</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3585"/>
         <source>Basic info</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3601"/>
@@ -872,17 +866,17 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3603"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3604"/>
         <source>Time created</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3605"/>
         <source>Time accessed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3606"/>
@@ -897,7 +891,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3651"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="819"/>
@@ -905,10 +899,14 @@
         <translation>アーカイブ マネージャーの設定でファイルの関連付けの種類を確認してください</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2737"/>
-        <location filename="../src/source/mainwindow.cpp" line="2757"/>
-        <source>The archive was changed on the disk, please import it again.</source>
-        <translation>アーカイブはディスク上で変更されました。再度インポートしてください。</translation>
+        <location filename="../src/source/mainwindow.cpp" line="202"/>
+        <source>You do not have permission to save files here, please change and retry</source>
+        <translation>その場所にファイルを保存する権限がありません。変更して再試行してください</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1671"/>
+        <source>Do you want to delete the archive?</source>
+        <translation>アーカイブを削除しますか？</translation>
     </message>
 </context>
 <context>
@@ -944,14 +942,14 @@
         <translation>アーカイブ</translation>
     </message>
     <message>
-        <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="39"/>
-        <source>Executable</source>
-        <translation>実行ファイル</translation>
-    </message>
-    <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="38"/>
         <source>Document</source>
         <translation>文書</translation>
+    </message>
+    <message>
+        <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="39"/>
+        <source>Executable</source>
+        <translation>実行ファイル</translation>
     </message>
     <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="40"/>
@@ -985,13 +983,13 @@
         <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="325"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">キャンセル</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="326"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation type="unfinished">確定</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="331"/>
@@ -1017,12 +1015,12 @@
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="39"/>
         <source>Current path:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="48"/>
         <source>Back to: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1042,24 +1040,24 @@
         <location filename="../src/source/dialog/progressdialog.cpp" line="55"/>
         <location filename="../src/source/dialog/progressdialog.cpp" line="106"/>
         <source>Extracting</source>
-        <translation>伸張中</translation>
+        <translation>展開中</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="184"/>
         <source>Are you sure you want to stop the extraction?</source>
-        <translation>伸張を停止してもよろしいですか？</translation>
+        <translation>展開を停止してもよろしいですか？</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="186"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">キャンセル</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="186"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation type="unfinished">確定</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1098,7 +1096,7 @@
         <location filename="../src/source/page/progresspage.cpp" line="364"/>
         <source>Speed</source>
         <comment>rename</comment>
-        <translation type="unfinished">速度</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="52"/>
@@ -1137,7 +1135,7 @@
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="130"/>
         <source>Renaming</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="132"/>
@@ -1148,12 +1146,12 @@
         <location filename="../src/source/page/progresspage.cpp" line="134"/>
         <location filename="../src/source/page/progresspage.cpp" line="154"/>
         <source>Updating the comment...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="136"/>
         <source>Extracting</source>
-        <translation>伸張中</translation>
+        <translation>展開中</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="148"/>
@@ -1161,37 +1159,37 @@
         <location filename="../src/source/page/progresspage.cpp" line="402"/>
         <source>Pause</source>
         <comment>button</comment>
-        <translation type="unfinished">一時停止</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="193"/>
         <location filename="../src/source/page/progresspage.cpp" line="438"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">キャンセル</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="180"/>
         <location filename="../src/source/page/progresspage.cpp" line="397"/>
         <source>Continue</source>
         <comment>button</comment>
-        <translation type="unfinished">続行</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="438"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation type="unfinished">確定</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="424"/>
         <source>Are you sure you want to stop the decompression?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="427"/>
         <source>Are you sure you want to stop the deletion?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="421"/>
@@ -1207,6 +1205,58 @@
 </context>
 <context>
     <name>QObject</name>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="213"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="219"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="236"/>
+        <source>Skip</source>
+        <comment>button</comment>
+        <translation>スキップ</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="214"/>
+        <source>Merge</source>
+        <comment>button</comment>
+        <translation>統合</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="217"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="213"/>
+        <source>Another file with the same name already exists, replace it?</source>
+        <translation>同じ名前のファイルが既に存在します。置き換えますか？</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="220"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="237"/>
+        <source>Replace</source>
+        <comment>button</comment>
+        <translation>置き換える</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="517"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="397"/>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>キャンセル</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="518"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="398"/>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="211"/>
+        <source>Another folder with the same name already exists, replace it?</source>
+        <translation>同じ名前のフォルダが既に存在します。置き換えますか？</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="223"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="218"/>
+        <source>Apply to all</source>
+        <translation>すべてに適用</translation>
+    </message>
     <message>
         <location filename="../src/source/tree/datamodel.h" line="56"/>
         <source>Name</source>
@@ -1240,17 +1290,17 @@
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="13"/>
         <source>Extraction</source>
-        <translation>伸張</translation>
+        <translation>展開</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="14"/>
         <source>Auto create a folder for multiple extracted files</source>
-        <translation>複数の伸張されたファイル用のフォルダを自動で作成する</translation>
+        <translation>複数の展開されたファイル用のフォルダを自動で作成する</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="15"/>
         <source>Show extracted files when completed</source>
-        <translation>完了時に伸張されたファイルを表示する</translation>
+        <translation>完了時に展開されたファイルを表示する</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="16"/>
@@ -1272,102 +1322,44 @@
         <source>File Type</source>
         <translation>ファイル形式</translation>
     </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="213"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="219"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="236"/>
-        <source>Skip</source>
-        <comment>button</comment>
-        <translation type="unfinished">スキップ</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="214"/>
-        <source>Merge</source>
-        <comment>button</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="217"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="213"/>
-        <source>Another file with the same name already exists, replace it?</source>
-        <translation>同じ名前の別ファイルが既に存在します。置き換えますか？</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="220"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="237"/>
-        <source>Replace</source>
-        <comment>button</comment>
-        <translation type="unfinished">置き換え</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="517"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="397"/>
-        <source>Cancel</source>
-        <comment>button</comment>
-        <translation type="unfinished">キャンセル</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="518"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="398"/>
-        <source>OK</source>
-        <comment>button</comment>
-        <translation type="unfinished">OK</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="211"/>
-        <source>Another folder with the same name already exists, replace it?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="223"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="218"/>
-        <source>Apply to all</source>
-        <translation>すべてに適用</translation>
-    </message>
 </context>
 <context>
     <name>RenameDialog</name>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="619"/>
         <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="670"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">キャンセル</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="671"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished">OK</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="681"/>
         <source>The name already exists</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SettingDialog</name>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="174"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="203"/>
-        <source>Current directory</source>
-        <translation>カレントディレクトリ</translation>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="131"/>
+        <source>Select All</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="132"/>
         <source>Clear All</source>
         <translation>すべて消去</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="131"/>
-        <source>Select All</source>
-        <comment>button</comment>
-        <translation type="unfinished">すべて選択</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="133"/>
@@ -1377,13 +1369,13 @@
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="168"/>
         <source>Extract archives to</source>
-        <translation>アーカイブの伸張先</translation>
+        <translation>アーカイブの展開先</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="174"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="213"/>
-        <source>Other directory</source>
-        <translation>他のディレクトリ</translation>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="203"/>
+        <source>Current directory</source>
+        <translation>カレントディレクトリ</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="174"/>
@@ -1392,9 +1384,15 @@
         <translation>デスクトップ</translation>
     </message>
     <message>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="174"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="213"/>
+        <source>Other directory</source>
+        <translation>他のディレクトリ</translation>
+    </message>
+    <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="281"/>
         <source>Delete archives after extraction</source>
-        <translation>伸張後にアーカイブを削除する</translation>
+        <translation>展開後にアーカイブを削除する</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="287"/>
@@ -1439,17 +1437,17 @@
         <location filename="../src/source/mainwindow.cpp" line="3871"/>
         <location filename="../src/source/mainwindow.cpp" line="3926"/>
         <source>Open file</source>
-        <translation type="unfinished">ファイルを開く</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3874"/>
         <source>Back</source>
-        <translation type="unfinished">戻る</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3930"/>
         <source>File info</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1459,18 +1457,18 @@
         <location filename="../src/source/page/uncompresspage.cpp" line="82"/>
         <location filename="../src/source/page/uncompresspage.cpp" line="116"/>
         <source>Extract to:</source>
-        <translation>伸張先:</translation>
+        <translation>展開先:</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="117"/>
         <source>Extract</source>
         <comment>button</comment>
-        <translation type="unfinished">伸張</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="202"/>
         <source>The default extraction path does not exist, please retry</source>
-        <translation>既定の伸張パスが存在しません。再試行してください</translation>
+        <translation>既定の展開パスが存在しません。もう一度お試しください。</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="205"/>
@@ -1481,7 +1479,7 @@
         <location filename="../src/source/page/uncompresspage.cpp" line="209"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished">OK</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="225"/>
@@ -1500,18 +1498,18 @@
         <location filename="../src/source/tree/uncompressview.cpp" line="424"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished">OK</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="664"/>
         <source>Extract</source>
         <comment>提取</comment>
-        <translation>伸張</translation>
+        <translation>展開</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="666"/>
         <source>Extract to current directory</source>
-        <translation>カレントディレクトリへ伸張</translation>
+        <translation>カレントディレクトリへ展開</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="668"/>
@@ -1521,7 +1519,7 @@
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="670"/>
         <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="678"/>
@@ -1543,13 +1541,13 @@
         <location filename="../src/source/tree/uncompressview.cpp" line="751"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">キャンセル</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="751"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation type="unfinished">確定</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="751"/>
