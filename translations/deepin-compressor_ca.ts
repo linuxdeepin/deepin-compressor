@@ -547,7 +547,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1118"/>
         <source>Unable to add system files or network files, please select files on local devices</source>
-        <translation type="unfinished"/>
+        <translation>No s&apos;han pogut afegir fitxers de sistema o de xarxa. Seleccioneu els fitxers dels dispositius locals.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1560"/>
@@ -595,13 +595,13 @@
         <location filename="../src/source/mainwindow.cpp" line="2374"/>
         <location filename="../src/source/mainwindow.cpp" line="2379"/>
         <source>Failed to create temporary directory, please check and try again.</source>
-        <translation type="unfinished"/>
+        <translation>No s&apos;ha pogut crear el directori temporal. Comproveu-ho i torneu-ho a provar.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2390"/>
         <location filename="../src/source/mainwindow.cpp" line="2400"/>
         <source>Failed to prepare renamed item &quot;%1&quot; for compression, please check permissions and available space.</source>
-        <translation type="unfinished"/>
+        <translation>No s&apos;ha pogut preparar l&apos;element canviat de nom «%1» per a la compressió. Comproveu els permisos i l&apos;espai disponible.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2452"/>
@@ -628,12 +628,12 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2491"/>
         <source>No compression support in current directory. Download the files to a local device.</source>
-        <translation type="unfinished"/>
+        <translation>No s&apos;admet la compressió al directori actual. Baixeu els fitxers a un dispositiu local.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2525"/>
         <source>Can&apos;t open compressed packages in current directory. Download the compressed package to a local device.</source>
-        <translation type="unfinished"/>
+        <translation>No es poden obrir els paquets comprimits al directori actual. Baixeu el paquet comprimit a un dispositiu local.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2535"/>
@@ -829,7 +829,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2570"/>
         <source>No extraction support in current directory. Download the compressed package to a local device.</source>
-        <translation type="unfinished"/>
+        <translation>No s&apos;admet l&apos;extracció al directori actual. Baixeu el paquet comprimit a un dispositiu local.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2777"/>
