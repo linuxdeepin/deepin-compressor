@@ -601,7 +601,7 @@
         <location filename="../src/source/mainwindow.cpp" line="2390"/>
         <location filename="../src/source/mainwindow.cpp" line="2400"/>
         <source>Failed to prepare renamed item &quot;%1&quot; for compression, please check permissions and available space.</source>
-        <translation type="unfinished"/>
+        <translation>Nie udało się przygotować pliku &quot;%1&quot; do kompresji. Sprawdź uprawnienia i miejsce na dysku.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2452"/>
