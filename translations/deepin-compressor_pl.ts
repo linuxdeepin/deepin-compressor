@@ -547,7 +547,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1118"/>
         <source>Unable to add system files or network files, please select files on local devices</source>
-        <translation>Nie można dodać plików systemowych ani sieciowych. Wybierz pliki z urządzeń lokalnych.</translation>
+        <translation>Nie można dodać plików systemowych ani sieciowych. Wybierz pliki z dysku lokalnego.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1560"/>
@@ -628,12 +628,12 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2491"/>
         <source>No compression support in current directory. Download the files to a local device.</source>
-        <translation type="unfinished"/>
+        <translation>Bieżący katalog nie wspiera kompresji. Przenieś pliki na dysk lokalny.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2525"/>
         <source>Can&apos;t open compressed packages in current directory. Download the compressed package to a local device.</source>
-        <translation type="unfinished"/>
+        <translation>Nie można otworzyć skompresowanych plików w bieżącym katalogu. Przenieś archiwum na dysk lokalny.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2535"/>
@@ -829,7 +829,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2570"/>
         <source>No extraction support in current directory. Download the compressed package to a local device.</source>
-        <translation type="unfinished"/>
+        <translation>Bieżący katalog nie wspiera rozpakowywania. Przenieś archiwum na dysk lokalny.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2777"/>
