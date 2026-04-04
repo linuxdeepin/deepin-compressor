@@ -547,7 +547,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1118"/>
         <source>Unable to add system files or network files, please select files on local devices</source>
-        <translation type="unfinished"/>
+        <translation>Nie można dodać plików systemowych ani sieciowych. Wybierz pliki z urządzeń lokalnych.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1560"/>
@@ -595,7 +595,7 @@
         <location filename="../src/source/mainwindow.cpp" line="2374"/>
         <location filename="../src/source/mainwindow.cpp" line="2379"/>
         <source>Failed to create temporary directory, please check and try again.</source>
-        <translation type="unfinished"/>
+        <translation>Nie udało się utworzyć katalogu tymczasowego. Sprawdź ustawienia i spróbuj ponownie.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2390"/>
