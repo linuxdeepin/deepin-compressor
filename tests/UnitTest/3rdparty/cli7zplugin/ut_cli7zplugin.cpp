@@ -305,6 +305,15 @@ TEST_F(UT_Cli7zPlugin, test_readListLine_001)
 TEST_F(UT_Cli7zPlugin, test_readListLine_002)
 {
     m_tester->m_parseState = ParseStateTitle;
+    // 兼容p7zip和7z版本格式 - 测试7z版本
+    EXPECT_EQ(m_tester->readListLine("7-Zip 23.01 (x64) : Copyright (c) 1999-2023 Igor Pavlov : 2023-06-20"), true);
+    EXPECT_EQ(m_tester->m_parseState, ParseStateHeader);
+}
+
+TEST_F(UT_Cli7zPlugin, test_readListLine_002_p7zip)
+{
+    m_tester->m_parseState = ParseStateTitle;
+    // 兼容p7zip和7z版本格式 - 测试p7zip版本（向后兼容）
     EXPECT_EQ(m_tester->readListLine("p7zip Version 16.02 (locale=zh_CN.UTF-8,Utf16=on,HugeFiles=on,64 bits,16 CPUs Intel(R) Core(TM) i7-10700 CPU @ 2.90GHz (A0655),ASM,AES-NI)"), true);
     EXPECT_EQ(m_tester->m_parseState, ParseStateHeader);
 }
