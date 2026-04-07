@@ -119,3 +119,4 @@ debian/files
 .cursor/
 .cursorindexingignore
 
+.npm-cache/
