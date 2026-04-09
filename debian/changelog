@@ -1,3 +1,12 @@
+deepin-compressor (6.5.24) unstable; urgency=medium
+
+  * deps: migrate from p7zip-full to 7zip package
+  * chore: migrate Transifex config from legacy files to YAML format
+  * fix: [unrar] can not extract rar files with longFilenames
+  * fix: remove empty files left when split-volume encrypted extraction fails (e.g. wrong password)
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Thu, 09 Apr 2026 13:46:45 +0800
+
 deepin-compressor (6.5.23) unstable; urgency=medium
 
   * fix: Enhance compression options and ARM CRC32 support
