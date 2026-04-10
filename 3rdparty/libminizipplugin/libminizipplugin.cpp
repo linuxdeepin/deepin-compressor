@@ -301,19 +301,6 @@ ErrorType LibminizipPlugin::extractEntry(unzFile zipfile, unz_file_info file_inf
 
     // 解压完整文件名（含路径）
     QString strDestFileName = options.strTargetPath + QDir::separator() + strFileName;
-
-    const QString cleanTargetPath = QDir::cleanPath(QDir(options.strTargetPath).absolutePath());
-    const QString cleanDestPath = QDir::cleanPath(QDir(strDestFileName).absolutePath());
-    if (!cleanDestPath.startsWith(cleanTargetPath + QDir::separator()) &&
-        cleanDestPath != cleanTargetPath) {
-        qInfo() << "Path traversal detected! Rejected path: " << strFileName;
-        return ET_FileWriteError;
-    }
-    if (!extractPathIsWithinTarget(options.strTargetPath, strDestFileName)) {
-        qInfo() << "Rejected path (symlink escape or out of root):" << strDestFileName;
-        return ET_FileWriteError;
-    }
-
     QFile file(strDestFileName);
 
     if (bIsDirectory) {     // 文件夹

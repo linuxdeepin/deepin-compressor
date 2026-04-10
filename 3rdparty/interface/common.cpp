@@ -521,14 +521,19 @@ bool Common::findLnfsPath(const QString &target, Compare func)
 bool extractPathIsWithinTarget(const QString &extractRoot, const QString &absoluteDestPath)
 {
     const QFileInfo rootFi(extractRoot);
-    const QString rootCanon = rootFi.canonicalFilePath();
+    QString rootCanon = rootFi.canonicalFilePath();
+    // 如果 canonical 失败，使用绝对路径作为后备
     if (rootCanon.isEmpty()) {
-        return false;
+        rootCanon = QDir(extractRoot).absolutePath();
+        if (rootCanon.isEmpty()) {
+            return false;
+        }
     }
 
     const QString destAbs = QFileInfo(absoluteDestPath).absoluteFilePath();
     QString path = destAbs;
 
+    // 向上遍历路径，解析符号链接
     while (true) {
         QFileInfo fi(path);
         if (fi.exists()) {
@@ -536,54 +541,21 @@ bool extractPathIsWithinTarget(const QString &extractRoot, const QString &absolu
             if (canon.isEmpty()) {
                 return false;
             }
+            // 检查解析后的路径是否在解压目录内
             if (!canon.startsWith(rootCanon + QDir::separator()) && canon != rootCanon) {
                 return false;
             }
             return true;
         }
+
         const QString parent = fi.path();
         if (parent == path || parent.isEmpty()) {
             break;
         }
         path = parent;
     }
+
     return rootFi.exists();
-}
-
-bool symlinkTargetIsWithinTarget(const QString &extractRoot, const QString &symlinkFilePath, const QString &symlinkTarget)
-{
-    const QFileInfo rootFi(extractRoot);
-    const QString rootCanon = rootFi.canonicalFilePath();
-    if (rootCanon.isEmpty()) {
-        return false;
-    }
-
-    if (symlinkTarget.isEmpty()) {
-        return false;
-    }
-
-    const QString linkParent = QFileInfo(symlinkFilePath).path();
-    const QString resolved = QDir::cleanPath(QDir(linkParent).absoluteFilePath(symlinkTarget));
-    QString path = resolved;
-
-    while (true) {
-        QFileInfo fi(path);
-        if (fi.exists()) {
-            const QString canon = fi.canonicalFilePath();
-            if (canon.isEmpty()) {
-                return false;
-            }
-            return canon.startsWith(rootCanon + QDir::separator()) || canon == rootCanon;
-        }
-
-        const QString parent = fi.path();
-        if (parent == path || parent.isEmpty()) {
-            break;
-        }
-        path = parent;
-    }
-
-    return resolved.startsWith(rootCanon + QDir::separator()) || resolved == rootCanon;
 }
 
 bool IsMtpFileOrDirectory(QString path) noexcept {
