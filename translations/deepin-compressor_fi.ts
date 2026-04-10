@@ -633,7 +633,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2525"/>
         <source>Can&apos;t open compressed packages in current directory. Download the compressed package to a local device.</source>
-        <translation type="unfinished"/>
+        <translation>Pakattuja ei voi avata nykyisessä hakemistossa. Lataa pakattu paketti sinun tietokoneelle.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2535"/>
@@ -829,7 +829,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2570"/>
         <source>No extraction support in current directory. Download the compressed package to a local device.</source>
-        <translation type="unfinished"/>
+        <translation>Hakemistossa ei ole purkutukea. Lataa tiedostot sinun tietokoneelle.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2777"/>
