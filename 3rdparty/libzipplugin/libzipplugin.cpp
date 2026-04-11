@@ -895,8 +895,9 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
         return ET_FileWriteError;
     }
 
+    // 写入文件前检查路径是否通过符号链接逃逸
     if (!extractPathIsWithinTarget(options.strTargetPath, strDestFileName)) {
-        qInfo() << "Rejected path (symlink escape or out of root):" << strDestFileName;
+        qInfo() << "Rejected path (symlink escape detected):" << strDestFileName;
         return ET_FileWriteError;
     }
 
@@ -956,12 +957,6 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
         const auto readBytes = zip_fread(zipFile, buf, zip_uint64_t(READBYTES));
         if (readBytes > 0) {
             QString strBuf = QString(buf).toLocal8Bit();
-            if (!symlinkTargetIsWithinTarget(options.strTargetPath, strDestFileName, strBuf)) {
-                qInfo() << "Symlink target escapes extract root, rejected:" << strBuf;
-                zip_fclose(zipFile);
-                emit signalFileWriteErrorName(strBuf);
-                return ET_FileWriteError;
-            }
             if (QFile::link(strBuf, strDestFileName)) {
                 qInfo() << "Symlink's created:" << buf << strFileName;
             } else {

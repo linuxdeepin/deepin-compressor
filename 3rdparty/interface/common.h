@@ -63,9 +63,4 @@ bool IsMtpFileOrDirectory(QString path) noexcept;
  */
 bool extractPathIsWithinTarget(const QString &extractRoot, const QString &absoluteDestPath);
 
-/**
- * 解压安全：ZIP 内符号链接目标解析后须位于解压根目录内。
- */
-bool symlinkTargetIsWithinTarget(const QString &extractRoot, const QString &symlinkFilePath, const QString &symlinkTarget);
-
 #endif
