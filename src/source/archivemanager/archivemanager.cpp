@@ -10,7 +10,6 @@
 #include "pluginmanager.h"
 #include "singlejob.h"
 #include "batchjob.h"
-#include "eventlogutils.h"
 
 #include <QMimeDatabase>
 #include <QFileInfo>
@@ -103,12 +102,6 @@ bool ArchiveManager::createArchive(const QList<FileEntry> &files, const QString 
 bool ArchiveManager::loadArchive(const QString &strArchiveFullPath, UiTools::AssignPluginType eType)
 {
     qDebug() << "Starting loadArchive operation for file:" << strArchiveFullPath;
-    QJsonObject obj{
-        {"tid", EventLogUtils::LoadCompressFile},
-        {"operate", "LoadCompressFile"},
-        {"describe", QString("Load Compress File : ") + strArchiveFullPath}
-    };
-    EventLogUtils::get().writeLogs(obj);
     // 重新加载首先释放之前的interface
     if (m_pInterface != nullptr) {
         qDebug() << "Clearing previous archive interface";
@@ -141,12 +134,6 @@ bool ArchiveManager::loadArchive(const QString &strArchiveFullPath, UiTools::Ass
 bool ArchiveManager::addFiles(const QString &strArchiveFullPath, const QList<FileEntry> &listAddEntry, const CompressOptions &stOptions)
 {
     qDebug() << "Starting addFiles operation for archive:" << strArchiveFullPath;
-    QJsonObject obj{
-        {"tid", EventLogUtils::AddCompressFile},
-        {"operate", "AddCompressFile"},
-        {"describe", QString("Add File to package: ") + strArchiveFullPath}
-    };
-    EventLogUtils::get().writeLogs(obj);
     // workaround:
     // pzip 仅支持新建压缩，目前先将zip 追加时显式指定使用 libzip 插件
     UiTools::AssignPluginType eType = UiTools::APT_Auto;
@@ -182,12 +169,6 @@ bool ArchiveManager::addFiles(const QString &strArchiveFullPath, const QList<Fil
 bool ArchiveManager::extractFiles(const QString &strArchiveFullPath, const QList<FileEntry> &files, const ExtractionOptions &stOptions, UiTools::AssignPluginType eType)
 {
     qDebug() << "Starting extractFiles operation for archive:" << strArchiveFullPath;
-    QJsonObject obj{
-        {"tid", EventLogUtils::ExtractCompressFile},
-        {"operate", "ExtractCompressFile"},
-        {"describe", QString("Decompress the package : ") + strArchiveFullPath}
-    };
-    EventLogUtils::get().writeLogs(obj);
     if (nullptr == m_pInterface) {
         qDebug() << "Creating interface for extraction";
         m_pInterface = UiTools::createInterface(strArchiveFullPath, false, eType);
@@ -236,12 +217,6 @@ bool ArchiveManager::extractFiles(const QString &strArchiveFullPath, const QList
 bool ArchiveManager::extractFiles2Path(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)
 {
     qDebug() << "Starting extractFiles2Path operation for archive:" << strArchiveFullPath;
-    QJsonObject obj{
-        {"tid", EventLogUtils::ExtractSingleFile},
-        {"operate", "ExtractSingleFile"},
-        {"describe", QString("Extract file from the compressed package : ") + strArchiveFullPath}
-    };
-    EventLogUtils::get().writeLogs(obj);
     if (nullptr == m_pInterface) {
         qDebug() << "Creating interface for extraction to path";
         m_pInterface = UiTools::createInterface(strArchiveFullPath);
@@ -271,12 +246,6 @@ bool ArchiveManager::extractFiles2Path(const QString &strArchiveFullPath, const 
 bool ArchiveManager::deleteFiles(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry)
 {
     qDebug() << "Starting deleteFiles operation for archive:" << strArchiveFullPath;
-    QJsonObject obj{
-        {"tid", EventLogUtils::DelCompressFile},
-        {"operate", "DelCompressFile"},
-        {"describe", QString("Delete file from package : ") + strArchiveFullPath}
-    };
-    EventLogUtils::get().writeLogs(obj);
     if (nullptr == m_pInterface) {
         qDebug() << "Creating interface for deletion";
         m_pInterface = UiTools::createInterface(strArchiveFullPath);
@@ -306,12 +275,6 @@ bool ArchiveManager::deleteFiles(const QString &strArchiveFullPath, const QList<
 bool ArchiveManager::renameFiles(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry)
 {
     qDebug() << "Starting renameFiles operation for archive:" << strArchiveFullPath;
-    QJsonObject obj{
-        {"tid", EventLogUtils::RenameCompressFile},
-        {"operate", "RenameCompressFile"},
-        {"describe", QString("Rename file from package : ") + strArchiveFullPath}
-    };
-    EventLogUtils::get().writeLogs(obj);
     if (nullptr == m_pInterface) {
         qDebug() << "Creating interface for renaming";
         m_pInterface = UiTools::createInterface(strArchiveFullPath);
@@ -368,12 +331,6 @@ bool ArchiveManager::batchExtractFiles(const QStringList &listFiles, const QStri
 bool ArchiveManager::openFile(const QString &strArchiveFullPath, const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram)
 {
     qDebug() << "Starting openFile operation for archive:" << strArchiveFullPath;
-    QJsonObject obj{
-        {"tid", EventLogUtils::OpenCompressFile},
-        {"operate", "OpenCompressFile"},
-        {"describe", QString("Open file from package : ") + strArchiveFullPath}
-    };
-    EventLogUtils::get().writeLogs(obj);
     if (nullptr == m_pInterface) {
         qDebug() << "Creating interface for opening file";
         m_pInterface = UiTools::createInterface(strArchiveFullPath);

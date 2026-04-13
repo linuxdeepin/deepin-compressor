@@ -28,7 +28,6 @@
 #include <QString>
 #include <QByteArray>
 #include "common/dbusadpator.h"
-#include "eventlogutils.h"
 #ifdef DTKWIDGET_CLASS_DWaterMarkHelper
 #include <DWaterMarkHelper>
 DWIDGET_USE_NAMESPACE
@@ -365,26 +364,6 @@ int main(int argc, char *argv[])
         // 无参数打开应用
         w.show();
     }
-    QObject::connect(&app, &DApplication::aboutToQuit,[=](){
-        QString strOpenFile;
-        if(!listTransFiles.isEmpty())
-            strOpenFile = listTransFiles[0];
-        if(strOpenFile.isEmpty()) {
-            QJsonObject obj{
-                {"tid", EventLogUtils::closeCompressWnd},
-                {"operate", "closeCompressWnd"},
-                {"describe", QString("Close Compress Window.")}
-            };
-            EventLogUtils::get().writeLogs(obj);
-        } else {
-            QJsonObject obj{
-                {"tid", EventLogUtils::closeCompressWnd},
-                {"operate", "closeCompressWnd"},
-                {"describe", QString("Close Compress Window. Close compress file : ") + strOpenFile}
-            };
-            EventLogUtils::get().writeLogs(obj);
-        }
-    });
     PERF_PRINT_END("POINT-01");
 
     return app.exec();

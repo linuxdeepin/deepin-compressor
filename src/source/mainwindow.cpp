@@ -1356,12 +1356,6 @@ void MainWindow::slotJobFinished(ArchiveJob::JobType eJobType, PluginFinishType 
 void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
 {
     qDebug() << "Starting extraction to path:" << strUncompressPath;
-    QJsonObject obj{
-        {"tid", EventLogUtils::ExtractCompressFile},
-        {"operate", "ExtractCompressFile"},
-        {"describe", QString("Extract Compress File: ") + strUncompressPath}
-    };
-    EventLogUtils::get().writeLogs(obj);
     m_operationtype = Operation_Extract; //解压操作
 
     QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();
