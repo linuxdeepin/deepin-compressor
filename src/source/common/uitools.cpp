@@ -262,23 +262,11 @@ ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool
         }
     }
 
-    // pzip 插件只用于压缩，不用于读取/解压
-    bool removePzipFlag = (!bWrite) && (mimeType.name() == QString("application/zip"));
-    if (removePzipFlag) {
-        qDebug() << "Setting flag to remove pzip plugin for reading zip (pzip is write-only)";
-    }
-
     // 创建插件
     ReadOnlyArchiveInterface *pIface = nullptr;
     for (Plugin *plugin : offers) {
         //删除P7zip插件
         if (remove7zFlag && plugin->metaData().name().contains("7zip", Qt::CaseInsensitive)) {
-            continue;
-        }
-
-        // 读取 ZIP 时跳过 pzip 插件（pzip 只用于压缩）
-        if (removePzipFlag && plugin->metaData().name().contains("pzip", Qt::CaseInsensitive)) {
-            qDebug() << "Skipping pzip plugin for reading (pzip is write-only)";
             continue;
         }
 

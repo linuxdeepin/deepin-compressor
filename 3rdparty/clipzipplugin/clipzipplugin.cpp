@@ -195,11 +195,10 @@ PluginFinishType CliPzipPlugin::addFiles(const QList<FileEntry> &files, const Co
         arguments << "-l" << QString::number(options.iCompressionLevel);
     }
 
-    // 线程数：只有大于1时才指定，否则让 pzip 自动使用全部 CPU 核心
-    if (options.iCPUTheadNum > 1) {
+    // 线程数（如果指定）
+    if (options.iCPUTheadNum > 0) {
         arguments << "-c" << QString::number(options.iCPUTheadNum);
     }
-    // 注意：iCPUTheadNum <= 1 时不传 -c 参数，pzip 默认使用全部核心
 
     // 输出文件
     arguments << m_strArchiveName;
@@ -214,7 +213,7 @@ PluginFinishType CliPzipPlugin::addFiles(const QList<FileEntry> &files, const Co
         arguments << filePath;
     }
 
-    qInfo() << "Running pzip:" << pzipPath << arguments;
+    qDebug() << "Running pzip:" << pzipPath << arguments;
 
     m_process->setProgram(pzipPath, arguments);
 
