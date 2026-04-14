@@ -12,7 +12,6 @@
 
 #include <QProcess>
 #include <QTimer>
-#include <QtGlobal>  // for QT_VERSION_CHECK
 
 class CliPzipPluginFactory : public KPluginFactory
 {
@@ -90,11 +89,7 @@ private:
 
 private slots:
     void readStdout(bool handleAll = false);
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
-#else
-    void processFinished(int exitCode);
-#endif
 
 private:
     KPtyProcess *m_process = nullptr;
