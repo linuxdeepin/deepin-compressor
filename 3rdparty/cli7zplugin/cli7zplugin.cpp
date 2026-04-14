@@ -151,9 +151,6 @@ bool Cli7zPlugin::isOpenFileFailed(const QString &line)
 void Cli7zPlugin::killProcess(bool emitFinished)
 {
     Q_UNUSED(emitFinished);
-    if (killTar7zPipelineIfActive()) {
-        return;
-    }
     if (!m_process) {
         return;
     }

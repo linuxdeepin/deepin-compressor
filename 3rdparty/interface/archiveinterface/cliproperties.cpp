@@ -51,9 +51,76 @@ QStringList CliProperties::addArgs(const QString &archive, const QStringList &fi
         Q_ASSERT(!password.isEmpty());
     }
 
-    // tar.7z 已改为 getTar7zTarArgs/getTar7z7zArgs + QProcess 管道，不再用脚本，此处不再拼命令串
     if (isTar7z) {
-        return QStringList();
+        //        tar.7z压缩命令重命名：tar --transform='flags=r;s|oldname1|newname1|' --transform='flags=r;s|oldname2|newname3|' ....
+        //        tar.7z压缩命令: tar cf - -C /home/username/Desktop/ 1.txt -C /home/username/Desktop/2/3/ 4K | 7z a - si new.tar.7z
+        const QString oneSpace = " "; //一个空格
+        QVector<QString> strold = {" ", "!", "$", "&", "*", "(", ")", "<", ">", "+", "-", ";"};
+        QVector<QString> strnew = {"\\ ", "\\!", "\\$", "\\&", "\\*", "\\(", "\\)", "\\<", "\\>", "\\+", "\\-", "\\;"};
+        //        注意字符转意，待优化
+
+        QStringList args;
+
+        QString tmp = "tar cf - ";
+        //重命名文件
+        if(!renameList.isEmpty()) {
+            tmp = "tar ";
+            for (QString sRename: renameList) {
+                tmp = tmp + sRename + oneSpace;
+            }
+            tmp = tmp + "-cf - ";
+        }
+        for (QString file : files) {
+            for (int n = 0; n < strold.length(); ++n) {
+                file.replace(strold[n], strnew[n]);
+            }
+
+            if (file.endsWith('/')) {
+                file.chop(1);
+            }
+
+            int pos = file.lastIndexOf('/');
+            if (pos > 0) {
+                //此处传进来的files是绝对路径，处理和dev分支有点区别，
+                tmp += "-C " + file.mid(0, pos + 1) + oneSpace + file.mid(pos + 1) + oneSpace;
+            }
+        }
+
+        tmp += "| 7z a -si ";
+        if (!password.isEmpty()) {
+            for (QString &val : substitutePasswordSwitch(password, headerEncryption)) {
+                tmp += val + oneSpace;
+            }
+        }
+
+        if (compressionLevel > -1) {
+            tmp += substituteCompressionLevelSwitch(compressionLevel) + oneSpace;
+        }
+
+        if (!compressionMethod.isEmpty()) {
+            tmp += substituteCompressionMethodSwitch(compressionMethod) + oneSpace;
+        }
+
+        if (!encryptionMethod.isEmpty()) {
+            tmp += substituteEncryptionMethodSwitch(encryptionMethod) + oneSpace;
+        }
+        if (volumeSize > 0) {
+            tmp += substituteMultiVolumeSwitch(volumeSize) + oneSpace;
+        }
+
+        if (!m_progressarg.isEmpty()) {
+            tmp += m_progressarg + oneSpace;
+        }
+
+        QString tmparchive = archive;
+        for (int n = 0; n < strold.length(); ++n) {
+            tmparchive.replace(strold[n], strnew[n]);
+        }
+
+        tmp += tmparchive;
+        args << tmp;
+        //        qInfo() << tmp;
+        return args;
     } else {
         QStringList args;
         for (const QString &s : qAsConst(m_addSwitch)) {
@@ -89,72 +156,6 @@ QStringList CliProperties::addArgs(const QString &archive, const QStringList &fi
         args.removeAll(QString());
         return args;
     }
-}
-
-QStringList CliProperties::getTar7zTarArgs(const QStringList &files, const QStringList &renameList)
-{
-    QStringList args;
-    if (renameList.isEmpty()) {
-        args << QStringLiteral("cf") << QStringLiteral("-");
-    } else {
-        args << renameList;
-        args << QStringLiteral("-cf") << QStringLiteral("-");
-    }
-    for (QString file : files) {
-        if (file.endsWith(QLatin1Char('/'))) {
-            file.chop(1);
-        }
-        int pos = file.lastIndexOf(QLatin1Char('/'));
-        if (pos > 0) {
-            args << QStringLiteral("-C") << file.mid(0, pos) << file.mid(pos + 1);
-        } else if (pos == 0) {
-            args << QStringLiteral("-C") << QStringLiteral("/") << file.mid(1);
-        } else {
-            args << QStringLiteral("-C") << QStringLiteral(".") << file;
-        }
-    }
-    return args;
-}
-
-QStringList CliProperties::getTar7z7zArgs(const QString &archive, const QString &password, bool headerEncryption,
-                                         int compressionLevel, const QString &compressionMethod,
-                                         const QString &encryptionMethod, int volumeSize)
-{
-    QStringList args;
-    args << QStringLiteral("a") << QStringLiteral("-si") << archive;
-    if (!password.isEmpty()) {
-        // 单参数 -p+密码，避免 7z 再从 stdin 提示输入导致管道卡死
-        args << (QStringLiteral("-p") + password);
-    }
-    if (compressionLevel > -1) {
-        const QString s = substituteCompressionLevelSwitch(compressionLevel);
-        if (!s.isEmpty()) {
-            args << s;
-        }
-    }
-    if (!compressionMethod.isEmpty()) {
-        const QString s = substituteCompressionMethodSwitch(compressionMethod);
-        if (!s.isEmpty()) {
-            args << s;
-        }
-    }
-    if (!encryptionMethod.isEmpty()) {
-        const QString s = substituteEncryptionMethodSwitch(encryptionMethod);
-        if (!s.isEmpty()) {
-            args << s;
-        }
-    }
-    if (volumeSize > 0) {
-        const QString s = substituteMultiVolumeSwitch(volumeSize);
-        if (!s.isEmpty()) {
-            args << s;
-        }
-    }
-    if (!m_progressarg.isEmpty()) {
-        args << m_progressarg;
-    }
-    args.removeAll(QString());
-    return args;
 }
 
 QStringList CliProperties::commentArgs(const QString &archive, const QString &commentfile)

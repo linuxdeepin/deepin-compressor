@@ -144,12 +144,6 @@ protected:
     virtual void killProcess(bool emitFinished = true) = 0;
 
     /**
-     * @brief killTar7zPipelineIfActive  若当前为 tar.7z 管道则结束两个进程
-     * @return 若已结束管道返回 true，否则 false
-     */
-    bool killTar7zPipelineIfActive();
-
-    /**
      * @brief handleProgress  解析进度并发送进度信号
      * @param line
      */
@@ -242,8 +236,6 @@ private slots:
 protected:
     CliProperties *m_cliProps = nullptr;  // 命令属性
     /*KProcess*/KPtyProcess *m_process = nullptr;  // 工作进程
-    QProcess *m_tarProcess = nullptr;   // 仅 tar.7z 管道：tar 进程
-    QProcess *m_tar7z_7z = nullptr;     // 仅 tar.7z 管道：7z 进程（输出来自此进程）
     PluginFinishType m_finishType = PFT_Nomral; // 插件结束类型
     QString m_strEncryptedFileName = QString(); // 当前被解压的加密文件名
     QVector<qint64> m_childProcessId; // 压缩tar.7z文件的子进程Id
@@ -270,6 +262,7 @@ private:
     QMap<QString, int> m_mapLongName;       // 长文件名统计
     QMap<QString, int> m_mapLongDirName;    // 长文件夹统计
     QMap<QString, int> m_mapRealDirValue;    // 真实文件统计
+    QString m_scriptPath; // 脚本路径
 };
 
 #endif // CLIINTERFACE_H
