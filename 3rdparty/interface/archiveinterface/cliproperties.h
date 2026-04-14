@@ -83,12 +83,6 @@ public:
                         bool isTar7z,
                         const QString &globalWorkDir,
                         const QStringList &renameList = QStringList());
-    /** tar.7z 管道：仅 tar 参数（QStringList，无 shell 拼接），供 QProcess 使用 */
-    QStringList getTar7zTarArgs(const QStringList &files, const QStringList &renameList = QStringList());
-    /** tar.7z 管道：仅 7z 参数（密码用 "-p" + 独立 argv，无 shell），供 QProcess 使用 */
-    QStringList getTar7z7zArgs(const QString &archive, const QString &password, bool headerEncryption,
-                              int compressionLevel, const QString &compressionMethod,
-                              const QString &encryptionMethod, int volumeSize);
     QStringList commentArgs(const QString &archive, const QString &commentfile);
     QStringList deleteArgs(const QString &archive, const QList<FileEntry> &files, const QString &password);
     QStringList extractArgs(const QString &archive, const QStringList &files, bool preservePaths, const QString &password);
