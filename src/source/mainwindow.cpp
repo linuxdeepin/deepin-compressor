@@ -2610,7 +2610,7 @@ bool MainWindow::handleArguments_Open(const QStringList &listParam)
     if (UiTools::isWayland() && firstLoad) {
         firstLoad = false;
         auto path = listParam[0];
-        QTimer::singleShot(200, [this, &path]() {
+        QTimer::singleShot(200, [this, path]() {
             loadArchive(path);
         });
     } else {
