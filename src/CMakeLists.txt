@@ -44,6 +44,9 @@ include_directories(${GOBJECT_INCLUDE_DIRS})
 pkg_search_module(GIO REQUIRED gio-unix-2.0)
 include_directories(${GIO_INCLUDE_DIRS})
 
+pkg_search_module(ZIP REQUIRED libzip)
+include_directories(${ZIP_INCLUDE_DIRS})
+
 #指定头文件路径
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/source)
@@ -77,6 +80,7 @@ target_link_libraries(${EXE_NAME}
     ${DtkWidget_LIBRARIES}
     ${GOBJECT_LIBRARIES}
     ${GIO_LIBRARIES}
+    ${ZIP_LIBRARIES}
     compressor-interface
 )
 

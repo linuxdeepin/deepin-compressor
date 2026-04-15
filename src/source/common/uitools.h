@@ -118,6 +118,13 @@ public:
     static ReadOnlyArchiveInterface *createInterface(const QString &fileName, const CustomMimeType &mimeType, Plugin *plugin);
 
     /**
+     * @brief checkZipNeedsAlternativePlugin 检测 ZIP 文件是否需要替代插件
+     * @param strFileName ZIP 文件路径
+     * @return 是否需要使用 cli7z 等替代插件
+     */
+    static bool checkZipNeedsAlternativePlugin(const QString &strFileName);
+
+    /**
      * @brief transSplitFileName 处理7z、rar分卷压缩包名称
      * @param fileName 原始名称
      * @param eSplitType 分卷类型
