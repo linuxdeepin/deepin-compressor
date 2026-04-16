@@ -36,6 +36,19 @@
     </message>
 </context>
 <context>
+    <name>CliRarPlugin</name>
+    <message>
+        <location filename="../3rdparty/clirarplugin/clirarplugin.cpp" line="305"/>
+        <source>Wrong password</source>
+        <translation type="unfinished">كلمة سر خاطىة</translation>
+    </message>
+    <message>
+        <location filename="../3rdparty/clirarplugin/clirarplugin.cpp" line="305"/>
+        <source>The password entered is incorrect. Please try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CommentProgressDialog</name>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="232"/>
@@ -438,13 +451,13 @@
 <context>
     <name>Main</name>
     <message>
+        <location filename="../src/main.cpp" line="145"/>
         <location filename="../src/main.cpp" line="146"/>
-        <location filename="../src/main.cpp" line="147"/>
         <source>Archive Manager</source>
         <translation>مدير اﻷرشيفات</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="148"/>
+        <location filename="../src/main.cpp" line="147"/>
         <source>Archive Manager is a fast and lightweight application for creating and extracting archives.</source>
         <translation>مدير الأرشيفات هو تطبيق سريع وخفيف الوزن لإنشاء واستخراج اﻷرشيفات</translation>
     </message>
@@ -462,13 +475,13 @@
         <translation>اﻹعدادات</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="363"/>
-        <location filename="../src/source/mainwindow.cpp" line="375"/>
+        <location filename="../src/source/mainwindow.cpp" line="364"/>
+        <location filename="../src/source/mainwindow.cpp" line="376"/>
         <source>Create New Archive</source>
         <translation>إنشاء أرشيف جديد</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="443"/>
+        <location filename="../src/source/mainwindow.cpp" line="444"/>
         <source>Converting</source>
         <translation>جار التحويل</translation>
     </message>
@@ -483,7 +496,7 @@
         <translation>هل ترغب في حذف الملف؟</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="696"/>
+        <location filename="../src/source/mainwindow.cpp" line="697"/>
         <source>%1 was changed on the disk, please import it again.</source>
         <translation>%1 تم تغييره على القرص ، يرجى استيراده مرة أخرى</translation>
     </message>
@@ -499,71 +512,71 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="202"/>
-        <location filename="../src/source/mainwindow.cpp" line="582"/>
-        <location filename="../src/source/mainwindow.cpp" line="660"/>
-        <location filename="../src/source/mainwindow.cpp" line="699"/>
-        <location filename="../src/source/mainwindow.cpp" line="769"/>
-        <location filename="../src/source/mainwindow.cpp" line="775"/>
-        <location filename="../src/source/mainwindow.cpp" line="784"/>
-        <location filename="../src/source/mainwindow.cpp" line="830"/>
-        <location filename="../src/source/mainwindow.cpp" line="1118"/>
+        <location filename="../src/source/mainwindow.cpp" line="583"/>
+        <location filename="../src/source/mainwindow.cpp" line="661"/>
+        <location filename="../src/source/mainwindow.cpp" line="700"/>
+        <location filename="../src/source/mainwindow.cpp" line="770"/>
+        <location filename="../src/source/mainwindow.cpp" line="776"/>
+        <location filename="../src/source/mainwindow.cpp" line="785"/>
+        <location filename="../src/source/mainwindow.cpp" line="831"/>
+        <location filename="../src/source/mainwindow.cpp" line="1119"/>
         <location filename="../src/source/mainwindow.cpp" line="1594"/>
         <location filename="../src/source/mainwindow.cpp" line="2737"/>
         <location filename="../src/source/mainwindow.cpp" line="2757"/>
-        <location filename="../src/source/mainwindow.cpp" line="3065"/>
-        <location filename="../src/source/mainwindow.cpp" line="3236"/>
+        <location filename="../src/source/mainwindow.cpp" line="3073"/>
+        <location filename="../src/source/mainwindow.cpp" line="3244"/>
         <source>OK</source>
         <comment>button</comment>
         <translation type="unfinished">موافق</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="403"/>
+        <location filename="../src/source/mainwindow.cpp" line="404"/>
         <source>Adding files to %1</source>
         <translation>جار إضافة الملفات إلى %1</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="411"/>
+        <location filename="../src/source/mainwindow.cpp" line="412"/>
         <source>Compressing</source>
         <translation>يتم الضغط</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="419"/>
+        <location filename="../src/source/mainwindow.cpp" line="420"/>
         <source>Extracting</source>
         <translation>يتم الاستخراج</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="427"/>
+        <location filename="../src/source/mainwindow.cpp" line="428"/>
         <source>Deleting</source>
         <translation>جار الحذف</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="582"/>
-        <location filename="../src/source/mainwindow.cpp" line="775"/>
+        <location filename="../src/source/mainwindow.cpp" line="583"/>
+        <location filename="../src/source/mainwindow.cpp" line="776"/>
         <source>You do not have permission to load %1</source>
         <translation>ليس لديك إذن لتحميل %1</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="649"/>
-        <location filename="../src/source/mainwindow.cpp" line="3377"/>
+        <location filename="../src/source/mainwindow.cpp" line="650"/>
+        <location filename="../src/source/mainwindow.cpp" line="3385"/>
         <source>Loading, please wait...</source>
         <translation>جار التحميل، من فضلك انتظر...</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="739"/>
+        <location filename="../src/source/mainwindow.cpp" line="740"/>
         <source>Are you sure you want to stop the ongoing task?</source>
         <translation>هل أنت متأكد من أنك تريد التوقف عن المهمة الجارية؟</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="739"/>
+        <location filename="../src/source/mainwindow.cpp" line="740"/>
         <location filename="../src/source/mainwindow.cpp" line="1671"/>
-        <location filename="../src/source/mainwindow.cpp" line="2907"/>
-        <location filename="../src/source/mainwindow.cpp" line="3407"/>
+        <location filename="../src/source/mainwindow.cpp" line="2915"/>
+        <location filename="../src/source/mainwindow.cpp" line="3415"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation type="unfinished">إلغاء</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="739"/>
+        <location filename="../src/source/mainwindow.cpp" line="740"/>
         <location filename="../src/source/mainwindow.cpp" line="1671"/>
         <source>Confirm</source>
         <comment>button</comment>
@@ -628,18 +641,18 @@
         <translation>تعذر الضغط</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2907"/>
+        <location filename="../src/source/mainwindow.cpp" line="2915"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation type="unfinished">استبدال</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3065"/>
+        <location filename="../src/source/mainwindow.cpp" line="3073"/>
         <source>You cannot add files to archives in this file type</source>
         <translation>لا يمكنك إضافة ملفات إلى أرشيفات بهذا نوع الملف</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2971"/>
+        <location filename="../src/source/mainwindow.cpp" line="2979"/>
         <source>Find directory</source>
         <translation>بحث عن دليل</translation>
     </message>
@@ -700,22 +713,22 @@
         <translation>الأختصارات</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3561"/>
+        <location filename="../src/source/mainwindow.cpp" line="3569"/>
         <source>File info</source>
         <translation>معلومات الملف</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="451"/>
+        <location filename="../src/source/mainwindow.cpp" line="452"/>
         <source>Updating comments</source>
         <translation>تحديث التعليقات</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="435"/>
+        <location filename="../src/source/mainwindow.cpp" line="436"/>
         <source>Renaming</source>
         <translation>إعادة التسمية</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="660"/>
+        <location filename="../src/source/mainwindow.cpp" line="661"/>
         <location filename="../src/source/mainwindow.cpp" line="2475"/>
         <location filename="../src/source/mainwindow.cpp" line="2509"/>
         <location filename="../src/source/mainwindow.cpp" line="2538"/>
@@ -723,18 +736,18 @@
         <translation>خطأ في المُسند</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="769"/>
+        <location filename="../src/source/mainwindow.cpp" line="770"/>
         <source>No such file or directory</source>
         <translation>لا يوجد ملف أو دليل بهذا الاسم</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="784"/>
-        <location filename="../src/source/mainwindow.cpp" line="823"/>
+        <location filename="../src/source/mainwindow.cpp" line="785"/>
+        <location filename="../src/source/mainwindow.cpp" line="824"/>
         <source>The file format is not supported by Archive Manager</source>
         <translation>تنسيق الملف غير مدعوم من قبل مدير الأرشيف</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1118"/>
+        <location filename="../src/source/mainwindow.cpp" line="1119"/>
         <source>Unable to add system files or network files, please select files on local devices</source>
         <translation type="unfinished"></translation>
     </message>
@@ -831,78 +844,78 @@
         <translation>اختر ملفًا</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2899"/>
+        <location filename="../src/source/mainwindow.cpp" line="2907"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
         <translation>اسم الملف هو نفسه للارشيف المضغوط، من فضلك استخدم اسمًا آخر</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2907"/>
+        <location filename="../src/source/mainwindow.cpp" line="2915"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation type="unfinished">يوجد ملف آخر بنفس الاسم بالفعل ، هل تريد استبداله ؟</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3050"/>
+        <location filename="../src/source/mainwindow.cpp" line="3058"/>
         <source>You cannot add the archive to itself</source>
         <translation>لا يمكنك إضافة الأرشيف إلى نفسه</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3407"/>
+        <location filename="../src/source/mainwindow.cpp" line="3415"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>تحديث</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3585"/>
+        <location filename="../src/source/mainwindow.cpp" line="3593"/>
         <source>Basic info</source>
         <translation>معلومات أساسية</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3601"/>
+        <location filename="../src/source/mainwindow.cpp" line="3609"/>
         <source>Size</source>
         <translation type="unfinished">الحجم</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3602"/>
+        <location filename="../src/source/mainwindow.cpp" line="3610"/>
         <source>Type</source>
         <translation type="unfinished">النوع</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3603"/>
+        <location filename="../src/source/mainwindow.cpp" line="3611"/>
         <source>Location</source>
         <translation>الموقع</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3604"/>
+        <location filename="../src/source/mainwindow.cpp" line="3612"/>
         <source>Time created</source>
         <translation>وقت الإنشاء</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3605"/>
+        <location filename="../src/source/mainwindow.cpp" line="3613"/>
         <source>Time accessed</source>
         <translation>وقت الوصول</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3606"/>
+        <location filename="../src/source/mainwindow.cpp" line="3614"/>
         <source>Time modified</source>
         <translation type="unfinished">وقت التعديل</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3616"/>
+        <location filename="../src/source/mainwindow.cpp" line="3624"/>
         <source>Archive</source>
         <translation type="unfinished">أرشيف</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3651"/>
+        <location filename="../src/source/mainwindow.cpp" line="3659"/>
         <source>Comment</source>
         <translation>تعليق</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3689"/>
+        <location filename="../src/source/mainwindow.cpp" line="3697"/>
         <source>Enter up to %1 characters</source>
         <translation>أدخل حتى %1 حرف</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="819"/>
+        <location filename="../src/source/mainwindow.cpp" line="820"/>
         <source>Please check the file association type in the settings of Archive Manager</source>
         <translation>يرجى التحقق من نوع ارتباط الملف في إعدادات مدير الملفات</translation>
     </message>
@@ -1270,7 +1283,7 @@
         <translation>نوع الملف</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3404"/>
+        <location filename="../src/source/mainwindow.cpp" line="3412"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
         <translation>&apos;%1 تغيّر. هل تريد حفظ التغييرات في الملف الأرشيفي؟&apos;</translation>
     </message>
@@ -1438,18 +1451,18 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3871"/>
-        <location filename="../src/source/mainwindow.cpp" line="3926"/>
+        <location filename="../src/source/mainwindow.cpp" line="3879"/>
+        <location filename="../src/source/mainwindow.cpp" line="3934"/>
         <source>Open file</source>
         <translation type="unfinished">فتح ملف</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3874"/>
+        <location filename="../src/source/mainwindow.cpp" line="3882"/>
         <source>Back</source>
         <translation type="unfinished">رجوع</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3930"/>
+        <location filename="../src/source/mainwindow.cpp" line="3938"/>
         <source>File info</source>
         <translation>معلومات الملف</translation>
     </message>
