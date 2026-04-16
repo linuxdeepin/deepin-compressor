@@ -1,3 +1,10 @@
+deepin-compressor (6.5.25) unstable; urgency=medium
+
+  * Revert "deps: migrate from p7zip-full to 7zip package" 由于系统依赖还没有完善，归档管理器的这笔提交先回滚。后续系统依赖处理了再添加进去。
+  * refactor: remove EventLogUtils references from main application and archive management
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Thu, 16 Apr 2026 14:00:10 +0800
+
 deepin-compressor (6.5.24) unstable; urgency=medium
 
   * deps: migrate from p7zip-full to 7zip package
