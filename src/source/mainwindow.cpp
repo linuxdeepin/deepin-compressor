@@ -2818,8 +2818,16 @@ bool MainWindow::handleArguments_Open(const QStringList &listParam)
     qInfo() << "打开文件";
     m_eStartupType = StartupType::ST_Normal;
     // 加载单个压缩包数据
-    loadArchive(listParam[0]);
-
+    static bool firstLoad = true;
+    if (UiTools::isWayland() && firstLoad) {
+        firstLoad = false;
+        auto path = listParam[0];
+        QTimer::singleShot(200, [this, path]() {
+            loadArchive(path);
+        });
+    } else {
+        loadArchive(listParam[0]);
+    }
     return true;
 }
 
