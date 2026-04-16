@@ -11,8 +11,8 @@
 准备测试的单文件：tar -cvf chrome.tar /opt/google/chrome
 
 测试软件：
-    1）7z
-	sudo apt-get install 7zip
+    1）7z （p7zip）
+	sudo apt-get install p7zip-full
 	
 	文件夹压缩测试：time 7z a chrome_7z.zip /opt/google/chrome
 
