@@ -29,6 +29,8 @@
 #include <QStorageInfo>
 #include <QProcessEnvironment>
 
+#include <zip.h>  // libzip header
+
 #include <KEncodingProber>
 
 DCORE_USE_NAMESPACE
@@ -222,6 +224,14 @@ ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool
 //    QFileInfo fileinfo(fileName); // 未使用该变量
 
     const CustomMimeType mimeType = determineMimeType(fileName);
+
+    // 提前检测 ZIP 文件是否需要替代插件（如 Deflate64）
+    if (!bWrite && eType == APT_Auto && mimeType.name() == "application/zip") {
+        if (checkZipNeedsAlternativePlugin(fileName)) {
+            qInfo() << "Detected need for alternative plugin, switching to cli7z";
+            eType = APT_Cli7z;  // 自动切换到 cli7z 插件
+        }
+    }
 
     QVector<Plugin *> offers;
     if (bWrite) {
@@ -459,4 +469,52 @@ bool UiTools::isWayland()
     } else {
         return false;
     }
+}
+
+bool UiTools::checkZipNeedsAlternativePlugin(const QString &strFileName)
+{
+    // 使用 libzip API 检测压缩方法
+    int errcode = 0;
+    zip_t *archive = zip_open(QFile::encodeName(strFileName).constData(), ZIP_RDONLY, &errcode);
+
+    if (!archive) {
+        qWarning() << "Failed to open ZIP file for compression method check:" << strFileName;
+        return false;  // 无法打开文件，使用默认插件
+    }
+
+    // 获取文件数量
+    zip_int64_t num_entries = zip_get_num_entries(archive, 0);
+
+    // 检查前几个文件，跳过 stored（未压缩）文件，找到第一个实际压缩的文件
+    bool needsAlternative = false;
+    const int maxCheck = 20;  // 最多检查前 20 个文件
+
+    for (zip_int64_t i = 0; i < num_entries && i < maxCheck; i++) {
+        struct zip_stat stat_buffer;
+        zip_stat_init(&stat_buffer);
+
+        if (zip_stat_index(archive, static_cast<zip_uint64_t>(i), 0, &stat_buffer) == 0) {
+            // 跳过 stored 文件（comp_method == 0）
+            if (stat_buffer.comp_method == ZIP_CM_STORE) {
+                continue;
+            }
+
+            // 检查压缩方法
+            // ZIP_CM_DEFLATE (8) = 标准 Deflate
+            // ZIP_CM_DEFLATE64 (9) = Deflate64
+            if (stat_buffer.comp_method == ZIP_CM_DEFLATE64) {  // ZIP_CM_DEFLATE64
+                qInfo() << "Detected Deflate64 compression method, switching to cli7z plugin"
+                        << "file:" << strFileName
+                        << "entry:" << stat_buffer.name;
+                needsAlternative = true;
+                break;
+            }
+
+            // 如果找到第一个非 stored 的文件，且不是 Deflate64，则停止检查，通常 ZIP 文件使用统一的压缩方法
+            break;
+        }
+    }
+
+    zip_close(archive);
+    return needsAlternative;
 }
