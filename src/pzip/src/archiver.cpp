@@ -6,6 +6,7 @@
 #include "pzip/archiver.h"
 #include "pzip/fast_deflate.h"
 #include "pzip/utils.h"
+#include "pzip/crypto/aes_encryptor.h"
 #include <algorithm>
 #include <fstream>
 #include <cstring>
@@ -166,17 +167,67 @@ Error Archiver::compressFile(FileTask* task) {
     if (cancelled_) {
         return Error(ErrorCode::CANCELLED, "Operation cancelled");
     }
-    
-    // 压缩文件内容
+
+    // 先按与无加密相同的路径做 Deflate/Store，再对压缩流做 WinZip AES（与 libzip 语义一致）
     Error err = compress(task);
     if (err) return err;
-    
-    // 填充头信息
+
+    if (options_.isEncrypted() && !fs::is_directory(task->status)) {
+        err = encryptFile(task);
+        if (err) return err;
+    }
+
     populateHeader(task);
-    
-    // 送入写入队列
+
     fileWriterPool_->enqueue(task);
-    
+
+    return Error();
+}
+
+
+Error Archiver::encryptFile(FileTask* task) {
+    // 创建加密器
+    AESEncryptor encryptor(options_.password, options_.encryptionMethod);
+    if (!encryptor.isValid()) {
+        return Error(ErrorCode::ENCRYPTION_ERROR, "Failed to initialize encryptor: " + encryptor.lastError());
+    }
+
+    // 保存盐值和密码验证值
+    task->salt = encryptor.salt();
+    task->passwordVerification = encryptor.passwordVerification();
+
+    // 收集压缩后的数据
+    std::vector<uint8_t> compressedData;
+    task->readCompressedData([&compressedData](const uint8_t* data, size_t size) {
+        compressedData.insert(compressedData.end(), data, data + size);
+    });
+
+    // 加密压缩后的数据
+    if (!compressedData.empty()) {
+        task->encryptedData = encryptor.encrypt(compressedData);
+        if (task->encryptedData.empty() && !compressedData.empty()) {
+            return Error(ErrorCode::ENCRYPTION_ERROR, "Encryption failed: " + encryptor.lastError());
+        }
+    }
+
+    // 获取认证码
+    task->authCode = encryptor.authenticationCode();
+
+    // 内层压缩方式须与加密前数据一致（Store / Deflate）
+    uint16_t innerMethod = ZIP_METHOD_STORE;
+    if (!task->isSymlink && !task->streamFromSource) {
+        innerMethod = ZIP_METHOD_DEFLATE;
+    }
+    task->header.method = innerMethod;
+    task->header.encryptionMethod = ZIP_ENCRYPTION_WINZIP_AES;
+    task->header.aesStrength = encryptionStrength(options_.encryptionMethod);
+    task->header.actualCompressionMethod = innerMethod;
+
+    // 计算加密后的大小：salt + pv + encrypted data + authCode
+    size_t saltSize = task->salt.size();
+    size_t encryptedDataSize = task->encryptedData.size();
+    task->header.compressedSize = saltSize + WINZIP_AES_PV_SIZE + encryptedDataSize + WINZIP_AES_AUTH_CODE_SIZE;
+
     return Error();
 }
 
@@ -252,24 +303,24 @@ Error Archiver::compress(FileTask* task) {
 
 void Archiver::populateHeader(FileTask* task) {
     auto& h = task->header;
-    
+
     // UTF-8 检测
     auto [validUtf8, requireUtf8] = utils::detectUTF8(h.name);
     if (requireUtf8 && validUtf8) {
         h.flags |= ZIP_FLAG_UTF8;
     }
-    
+
     // 版本信息
     h.versionMadeBy = (3 << 8) | ZIP_VERSION_20;  // Unix + ZIP 2.0
     h.versionNeeded = ZIP_VERSION_20;
-    
+
     // 修改时间
     time_t modTime = utils::getModTime(task->path);
     ExtendedTimestamp ext;
     ext.modTime = modTime;
     auto extData = ext.encode();
     h.extra.insert(h.extra.end(), extData.begin(), extData.end());
-    
+
     // DOS 时间
     struct tm* tm = localtime(&modTime);
     if (tm) {
@@ -280,7 +331,7 @@ void Archiver::populateHeader(FileTask* task) {
                     (((tm->tm_mon + 1) & 0x0F) << 5) |
                     (tm->tm_mday & 0x1F);
     }
-    
+
     // 目录处理
     if (fs::is_directory(task->status)) {
         if (!h.name.empty() && h.name.back() != '/') {
@@ -291,6 +342,9 @@ void Archiver::populateHeader(FileTask* task) {
         h.uncompressedSize = 0;
         h.compressedSize = 0;
         h.crc32 = 0;
+        // 目录不加密
+        h.encryptionMethod = ZIP_ENCRYPTION_NONE;
+        h.aesStrength = 0;
     } else if (task->isSymlink) {
         // 符号链接：存储链接目标
         h.method = ZIP_METHOD_STORE;
@@ -299,6 +353,16 @@ void Archiver::populateHeader(FileTask* task) {
         h.compressedSize = task->symlinkTarget.size();
         // 设置 Unix 符号链接属性
         h.externalAttr = static_cast<uint32_t>(S_IFLNK | 0777) << 16;
+    } else if (h.isEncrypted()) {
+        // 加密文件：不使用数据描述符，直接写入实际大小
+        // 注意：DATA_DESCRIPTOR 与 WinZip AES 加密不兼容
+        h.flags |= ZIP_FLAG_ENCRYPTED;
+        h.flags &= ~ZIP_FLAG_DATA_DESCRIPTOR;  
+        // CRC32 在 AE-2 格式中为 0
+        h.crc32 = 0;
+        // 设置未压缩大小（原始文件大小）
+        h.uncompressedSize = task->fileSize;
+        // compressedSize 已经在 encryptFile 中设置
     } else if (options_.compressionLevel == 0) {
         // Store 模式：不压缩，CRC 在写入阶段边读边算，用 DATA_DESCRIPTOR 后置
         h.method = ZIP_METHOD_STORE;
@@ -318,22 +382,35 @@ Error Archiver::archiveFile(FileTask* task) {
         FileTaskPool::instance().release(std::unique_ptr<FileTask>(task));
         return Error(ErrorCode::CANCELLED, "Operation cancelled");
     }
-    
-    // 写入 ZIP
-    Error err = writer_->createRaw(task->header, 
-        [task](std::function<void(const uint8_t*, size_t)> writer) {
-            task->readCompressedData(writer);
-        });
-    
+
+    Error err;
+
+    // 如果是加密文件，使用加密写入方式
+    if (task->header.isEncrypted()) {
+        err = writer_->createEncrypted(
+            task->header,
+            task->salt,
+            task->passwordVerification,
+            task->encryptedData,
+            task->authCode
+        );
+    } else {
+        // 普通写入
+        err = writer_->createRaw(task->header,
+            [task](std::function<void(const uint8_t*, size_t)> writer) {
+                task->readCompressedData(writer);
+            });
+    }
+
     // 更新进度
     processedFiles_++;
     if (options_.progress) {
         options_.progress(processedFiles_, totalFiles_);
     }
-    
+
     // 释放任务
     FileTaskPool::instance().release(std::unique_ptr<FileTask>(task));
-    
+
     return err;
 }
 

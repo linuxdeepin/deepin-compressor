@@ -1270,12 +1270,16 @@ void MainWindow::slotCompress(const QVariant &val)
     bUseLibarchive = false;
 #endif
 
+    // 旧逻辑：ZIP 只要有密码就强制使用 libzip（历史原因：pzip 早期不支持加密）。
+    // 现状：Qt6 环境已支持通过 pzip（clipzipplugin 调用 pzip-bin）写入 WinZip AES（AE-2），
+    // 因此不应再因为“有密码”而强行切回 libzip，否则加密路径永远走不到 pzip。
     bool useLibzipForPassword = false;
-    if ("application/zip" == m_stCompressParameter.strMimeType) {
-        if (!m_stCompressParameter.strPassword.isEmpty()) {
-            useLibzipForPassword = true;
-        }
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    if ("application/zip" == m_stCompressParameter.strMimeType
+        && !m_stCompressParameter.strPassword.isEmpty()) {
+        useLibzipForPassword = true;
     }
+#endif
 
     UiTools::AssignPluginType eType = UiTools::APT_Auto;        // 默认自动选择插件
     if (true == useLibzipForPassword) {

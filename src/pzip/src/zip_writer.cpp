@@ -117,79 +117,118 @@ Error ZipWriter::writeLocalFileHeader(const ZipFileHeader& header) {
     // 对应 Go archive/zip 的 CreateRaw/CreateHeader 写入本地文件头的逻辑
     std::vector<uint8_t> buf;
     buf.reserve(30 + header.name.size() + header.extra.size());
-    
+
     auto write16 = [&buf](uint16_t v) {
         buf.push_back(v & 0xFF);
         buf.push_back((v >> 8) & 0xFF);
     };
-    
+
     auto write32 = [&buf](uint32_t v) {
         buf.push_back(v & 0xFF);
         buf.push_back((v >> 8) & 0xFF);
         buf.push_back((v >> 16) & 0xFF);
         buf.push_back((v >> 24) & 0xFF);
     };
-    
+
     // Signature
     write32(LOCAL_FILE_HEADER_SIG);
-    
-    // Version needed (ZIP64 需要版本 4.5)
-    // 对应 Go: if fh.isZip64() { fh.ReaderVersion = zipVersion45 }
-    write16(header.isZip64() ? ZIP_VERSION_45 : header.versionNeeded);
-    
-    // Flags
-    write16(header.flags);
-    
-    // Compression method
-    write16(header.method);
-    
+
+    // Version needed (ZIP64 需要版本 4.5, WinZip AES 需要版本 2.0)
+    uint16_t versionNeeded = header.versionNeeded;
+    if (header.isZip64()) {
+        versionNeeded = ZIP_VERSION_45;
+    }
+    write16(versionNeeded);
+
+    // Flags (加密时设置加密标志位)
+    uint16_t flags = header.flags;
+    if (header.isEncrypted()) {
+        flags |= ZIP_FLAG_ENCRYPTED;
+    }
+    write16(flags);
+
+    // Compression method (WinZip AES 使用 99)
+    uint16_t method = header.method;
+    if (header.isEncrypted()) {
+        method = ZIP_ENCRYPTION_WINZIP_AES;
+    }
+    write16(method);
+
     // Modification time and date
     write16(header.modTime);
     write16(header.modDate);
-    
-    // CRC32 (0 if using data descriptor)
-    if (header.flags & ZIP_FLAG_DATA_DESCRIPTOR) {
+
+    // CRC32 (AE-2 格式使用 0，AE-1 格式使用实际 CRC32)
+    // 对于加密文件，直接写入 0
+    if (header.isEncrypted()) {
+        // AE-2 格式: CRC32 存储为 0
+        write32(0);
+    } else if (header.flags & ZIP_FLAG_DATA_DESCRIPTOR) {
         write32(0);
     } else {
         write32(header.crc32);
     }
-    
-    // Compressed size (0 if using data descriptor)
-    if (header.flags & ZIP_FLAG_DATA_DESCRIPTOR) {
+
+    // Compressed size
+    // WinZip AES 加密文件不使用 DATA_DESCRIPTOR，直接写入实际大小
+    if (header.isEncrypted()) {
+        write32(static_cast<uint32_t>(header.compressedSize));
+    } else if (header.flags & ZIP_FLAG_DATA_DESCRIPTOR) {
         write32(0);
     } else if (header.isZip64()) {
         write32(ZIP_UINT32_MAX);
     } else {
         write32(static_cast<uint32_t>(header.compressedSize));
     }
-    
-    // Uncompressed size (0 if using data descriptor)
-    if (header.flags & ZIP_FLAG_DATA_DESCRIPTOR) {
+
+    // Uncompressed size
+    // WinZip AES 加密文件直接写入实际大小
+    if (header.isEncrypted()) {
+        write32(static_cast<uint32_t>(header.uncompressedSize));
+    } else if (header.flags & ZIP_FLAG_DATA_DESCRIPTOR) {
         write32(0);
     } else if (header.isZip64()) {
         write32(ZIP_UINT32_MAX);
     } else {
         write32(static_cast<uint32_t>(header.uncompressedSize));
     }
-    
+
+    // 构建 extra 字段（WinZip AES extra 必须放在第一位）
+    std::vector<uint8_t> extra;
+
+    // 如果是 WinZip AES 加密，先添加 WinZip AES Extra Field（必须在其他 extra 之前）
+    if (header.isEncrypted()) {
+        WinZipAESExtra aesExtra;
+        aesExtra.vendorVersion = WINZIP_AES_VERSION_2;  // 使用 AE-2
+        aesExtra.vendorId = WINZIP_AES_VENDOR_ID_AE;  // "AE"
+        aesExtra.aesStrength = header.aesStrength;
+        aesExtra.actualCompressionMethod = header.actualCompressionMethod;
+
+        std::vector<uint8_t> aesExtraData = aesExtra.encode();
+        extra.insert(extra.end(), aesExtraData.begin(), aesExtraData.end());
+    }
+
+    // 然后添加其他 extra 字段（如 Extended Timestamp）
+    extra.insert(extra.end(), header.extra.begin(), header.extra.end());
+
     // Filename length
     write16(static_cast<uint16_t>(header.name.size()));
-    
+
     // Extra field length
-    write16(static_cast<uint16_t>(header.extra.size()));
-    
+    write16(static_cast<uint16_t>(extra.size()));
+
     // Filename
     buf.insert(buf.end(), header.name.begin(), header.name.end());
-    
+
     // Extra field
-    buf.insert(buf.end(), header.extra.begin(), header.extra.end());
-    
+    buf.insert(buf.end(), extra.begin(), extra.end());
+
     file_.write(reinterpret_cast<const char*>(buf.data()), buf.size());
-    
+
     if (!file_.good()) {
         return Error(ErrorCode::FILE_WRITE_ERROR, "Failed to write local file header");
     }
-    
+
     currentOffset_ += buf.size();
     return Error();
 }
@@ -252,39 +291,98 @@ Error ZipWriter::writeDataDescriptor(const ZipFileHeader& header) {
 Error ZipWriter::createRaw(const ZipFileHeader& header,
                            std::function<void(std::function<void(const uint8_t*, size_t)>)> dataProvider) {
     std::lock_guard<std::mutex> lock(writeMutex_);
-    
+
     if (!file_.is_open()) {
         return Error(ErrorCode::FILE_OPEN_ERROR, "File not open");
     }
-    
+
     // 记录本地文件头偏移
     uint64_t localHeaderOffset = currentOffset_;
-    
+
     // 写入本地文件头
     Error err = writeLocalFileHeader(header);
     if (err) return err;
-    
+
     // 写入压缩数据（dataProvider 可能会更新 header 中的 CRC 等字段）
     dataProvider([this](const uint8_t* data, size_t size) {
         file_.write(reinterpret_cast<const char*>(data), size);
         currentOffset_ += size;
     });
-    
+
     if (!file_.good()) {
         return Error(ErrorCode::FILE_WRITE_ERROR, "Failed to write compressed data");
     }
-    
+
     // 如果使用数据描述符，写入它（此时 header.crc32 已在 dataProvider 中更新）
     if (header.flags & ZIP_FLAG_DATA_DESCRIPTOR) {
         err = writeDataDescriptor(header);
         if (err) return err;
     }
-    
+
     // dataProvider 运行后再拷贝 header，确保 CRC 等字段是最新值
     CentralDirEntry entry;
     entry.header = header;
     entry.localHeaderOffset = localHeaderOffset;
     centralDir_.push_back(entry);
+    return Error();
+}
+
+Error ZipWriter::createEncrypted(const ZipFileHeader& header,
+                                  const std::vector<uint8_t>& salt,
+                                  uint16_t passwordVerification,
+                                  const std::vector<uint8_t>& encryptedData,
+                                  const std::array<uint8_t, WINZIP_AES_AUTH_CODE_SIZE>& authCode) {
+    std::lock_guard<std::mutex> lock(writeMutex_);
+
+    if (!file_.is_open()) {
+        return Error(ErrorCode::FILE_OPEN_ERROR, "File not open");
+    }
+
+    // 记录本地文件头偏移
+    uint64_t localHeaderOffset = currentOffset_;
+
+    // 写入本地文件头（会自动处理 WinZip AES Extra Field）
+    Error err = writeLocalFileHeader(header);
+    if (err) return err;
+
+    // 写入加密数据格式：salt + passwordVerification + encryptedData + authCode
+
+    // 1. 写入 salt
+    file_.write(reinterpret_cast<const char*>(salt.data()), salt.size());
+    currentOffset_ += salt.size();
+
+    // 2. 写入 password verification (2 bytes, little endian)
+    uint8_t pv[WINZIP_AES_PV_SIZE] = {
+        static_cast<uint8_t>(passwordVerification & 0xFF),
+        static_cast<uint8_t>((passwordVerification >> 8) & 0xFF)
+    };
+    file_.write(reinterpret_cast<const char*>(pv), WINZIP_AES_PV_SIZE);
+    currentOffset_ += WINZIP_AES_PV_SIZE;
+
+    // 3. 写入加密数据
+    if (!encryptedData.empty()) {
+        file_.write(reinterpret_cast<const char*>(encryptedData.data()), encryptedData.size());
+        currentOffset_ += encryptedData.size();
+    }
+
+    // 4. 写入 authentication code (10 bytes)
+    file_.write(reinterpret_cast<const char*>(authCode.data()), WINZIP_AES_AUTH_CODE_SIZE);
+    currentOffset_ += WINZIP_AES_AUTH_CODE_SIZE;
+
+    if (!file_.good()) {
+        return Error(ErrorCode::FILE_WRITE_ERROR, "Failed to write encrypted data");
+    }
+
+    // 不使用数据描述符 - WinZip AES 格式直接在本地文件头中写入实际大小
+    // 7z 和其他工具期望加密文件有正确的本地文件头大小
+
+    // 添加到中央目录
+    CentralDirEntry entry;
+    entry.header = header;
+    entry.header.crc32 = 0;  // AE-2 格式
+    entry.localHeaderOffset = localHeaderOffset;
+    centralDir_.push_back(entry);
+
     return Error();
 }
 
@@ -352,32 +450,44 @@ Error ZipWriter::writeCentralDirectory() {
     for (auto& entry : centralDir_) {
         auto& h = entry.header;
         buf.clear();
-        
+
         // 检查是否需要 ZIP64 extra 字段
         bool needZip64 = h.isZip64() || entry.localHeaderOffset >= ZIP_UINT32_MAX;
-        
+
         // Signature
         write32(CENTRAL_DIR_HEADER_SIG);
-        
+
         // Version made by
         write16(h.versionMadeBy);
-        
+
         // Version needed (ZIP64 需要版本 4.5)
         write16(needZip64 ? ZIP_VERSION_45 : h.versionNeeded);
-        
-        // Flags
-        write16(h.flags);
-        
-        // Compression method
-        write16(h.method);
-        
+
+        // Flags (加密时设置加密标志位)
+        uint16_t flags = h.flags;
+        if (h.isEncrypted()) {
+            flags |= ZIP_FLAG_ENCRYPTED;
+        }
+        write16(flags);
+
+        // Compression method (WinZip AES 使用 99)
+        uint16_t method = h.method;
+        if (h.isEncrypted()) {
+            method = ZIP_ENCRYPTION_WINZIP_AES;
+        }
+        write16(method);
+
         // Modification time and date
         write16(h.modTime);
         write16(h.modDate);
-        
-        // CRC32
-        write32(h.crc32);
-        
+
+        // CRC32 (AE-2 格式为 0)
+        uint32_t crc32 = h.crc32;
+        if (h.isEncrypted()) {
+            crc32 = 0;  // AE-2 格式
+        }
+        write32(crc32);
+
         if (needZip64) {
             // 对应 Go: "the file needs a zip64 header. store maxint in both
             // 32 bit size fields (and offset later) to signal that the
@@ -388,10 +498,25 @@ Error ZipWriter::writeCentralDirectory() {
             write32(static_cast<uint32_t>(h.compressedSize));
             write32(static_cast<uint32_t>(h.uncompressedSize));
         }
-        
+
         // Filename length
         write16(static_cast<uint16_t>(h.name.size()));
-        
+
+        // 构建 extra 字段
+        std::vector<uint8_t> extraFields;
+
+        // 如果是 WinZip AES 加密，添加 WinZip AES Extra Field
+        if (h.isEncrypted()) {
+            WinZipAESExtra aesExtra;
+            aesExtra.vendorVersion = WINZIP_AES_VERSION_2;  // 使用 AE-2
+            aesExtra.vendorId = WINZIP_AES_VENDOR_ID_AE;  // "AE"
+            aesExtra.aesStrength = h.aesStrength;
+            aesExtra.actualCompressionMethod = h.actualCompressionMethod;
+
+            std::vector<uint8_t> aesExtraData = aesExtra.encode();
+            extraFields.insert(extraFields.end(), aesExtraData.begin(), aesExtraData.end());
+        }
+
         // 构建 ZIP64 extra 字段
         std::vector<uint8_t> zip64Extra;
         if (needZip64) {
@@ -415,44 +540,50 @@ Error ZipWriter::writeCentralDirectory() {
                 zip64Extra.push_back((entry.localHeaderOffset >> (i * 8)) & 0xFF);
             }
         }
-        
-        // Extra field length (原有 extra + ZIP64 extra)
-        size_t extraLen = h.extra.size() + zip64Extra.size();
+
+        // Extra field length (原有 extra + WinZip AES extra + ZIP64 extra)
+        size_t extraLen = h.extra.size() + extraFields.size() + zip64Extra.size();
         write16(static_cast<uint16_t>(extraLen));
-        
+
         // Comment length
         write16(0);
-        
+
         // Disk number start
         write16(0);
-        
+
         // Internal file attributes
         write16(0);
-        
+
         // External file attributes
         write32(h.externalAttr);
-        
+
         // Relative offset of local header
         if (entry.localHeaderOffset > ZIP_UINT32_MAX) {
             write32(ZIP_UINT32_MAX);
         } else {
             write32(static_cast<uint32_t>(entry.localHeaderOffset));
         }
-        
+
         // 写入固定部分
         file_.write(reinterpret_cast<const char*>(buf.data()), buf.size());
         currentOffset_ += buf.size();
-        
+
         // Filename
         file_.write(h.name.c_str(), h.name.size());
         currentOffset_ += h.name.size();
-        
+
         // 原有 Extra field
         if (!h.extra.empty()) {
             file_.write(reinterpret_cast<const char*>(h.extra.data()), h.extra.size());
             currentOffset_ += h.extra.size();
         }
-        
+
+        // WinZip AES Extra Field
+        if (!extraFields.empty()) {
+            file_.write(reinterpret_cast<const char*>(extraFields.data()), extraFields.size());
+            currentOffset_ += extraFields.size();
+        }
+
         // ZIP64 extra field
         if (!zip64Extra.empty()) {
             file_.write(reinterpret_cast<const char*>(zip64Extra.data()), zip64Extra.size());

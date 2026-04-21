@@ -45,12 +45,18 @@ FileTask::FileTask(FileTask&& other) noexcept
     , overflow_(std::move(other.overflow_))
     , overflowPath_(std::move(other.overflowPath_))
     , written_(other.written_)
+    , encryptedData(std::move(other.encryptedData))
+    , salt(std::move(other.salt))
+    , passwordVerification(other.passwordVerification)
+    , authCode(other.authCode)
 {
     other.compressor = nullptr;
     other.isSymlink = false;
     other.streamFromSource = false;
     other.bufferUsed_ = 0;
     other.written_ = 0;
+    other.passwordVerification = 0;
+    other.authCode.fill(0);
 }
 
 FileTask& FileTask::operator=(FileTask&& other) noexcept {
@@ -68,12 +74,18 @@ FileTask& FileTask::operator=(FileTask&& other) noexcept {
         overflow_ = std::move(other.overflow_);
         overflowPath_ = std::move(other.overflowPath_);
         written_ = other.written_;
+        encryptedData = std::move(other.encryptedData);
+        salt = std::move(other.salt);
+        passwordVerification = other.passwordVerification;
+        authCode = other.authCode;
         
         other.compressor = nullptr;
         other.isSymlink = false;
         other.streamFromSource = false;
         other.bufferUsed_ = 0;
         other.written_ = 0;
+        other.passwordVerification = 0;
+        other.authCode.fill(0);
     }
     return *this;
 }
@@ -95,6 +107,10 @@ Error FileTask::reset(const fs::path& filePath, const fs::path& relativeTo) {
     isSymlink = false;
     symlinkTarget.clear();
     streamFromSource = false;
+    encryptedData.clear();
+    salt.clear();
+    passwordVerification = 0;
+    authCode.fill(0);
     
     // 设置新文件信息
     path = filePath;

@@ -7,6 +7,7 @@
 
 #include "common.h"
 #include "file_task.h"
+#include "pzip/crypto/winzip_aes_extra.h"
 #include <fstream>
 
 namespace pzip {
@@ -51,8 +52,23 @@ public:
      * @param compressedSize 压缩数据大小
      * @return 错误信息
      */
-    Error createRaw(const ZipFileHeader& header, 
+    Error createRaw(const ZipFileHeader& header,
                     std::function<void(std::function<void(const uint8_t*, size_t)>)> dataProvider);
+
+    /**
+     * @brief 写入加密数据（WinZip AES）
+     * @param header ZIP 文件头
+     * @param salt 盐值
+     * @param passwordVerification 密码验证值
+     * @param encryptedData 加密后的数据
+     * @param authCode 认证码
+     * @return 错误信息
+     */
+    Error createEncrypted(const ZipFileHeader& header,
+                          const std::vector<uint8_t>& salt,
+                          uint16_t passwordVerification,
+                          const std::vector<uint8_t>& encryptedData,
+                          const std::array<uint8_t, WINZIP_AES_AUTH_CODE_SIZE>& authCode);
 
     /**
      * @brief 写入文件（会自动压缩）

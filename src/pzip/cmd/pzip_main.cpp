@@ -12,17 +12,23 @@
 
 #include "pzip/pzip.h"
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <vector>
 #include <chrono>
 #include <getopt.h>
+#include <fstream>
+#include <iterator>
 
 void printUsage(const char* progName) {
     std::cout << "pzip - Parallel ZIP Archiver v" << pzip::version() << "\n\n"
               << "用法: " << progName << " [选项] <archive.zip> <文件或目录...>\n\n"
               << "选项:\n"
               << "  -c, --concurrency <n>  设置并发线程数（默认: 全部 CPU 核心）\n"
-              << "  -l, --level <1-9>      设置压缩级别（默认: 1，最快）\n"
+              << "  -l, --level <0-9>      设置压缩级别（默认: 1，最快；0=不压缩）\n"
+              << "  -p, --password <密码>  设置加密密码（UTF-8/终端字节）\n"
+              << "  -P, --password-file <路径>  从文件读取密码字节（与 libzip 插件编码对齐时由 GUI 写入）\n"
+              << "  -e, --encryption <方法> 加密方法: aes128, aes192, aes256（默认: aes256）\n"
               << "  -v, --verbose          显示详细信息\n"
               << "  -q, --quiet            静默模式\n"
               << "  -h, --help             显示帮助信息\n"
@@ -30,7 +36,9 @@ void printUsage(const char* progName) {
               << "示例:\n"
               << "  " << progName << " archive.zip file1.txt file2.txt\n"
               << "  " << progName << " archive.zip directory/\n"
-              << "  " << progName << " -c 4 -l 9 archive.zip files/\n";
+              << "  " << progName << " -c 4 -l 9 archive.zip files/\n"
+              << "  " << progName << " -p mypassword archive.zip files/\n"
+              << "  " << progName << " -p mypassword -e aes256 archive.zip files/\n";
 }
 
 int main(int argc, char* argv[]) {
@@ -38,20 +46,24 @@ int main(int argc, char* argv[]) {
     pzip::ArchiverOptions options;
     bool verbose = false;
     bool quiet = false;
-    
+    std::string encryptionMethodStr;
+
     // 命令行选项定义
     static struct option longOptions[] = {
         {"concurrency", required_argument, nullptr, 'c'},
         {"level",       required_argument, nullptr, 'l'},
+        {"password",    required_argument, nullptr, 'p'},
+        {"password-file", required_argument, nullptr, 'P'},
+        {"encryption",  required_argument, nullptr, 'e'},
         {"verbose",     no_argument,       nullptr, 'v'},
         {"quiet",       no_argument,       nullptr, 'q'},
         {"help",        no_argument,       nullptr, 'h'},
         {nullptr,       0,                 nullptr, 0}
     };
-    
+
     // 解析命令行选项
     int opt;
-    while ((opt = getopt_long(argc, argv, "c:l:vqh", longOptions, nullptr)) != -1) {
+    while ((opt = getopt_long(argc, argv, "c:l:p:P:e:vqh", longOptions, nullptr)) != -1) {
         switch (opt) {
             case 'c':
                 options.concurrency = std::stoul(optarg);
@@ -62,6 +74,21 @@ int main(int argc, char* argv[]) {
                     std::cerr << "错误: 压缩级别必须在 0-9 之间\n";
                     return 1;
                 }
+                break;
+            case 'p':
+                options.password = optarg;
+                break;
+            case 'P': {
+                std::ifstream pf(optarg, std::ios::binary);
+                if (!pf) {
+                    std::cerr << "错误: 无法读取密码文件: " << optarg << "\n";
+                    return 1;
+                }
+                options.password.assign(std::istreambuf_iterator<char>(pf), std::istreambuf_iterator<char>());
+                break;
+            }
+            case 'e':
+                encryptionMethodStr = optarg;
                 break;
             case 'v':
                 verbose = true;
@@ -75,6 +102,21 @@ int main(int argc, char* argv[]) {
             default:
                 printUsage(argv[0]);
                 return 1;
+        }
+    }
+
+    // 解析加密方法
+    if (!options.password.empty()) {
+        if (encryptionMethodStr.empty() || encryptionMethodStr == "aes256") {
+            options.encryptionMethod = pzip::EncryptionMethod::AES256;
+        } else if (encryptionMethodStr == "aes192") {
+            options.encryptionMethod = pzip::EncryptionMethod::AES192;
+        } else if (encryptionMethodStr == "aes128") {
+            options.encryptionMethod = pzip::EncryptionMethod::AES128;
+        } else {
+            std::cerr << "错误: 不支持的加密方法: " << encryptionMethodStr << "\n";
+            std::cerr << "支持的加密方法: aes128, aes192, aes256\n";
+            return 1;
         }
     }
     
@@ -119,6 +161,23 @@ int main(int argc, char* argv[]) {
         if (verbose) {
             std::cout << "并发线程数: " << (options.concurrency > 0 ? options.concurrency : std::thread::hardware_concurrency()) << "\n";
             std::cout << "压缩级别: " << options.compressionLevel << "\n";
+            if (options.isEncrypted()) {
+                std::cout << "加密: 是\n";
+                std::cout << "加密方法: ";
+                switch (options.encryptionMethod) {
+                    case pzip::EncryptionMethod::AES128:
+                        std::cout << "AES-128\n";
+                        break;
+                    case pzip::EncryptionMethod::AES192:
+                        std::cout << "AES-192\n";
+                        break;
+                    case pzip::EncryptionMethod::AES256:
+                        std::cout << "AES-256\n";
+                        break;
+                    default:
+                        std::cout << "未知\n";
+                }
+            }
         }
     }
     

@@ -15,6 +15,58 @@
 #include <linux/limits.h>
 #include <signal.h>
 
+#include <QTemporaryFile>
+#include <QTextCodec>
+
+
+namespace {
+
+constexpr auto kUiEncAes128 = "AES128";
+constexpr auto kUiEncAes192 = "AES192";
+constexpr auto kUiEncAes256 = "AES256";
+    
+constexpr auto kCliEncAes128 = "aes128";
+constexpr auto kCliEncAes192 = "aes192";
+constexpr auto kCliEncAes256 = "aes256";
+
+// 与 LibzipPlugin::passwordUnicode(str, 0) 对 .zip 的逻辑一致，保证与 libzip 产包互解
+static QByteArray passwordBytesLikeLibzipForZip(const QString &strPassword, const QString &archiveName)
+{
+    if (!archiveName.endsWith(QLatin1String(".zip"), Qt::CaseInsensitive)) {
+        return strPassword.toUtf8();
+    }
+    const int nCount = strPassword.count();
+    bool hasHan = false;
+    for (int i = 0; i < nCount; ++i) {
+        const ushort uni = strPassword.at(i).unicode();
+        if (uni >= 0x4E00 && uni <= 0x9FA5) {
+            hasHan = true;
+            break;
+        }
+    }
+    if (hasHan) {
+        QTextCodec *utf8 = QTextCodec::codecForName("UTF-8");
+        QTextCodec *dst = QTextCodec::codecForName("UTF-8");
+        if (!utf8 || !dst) {
+            return strPassword.toUtf8();
+        }
+        const QString strUnicode = utf8->toUnicode(strPassword.toUtf8().constData());
+        return dst->fromUnicode(strUnicode);
+    }
+    return strPassword.toUtf8();
+}
+
+static QString encryptionCliArgFromUi(const QString &ui)
+{
+    if (ui == QLatin1String(kUiEncAes128)) return QString::fromLatin1(kCliEncAes128);
+    if (ui == QLatin1String(kUiEncAes192)) return QString::fromLatin1(kCliEncAes192);
+    if (ui == QLatin1String(kUiEncAes256)) return QString::fromLatin1(kCliEncAes256);
+    return QString::fromLatin1(kCliEncAes256);
+}
+
+} // namespace
+
+// pzip
 // pzip 安装路径
 static const QString PZIP_INSTALL_PATH = QStringLiteral("/usr/lib/deepin-compressor/pzip");
 static const QString PUNZIP_INSTALL_PATH = QStringLiteral("/usr/lib/deepin-compressor/punzip");
@@ -186,9 +238,29 @@ PluginFinishType CliPzipPlugin::addFiles(const QList<FileEntry> &files, const Co
     m_process->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
 
     QStringList arguments;
-    
+
+    m_passwordFile.reset();
+
     // 静默模式
     arguments << "-q";
+
+    if (options.bEncryption && !options.strPassword.isEmpty()) {
+        m_passwordFile = std::make_unique<QTemporaryFile>();
+        if (!m_passwordFile->open()) {
+            qWarning() << "Failed to create temporary file for password";
+            m_eErrorType = ET_PluginError;
+            return PFT_Error;
+        }
+        const QByteArray pwBytes = passwordBytesLikeLibzipForZip(options.strPassword, m_strArchiveName);
+        if (m_passwordFile->write(pwBytes) != pwBytes.size()) {
+            qWarning() << "Failed to write password bytes";
+            m_eErrorType = ET_PluginError;
+            return PFT_Error;
+        }
+        m_passwordFile->flush();
+        arguments << "--password-file" << m_passwordFile->fileName();
+        arguments << "-e" << encryptionCliArgFromUi(options.strEncryptionMethod);
+    }
 
     // 压缩等级：0=Store(不压缩)，1-9=deflate 压缩级别
     int level = options.iCompressionLevel;
@@ -374,6 +446,7 @@ void CliPzipPlugin::killProcess(bool emitFinished)
 
 void CliPzipPlugin::deleteProcess()
 {
+    m_passwordFile.reset();
     if (m_process) {
         readStdout(true);
         m_process->blockSignals(true);

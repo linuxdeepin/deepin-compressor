@@ -12,6 +12,8 @@
 
 #include <QProcess>
 #include <QTimer>
+#include <memory>
+#include <QTemporaryFile>
 #include <QtGlobal>  // for QT_VERSION_CHECK
 
 class CliPzipPluginFactory : public KPluginFactory
@@ -104,6 +106,8 @@ private:
     QVector<qint64> m_childProcessId;
     qint64 m_qTotalSize = 0;
     QTimer *m_timer = nullptr;
+
+    std::unique_ptr<QTemporaryFile> m_passwordFile;
 
     // 解压相关
     QString m_extractDestPath;

@@ -14,6 +14,8 @@ find_package(PkgConfig REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(Threads REQUIRED)
 
+find_package(OpenSSL REQUIRED)
+
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${ZLIB_INCLUDE_DIRS})
 
@@ -26,11 +28,17 @@ set(PZIP_SOURCES
     src/fast_deflate.cpp
     src/utils.cpp
     src/worker_pool.cpp
+    src/crypto/aes_encryptor.cpp
+    src/crypto/winzip_aes_extra.cpp
 )
 
 add_library(pzip_core_lib STATIC ${PZIP_SOURCES})
 target_include_directories(pzip_core_lib PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_link_libraries(pzip_core_lib ${ZLIB_LIBRARIES} Threads::Threads)
+target_link_libraries(pzip_core_lib
+    ${ZLIB_LIBRARIES}
+    Threads::Threads
+    OpenSSL::Crypto
+)
 
 target_compile_features(pzip_core_lib PUBLIC cxx_std_17)
 

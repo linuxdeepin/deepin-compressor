@@ -20,6 +20,16 @@ struct ArchiverOptions {
     int compressionLevel = 1;       // 压缩级别（1 = 最快，默认值）
     bool preservePermissions = true; // 保留文件权限
     ProgressCallback progress;       // 进度回调
+
+    // 加密选项
+    std::string password;                    // 加密密码
+    EncryptionMethod encryptionMethod = EncryptionMethod::None; 
+    bool useAE2 = true;                      // 使用 AE-2 格式
+
+    // 判断是否启用加密
+    bool isEncrypted() const {
+        return !password.empty() && encryptionMethod != EncryptionMethod::None;
+    }
 };
 
 /**
@@ -81,16 +91,19 @@ public:
 private:
     // 压缩单个文件
     Error compressFile(FileTask* task);
-    
+
+    // 加密文件
+    Error encryptFile(FileTask* task);
+
     // 写入单个文件到 ZIP
     Error archiveFile(FileTask* task);
-    
+
     // 遍历目录
     Error walkDirectory(const fs::path& root);
-    
+
     // 压缩文件内容
     Error compress(FileTask* task);
-    
+
     // 填充 ZIP 文件头
     void populateHeader(FileTask* task);
     
