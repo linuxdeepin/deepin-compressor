@@ -257,6 +257,7 @@ private:
     qint64  m_processId;  // 进程Id
     bool m_isTar7z = false; // 是否是tar.7z文件
     qint64 m_filesSize; //选择需要压缩的文件大小，压缩tar.7z时使用
+    qint64 m_totalFileSize = 0; // 待压缩文件总大小（缓存，避免在handleProgress中重复计算）
     QString m_rootEntry; // 追加压缩文件夹的时候记录上一层节点
     int m_indexOfListRootEntry = 0; // 右键解压到当前文件夹时的数据
     QMap<QString, int> m_mapLongName;       // 长文件名统计
