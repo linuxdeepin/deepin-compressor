@@ -14,6 +14,7 @@
 #include <QTimer>
 #include <memory>
 #include <QTemporaryFile>
+#include <QTemporaryDir>
 #include <QtGlobal>  // for QT_VERSION_CHECK
 
 class CliPzipPluginFactory : public KPluginFactory
@@ -90,6 +91,8 @@ private:
      */
     void getChildProcessId(qint64 processId, const QStringList &listKey, QVector<qint64> &childprocessid);
 
+    void emitProgressIfArchiveGrew();
+
 private slots:
     void readStdout(bool handleAll = false);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -106,8 +109,13 @@ private:
     QVector<qint64> m_childProcessId;
     qint64 m_qTotalSize = 0;
     QTimer *m_timer = nullptr;
+    qint64 m_lastProgressArchiveSize = -1;
+    double m_lastUiBytesProgress = -1.0;
 
     std::unique_ptr<QTemporaryFile> m_passwordFile;
+    std::unique_ptr<QTemporaryDir> m_tempArchiveDir;
+    QString m_tempArchiveName;
+    QString m_progressArchiveName;
 
     // 解压相关
     QString m_extractDestPath;

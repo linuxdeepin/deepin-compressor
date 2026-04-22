@@ -168,6 +168,10 @@ Error Archiver::compressFile(FileTask* task) {
         return Error(ErrorCode::CANCELLED, "Operation cancelled");
     }
 
+    if (options_.onEntryStart) {
+        options_.onEntryStart(task->header.name);
+    }
+
     // 先按与无加密相同的路径做 Deflate/Store，再对压缩流做 WinZip AES（与 libzip 语义一致）
     Error err = compress(task);
     if (err) return err;
@@ -254,6 +258,8 @@ Error Archiver::compress(FileTask* task) {
     std::vector<uint8_t> buf(BUFFER_SIZE);
     uint32_t crc = 0;
     uint64_t totalBytesRead = 0;
+    uint64_t reportedBytesRead = 0;
+    constexpr uint64_t REPORT_GRANULARITY = 512 * 1024; // 限制回调频率，避免拖慢压缩线程
     
     if (useStore) {
         // Store 模式：跳过读文件，写入 ZIP 时直接从源文件流式读取并计算 CRC
@@ -277,6 +283,14 @@ Error Archiver::compress(FileTask* task) {
             crc = ::crc32(crc, buf.data(), bytesRead);
             writer.write(buf.data(), bytesRead);
             totalBytesRead += bytesRead;
+
+            if (options_.onBytesRead) {
+                const uint64_t deltaSinceLast = totalBytesRead - reportedBytesRead;
+                if (deltaSinceLast >= REPORT_GRANULARITY) {
+                    options_.onBytesRead(deltaSinceLast);
+                    reportedBytesRead = totalBytesRead;
+                }
+            }
         }
     }
     
@@ -292,6 +306,13 @@ Error Archiver::compress(FileTask* task) {
         return Error(ErrorCode::FILE_READ_ERROR, 
             "Short read: expected " + std::to_string(task->fileSize) + 
             " bytes, got " + std::to_string(totalBytesRead) + " for: " + task->path.string());
+    }
+
+    if (options_.onBytesRead) {
+        const uint64_t tail = totalBytesRead - reportedBytesRead;
+        if (tail > 0) {
+            options_.onBytesRead(tail);
+        }
     }
     
     file.close();
