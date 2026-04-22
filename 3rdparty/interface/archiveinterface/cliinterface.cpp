@@ -350,6 +350,12 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
 
     m_isTar7z = false;
 
+    // 计算并缓存总文件大小，避免在handleProgress中重复计算
+    m_totalFileSize = 0;
+    for (const auto &file : m_files) {
+        m_totalFileSize += file.qSize;
+    }
+
     bool ret = false;
     QStringList fileList;
 
@@ -817,39 +823,76 @@ void CliInterface::handleProgress(const QString &line)
             if (percentage > 0) {
                 if (line.contains("\b\b\b\b") == true) {
                     QString strfilename;
-                    if (m_workStatus == WT_Extract || m_workStatus == WT_Add) {   // 解压、压缩解析文件名
-                        int count = line.indexOf("+");   // 获取压缩参数解析
-
-                        // 解压参数解析
-                        if (-1 == count) {
-                            count = line.indexOf("-");
-                        }
-
-                        // 更新参数解析
-                        if (-1 == count) {
-                            count = line.indexOf("U");
-                        }
+                    if (m_workStatus == WT_Extract) {   // 解压解析文件名
+                        int count = line.indexOf("-");   // 解压参数解析
 
                         if (count > 0) {
                             strfilename = line.midRef(count + 2).toString();   // 文件名
                             // 右键 解压到当前文件夹
-                            if (m_workStatus == WT_Extract && !m_extractOptions.bExistList && m_indexOfListRootEntry == 0) {
+                            if (!m_extractOptions.bExistList && m_indexOfListRootEntry == 0) {
                                 m_indexOfListRootEntry++;
                                 FileEntry entry;
                                 entry.strFullPath = strfilename;
                                 DataManager::get_instance().archiveData().listRootEntry << entry;
                             }
                         }
-                    } else {   // 删除解析文件名
+                    } else if (m_workStatus == WT_Add) {   // 压缩：根据进度百分比计算当前文件
+                        // p7zip在压缩时只显示最后一个文件名，需要根据进度推断当前文件
+                        if (!m_files.isEmpty()) {
+                            // 如果总大小为0，使用文件数量平均分配
+                            if (m_totalFileSize == 0) {
+                                int fileIndex = (percentage * m_files.size()) / 100;
+                                if (fileIndex >= m_files.size()) {
+                                    fileIndex = m_files.size() - 1;
+                                }
+                                strfilename = m_files[fileIndex].strFileName;
+                                if (strfilename.isEmpty()) {
+                                    strfilename = QFileInfo(m_files[fileIndex].strFullPath).fileName();
+                                }
+                            } else {
+                                // 根据进度计算已压缩的大小
+                                qint64 compressedSize = (percentage * m_totalFileSize) / 100;
+
+                                // 找到当前正在压缩的文件
+                                qint64 accumulatedSize = 0;
+                                int fileIndex = 0;
+                                for (int i = 0; i < m_files.size(); ++i) {
+                                    accumulatedSize += m_files[i].qSize;
+                                    if (accumulatedSize > compressedSize) {
+                                        fileIndex = i;
+                                        break;
+                                    }
+                                    fileIndex = i; // 防止最后一个文件时索引越界
+                                }
+
+                                // 确保索引在有效范围内
+                                if (fileIndex >= m_files.size()) {
+                                    fileIndex = m_files.size() - 1;
+                                }
+
+                                strfilename = m_files[fileIndex].strFileName;
+                                if (strfilename.isEmpty()) {
+                                    strfilename = QFileInfo(m_files[fileIndex].strFullPath).fileName();
+                                }
+                            }
+                        }
+                    } else {   // 删除、重命名等操作解析文件名
                         if (line.contains("% = ")) {
                             strfilename = line.right(line.length() - line.indexOf(QLatin1Char('=')) - 2);
                         } else if (line.contains("% R ")) {
                             strfilename = line.right(line.length() - line.indexOf(QLatin1Char('R')) - 2);
+                        } else if (line.contains("U ")) {   // 重命名操作
+                            int count = line.indexOf("U ");
+                            if (count > 0) {
+                                strfilename = line.midRef(count + 2).toString();
+                            }
                         }
                     }
 
                     emit signalprogress(percentage);
-                    emit signalCurFileName(strfilename);
+                    if (!strfilename.isEmpty()) {
+                        emit signalCurFileName(strfilename);
+                    }
                 }
             } else {
                 // 7z解压小文件无法获取文件名添加一个空的entry
