@@ -5,12 +5,15 @@
 
 #include "clipzipplugin.h"
 #include "datamanager.h"
+#include "common.h"
 
 #include <QDebug>
 #include <QDir>
 #include <QFileInfo>
 #include <QStandardPaths>
 #include <QCoreApplication>
+#include <QDirIterator>
+#include <cmath>
 
 #include <linux/limits.h>
 #include <signal.h>
@@ -95,11 +98,29 @@ CliPzipPlugin::CliPzipPlugin(QObject *parent, const QVariantList &args)
     m_ePlugintype = PT_Libzip; // 复用 Libzip 类型，因为都是 ZIP 格式
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout, this, [=]() {
-        QFileInfo info(m_strArchiveName);
-        if (m_qTotalSize > 0) {
-            emit signalprogress(static_cast<double>(info.size()) / m_qTotalSize * 100);
-        }
+        emitProgressIfArchiveGrew();
     });
+}
+
+void CliPzipPlugin::emitProgressIfArchiveGrew()
+{
+    if (m_qTotalSize <= 0) {
+        return;
+    }
+
+    QFileInfo info(m_progressArchiveName.isEmpty() ? m_strArchiveName : m_progressArchiveName);
+    const qint64 curSize = info.size();
+    if (curSize < 0) {
+        return;
+    }
+
+    // 避免重复发送相同进度：会导致 UI 速度=0，从而“剩余时间”消失
+    if (curSize == m_lastProgressArchiveSize) {
+        return;
+    }
+    m_lastProgressArchiveSize = curSize;
+
+    emit signalprogress(static_cast<double>(curSize) / m_qTotalSize * 100);
 }
 
 CliPzipPlugin::~CliPzipPlugin()
@@ -224,6 +245,11 @@ PluginFinishType CliPzipPlugin::addFiles(const QList<FileEntry> &files, const Co
     m_qTotalSize = options.qTotalSize;
     m_stdOutData.clear();
     m_isProcessKilled = false;
+    m_tempArchiveDir.reset();
+    m_tempArchiveName.clear();
+    m_progressArchiveName.clear();
+    m_lastProgressArchiveSize = -1;
+    m_lastUiBytesProgress = -1.0;
 
     QString pzipPath = getPzipPath();
     if (pzipPath.isEmpty()) {
@@ -243,6 +269,50 @@ PluginFinishType CliPzipPlugin::addFiles(const QList<FileEntry> &files, const Co
 
     // 静默模式
     arguments << "-q";
+
+    arguments << "--ui-events";
+
+    // MTP 挂载目录不一定支持 seek/rename 等操作，先在临时目录生成，再 mv 回目标路径
+    QString outArchiveName = m_strArchiveName;
+    if (IsMtpFileOrDirectory(m_strArchiveName)) {
+        m_tempArchiveDir = std::make_unique<QTemporaryDir>();
+        m_tempArchiveDir->setAutoRemove(true);
+        m_tempArchiveName = m_tempArchiveDir->path() + QDir::separator() + QFileInfo(m_strArchiveName).fileName();
+        outArchiveName = m_tempArchiveName;
+        qInfo() << "[PZIP_ROUTE]" << "clipzip: mtp target detected, staging archive at:" << outArchiveName
+                << "final:" << m_strArchiveName;
+    }
+    m_progressArchiveName = outArchiveName;
+
+    // pzip 静默模式不会输出“当前文件名”，为了避免进度页一直显示“计算中”，先上报一个可展示的文件名
+    if (!files.isEmpty()) {
+        const FileEntry &f0 = files.first();
+        const QString display = !f0.strAlias.isEmpty() ? f0.strAlias
+                                                       : (!f0.strFileName.isEmpty() ? f0.strFileName : f0.strFullPath);
+        emit signalCurFileName(display);
+    }
+
+    // 兜底：部分场景上层未计算总大小（qTotalSize=0），会导致进度条永远不刷新
+    if (m_qTotalSize <= 0) {
+        qint64 sum = 0;
+        for (const FileEntry &f : files) {
+            QFileInfo fi(f.strFullPath);
+            if (!fi.exists()) continue;
+            if (fi.isFile()) {
+                sum += fi.size();
+                continue;
+            }
+            if (fi.isDir()) {
+                QDirIterator it(fi.absoluteFilePath(), QDir::Files, QDirIterator::Subdirectories);
+                while (it.hasNext()) {
+                    it.next();
+                    sum += it.fileInfo().size();
+                }
+            }
+        }
+        m_qTotalSize = sum;
+        qInfo() << "[PZIP_ROUTE]" << "clipzip: fallback total size computed:" << m_qTotalSize;
+    }
 
     if (options.bEncryption && !options.strPassword.isEmpty()) {
         m_passwordFile = std::make_unique<QTemporaryFile>();
@@ -275,7 +345,7 @@ PluginFinishType CliPzipPlugin::addFiles(const QList<FileEntry> &files, const Co
     }
 
     // 输出文件
-    arguments << m_strArchiveName;
+    arguments << outArchiveName;
 
     // 添加所有源文件/目录
     for (const FileEntry &file : files) {
@@ -314,6 +384,11 @@ PluginFinishType CliPzipPlugin::addFiles(const QList<FileEntry> &files, const Co
         m_processId = m_process->processId();
         getChildProcessId(m_processId, QStringList() << "pzip", m_childProcessId);
         m_timer->start(500);  // 每500ms更新一次进度
+
+        // 让 UI 立即脱离“计算中”（速度/剩余时间会在首次 setProgress 后更新）
+        if (m_qTotalSize > 0) {
+            emit signalprogress(1);
+        }
     }
 
     return PFT_Nomral;
@@ -399,6 +474,36 @@ bool CliPzipPlugin::doKill()
 
 bool CliPzipPlugin::handleLine(const QString &line)
 {
+    static const QLatin1String kUiPrefix("[PZIP_UI] entry ");
+    if (line.startsWith(kUiPrefix)) {
+        const QString nameInArchive = line.mid(kUiPrefix.size());
+        if (!nameInArchive.isEmpty()) {
+            emit signalCurFileName(nameInArchive);
+        }
+        emitProgressIfArchiveGrew();
+        return true;
+    }
+
+    static const QLatin1String kUiBytesPrefix("[PZIP_UI] inbytes ");
+    if (line.startsWith(kUiBytesPrefix)) {
+        if (m_qTotalSize > 0) {
+            bool ok = false;
+            const qint64 inBytes = line.mid(kUiBytesPrefix.size()).trimmed().toLongLong(&ok);
+            if (ok && inBytes >= 0) {
+                double p = static_cast<double>(inBytes) / static_cast<double>(m_qTotalSize) * 100.0;
+                if (p > 99.9) p = 99.9; // 结束由 processFinished 统一补 100
+                if (p < 0.0) p = 0.0;
+
+                // 只要有实际变化就推一把，让 UI 能稳定算速度/剩余时间
+                if (m_lastUiBytesProgress < 0.0 || std::abs(p - m_lastUiBytesProgress) >= 0.05) {
+                    m_lastUiBytesProgress = p;
+                    emit signalprogress(p);
+                }
+            }
+        }
+        return true;
+    }
+
     if (line.contains(QLatin1String("No space left on device"))) {
         m_eErrorType = ET_InsufficientDiskSpace;
         return false;
@@ -409,13 +514,7 @@ bool CliPzipPlugin::handleLine(const QString &line)
         // 不一定是致命错误，继续处理
     }
 
-    // 更新进度
-    if (m_qTotalSize > 0) {
-        QFileInfo info(m_strArchiveName);
-        emit signalprogress(static_cast<double>(info.size()) / m_qTotalSize * 100);
-    }
-
-    emit signalCurFileName(line);
+    emitProgressIfArchiveGrew();
     return true;
 }
 
@@ -540,7 +639,22 @@ void CliPzipPlugin::processFinished(int exitCode)
     PluginFinishType eFinishType;
 
     if (0 == exitCode && exitStatus == QProcess::NormalExit) {
-        eFinishType = PFT_Nomral;
+        bool ok = true;
+
+        // 若走了 MTP staging，成功后将临时文件移动到最终目标路径
+        if (!m_tempArchiveName.isEmpty() && m_tempArchiveDir) {
+            QProcess mover;
+            const QStringList args = {m_tempArchiveName, m_strArchiveName};
+            int ret = mover.execute(QStringLiteral("mv"), args);
+            ok = (ret == 0) && (mover.exitStatus() == QProcess::NormalExit) && (mover.exitCode() == 0);
+            qInfo() << "[PZIP_ROUTE]" << "clipzip: mv staged archive to final, ok=" << ok
+                    << "from" << m_tempArchiveName << "to" << m_strArchiveName;
+            if (!ok) {
+                m_eErrorType = ET_FileWriteError;
+            }
+        }
+
+        eFinishType = ok ? PFT_Nomral : PFT_Error;
     } else {
         eFinishType = PFT_Error;
     }

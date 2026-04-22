@@ -9,6 +9,7 @@
 #include "worker_pool.h"
 #include "file_task.h"
 #include "zip_writer.h"
+#include <functional>
 
 namespace pzip {
 
@@ -20,6 +21,8 @@ struct ArchiverOptions {
     int compressionLevel = 1;       // 压缩级别（1 = 最快，默认值）
     bool preservePermissions = true; // 保留文件权限
     ProgressCallback progress;       // 进度回调
+    std::function<void(const std::string& nameInArchive)> onEntryStart; // 当前处理的条目（用于 UI 事件）
+    std::function<void(uint64_t deltaBytesRead)> onBytesRead; // 输入字节增量（用于 UI 进度/速率）
 
     // 加密选项
     std::string password;                    // 加密密码
