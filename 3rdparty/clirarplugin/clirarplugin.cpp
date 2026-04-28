@@ -295,15 +295,11 @@ bool CliRarPlugin::handleLine(const QString &line, WorkType workStatus)
     }
 
     if (isWrongPasswordMsg(line)) {  // 提示密码错误
-        // RAR4密码错误直接结束
-        if (line.startsWith(QLatin1String("Checksum error in the encrypted file"))) {
-            m_eErrorType = ET_WrongPassword;
-            m_finishType = PFT_Error;
-            return false;
-        } else { // RAR5密码错误反复输入新密码
-            m_eErrorType = ET_WrongPassword;
-            return true;
-        }
+        // Strategy: treat wrong password as fatal and let UI show failure page with retry,
+        // consistent with zip/7z behavior.
+        m_eErrorType = ET_WrongPassword;
+        m_finishType = PFT_Error;
+        return false;
     }
 
     if (workStatus == WT_List) {
