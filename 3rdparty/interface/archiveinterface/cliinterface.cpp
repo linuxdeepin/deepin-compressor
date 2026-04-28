@@ -1387,7 +1387,10 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
         m_isCorruptArchive = false;
     }
 
-    if (exitCode == 0) {   // job正常结束
+    // If we already detected an error from stdout parsing, do not overwrite it
+    // just because the cli tool exits with code 0 (e.g. unrar may return 0 even
+    // when some entries fail to extract, such as long file name cases).
+    if (exitCode == 0 && m_finishType != PFT_Error && m_finishType != PFT_Cancel) {
         m_finishType = PFT_Nomral;
     }
 
@@ -1403,7 +1406,8 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
 
     deleteProcess();
 
-    if (0 == exitCode) {   // job正常结束
+    // Keep stdout-detected errors (e.g. long name) even if exitCode is 0.
+    if (0 == exitCode && m_finishType != PFT_Error && m_finishType != PFT_Cancel) {
         m_finishType = PFT_Nomral;
     }
 
