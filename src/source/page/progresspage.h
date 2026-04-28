@@ -149,6 +149,7 @@ private:
     double m_dProgressPercent = -1.0;
     QElapsedTimer m_timer;  //计时器
     qint64 m_qConsumeTime = 0; //消耗时间
+    QElapsedTimer m_uiUpdateTimer; // UI 刷新节流计时器（避免解压高频进度拖慢）
 
     QString m_strArchiveName;
 };
