@@ -1907,7 +1907,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             switch (eErrorType) {
             // 密码错误
             case ET_WrongPassword: {
-                showErrorMessage(FI_Uncompress, EI_WrongPassword);
+                showErrorMessage(FI_Uncompress, EI_WrongPassword, true);
                 break;
             }
             // 文件名过长
@@ -1931,7 +1931,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             break;
         // 密码错误
         case ET_WrongPassword:
-            showErrorMessage(FI_Load, EI_WrongPassword);
+            showErrorMessage(FI_Load, EI_WrongPassword, true);
             break;
         // ftp目录不支持seek操作
         case ET_FileSeekError:
@@ -3495,6 +3495,18 @@ void MainWindow::slotFailureRetry()
     switch (m_pFailurePage->getFailureInfo()) {
     case FI_Compress: {
         m_ePageID = PI_CompressSetting;  // 返回到列表设置界面
+    }
+    break;
+    case FI_Load: {
+        // Retry opening the same archive (e.g. wrong password).
+        const QString archivePath = m_stUnCompressParameter.strFullPath;
+        if (!archivePath.isEmpty()) {
+            loadArchive(archivePath);
+        } else {
+            m_ePageID = PI_Home;
+            refreshPage();
+        }
+        return;
     }
     break;
     case FI_Uncompress: {

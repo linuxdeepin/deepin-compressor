@@ -223,11 +223,14 @@ int main(int argc, char *argv[])
         qDebug() << "Registering standard DBus service";
         if (dbus.registerService("com.deepin.Compressor")) {
             dbus.registerObject("/com/deepin/Compressor", &w);
-            qDebug() << "DBus service registered successfully, moving window to center";
-            Dtk::Widget::moveToCenter(&w);
+            qDebug() << "DBus service registered successfully";
         } else {
             qWarning() << "Failed to register standard DBus service:" << dbus.lastError().message();
         }
+        // Keep window placement independent from DBus registration result.
+        // Otherwise, in the "second launch" path (service already taken), the window may still
+        // be at a default geometry when password queries trigger, causing mis-centered dialogs.
+        Dtk::Widget::moveToCenter(&w);
     } else {
         qDebug() << "Registering WPS-specific DBus service";
         QString serviceName = "com.deepin.Compressor"+QString::number(QGuiApplication::applicationPid());
