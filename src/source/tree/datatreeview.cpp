@@ -6,12 +6,15 @@
 #include "datatreeview.h"
 #include "treeheaderview.h"
 #include "datamodel.h"
+#include "itemviewrowhoverproxystyle.h"
 #include "uitools.h"
 
 #include <DApplication>
 #include <DStyle>
 #include <DGuiApplicationHelper>
 
+#include <QApplication>
+#include <QColor>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QHeaderView>
@@ -201,6 +204,11 @@ void DataTreeView::initUI()
     setContextMenuPolicy(Qt::CustomContextMenu);    // 设置自定义右键菜单
     setAcceptDrops(true);
 
+    setMouseTracking(true);
+    auto *hoverProxyStyle = new ItemViewRowHoverProxyStyle(QApplication::style(), this);
+    hoverProxyStyle->setParent(QCoreApplication::instance());
+    setStyle(hoverProxyStyle);
+
     m_selectionModel = selectionModel();
 }
 
@@ -247,6 +255,12 @@ QVariantMap DataTreeView::mapOrderJson()
 void DataTreeView::drawRow(QPainter *painter, const QStyleOptionViewItem &options, const QModelIndex &index) const
 {
     // qDebug() << "Drawing row";
+    Q_ASSERT(m_selectionModel);
+    if (!m_selectionModel) {
+        QTreeView::drawRow(painter, options, index);
+        return;
+    }
+
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing);
 
@@ -278,22 +292,20 @@ void DataTreeView::drawRow(QPainter *painter, const QStyleOptionViewItem &option
     auto margin = style->pixelMetric(DStyle::PM_ContentsMargins, &options);
     //根据实际情况设置颜色，奇数行为灰色
     auto palette = options.palette;
-    QBrush background;
+    QBrush zebraBrush;
     bool bVis = m_pHeaderView->getpreLbl()->isVisible();
     if (bVis ? (index.row() & 1) : !(index.row() & 1)) {
         if(DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
-            background = QColor(255, 255, 255, 12);
+            zebraBrush = QColor(255, 255, 255, 12);
         } else {
-            background = palette.color(cg, DPalette::AlternateBase);
+            zebraBrush = palette.color(cg, DPalette::AlternateBase);
         }
     } else {
-        background = palette.color(cg, DPalette::Base);
+        zebraBrush = palette.color(cg, DPalette::Base);
     }
-    if (options.state & DStyle::State_Enabled) {
-        if (m_selectionModel->isSelected(index)) {
-            background = palette.color(cg, DPalette::Highlight);
-        }
-    }
+
+    const bool selected = (options.state & DStyle::State_Enabled) && m_selectionModel->isSelected(index);
+    const bool hoverRow = (options.state & DStyle::State_Enabled) && index.row() == m_hoverRow && !selected;
 
     // 绘制整行背景，高度-2以让高分屏非整数缩放比例下无被选中的蓝色细线，防止原来通过delegate绘制单元格交替颜色背景出现的高分屏非整数缩放比例下qrect精度问题导致的横向单元格间出现白色边框
     QPainterPath path;
@@ -305,7 +317,30 @@ void DataTreeView::drawRow(QPainter *painter, const QStyleOptionViewItem &option
     rowRect.setWidth(rowRect.width() - margin);
 
     path.addRoundedRect(rowRect, radius, radius);
-    painter->fillPath(path, background);
+    painter->fillPath(path, zebraBrush);
+
+    if (hoverRow) {
+        QStyleOptionViewItem hoverOpt = options;
+        hoverOpt.state &= ~QStyle::State_Selected;
+        hoverOpt.state |= QStyle::State_MouseOver;
+        hoverOpt.rect = rowRect;
+
+        // Use the original base style to paint the row hover background,
+        // since our proxy style clears State_MouseOver to prevent per-cell hover.
+        painter->save();
+        // Keep rounded corners: style hover may be rectangular, so clip it.
+        painter->setClipPath(path);
+        if (auto *proxy = dynamic_cast<ItemViewRowHoverProxyStyle *>(this->style())) {
+            proxy->baseStyle()->drawPrimitive(QStyle::PE_PanelItemViewRow, &hoverOpt, painter, this);
+        } else {
+            style->drawPrimitive(QStyle::PE_PanelItemViewRow, &hoverOpt, painter, this);
+        }
+        painter->restore();
+    }
+
+    if (selected) {
+        painter->fillPath(path, palette.color(cg, DPalette::Highlight));
+    }
 
     QTreeView::drawRow(painter, options, index);
     // draw focus
@@ -475,9 +510,23 @@ void DataTreeView::mouseReleaseEvent(QMouseEvent *event)
     DTreeView::mouseReleaseEvent(event);
 }
 
+void DataTreeView::updateHoverRowFromPosition(const QPoint &pos)
+{
+    const QModelIndex idx = indexAt(pos);
+    const int newRow = idx.isValid() ? idx.row() : -1;
+    if (newRow != m_hoverRow) {
+        m_hoverRow = newRow;
+        viewport()->update();
+    }
+}
+
 void DataTreeView::mouseMoveEvent(QMouseEvent *event)
 {
     // qDebug() << "Mouse move at position:" << event->pos();
+    if (!m_isPressed) {
+        updateHoverRowFromPosition(event->pos());
+    }
+
     if (m_isPressed) {
         //最小距离为防误触和双向滑动时,只触发横向或者纵向的
         int touchmindistance = 2;
@@ -505,6 +554,17 @@ void DataTreeView::mouseMoveEvent(QMouseEvent *event)
         m_lastTouchBeginPos = event->pos();
         return;
     }
+
+    DTreeView::mouseMoveEvent(event);
+}
+
+void DataTreeView::leaveEvent(QEvent *event)
+{
+    if (m_hoverRow >= 0) {
+        m_hoverRow = -1;
+        viewport()->update();
+    }
+    DTreeView::leaveEvent(event);
 }
 
 void DataTreeView::keyPressEvent(QKeyEvent *event)

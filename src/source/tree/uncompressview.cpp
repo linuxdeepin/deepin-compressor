@@ -97,6 +97,8 @@ void UnCompressView::mousePressEvent(QMouseEvent *event)
 void UnCompressView:: mouseMoveEvent(QMouseEvent *event)
 {
     // qDebug() << "Mouse move event at position:" << event->pos();
+    updateHoverRowFromPosition(event->pos());
+
     if (m_isPressed) {
         // qDebug() << "Is pressed";
         //最小距离为防误触和双向滑动时,只触发横向或者纵向的

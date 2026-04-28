@@ -12,7 +12,10 @@
 
 #include <QStyledItemDelegate>
 #include <QDir>
+#include <QPoint>
 #include <QTime>
+
+#include <QEvent>
 
 DWIDGET_USE_NAMESPACE
 
@@ -78,6 +81,7 @@ protected:
 
     void mouseReleaseEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
+    void leaveEvent(QEvent *event) override;
     /**
      * @brief keyPressEvent 键盘事件 delete、enter、Alt+M
      * @param event
@@ -107,6 +111,7 @@ protected:
      * @brief resizeColumnWidth 重置列宽度
      */
     void resizeColumnWidth();
+    void updateHoverRowFromPosition(const QPoint &pos);
 
 Q_SIGNALS:
     /**
@@ -155,6 +160,7 @@ protected:
 private:
     Qt::FocusReason m_reson;
     QItemSelectionModel *m_selectionModel =  nullptr;
+    int m_hoverRow = -1;
 
 };
 
