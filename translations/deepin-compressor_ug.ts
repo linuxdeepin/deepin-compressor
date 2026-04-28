@@ -36,6 +36,19 @@
     </message>
 </context>
 <context>
+    <name>CliRarPlugin</name>
+    <message>
+        <location filename="../3rdparty/clirarplugin/clirarplugin.cpp" line="305"/>
+        <source>Wrong password</source>
+        <translation type="unfinished">مەخپىي نومۇر خاتا</translation>
+    </message>
+    <message>
+        <location filename="../3rdparty/clirarplugin/clirarplugin.cpp" line="305"/>
+        <source>The password entered is incorrect. Please try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CommentProgressDialog</name>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="232"/>
@@ -436,13 +449,13 @@
 <context>
     <name>Main</name>
     <message>
+        <location filename="../src/main.cpp" line="145"/>
         <location filename="../src/main.cpp" line="146"/>
-        <location filename="../src/main.cpp" line="147"/>
         <source>Archive Manager</source>
         <translation>ئارخىپ باشقۇرغۇچى</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="148"/>
+        <location filename="../src/main.cpp" line="147"/>
         <source>Archive Manager is a fast and lightweight application for creating and extracting archives.</source>
         <translation>ئارخىپ باشقۇرغۇچى ئارخىپ قۇرۇش ۋە چىقىرىش ئۈچۈن تېز ھەم يېنىك قوللىنىشچان پروگرامما.</translation>
     </message>
@@ -460,23 +473,23 @@
         <translation>تەڭشەك</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="363"/>
-        <location filename="../src/source/mainwindow.cpp" line="375"/>
+        <location filename="../src/source/mainwindow.cpp" line="364"/>
+        <location filename="../src/source/mainwindow.cpp" line="376"/>
         <source>Create New Archive</source>
         <translation>يىڭى ئارخىپ قۇرۇش</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="443"/>
+        <location filename="../src/source/mainwindow.cpp" line="444"/>
         <source>Converting</source>
         <translation>ئايلاندۇرۋاتىدۇ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="451"/>
+        <location filename="../src/source/mainwindow.cpp" line="452"/>
         <source>Updating comments</source>
         <translation>ئىزاھات يېڭىلىنىۋاتىدۇ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="660"/>
+        <location filename="../src/source/mainwindow.cpp" line="661"/>
         <location filename="../src/source/mainwindow.cpp" line="2475"/>
         <location filename="../src/source/mainwindow.cpp" line="2509"/>
         <location filename="../src/source/mainwindow.cpp" line="2538"/>
@@ -565,12 +578,12 @@
         <translation>ھۆججەتنى تاللاڭ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3689"/>
+        <location filename="../src/source/mainwindow.cpp" line="3697"/>
         <source>Enter up to %1 characters</source>
         <translation>ئىزاھات مەزمۇنى %1 خەتتىن ئېشىپ كەتمىسۇن</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3561"/>
+        <location filename="../src/source/mainwindow.cpp" line="3569"/>
         <source>File info</source>
         <translation>ھۆججەت ئۇچۇرى</translation>
     </message>
@@ -580,7 +593,7 @@
         <translation>تاللانغان ئارخىپىنى يۇيۇۋەتمەكچىمۇ؟</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="696"/>
+        <location filename="../src/source/mainwindow.cpp" line="697"/>
         <source>%1 was changed on the disk, please import it again.</source>
         <translation>دىسكىدا% 1 ئۆزگەرتىلدى ، قايتا ئەكىرىڭ.</translation>
     </message>
@@ -595,33 +608,33 @@
         <translation>بۇ يەردە ھۆججەتلەرنى ساقلاش ھوقۇقىڭىز يوق ، ئۆزگەرتىپ قايتا سىناڭ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="403"/>
+        <location filename="../src/source/mainwindow.cpp" line="404"/>
         <source>Adding files to %1</source>
         <translation>%1 غا ھۆججەت قوشۇۋاتىدۇ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="411"/>
+        <location filename="../src/source/mainwindow.cpp" line="412"/>
         <source>Compressing</source>
         <translation>پىرىسلاش</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="419"/>
+        <location filename="../src/source/mainwindow.cpp" line="420"/>
         <source>Extracting</source>
         <translation>ئېلىش</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="427"/>
+        <location filename="../src/source/mainwindow.cpp" line="428"/>
         <source>Deleting</source>
         <translation>ئۆچۈرلىۋاتىدۇ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="649"/>
-        <location filename="../src/source/mainwindow.cpp" line="3377"/>
+        <location filename="../src/source/mainwindow.cpp" line="650"/>
+        <location filename="../src/source/mainwindow.cpp" line="3385"/>
         <source>Loading, please wait...</source>
         <translation>يۈكلەۋاتىدۇ،كۈتۈپ تۇرۇڭ...</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="739"/>
+        <location filename="../src/source/mainwindow.cpp" line="740"/>
         <source>Are you sure you want to stop the ongoing task?</source>
         <translation>داۋاملىشىۋاتقان ۋەزىپىنى توختاتماقچىمۇ؟</translation>
     </message>
@@ -648,13 +661,13 @@
         <translation>پىرىسلاش مەغلۇپ بولدى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2907"/>
+        <location filename="../src/source/mainwindow.cpp" line="2915"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>ئالماشتۇرۇڭ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2971"/>
+        <location filename="../src/source/mainwindow.cpp" line="2979"/>
         <source>Find directory</source>
         <translation>مۇندەرىجىنى تېپىڭ</translation>
     </message>
@@ -673,64 +686,64 @@
         <translation>مەخپىي نومۇر خاتا</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="784"/>
-        <location filename="../src/source/mainwindow.cpp" line="823"/>
+        <location filename="../src/source/mainwindow.cpp" line="785"/>
+        <location filename="../src/source/mainwindow.cpp" line="824"/>
         <source>The file format is not supported by Archive Manager</source>
         <translation>بۇ فورماتتىكى ھۆججەتنى ئاچالمايدۇ</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="202"/>
-        <location filename="../src/source/mainwindow.cpp" line="582"/>
-        <location filename="../src/source/mainwindow.cpp" line="660"/>
-        <location filename="../src/source/mainwindow.cpp" line="699"/>
-        <location filename="../src/source/mainwindow.cpp" line="769"/>
-        <location filename="../src/source/mainwindow.cpp" line="775"/>
-        <location filename="../src/source/mainwindow.cpp" line="784"/>
-        <location filename="../src/source/mainwindow.cpp" line="830"/>
-        <location filename="../src/source/mainwindow.cpp" line="1118"/>
+        <location filename="../src/source/mainwindow.cpp" line="583"/>
+        <location filename="../src/source/mainwindow.cpp" line="661"/>
+        <location filename="../src/source/mainwindow.cpp" line="700"/>
+        <location filename="../src/source/mainwindow.cpp" line="770"/>
+        <location filename="../src/source/mainwindow.cpp" line="776"/>
+        <location filename="../src/source/mainwindow.cpp" line="785"/>
+        <location filename="../src/source/mainwindow.cpp" line="831"/>
+        <location filename="../src/source/mainwindow.cpp" line="1119"/>
         <location filename="../src/source/mainwindow.cpp" line="1594"/>
         <location filename="../src/source/mainwindow.cpp" line="2737"/>
         <location filename="../src/source/mainwindow.cpp" line="2757"/>
-        <location filename="../src/source/mainwindow.cpp" line="3065"/>
-        <location filename="../src/source/mainwindow.cpp" line="3236"/>
+        <location filename="../src/source/mainwindow.cpp" line="3073"/>
+        <location filename="../src/source/mainwindow.cpp" line="3244"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>تاماملاندى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="435"/>
+        <location filename="../src/source/mainwindow.cpp" line="436"/>
         <source>Renaming</source>
         <translation>تەنھىلىك</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="582"/>
-        <location filename="../src/source/mainwindow.cpp" line="775"/>
+        <location filename="../src/source/mainwindow.cpp" line="583"/>
+        <location filename="../src/source/mainwindow.cpp" line="776"/>
         <source>You do not have permission to load %1</source>
         <translation>«%1”» ھۆججەتنى يۈكلەش ھوقۇقىڭىز يوق</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="739"/>
+        <location filename="../src/source/mainwindow.cpp" line="740"/>
         <location filename="../src/source/mainwindow.cpp" line="1671"/>
-        <location filename="../src/source/mainwindow.cpp" line="2907"/>
-        <location filename="../src/source/mainwindow.cpp" line="3407"/>
+        <location filename="../src/source/mainwindow.cpp" line="2915"/>
+        <location filename="../src/source/mainwindow.cpp" line="3415"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>ئەمەلدىن قالدۇرۇش</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="739"/>
+        <location filename="../src/source/mainwindow.cpp" line="740"/>
         <location filename="../src/source/mainwindow.cpp" line="1671"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>جەزىملەشتۈرۈڭ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="769"/>
+        <location filename="../src/source/mainwindow.cpp" line="770"/>
         <source>No such file or directory</source>
         <translation>نىشان ھۆججەت ياكى مۇندەرىجە يوق</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1118"/>
+        <location filename="../src/source/mainwindow.cpp" line="1119"/>
         <source>Unable to add system files or network files, please select files on local devices</source>
         <translation>سىستېما ھۆججەتلىرىنى ياكى تور ھۆججەتلىرىنى قوشالمىدى، لۇتپەن يېرىلىك ئۈسكۈنىدىكى ھۆججەتنى تاللاڭ</translation>
     </message>
@@ -829,78 +842,78 @@
         <translation>تېزلەتمە</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2899"/>
+        <location filename="../src/source/mainwindow.cpp" line="2907"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
         <translation>ھۆججەت نامى پىرىسلانغان ھۆججەتنىڭ نامى بىلەن ئوخشاش قالدى، ھۆججەت نامىنى ئۆزگەرتىڭ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2907"/>
+        <location filename="../src/source/mainwindow.cpp" line="2915"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>ئوخشاش ئىسىمدىكى باشقا بىر ھۆججەت بۇرۇنلا مەۋجۇت ، ئۇنى ئالماشتۇرامسىز؟</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3050"/>
+        <location filename="../src/source/mainwindow.cpp" line="3058"/>
         <source>You cannot add the archive to itself</source>
         <translation>ئارخىپنى ئۆزىگە قوشالمايسىز</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3065"/>
+        <location filename="../src/source/mainwindow.cpp" line="3073"/>
         <source>You cannot add files to archives in this file type</source>
         <translation>بۇ پىرىسلانغان بوغچا فورماتى ھۆججەت قوشۇشنى قوللىمايدۇ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3407"/>
+        <location filename="../src/source/mainwindow.cpp" line="3415"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>يىڭىلاش</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3585"/>
+        <location filename="../src/source/mainwindow.cpp" line="3593"/>
         <source>Basic info</source>
         <translation>ئاساسىي ئۇچۇر</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3601"/>
+        <location filename="../src/source/mainwindow.cpp" line="3609"/>
         <source>Size</source>
         <translation>سىغىمى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3602"/>
+        <location filename="../src/source/mainwindow.cpp" line="3610"/>
         <source>Type</source>
         <translation>تىپى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3603"/>
+        <location filename="../src/source/mainwindow.cpp" line="3611"/>
         <source>Location</source>
         <translation>ئورۇن</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3604"/>
+        <location filename="../src/source/mainwindow.cpp" line="3612"/>
         <source>Time created</source>
         <translation>قۇرۇلغان ۋاقىت</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3605"/>
+        <location filename="../src/source/mainwindow.cpp" line="3613"/>
         <source>Time accessed</source>
         <translation>زىيارەت ۋاقتى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3606"/>
+        <location filename="../src/source/mainwindow.cpp" line="3614"/>
         <source>Time modified</source>
         <translation>ۋاقىت ئۆزگەرتىلدى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3616"/>
+        <location filename="../src/source/mainwindow.cpp" line="3624"/>
         <source>Archive</source>
         <translation>ئارخىپ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3651"/>
+        <location filename="../src/source/mainwindow.cpp" line="3659"/>
         <source>Comment</source>
         <translation>ئىزاھات</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="819"/>
+        <location filename="../src/source/mainwindow.cpp" line="820"/>
         <source>Please check the file association type in the settings of Archive Manager</source>
         <translation>ئارخىپ باشقۇرغۇچىنىڭ تەڭشەكلىرىدىكى ھۆججەت بىرلەشمىسىنىڭ تۈرىنى تەكشۈرۈپ بېقىڭ</translation>
     </message>
@@ -1228,7 +1241,7 @@
         <translation>سىغىمى</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3404"/>
+        <location filename="../src/source/mainwindow.cpp" line="3412"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
         <translation>% 1 ئۆزگەردى. ئارخىپقا ئۆزگەرتىش كىرگۈزمەكچىمۇ؟</translation>
     </message>
@@ -1436,18 +1449,18 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3871"/>
-        <location filename="../src/source/mainwindow.cpp" line="3926"/>
+        <location filename="../src/source/mainwindow.cpp" line="3879"/>
+        <location filename="../src/source/mainwindow.cpp" line="3934"/>
         <source>Open file</source>
         <translation>ھۆججەتنى ئېچىڭ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3874"/>
+        <location filename="../src/source/mainwindow.cpp" line="3882"/>
         <source>Back</source>
         <translation>قايتىش</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3930"/>
+        <location filename="../src/source/mainwindow.cpp" line="3938"/>
         <source>File info</source>
         <translation>ھۆججەت ئۇچۇرى</translation>
     </message>

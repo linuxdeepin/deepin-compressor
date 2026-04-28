@@ -36,6 +36,19 @@
     </message>
 </context>
 <context>
+    <name>CliRarPlugin</name>
+    <message>
+        <location filename="../3rdparty/clirarplugin/clirarplugin.cpp" line="305"/>
+        <source>Wrong password</source>
+        <translation type="unfinished">លេខសំងាត់​ខុស</translation>
+    </message>
+    <message>
+        <location filename="../3rdparty/clirarplugin/clirarplugin.cpp" line="305"/>
+        <source>The password entered is incorrect. Please try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CommentProgressDialog</name>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="232"/>
@@ -436,13 +449,13 @@
 <context>
     <name>Main</name>
     <message>
+        <location filename="../src/main.cpp" line="145"/>
         <location filename="../src/main.cpp" line="146"/>
-        <location filename="../src/main.cpp" line="147"/>
         <source>Archive Manager</source>
         <translation>អ្នកគ្រប់គ្រងបណ្ណសារ</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="148"/>
+        <location filename="../src/main.cpp" line="147"/>
         <source>Archive Manager is a fast and lightweight application for creating and extracting archives.</source>
         <translation>កម្មវិធីគ្រប់គ្រងប័ណ្ណសារគឺជាកម្មវិធីលឿននិងស្រាលសម្រាប់បង្កើតនិងស្រង់ចេញប័ណ្ណសារ។</translation>
     </message>
@@ -460,23 +473,23 @@
         <translation>ការកំណត់</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="363"/>
-        <location filename="../src/source/mainwindow.cpp" line="375"/>
+        <location filename="../src/source/mainwindow.cpp" line="364"/>
+        <location filename="../src/source/mainwindow.cpp" line="376"/>
         <source>Create New Archive</source>
         <translation>បង្កើតប័ណ្ណសារថ្មី</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="443"/>
+        <location filename="../src/source/mainwindow.cpp" line="444"/>
         <source>Converting</source>
         <translation>កំពុងបំលែង</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="451"/>
+        <location filename="../src/source/mainwindow.cpp" line="452"/>
         <source>Updating comments</source>
         <translation>កែប្រែការសម្គាល់</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="660"/>
+        <location filename="../src/source/mainwindow.cpp" line="661"/>
         <location filename="../src/source/mainwindow.cpp" line="2475"/>
         <location filename="../src/source/mainwindow.cpp" line="2509"/>
         <location filename="../src/source/mainwindow.cpp" line="2538"/>
@@ -565,12 +578,12 @@
         <translation>ជ្រើសរើសឯកសារ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3689"/>
+        <location filename="../src/source/mainwindow.cpp" line="3697"/>
         <source>Enter up to %1 characters</source>
         <translation>តើអ្នកចូលប្រើបានទៅ %1 តួអក្សរ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3561"/>
+        <location filename="../src/source/mainwindow.cpp" line="3569"/>
         <source>File info</source>
         <translation>ព័ត៌មានឯកសារ</translation>
     </message>
@@ -580,7 +593,7 @@
         <translation>តើអ្នកចង់លុបប័ណ្ណសារទេ?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="696"/>
+        <location filename="../src/source/mainwindow.cpp" line="697"/>
         <source>%1 was changed on the disk, please import it again.</source>
         <translation>%1 ត្រូវបានផ្លាស់ប្ដូរនៅលើឌីស សូមនាំចូលម្តងទៀត។</translation>
     </message>
@@ -595,33 +608,33 @@
         <translation>អ្នកមិនមានសិទ្ធិរក្សាទុកឯកសារនៅទីនេះទេ សូមផ្លាស់ប្តូរហើយព្យាយាមម្តងទៀត</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="403"/>
+        <location filename="../src/source/mainwindow.cpp" line="404"/>
         <source>Adding files to %1</source>
         <translation>បន្ថែមឯកសារទៅ %1</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="411"/>
+        <location filename="../src/source/mainwindow.cpp" line="412"/>
         <source>Compressing</source>
         <translation>កំពុងបង្ហាប់</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="419"/>
+        <location filename="../src/source/mainwindow.cpp" line="420"/>
         <source>Extracting</source>
         <translation>កំពុងស្រង់ចេញ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="427"/>
+        <location filename="../src/source/mainwindow.cpp" line="428"/>
         <source>Deleting</source>
         <translation>កំពុងលុប</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="649"/>
-        <location filename="../src/source/mainwindow.cpp" line="3377"/>
+        <location filename="../src/source/mainwindow.cpp" line="650"/>
+        <location filename="../src/source/mainwindow.cpp" line="3385"/>
         <source>Loading, please wait...</source>
         <translation>កំពុងផ្ទុក សូមរង់ចាំ...</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="739"/>
+        <location filename="../src/source/mainwindow.cpp" line="740"/>
         <source>Are you sure you want to stop the ongoing task?</source>
         <translation>តើអ្នកពិតជាចង់បញ្ឈប់កិច្ចការដែលកំពុងដំណើរការមែនទេ?</translation>
     </message>
@@ -648,13 +661,13 @@
         <translation>ការបង្ហាប់បានបរាជ័យ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2907"/>
+        <location filename="../src/source/mainwindow.cpp" line="2915"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation type="unfinished">ជំនួស</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2971"/>
+        <location filename="../src/source/mainwindow.cpp" line="2979"/>
         <source>Find directory</source>
         <translation>រកថតឯកសារ</translation>
     </message>
@@ -673,64 +686,64 @@
         <translation>លេខសំងាត់​ខុស</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="784"/>
-        <location filename="../src/source/mainwindow.cpp" line="823"/>
+        <location filename="../src/source/mainwindow.cpp" line="785"/>
+        <location filename="../src/source/mainwindow.cpp" line="824"/>
         <source>The file format is not supported by Archive Manager</source>
         <translation>បំណែកទម្រង់ឯកសារនេះមិនត្រូវបានគាំទ្រដោយ Archive Manager</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="202"/>
-        <location filename="../src/source/mainwindow.cpp" line="582"/>
-        <location filename="../src/source/mainwindow.cpp" line="660"/>
-        <location filename="../src/source/mainwindow.cpp" line="699"/>
-        <location filename="../src/source/mainwindow.cpp" line="769"/>
-        <location filename="../src/source/mainwindow.cpp" line="775"/>
-        <location filename="../src/source/mainwindow.cpp" line="784"/>
-        <location filename="../src/source/mainwindow.cpp" line="830"/>
-        <location filename="../src/source/mainwindow.cpp" line="1118"/>
+        <location filename="../src/source/mainwindow.cpp" line="583"/>
+        <location filename="../src/source/mainwindow.cpp" line="661"/>
+        <location filename="../src/source/mainwindow.cpp" line="700"/>
+        <location filename="../src/source/mainwindow.cpp" line="770"/>
+        <location filename="../src/source/mainwindow.cpp" line="776"/>
+        <location filename="../src/source/mainwindow.cpp" line="785"/>
+        <location filename="../src/source/mainwindow.cpp" line="831"/>
+        <location filename="../src/source/mainwindow.cpp" line="1119"/>
         <location filename="../src/source/mainwindow.cpp" line="1594"/>
         <location filename="../src/source/mainwindow.cpp" line="2737"/>
         <location filename="../src/source/mainwindow.cpp" line="2757"/>
-        <location filename="../src/source/mainwindow.cpp" line="3065"/>
-        <location filename="../src/source/mainwindow.cpp" line="3236"/>
+        <location filename="../src/source/mainwindow.cpp" line="3073"/>
+        <location filename="../src/source/mainwindow.cpp" line="3244"/>
         <source>OK</source>
         <comment>button</comment>
         <translation type="unfinished">យល់ព្រម</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="435"/>
+        <location filename="../src/source/mainwindow.cpp" line="436"/>
         <source>Renaming</source>
         <translation>កែឈ្មោះ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="582"/>
-        <location filename="../src/source/mainwindow.cpp" line="775"/>
+        <location filename="../src/source/mainwindow.cpp" line="583"/>
+        <location filename="../src/source/mainwindow.cpp" line="776"/>
         <source>You do not have permission to load %1</source>
         <translation>អ្នកមិនមានសិទ្ធិដើម្បីផ្ទុក %1</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="739"/>
+        <location filename="../src/source/mainwindow.cpp" line="740"/>
         <location filename="../src/source/mainwindow.cpp" line="1671"/>
-        <location filename="../src/source/mainwindow.cpp" line="2907"/>
-        <location filename="../src/source/mainwindow.cpp" line="3407"/>
+        <location filename="../src/source/mainwindow.cpp" line="2915"/>
+        <location filename="../src/source/mainwindow.cpp" line="3415"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation type="unfinished">បោះបង់</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="739"/>
+        <location filename="../src/source/mainwindow.cpp" line="740"/>
         <location filename="../src/source/mainwindow.cpp" line="1671"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation type="unfinished">បញ្ជាក់</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="769"/>
+        <location filename="../src/source/mainwindow.cpp" line="770"/>
         <source>No such file or directory</source>
         <translation>មិនមានឯកសារឬថត់ក្នុងការបញ្ជាក់នោះ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1118"/>
+        <location filename="../src/source/mainwindow.cpp" line="1119"/>
         <source>Unable to add system files or network files, please select files on local devices</source>
         <translation type="unfinished"></translation>
     </message>
@@ -829,78 +842,78 @@
         <translation>ផ្លូវកាត់</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2899"/>
+        <location filename="../src/source/mainwindow.cpp" line="2907"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
         <translation>ឈ្មោះនេះស្រដៀងនឹងឈ្មោះបំណែកទម្រង់នេះ សូមប្រើឈ្មោះផ្សេងទៀត។</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2907"/>
+        <location filename="../src/source/mainwindow.cpp" line="2915"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>ឯកសារមួយទៀតដែលមានឈ្មោះដូចគ្នាមានរួចហើយជំនួសវា?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3050"/>
+        <location filename="../src/source/mainwindow.cpp" line="3058"/>
         <source>You cannot add the archive to itself</source>
         <translation type="unfinished">អ្នកមិនអាចបន្ថែមប័ណ្ណសារទៅខ្លួនវាបានទេ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3065"/>
+        <location filename="../src/source/mainwindow.cpp" line="3073"/>
         <source>You cannot add files to archives in this file type</source>
         <translation>អ្នកមិនអាចបន្ថែមឯកសារទៅក្នុងបំណែកទម្រង់នៅទីនោះ។</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3407"/>
+        <location filename="../src/source/mainwindow.cpp" line="3415"/>
         <source>Update</source>
         <comment>button</comment>
         <translation type="unfinished">ធ្វើបច្ចុប្បន្នភាព</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3585"/>
+        <location filename="../src/source/mainwindow.cpp" line="3593"/>
         <source>Basic info</source>
         <translation>ព័ត៌មានមូលដ្ឋាន</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3601"/>
+        <location filename="../src/source/mainwindow.cpp" line="3609"/>
         <source>Size</source>
         <translation>ទំហំ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3602"/>
+        <location filename="../src/source/mainwindow.cpp" line="3610"/>
         <source>Type</source>
         <translation>ប្រភេទ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3603"/>
+        <location filename="../src/source/mainwindow.cpp" line="3611"/>
         <source>Location</source>
         <translation>ទីតាំង</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3604"/>
+        <location filename="../src/source/mainwindow.cpp" line="3612"/>
         <source>Time created</source>
         <translation>ពេលវេលាបានបង្កើត</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3605"/>
+        <location filename="../src/source/mainwindow.cpp" line="3613"/>
         <source>Time accessed</source>
         <translation>ពេលវេលាបានចូល</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3606"/>
+        <location filename="../src/source/mainwindow.cpp" line="3614"/>
         <source>Time modified</source>
         <translation>ពេលវេលាកែប្រែ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3616"/>
+        <location filename="../src/source/mainwindow.cpp" line="3624"/>
         <source>Archive</source>
         <translation>ប័ណ្ណសារ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3651"/>
+        <location filename="../src/source/mainwindow.cpp" line="3659"/>
         <source>Comment</source>
         <translation>យោបល់</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="819"/>
+        <location filename="../src/source/mainwindow.cpp" line="820"/>
         <source>Please check the file association type in the settings of Archive Manager</source>
         <translation>សូមពិនិត្យមើលប្រភេទឯកសារនៅក្នុងការកំណត់របស់អ្នកគ្រប់គ្រងប័ណ្ណសារ</translation>
     </message>
@@ -1228,7 +1241,7 @@
         <translation>ទំហំ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3404"/>
+        <location filename="../src/source/mainwindow.cpp" line="3412"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
         <translation>បានផ្លាស់ប្ដូរ %1។ តើអ្នកចង់រក្សាទុកការផ្លាស់ប្តូរក្នុងប័ណ្ណសារទេ?</translation>
     </message>
@@ -1436,18 +1449,18 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3871"/>
-        <location filename="../src/source/mainwindow.cpp" line="3926"/>
+        <location filename="../src/source/mainwindow.cpp" line="3879"/>
+        <location filename="../src/source/mainwindow.cpp" line="3934"/>
         <source>Open file</source>
         <translation type="unfinished">បើក​ឯកសារ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3874"/>
+        <location filename="../src/source/mainwindow.cpp" line="3882"/>
         <source>Back</source>
         <translation type="unfinished">ថយក្រោយ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3930"/>
+        <location filename="../src/source/mainwindow.cpp" line="3938"/>
         <source>File info</source>
         <translation type="unfinished">ព័ត៌មានឯកសារ</translation>
     </message>

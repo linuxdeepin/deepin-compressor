@@ -70,6 +70,13 @@ public:
      */
     bool status() override;
 
+    /**
+     * @brief slotError  处理错误消息（不中断操作）
+     * @param message 错误消息
+     * @param details 详细信息
+     */
+    void slotError(const QString &message, const QString &details);
+
     SingleJobThread *getdptr();
 protected:
     /**

@@ -110,6 +110,12 @@ Q_SIGNALS:
      */
     void signalQuery(Query *query);
 
+    /**
+     * @brief signalTempMessage 发送临时消息（不中断操作）
+     * @param message 消息内容
+     */
+    void signalTempMessage(const QString &message);
+
 public:
     JobType m_eJobType = JT_NoJob;     // 操作类型
     PluginFinishType m_eFinishedType = PFT_Nomral;

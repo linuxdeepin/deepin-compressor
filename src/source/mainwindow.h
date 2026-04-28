@@ -417,6 +417,12 @@ private Q_SLOTS:
     void slotReceiveFileWriteErrorName(const QString &strName);
 
     /**
+     * @brief slotReceiveTempMessage    接收临时消息
+     * @param strMessage    消息内容
+     */
+    void slotReceiveTempMessage(const QString &strMessage);
+
+    /**
      * @brief slotQuery   发送询问信号
      * @param query 询问类型
      */

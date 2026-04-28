@@ -932,8 +932,13 @@ void CliInterface::handleProgress(const QString &line)
             qint64 percentage = compressedSize * 1024 * 1024 * 100 / m_filesSize;
 
             emit signalprogress(percentage);
-            // 无法获取正在压缩的某个文件名
-            //            emit signalCurFileName();
+            // tar.7z 无法获取正在压缩的单个文件名，但可以提示正在打包成 tar 文件
+            // 发送 tar 文件名提示（去掉 .7z 后缀，显示正在打包的 tar 文件名）
+            QString tarFileName = QFileInfo(m_strArchiveName).fileName();
+            if (tarFileName.endsWith(".7z", Qt::CaseInsensitive)) {
+                tarFileName = tarFileName.left(tarFileName.length() - 3);
+            }
+            emit signalCurFileName(tarFileName);
         }
     }
 }

@@ -326,6 +326,7 @@ void MainWindow::initConnections()
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalFileWriteErrorName, this, &MainWindow::slotReceiveFileWriteErrorName);
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalCurArchiveName, this, &MainWindow::slotReceiveCurArchiveName);
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalQuery, this, &MainWindow::slotQuery);
+    connect(ArchiveManager::get_instance(), &ArchiveManager::signalTempMessage, this, &MainWindow::slotReceiveTempMessage);
 
     qDebug() << "Connecting file watcher signals";
     connect(m_pOpenFileWatcher, &OpenFileWatcher::fileChanged, this, &MainWindow::slotOpenFileChanged);
@@ -1449,6 +1450,13 @@ void MainWindow::slotReceiveFileWriteErrorName(const QString &strName)
 {
     qDebug() << "MainWindow::slotReceiveFileWriteErrorName" << strName;
     m_fileWriteErrorName = strName;
+}
+
+void MainWindow::slotReceiveTempMessage(const QString &strMessage)
+{
+    qInfo() << "Temp message:" << strMessage;
+    QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
+    sendMessage(new CustomFloatingMessage(icon, strMessage, 2000, this));
 }
 
 void MainWindow::slotQuery(Query *query)
@@ -2814,8 +2822,16 @@ bool MainWindow::handleArguments_Open(const QStringList &listParam)
     qInfo() << "打开文件";
     m_eStartupType = StartupType::ST_Normal;
     // 加载单个压缩包数据
-    loadArchive(listParam[0]);
-
+    static bool firstLoad = true;
+    if (UiTools::isWayland() && firstLoad) {
+        firstLoad = false;
+        auto path = listParam[0];
+        QTimer::singleShot(200, [this, path]() {
+            loadArchive(path);
+        });
+    } else {
+        loadArchive(listParam[0]);
+    }
     return true;
 }
 

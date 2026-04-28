@@ -114,6 +114,12 @@ Q_SIGNALS:
      */
     void signalCurArchiveName(const QString &strArchiveName);
 
+    /**
+     * @brief signalTempMessage 发送临时消息（不中断操作）
+     * @param message 消息内容
+     */
+    void signalTempMessage(const QString &message);
+
 private Q_SLOTS:
     /**
      * @brief slotHandleSingleJobProgress       处理单个压缩包解压进度
