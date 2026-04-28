@@ -100,24 +100,35 @@ void ProgressPage::setProgress(double dPercent)
         dPercent = 0;
     }
 
-    // 原先用「整数百分比是否变大」过滤更新，会导致子百分比进度（如 1.1%、1.2%）全部被丢弃，
-    // 从而永远不调用 calSpeedAndRemainingTime，速度与剩余时间一直停在「计算中」。
-    // 这里改为：进度必须单调递增（浮点），进度条仍可按四舍五入刷新。
+    // Accept sub-percent progress, but keep it monotonic.
     if (dPercent <= m_dProgressPercent) {
         qDebug() << "Progress not increased, current:" << m_dProgressPercent << "new:" << dPercent;
         return;
     }
-
     m_dProgressPercent = dPercent;
 
     const int iPercent = qMin(100, qRound(dPercent));
-    if (iPercent != m_iPerent) {
+    const bool percentChanged = (iPercent != m_iPerent);
+    if (percentChanged) {
         m_iPerent = iPercent;
         m_pProgressBar->setValue(m_iPerent);     // 进度条刷新值
         m_pProgressBar->update();
     }
 
-    qInfo() << "Updating progress:" << dPercent << "% (bar" << m_iPerent << "%)";
+    // 节流：进度可能非常密集（子百分比频繁变化），每次都刷新速度/剩余时间会拖慢任务并造成显示抖动。
+    // 规则：整数进度变化必刷；否则最多每 200ms 刷一次速度/剩余时间。
+    if (!m_uiUpdateTimer.isValid()) {
+        m_uiUpdateTimer.start();
+    }
+    const bool timeToUpdate = (m_uiUpdateTimer.elapsed() >= 200);
+    if (!percentChanged && !timeToUpdate) {
+        return;
+    }
+    if (timeToUpdate) {
+        m_uiUpdateTimer.restart();
+    }
+
+    qDebug() << "Updating progress:" << dPercent << "% (bar" << m_iPerent << "%)";
     // 刷新界面显示
     double dSpeed = 0.0;
     qint64 qRemainingTime = 0;
@@ -171,6 +182,9 @@ void ProgressPage::resetProgress()
     m_iPerent = 0;
     m_dProgressPercent = -1.0;
     m_qConsumeTime = 0;
+    if (m_uiUpdateTimer.isValid()) {
+        m_uiUpdateTimer.invalidate();
+    }
 }
 
 void ProgressPage::restartTimer()
@@ -178,6 +192,9 @@ void ProgressPage::restartTimer()
     qDebug() << "restartTimer";
     m_qConsumeTime = 0;
     m_timer.restart();
+    if (m_uiUpdateTimer.isValid()) {
+        m_uiUpdateTimer.invalidate();
+    }
 }
 
 void ProgressPage::setPushButtonCheckable(bool a, bool b)
