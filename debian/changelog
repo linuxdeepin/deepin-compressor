@@ -1,3 +1,9 @@
+deepin-compressor (6.5.27) unstable; urgency=medium
+
+  * chore: Add libssl-dev to Build-Depends in debian/control
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Wed, 29 Apr 2026 15:45:59 +0800
+
 deepin-compressor (6.5.26) unstable; urgency=medium
 
   * fix: Enhance error handling for wrong password scenarios in archive processing
