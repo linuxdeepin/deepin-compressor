@@ -22,6 +22,7 @@ Build-Depends:
  libgsettings-qt-dev,
  libarchive-dev,
  libsecret-1-dev,
+ libssl-dev,
  libpoppler-cpp-dev,
  libzip-dev,
  libmount-dev,
