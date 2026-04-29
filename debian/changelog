@@ -1,3 +1,16 @@
+deepin-compressor (6.5.26) unstable; urgency=medium
+
+  * fix: Enhance error handling for wrong password scenarios in archive processing
+  * fix: Prevent overwriting error states on successful exit codes in CliInterface
+  * fix: Improve progress tracking and UI update efficiency in ProgressPage
+  * fix: Implement full-row hover effect in DataTreeView
+  * chore: Change secret handling to inherit in call-chatOps.yml
+  * fix: Update regex to support both p7zip and 7-Zip version formats
+  * feat: Enhance CliPzipPlugin with progress reporting and temporary archive handling
+  * feat: Implement WinZip AES encryption support in pzip
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Wed, 29 Apr 2026 13:13:52 +0800
+
 deepin-compressor (6.5.25) unstable; urgency=medium
 
   * Revert "deps: migrate from p7zip-full to 7zip package" 由于系统依赖还没有完善，归档管理器的这笔提交先回滚。后续系统依赖处理了再添加进去。
