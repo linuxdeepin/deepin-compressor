@@ -2591,10 +2591,12 @@ bool MainWindow::handleArguments_Open(const QStringList &listParam)
     qInfo() << "打开文件";
     m_eStartupType = StartupType::ST_Normal;
     // 加载单个压缩包数据
-    static bool firstLoad = true;
-    if (UiTools::isWayland() && firstLoad) {
-        firstLoad = false;
+    if (m_bDelayQueryDialog) {
+        m_bDelayQueryDialog = false;
         auto path = listParam[0];
+        m_ePageID = PI_Loading;
+        m_pLoadingPage->setDes(tr("Loading, please wait..."));
+        m_pLoadingPage->startLoading();
         QTimer::singleShot(200, [this, path]() {
             loadArchive(path);
         });
