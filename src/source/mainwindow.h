@@ -55,6 +55,8 @@ public :
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
 
+    void setDelayQueryDialog(bool delay) { m_bDelayQueryDialog = delay; }
+
     /**
      * @brief checkHerePath 检查目标路径是否可写/可执行
      * @param strPath       全路径
@@ -586,6 +588,7 @@ private:
     QString m_fileWriteErrorName;     // 创建失败的文件名
 
     StartupType m_eStartupType = StartupType::ST_Normal;      // 操作方式
+    bool m_bDelayQueryDialog = false;
     CalculateSizeThread *m_mywork = nullptr; // 计算文件(夹)大小线程
     // 适配arm平台
 #ifdef __aarch64__
