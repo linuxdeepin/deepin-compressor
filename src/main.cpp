@@ -205,6 +205,8 @@ int main(int argc, char *argv[])
     if(!orderObject){
         if (dbus.registerService("com.deepin.compressor")) {
             Dtk::Widget::moveToCenter(&w);
+        } else if (UiTools::isWayland()) { // Wayland下非首个实例，弹窗需延迟等窗管设置位置
+            w.setDelayQueryDialog(true);
         }
     } else {
         if (dbus.registerService("com.deepin.compressor"+QString::number(QGuiApplication::applicationPid()))) {
@@ -212,6 +214,8 @@ int main(int argc, char *argv[])
              adaptor.setCompressFile(newfilelist.first());
              Dtk::Widget::moveToCenter(&w);
              w.setProperty(ORDER_JSON, sJsonStr);
+        } else if (UiTools::isWayland()) { // Wayland下非首个实例，弹窗需延迟等窗管设置位置
+            w.setDelayQueryDialog(true);
         }
         QDBusConnection dbusConnection = QDBusConnection::sessionBus();
 
