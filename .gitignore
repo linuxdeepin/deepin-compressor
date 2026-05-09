@@ -110,3 +110,18 @@ debian/deepin-compressor
 debian/deepin-compressor.debhelper.log
 debian/deepin-compressor.substvars
 debian/files
+
+# vscode
+.vscode/
+
+# cursor
+.specstory/
+.cursor/
+.cursorindexingignore
+
+ # ai
+CLAUDE.md
+AGENTS.md
+.trellis
+.claude
+.agents
