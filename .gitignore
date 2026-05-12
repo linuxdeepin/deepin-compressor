@@ -118,4 +118,7 @@ debian/files
 .specstory/
 .cursor/
 .cursorindexingignore
+.claude/
+.npm-cache/
+.trellis/
 

@@ -1287,6 +1287,8 @@ void MainWindow::slotCompress(const QVariant &val)
     } else if ((false == options.bSplit) && true == bUseLibarchive && "application/zip" == m_stCompressParameter.strMimeType) {
         // 考虑到华为arm平台 zip压缩 性能提升，只针对zip类型的压缩才会考虑到是否特殊处理arm平台，分卷情况不做此处理
         eType = UiTools::APT_Libarchive;
+    } else if (options.bSplit && "application/zip" == m_stCompressParameter.strMimeType) {
+        eType = UiTools::APT_Cli7z;
     } else if ("application/x-compressed-tar" == m_stCompressParameter.strMimeType && m_stCompressParameter.strArchiveName.endsWith("tar.gz")) {
         if (1 == m_stCompressParameter.iCPUTheadNum) {
             // 针对单线程的tar.gz，使用gzip默认方式进行压缩
