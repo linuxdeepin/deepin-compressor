@@ -116,7 +116,6 @@ void SingleJob::initConnections()
     connect(m_pInterface, &ReadOnlyArchiveInterface::signalCurFileName, this, &SingleJob::signalCurFileName, Qt::ConnectionType::UniqueConnection);
     connect(m_pInterface, &ReadOnlyArchiveInterface::signalFileWriteErrorName, this, &SingleJob::signalFileWriteErrorName, Qt::ConnectionType::UniqueConnection);
     connect(m_pInterface, &ReadOnlyArchiveInterface::signalQuery, this, &SingleJob::signalQuery, Qt::ConnectionType::AutoConnection);
-    connect(m_pInterface, &ReadOnlyArchiveInterface::error, this, &SingleJob::slotError, Qt::AutoConnection);
 }
 
 void SingleJob::slotFinished(PluginFinishType eType)
