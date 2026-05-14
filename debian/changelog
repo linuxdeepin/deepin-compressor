@@ -1,3 +1,9 @@
+deepin-compressor (6.5.28) unstable; urgency=medium
+
+  * fix: Fix ZIP multi-volume compression not working after pzip plugin was introduced
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Thu, 14 May 2026 19:02:25 +0800
+
 deepin-compressor (6.5.27) unstable; urgency=medium
 
   * chore: Add libssl-dev to Build-Depends in debian/control
