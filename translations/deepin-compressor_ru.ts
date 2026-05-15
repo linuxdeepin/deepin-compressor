@@ -521,7 +521,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="739"/>
         <source>Are you sure you want to stop the ongoing task?</source>
-        <translation>Вы действительно хотите прервать текущую задачу?</translation>
+        <translation>Уверены, что хотите прервать текущую задачу?</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="739"/>
@@ -1045,7 +1045,7 @@
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="184"/>
         <source>Are you sure you want to stop the extraction?</source>
-        <translation>Вы уверены, что хотите остановить извлечение?</translation>
+        <translation>Уверены, что хотите остановить извлечение?</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="186"/>
@@ -1189,13 +1189,13 @@
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="427"/>
         <source>Are you sure you want to stop the deletion?</source>
-        <translation>Вы уверены, что хотите остановить удаление?</translation>
+        <translation>Уверены, что хотите остановить удаление?</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="421"/>
         <location filename="../src/source/page/progresspage.cpp" line="430"/>
         <source>Are you sure you want to stop the compression?</source>
-        <translation>Вы уверены, что хотите остановить сжатие?</translation>
+        <translation>Уверены, что хотите остановить сжатие?</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="433"/>
