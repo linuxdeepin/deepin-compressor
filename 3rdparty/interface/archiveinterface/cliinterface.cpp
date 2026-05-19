@@ -227,7 +227,10 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
         }
         if (bHandleLongName) {
             if (!handleLongNameExtract(m_files)) {
-                m_eErrorType = ET_FileWriteError;
+                if (m_eErrorType == ET_NoError) {
+                    m_eErrorType = ET_FileWriteError;
+                }
+                emit signalFinished(PFT_Error);
                 return PFT_Error;
             }
         }
@@ -269,7 +272,10 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
 
         if (bHandleLongName) {
             if (!handleLongNameExtract(arcData.mapFileEntry.values())) {
-                m_eErrorType = ET_FileWriteError;
+                if (m_eErrorType == ET_NoError) {
+                    m_eErrorType = ET_FileWriteError;
+                }
+                emit signalFinished(PFT_Error);
                 return PFT_Error;
             }
         }
@@ -779,9 +785,14 @@ bool CliInterface::runProcess(const QString &programName, const QStringList &arg
                         if (exitCode != 0) {
                             emit signalprogress(100);
                             emit signalFinished(PFT_Error);
+                            return;
                         }
                         deleteProcess();
-                        extractFiles(m_files, m_extractOptions, property("lnfs").toBool());
+                        PluginFinishType ret = extractFiles(m_files, m_extractOptions, property("lnfs").toBool());
+                        if (ret == PFT_Error) {
+                            emit signalprogress(100);
+                            emit signalFinished(PFT_Error);
+                        }
                     }
                 });
     }
@@ -1320,6 +1331,14 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
                                                      m_cliProps->extractArgs(absoluteDestinationPath, fileList, false, password));
                                 pProcess->start();
                                 pProcess->waitForFinished(-1);
+
+                                if (pProcess->exitCode() != 0) {
+                                    QByteArray output = pProcess->readAllStandardOutput();
+                                    if (output.contains("Wrong password")) {
+                                        m_eErrorType = ET_WrongPassword;
+                                        return false;
+                                    }
+                                }
 
                                 bPasswordEntered = true;
                                 break;
