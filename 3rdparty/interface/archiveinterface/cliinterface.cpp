@@ -117,7 +117,7 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
     m_extractOptions = options;
 
     if (!bLnfs) {
-        if (arcData.listRootEntry.isEmpty() && options.qSize < FILE_MAX_SIZE) {
+        if (arcData.listRootEntry.isEmpty()) {
             emit signalprogress(1);
             setProperty("list", "tmpList");
             list();
@@ -1287,7 +1287,51 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
             pProcess->setProgram(m_cliProps->property("extractProgram").toString(),
                                  m_cliProps->extractArgs(absoluteDestinationPath, fileList, false, password));
             pProcess->start();
-            pProcess->waitForFinished(-1);
+
+            // 检测加密文件解压时的密码提示，避免进程卡死
+            if (password.isEmpty()) {
+                bool bPasswordEntered = false;
+                while (!pProcess->waitForFinished(200)) {
+                    if (pProcess->bytesAvailable() > 0) {
+                        QByteArray output = pProcess->readAllStandardOutput();
+                        QStringList lines = QString::fromLocal8Bit(output).split('\n');
+                        for (const QString &line : lines) {
+                            if (isPasswordPrompt(line)) {
+                                pProcess->kill();
+                                pProcess->waitForFinished(3000);
+
+                                PasswordNeededQuery query(m_strArchiveName);
+                                emit signalQuery(&query);
+                                query.waitForResponse();
+
+                                if (query.responseCancelled()) {
+                                    m_eErrorType = ET_NeedPassword;
+                                    return false;
+                                }
+
+                                password = query.password();
+                                DataManager::get_instance().archiveData().strPassword = password;
+
+                                // 带密码参数重新启动解压进程
+                                pProcess->setPtyChannels(KPtyProcess::StdinChannel);
+                                pProcess->setOutputChannelMode(KProcess::MergedChannels);
+                                pProcess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+                                pProcess->setProgram(m_cliProps->property("extractProgram").toString(),
+                                                     m_cliProps->extractArgs(absoluteDestinationPath, fileList, false, password));
+                                pProcess->start();
+                                pProcess->waitForFinished(-1);
+
+                                bPasswordEntered = true;
+                                break;
+                            }
+                        }
+                        if (bPasswordEntered)
+                            break;
+                    }
+                }
+            } else {
+                pProcess->waitForFinished(-1);
+            }
         }
     }
     pProcess->deleteLater();
