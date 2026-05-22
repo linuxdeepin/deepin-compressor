@@ -1206,7 +1206,6 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
 {
     ExtractionOptions &options = m_extractOptions;
     QString password;
-    QStringList fileList;
     if (options.password.isEmpty()) {
         // 对列表加密文件进行追加解压的时候使用压缩包的密码
         password = DataManager::get_instance().archiveData().isListEncrypted ? DataManager::get_instance().archiveData().strPassword : QString();
@@ -1219,9 +1218,14 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
     QFile tmpFile(absoluteDestinationPath);
     if (tmpFile.exists()) tmpFile.remove();
     QFile::copy(m_strArchiveName, absoluteDestinationPath);
-    KPtyProcess *pProcess = new KPtyProcess;
-    for (FileEntry entry : files) {
-        qInfo() << "file path --- " << entry.strFullPath;
+
+    // 第一遍：遍历所有文件，分离需要重命名的文件和普通文件，同时创建目录结构
+    QList<FileEntry> renameEntries;
+    QStringList normalFileList;
+    QScopedPointer<KPtyProcess> pProcess(new KPtyProcess);
+    qInfo() << "handleLongNameExtract: total files:" << files.count();
+
+    for (const FileEntry &entry : files) {
         QFileInfo info(entry.strFullPath);
         QString strFilePath = info.path();
         QString strFileName = entry.strFullPath;
@@ -1235,13 +1239,13 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
                 strFileName = sDir + info.fileName();
             }
         }
-        if (NAME_MAX < QString(info.fileName()).toLocal8Bit().length() && !entry.strFullPath.endsWith(QDir::separator())) {
-            QString strTemp = info.fileName().left(TRUNCATION_FILE_LONG);
 
-            // 保存文件路径，不同目录下的同名文件分开计数,文件解压结束后才添加计数，
-            QString tempFilePathName = strFilePath + QDir::separator() + strTemp;   // 路径加截取后的文件名
+        bool needRename = (NAME_MAX < QString(info.fileName()).toLocal8Bit().length() && !entry.strFullPath.endsWith(QDir::separator()));
+        if (needRename) {
+            QString strTemp = info.fileName().left(TRUNCATION_FILE_LONG);
+            QString tempFilePathName = strFilePath + QDir::separator() + strTemp;
             if (m_mapLongName[tempFilePathName]++ >= LONGFILE_SAME_FILES) {
-                emit signalCurFileName(entry.strFullPath);   // 发送当前正在解压的文件名
+                emit signalCurFileName(entry.strFullPath);
                 m_eErrorType = ET_LongNameError;
                 return false;
             }
@@ -1252,9 +1256,9 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
                 strFileName = strFilePath + QDir::separator() + strTempFileName;
             }
         }
+
         QString strDestFileName = options.strTargetPath + QDir::separator() + strFileName;
-        if (!m_extractOptions.bAllExtract) {   //部分提取截断目录结构，保证拖动文件进入对应的目标目录中。
-            //去除文件的头目录结构，由于长文件夹命名限制，长文件夹重命名格式不一致，使用头目录文件分隔符的个数为基准去除目录头
+        if (!m_extractOptions.bAllExtract) {
             int nCnt = m_rootNode.count(QDir::separator());
             QString destFileName = strFileName;
             for (int i = 0; i < nCnt; i++) {
@@ -1265,96 +1269,116 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
             }
             strDestFileName = options.strTargetPath + QDir::separator() + destFileName;
         }
-        qInfo() << "m_rootNode --- " << m_rootNode;
-        qInfo() << "dest file name --- " << strDestFileName;
+
         if (entry.strFullPath.endsWith(QDir::separator())) {
-            // 解压完整文件名（含路径）
             if (!QDir(strDestFileName).exists()) {
-                if (!QDir(strDestFileName).mkpath(strDestFileName))
+                if (!QDir(strDestFileName).mkpath(strDestFileName)) {
                     return false;
+                }
             }
         } else {
-            QList<FileEntry> lstFile;
-            entry.strAlias = QFileInfo(strFileName).fileName();
-            lstFile.append(entry);
-            pProcess->setPtyChannels(KPtyProcess::StdinChannel);
-            pProcess->setOutputChannelMode(KProcess::MergedChannels);
-            pProcess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
-            pProcess->setProgram(m_cliProps->property("moveProgram").toString(), m_cliProps->moveArgs(absoluteDestinationPath, lstFile, DataManager::get_instance().archiveData(), password));
-            pProcess->start();
-            pProcess->waitForFinished(-1);
-
-            //解压到当前
-            fileList.clear();
-            if (info.path() != ".") {
-                fileList.append(info.path() + QDir::separator() + entry.strAlias);
+            FileEntry newEntry = entry;
+            newEntry.strAlias = QFileInfo(strFileName).fileName();
+            if (needRename) {
+                renameEntries.append(newEntry);
             } else {
-                fileList.append(entry.strAlias);
-            }
-            QDir::setCurrent(QFileInfo(strDestFileName).path());
-            pProcess->setPtyChannels(KPtyProcess::StdinChannel);
-            pProcess->setOutputChannelMode(KProcess::MergedChannels);
-            pProcess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
-            pProcess->setProgram(m_cliProps->property("extractProgram").toString(),
-                                 m_cliProps->extractArgs(absoluteDestinationPath, fileList, false, password));
-            pProcess->start();
-
-            // 检测加密文件解压时的密码提示，避免进程卡死
-            if (password.isEmpty()) {
-                bool bPasswordEntered = false;
-                while (!pProcess->waitForFinished(200)) {
-                    if (pProcess->bytesAvailable() > 0) {
-                        QByteArray output = pProcess->readAllStandardOutput();
-                        QStringList lines = QString::fromLocal8Bit(output).split('\n');
-                        for (const QString &line : lines) {
-                            if (isPasswordPrompt(line)) {
-                                pProcess->kill();
-                                pProcess->waitForFinished(3000);
-
-                                PasswordNeededQuery query(m_strArchiveName);
-                                emit signalQuery(&query);
-                                query.waitForResponse();
-
-                                if (query.responseCancelled()) {
-                                    m_eErrorType = ET_NeedPassword;
-                                    return false;
-                                }
-
-                                password = query.password();
-                                DataManager::get_instance().archiveData().strPassword = password;
-
-                                // 带密码参数重新启动解压进程
-                                pProcess->setPtyChannels(KPtyProcess::StdinChannel);
-                                pProcess->setOutputChannelMode(KProcess::MergedChannels);
-                                pProcess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
-                                pProcess->setProgram(m_cliProps->property("extractProgram").toString(),
-                                                     m_cliProps->extractArgs(absoluteDestinationPath, fileList, false, password));
-                                pProcess->start();
-                                pProcess->waitForFinished(-1);
-
-                                if (pProcess->exitCode() != 0) {
-                                    QByteArray output = pProcess->readAllStandardOutput();
-                                    if (output.contains("Wrong password")) {
-                                        m_eErrorType = ET_WrongPassword;
-                                        return false;
-                                    }
-                                }
-
-                                bPasswordEntered = true;
-                                break;
-                            }
-                        }
-                        if (bPasswordEntered)
-                            break;
-                    }
+                if (info.path() != ".") {
+                    normalFileList.append(info.path() + QDir::separator() + newEntry.strAlias);
+                } else {
+                    normalFileList.append(newEntry.strAlias);
                 }
-            } else {
-                pProcess->waitForFinished(-1);
             }
         }
     }
-    pProcess->deleteLater();
-    pProcess = nullptr;
+
+    // 第二步：对需要重命名的文件逐个执行 7z rn
+    qInfo() << "handleLongNameExtract: rename entries:" << renameEntries.count() << ", normal files:" << normalFileList.count();
+    for (const FileEntry &entry : renameEntries) {
+        qInfo() << "handleLongNameExtract: rename" << entry.strFullPath << "->" << entry.strAlias;
+        QList<FileEntry> lstFile;
+        lstFile.append(entry);
+        pProcess->setPtyChannels(KPtyProcess::StdinChannel);
+        pProcess->setOutputChannelMode(KProcess::MergedChannels);
+        pProcess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+        pProcess->setProgram(m_cliProps->property("moveProgram").toString(), m_cliProps->moveArgs(absoluteDestinationPath, lstFile, DataManager::get_instance().archiveData(), password));
+        pProcess->start();
+        pProcess->waitForFinished(-1);
+    }
+
+    // 第三步：一次性批量解压所有文件（包括重命名后的和普通的）
+    QStringList allFileList;
+    for (const FileEntry &entry : renameEntries) {
+        QFileInfo info(entry.strFullPath);
+        if (info.path() != ".") {
+            allFileList.append(info.path() + QDir::separator() + entry.strAlias);
+        } else {
+            allFileList.append(entry.strAlias);
+        }
+    }
+    allFileList.append(normalFileList);
+    qInfo() << "handleLongNameExtract: batch extract files:" << allFileList.count();
+
+    if (!allFileList.isEmpty()) {
+        QDir::setCurrent(options.strTargetPath);
+        pProcess->setPtyChannels(KPtyProcess::StdinChannel);
+        pProcess->setOutputChannelMode(KProcess::MergedChannels);
+        pProcess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+        pProcess->setProgram(m_cliProps->property("extractProgram").toString(),
+                             m_cliProps->extractArgs(absoluteDestinationPath, allFileList, true, password));
+        pProcess->start();
+
+        if (password.isEmpty()) {
+            bool bPasswordEntered = false;
+            while (!pProcess->waitForFinished(200)) {
+                if (pProcess->bytesAvailable() > 0) {
+                    QByteArray output = pProcess->readAllStandardOutput();
+                    QStringList lines = QString::fromLocal8Bit(output).split('\n');
+                    for (const QString &line : lines) {
+                        if (isPasswordPrompt(line)) {
+                            pProcess->kill();
+                            pProcess->waitForFinished(3000);
+
+                            PasswordNeededQuery query(m_strArchiveName);
+                            emit signalQuery(&query);
+                            query.waitForResponse();
+
+                            if (query.responseCancelled()) {
+                                m_eErrorType = ET_NeedPassword;
+                                return false;
+                            }
+
+                            password = query.password();
+                            DataManager::get_instance().archiveData().strPassword = password;
+
+                            pProcess->setPtyChannels(KPtyProcess::StdinChannel);
+                            pProcess->setOutputChannelMode(KProcess::MergedChannels);
+                            pProcess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+                            pProcess->setProgram(m_cliProps->property("extractProgram").toString(),
+                                                 m_cliProps->extractArgs(absoluteDestinationPath, allFileList, true, password));
+                            pProcess->start();
+                            pProcess->waitForFinished(-1);
+
+                            if (pProcess->exitCode() != 0) {
+                                QByteArray output = pProcess->readAllStandardOutput();
+                                if (output.contains("Wrong password")) {
+                                    m_eErrorType = ET_WrongPassword;
+                                    return false;
+                                }
+                            }
+
+                            bPasswordEntered = true;
+                            break;
+                        }
+                    }
+                    if (bPasswordEntered)
+                        break;
+                }
+            }
+        } else {
+            pProcess->waitForFinished(-1);
+        }
+    }
+
     return true;
 }
 
