@@ -1355,12 +1355,12 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
     qInfo() << "handleLongNameExtract: batch extract files:" << allFileList.count();
 
     if (!allFileList.isEmpty()) {
-        pProcess->setWorkingDirectory(options.strTargetPath);
+        QDir::setCurrent(options.strTargetPath);
         pProcess->setPtyChannels(KPtyProcess::StdinChannel);
         pProcess->setOutputChannelMode(KProcess::MergedChannels);
         pProcess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
         pProcess->setProgram(m_cliProps->property("extractProgram").toString(),
-                             m_cliProps->extractArgs(absoluteDestinationPath, allFileList, false, password));
+                             m_cliProps->extractArgs(absoluteDestinationPath, allFileList, true, password));
         pProcess->start();
 
         if (password.isEmpty()) {
@@ -1390,7 +1390,7 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
                             pProcess->setOutputChannelMode(KProcess::MergedChannels);
                             pProcess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
                             pProcess->setProgram(m_cliProps->property("extractProgram").toString(),
-                                                 m_cliProps->extractArgs(absoluteDestinationPath, allFileList, false, password));
+                                                 m_cliProps->extractArgs(absoluteDestinationPath, allFileList, true, password));
                             pProcess->start();
                             pProcess->waitForFinished(-1);
 
