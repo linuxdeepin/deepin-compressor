@@ -1,3 +1,16 @@
+deepin-compressor (6.5.29) unstable; urgency=medium
+
+  * chore: Update version to 6.5.29
+  * fix: optimize handleLongNameExtract by batching extraction
+  * [skip CI] Translate deepin-compressor.ts in ru
+  * [skip CI] Translate deepin-compressor.ts in ru
+  * fix: handle wrong password when processing longname-extract
+  * fix: handle password prompt and missing list in long filename extraction
+  * fix(security): allow symlink creation, check path escape only during file writes (#381)
+  * fix(security): harden symlink target validation during extraction
+
+ -- zhanghongyuan <zhanghongyuan@uniontech.com>  Thu, 28 May 2026 20:28:41 +0800
+
 deepin-compressor (6.5.28) unstable; urgency=medium
 
   * fix: Fix ZIP multi-volume compression not working after pzip plugin was introduced
