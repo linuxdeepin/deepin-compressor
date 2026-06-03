@@ -17,6 +17,11 @@
 #include <QDebug>
 #include <DPasswordEdit>
 #include <QFileInfo>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QRegularExpressionValidator>
+#else
+#include <QRegExpValidator>
+#endif
 const int g_nTextLength = 255;
 const int g_nDlgWidth = 380;
 const int g_nDlgHeight = 178;
@@ -599,12 +604,19 @@ int RenameDialog::showDialog(const QString &strReName, const QString &strAlias, 
     qDebug() << "Showing RenameDialog for:" << strReName << "isDirectory:" << isDirectory << "isRepeat:" << isRepeat;
     if(m_lineEdit == NULL) {//创建DLineEdit,设定显示规则。
         m_lineEdit = new DLineEdit(this);
+        //使用 QValidator 在输入时直接拒绝非法字符，避免在 textChanged 中 setText 导致光标跳动
+        //第一位不允许空格和特殊字符，后续位不允许特殊字符（中间空格允许）
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        QRegularExpression re("^[^\\s/\\\\:*\"'?<>|\\r\\n\\t][^/\\\\:*\"'?<>|\\r\\n\\t]*$");
+        m_lineEdit->lineEdit()->setValidator(new QRegularExpressionValidator(re, m_lineEdit));
+#else
+        QRegExp re("^[^\\s/\\\\:*\"'?<>|\\r\\n\\t][^/\\\\:*\"'?<>|\\r\\n\\t]*$");
+        m_lineEdit->lineEdit()->setValidator(new QRegExpValidator(re, m_lineEdit));
+#endif
         //输入字符格式与文管保持一致
         connect(m_lineEdit, &DLineEdit::textChanged,[=](){
-            QString name = "(^\\s+|[/\\\\:*\"'?<>|\r\n\t])";
-            QString text = m_lineEdit->text();
-            m_lineEdit->setText(text.remove(QRegularExpression(name)));
             if(m_nOkBtnIndex >= 0) { //重命名输入文字为空时确认按钮不可点击，输入文字后恢复
+                QString text = m_lineEdit->text();
                 if(text.isNull()||text.isEmpty()){
                     getButton(m_nOkBtnIndex)->setEnabled(false);
                 } else {
