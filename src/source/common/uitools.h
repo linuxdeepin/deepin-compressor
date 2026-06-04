@@ -50,6 +50,7 @@ public:
 
     enum AssignPluginType {
         APT_Auto,           // 自动识别
+        APT_AutoWithoutPzip,// 自动识别，但排除 pzip 插件
         APT_Cli7z,          // cli7zplugin
         APT_Libarchive,     // libarchive
         APT_Libzip,         // libzipplugin

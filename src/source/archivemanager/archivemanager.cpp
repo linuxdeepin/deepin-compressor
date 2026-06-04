@@ -134,12 +134,11 @@ bool ArchiveManager::loadArchive(const QString &strArchiveFullPath, UiTools::Ass
 bool ArchiveManager::addFiles(const QString &strArchiveFullPath, const QList<FileEntry> &listAddEntry, const CompressOptions &stOptions)
 {
     qDebug() << "Starting addFiles operation for archive:" << strArchiveFullPath;
-    // workaround:
-    // pzip 仅支持新建压缩，目前先将zip 追加时显式指定使用 libzip 插件
+    // pzip 仅支持新建压缩，ZIP 追加时排除 pzip 后保持自动选择
     UiTools::AssignPluginType eType = UiTools::APT_Auto;
     CustomMimeType mimeType = determineMimeType(strArchiveFullPath);
     if (mimeType.name() == QLatin1String("application/zip")) {
-        eType = UiTools::APT_Libzip;
+        eType = UiTools::APT_AutoWithoutPzip;
     }
 
     qDebug() << "Creating interface for adding files, plugin type:" << eType;
