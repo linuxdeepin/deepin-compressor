@@ -285,10 +285,11 @@ ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool
         }
     }
 
-    // pzip 插件只用于压缩，不用于读取/解压
-    bool removePzipFlag = (!bWrite) && (mimeType.name() == QString("application/zip"));
+    // pzip 插件只用于压缩，不用于读取/解压；ZIP 追加时也需要排除 pzip，回到旧版自动选择链路
+    bool removePzipFlag = (mimeType.name() == QString("application/zip"))
+                          && ((!bWrite) || eType == APT_AutoWithoutPzip);
     if (removePzipFlag) {
-        qDebug() << "Setting flag to remove pzip plugin for reading zip (pzip is write-only)";
+        qDebug() << "Setting flag to remove pzip plugin for zip";
     }
 
     // 创建插件
@@ -310,6 +311,7 @@ ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool
         switch (eType) {
         // 自动识别
         case APT_Auto:
+        case APT_AutoWithoutPzip:
             qDebug() << "Using auto-detect plugin type";
             pIface = createInterface(fileName, mimeType, plugin);
             break;
