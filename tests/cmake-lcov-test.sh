@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+# SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -11,6 +11,8 @@ cd ../$utdir
 
 cmake -DCMAKE_BUILD_TYPE=Debug ..
 make -j16
+
+export LD_LIBRARY_PATH=./3rdparty/interface:$LD_LIBRARY_PATH
 
 ./bin/tests/bz2plugin_test --gtest_output=xml:./report/report_bz2plugin.xml
 ./bin/tests/cli7zplugin_test --gtest_output=xml:./report/report_cli7zplugin.xml

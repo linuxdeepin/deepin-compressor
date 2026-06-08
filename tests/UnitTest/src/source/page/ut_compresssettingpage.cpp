@@ -77,7 +77,11 @@ TEST_F(UT_TypeLabel, initTest)
 TEST_F(UT_TypeLabel, test_mousePressEvent)
 {
     QTest::mousePress(m_tester, Qt::LeftButton);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(50, 50), QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+#else
     QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+#endif
     m_tester->mousePressEvent(event);
     delete event;
 }
