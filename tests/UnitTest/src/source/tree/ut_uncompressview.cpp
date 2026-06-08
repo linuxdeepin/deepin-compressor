@@ -121,7 +121,11 @@ TEST_F(UT_UnCompressView, test_setDefaultUncompressPath)
 
 TEST_F(UT_UnCompressView, test_mousePressEvent)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonRelease, QPointF(50, 50), QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+#else
     QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonRelease, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+#endif
     m_tester->mousePressEvent(event);
     delete event;
     EXPECT_EQ(m_tester->m_dragPos, QPointF(50, 50));
@@ -130,7 +134,11 @@ TEST_F(UT_UnCompressView, test_mousePressEvent)
 TEST_F(UT_UnCompressView, test_mouseMoveEvent)
 {
     m_tester->m_isPressed = true;
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QMouseEvent *event = new QMouseEvent(QEvent::MouseMove, QPointF(50, 50), QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+#else
     QMouseEvent *event = new QMouseEvent(QEvent::MouseMove, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+#endif
     m_tester->m_lastTouchBeginPos = QPointF(200, 100);
     m_tester->mouseMoveEvent(event);
     delete event;
@@ -146,7 +154,11 @@ TEST_F(UT_UnCompressView, test_mouseMoveEvent)
     m_tester->selectAll();
 
     m_tester->m_isPressed = false;
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    event = new QMouseEvent(QEvent::MouseMove, QPointF(50, 50), QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+#else
     event = new QMouseEvent(QEvent::MouseMove, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+#endif
     m_tester->m_lastTouchBeginPos = QPointF(200, 100);
     m_tester->mouseMoveEvent(event);
     delete event;

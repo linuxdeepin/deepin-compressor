@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+# SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -37,7 +37,7 @@ mkdir -p report
 #统计代码覆盖率并生成html报告
 lcov -d $workdir -c -o ./coverage.info
 
-lcov --extract ./coverage.info '*/src/*' -o ./coverage.info
+lcov --extract ./coverage.info '*/3rdparty/*' -o ./coverage.info
 
 lcov --remove ./coverage.info '*/tests/*' -o ./coverage.info
 

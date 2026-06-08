@@ -16,7 +16,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
-find_package(Qt5Core)
+find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS Core)
 file(GLOB_RECURSE
   c_files
   ../../../3rdparty/ChardetDetector/*.cpp
@@ -25,7 +25,7 @@ file(GLOB_RECURSE
 
 add_executable(${PROJECT_NAME} "main.cpp"  ${c_files})
 
-target_link_libraries(${PROJECT_NAME} Qt5::Core)
+target_link_libraries(${PROJECT_NAME} Qt${QT_DESIRED_VERSION}::Core)
 target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/libFuzzer.a)
 
 execute_process(COMMAND /usr/bin/cp -rf ${CMAKE_SOURCE_DIR}/libfuzzer_in ${PROJECT_BINARY_DIR}/)

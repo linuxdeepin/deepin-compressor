@@ -417,7 +417,11 @@ TEST_F(UT_CompressView, test_slotPreClicked_002)
 
 TEST_F(UT_CompressView, test_mouseReleaseEvent)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonRelease, QPointF(50, 50), QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+#else
     QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonRelease, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+#endif
     m_tester->mouseReleaseEvent(event);
     delete event;
     EXPECT_EQ(m_tester->m_isPressed, false);
@@ -427,7 +431,11 @@ TEST_F(UT_CompressView, test_mouseMoveEvent)
 {
     m_tester->m_isPressed = true;
     m_tester->m_lastTouchBeginPos = QPoint(0, 0);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QMouseEvent *event = new QMouseEvent(QEvent::MouseMove, QPointF(50, 50), QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+#else
     QMouseEvent *event = new QMouseEvent(QEvent::MouseMove, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+#endif
     m_tester->mouseMoveEvent(event);
     delete event;
     EXPECT_EQ(m_tester->m_lastTouchBeginPos, QPointF(50, 50));

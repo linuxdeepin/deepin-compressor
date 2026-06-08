@@ -972,9 +972,14 @@ TEST_F(UT_MainWindow, test_slotReceiveFileWriteErrorName)
 
 TEST_F(UT_MainWindow, test_slotQuery)
 {
-    Stub stub;
-    CommonStub::stub_OverwriteQuery_execute(stub);
-    OverwriteQuery query("", m_tester);
+    // 使用子类重写execute()替代二进制桩，避免ASan与桩框架冲突导致DEADLYSIGNAL
+    class TestOverwriteQuery : public OverwriteQuery {
+    public:
+        explicit TestOverwriteQuery(const QString &filename, QObject *parent = nullptr)
+            : OverwriteQuery(filename, parent) {}
+        void execute() override { /* no-op */ }
+    };
+    TestOverwriteQuery query("", m_tester);
     m_tester->slotQuery(&query);
 }
 
@@ -1534,6 +1539,7 @@ TEST_F(UT_MainWindow, test_showErrorMessage_012)
 
 TEST_F(UT_MainWindow, test_showErrorMessage_013)
 {
+    m_tester->m_fileWriteErrorName = "testfile.txt";
     m_tester->showErrorMessage(FI_Uncompress, EI_CreatFileFailed);
     EXPECT_EQ(m_tester->m_pFailurePage->m_pDetailLbl->text().contains("Failed to create"), true);
 }
