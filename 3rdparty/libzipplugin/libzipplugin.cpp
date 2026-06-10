@@ -206,8 +206,8 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
                         return PFT_Error;
                     }
 
-                    // 全部解压时显示压缩包名称
-                    PasswordNeededQuery query(m_strArchiveName);
+                    // 全部解压时显示当前需要密码的加密文件名
+                    PasswordNeededQuery query(strFileName);
                     emit signalQuery(&query);
                     query.waitForResponse();
 
