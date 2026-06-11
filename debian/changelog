@@ -1,3 +1,11 @@
+deepin-compressor (6.5.31) unstable; urgency=medium
+
+  * fix(compressor): fix MIME type detection failure for spanned ZIP files
+  * fix(compressor): fix encrypted file name not shown in password dialog during extraction
+  * chore(tests): adapt unit tests for Qt6 compatibility and fix lcov
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Thu, 11 Jun 2026 19:36:23 +0800
+
 deepin-compressor (6.5.30) unstable; urgency=medium
 
   * fix(compressor): fix ZIP append failure when adding same-name folder
