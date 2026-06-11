@@ -117,8 +117,13 @@ CustomMimeType determineMimeType(const QString &filename)
     *  谷歌插件crx：内容检测为"application/octet-stream"，后缀检测为"application/octet-stream"，file命令探测为"application/x-chrome-extension"
     *  zip分卷包：内容检测为"application/octet-stream"，后缀检测为"application/zip"，file命令探测为"application/octet-stream"
     *  iso：内容检测为"application/octet-stream"，后缀检测为"application/x-cd-image"，file命令探测为"application/x-iso9660-image"
+    *  WinZip分卷ZIP：扩展名检测为"application/zip"，内容检测可能不是zip（如误识别为pdf），file命令探测为"application/zip"
     */
-    if (mimeFromContent.isDefault()) {
+    const QString &extName = mimeFromExtension.name();
+    bool isZipExtension = (extName == QStringLiteral("application/zip"));
+    bool isContentZip = mimeFromContent.inherits(QStringLiteral("application/zip"));
+    bool needFileCommandFallback = mimeFromContent.isDefault() || (isZipExtension && !isContentZip);
+    if (needFileCommandFallback) {
         qDebug() << "Using file command to detect MIME type for:" << filename;
         QProcess process;
         QStringList args;
