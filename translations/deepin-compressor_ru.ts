@@ -761,7 +761,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2773"/>
         <source>Help</source>
-        <translation>Помощь</translation>
+        <translation>Справка</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2781"/>
