@@ -1238,6 +1238,94 @@ void CliInterface::removeExtractedFilesOnFailure(const QString &strTargetPath, c
     } while (removed);
 }
 
+bool CliInterface::copyArchiveVolumesToDir(const QString &srcArchive, const QString &destDir, QString &outFirstVolumePath)
+{
+    QFileInfo srcInfo(srcArchive);
+    QString srcDir = srcInfo.absolutePath();
+    QString srcName = srcInfo.fileName();
+
+    // 7z/zip 分卷: xxx.7z.001, xxx.7z.002 ... / xxx.zip.001, xxx.zip.002 ...
+    // 合并为单个文件, 使 7z rn (重命名) 能正常工作 (7z rn 不支持分卷包)
+    static const QRegularExpression reDotNNN(QStringLiteral("^(.+)\\.[0-9]{3}$"));
+    QRegularExpressionMatch m = reDotNNN.match(srcName);
+    if (m.hasMatch()) {
+        QString base = m.captured(1);   // 例如 "archive.7z" / "archive.zip"
+        QStringList volumePaths;
+        for (int i = 1;; ++i) {
+            QString volName = QString("%1.%2").arg(base).arg(i, 3, 10, QChar('0'));
+            QString volPath = srcDir + QDir::separator() + volName;
+            if (!QFile::exists(volPath)) {
+                break;
+            }
+            volumePaths << volPath;
+        }
+
+        if (volumePaths.count() >= 2) {
+            // 分卷包: 拼接所有卷为单个文件
+            QString mergedPath = destDir + QDir::separator() + base;
+
+            // 安全检查: 拒绝操作符号链接, 防止 symlink 攻击导致任意文件覆盖
+            if (QFileInfo(mergedPath).isSymLink()) {
+                qWarning() << "copyArchiveVolumesToDir: refusing to write to symlink" << mergedPath;
+                return false;
+            }
+
+            if (QFile::exists(mergedPath)) {
+                QFile::remove(mergedPath);
+            }
+
+            QFile mergedFile(mergedPath);
+            if (!mergedFile.open(QIODevice::WriteOnly)) {
+                qWarning() << "copyArchiveVolumesToDir: FAILED to open merged file" << mergedPath;
+                return false;
+            }
+
+            for (const QString &volPath : volumePaths) {
+                QFile volFile(volPath);
+                if (!volFile.open(QIODevice::ReadOnly)) {
+                    qWarning() << "copyArchiveVolumesToDir: FAILED to open volume" << volPath;
+                    mergedFile.close();
+                    return false;
+                }
+                const qint64 chunkSize = 4 * 1024 * 1024;  // 4MB
+                while (!volFile.atEnd()) {
+                    QByteArray chunk = volFile.read(chunkSize);
+                    if (chunk.isEmpty()) {
+                        break;
+                    }
+                    mergedFile.write(chunk);
+                }
+                volFile.close();
+            }
+            mergedFile.close();
+
+            outFirstVolumePath = mergedPath;
+            qInfo() << "copyArchiveVolumesToDir: merged" << volumePaths.count()
+                     << "volumes into" << mergedPath;
+            return true;
+        }
+    }
+
+    // rar 分卷 / 非分卷: 复制单个文件
+    QString destPath = destDir + QDir::separator() + srcName;
+
+    // 安全检查: 拒绝操作符号链接, 防止 symlink 攻击导致任意文件覆盖
+    if (QFileInfo(destPath).isSymLink()) {
+        qWarning() << "copyArchiveVolumesToDir: refusing to write to symlink" << destPath;
+        return false;
+    }
+
+    if (QFile::exists(destPath)) {
+        QFile::remove(destPath);
+    }
+    if (!QFile::copy(srcArchive, destPath)) {
+        qWarning() << "copyArchiveVolumesToDir: FAILED to copy" << srcArchive << "->" << destPath;
+        return false;
+    }
+    outFirstVolumePath = destPath;
+    return true;
+}
+
 bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
 {
     ExtractionOptions &options = m_extractOptions;
@@ -1250,10 +1338,13 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
     }
     QScopedPointer<QTemporaryDir> extractTempDir;
     extractTempDir.reset(new QTemporaryDir());
-    QString absoluteDestinationPath = extractTempDir->path() + QDir::separator() + QFileInfo(m_strArchiveName).fileName();
-    QFile tmpFile(absoluteDestinationPath);
-    if (tmpFile.exists()) tmpFile.remove();
-    QFile::copy(m_strArchiveName, absoluteDestinationPath);
+    QString absoluteDestinationPath;
+    // 复制压缩包到临时目录, 分卷包需复制所有卷, 否则 7z 解压时后续卷缺失会报错或卡死
+    if (!copyArchiveVolumesToDir(m_strArchiveName, extractTempDir->path(), absoluteDestinationPath)) {
+        qWarning() << "handleLongNameExtract: Failed to copy archive volumes to temp dir" << extractTempDir->path();
+        m_eErrorType = ET_FileWriteError;
+        return false;
+    }
 
     // 第一遍：遍历所有文件，分离需要重命名的文件和普通文件，同时创建目录结构
     QList<FileEntry> renameEntries;
@@ -1355,12 +1446,12 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
     qInfo() << "handleLongNameExtract: batch extract files:" << allFileList.count();
 
     if (!allFileList.isEmpty()) {
-        QDir::setCurrent(options.strTargetPath);
+        pProcess->setWorkingDirectory(options.strTargetPath);
         pProcess->setPtyChannels(KPtyProcess::StdinChannel);
         pProcess->setOutputChannelMode(KProcess::MergedChannels);
         pProcess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
         pProcess->setProgram(m_cliProps->property("extractProgram").toString(),
-                             m_cliProps->extractArgs(absoluteDestinationPath, allFileList, true, password));
+                             m_cliProps->extractArgs(absoluteDestinationPath, allFileList, false, password));
         pProcess->start();
 
         if (password.isEmpty()) {
@@ -1390,7 +1481,7 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
                             pProcess->setOutputChannelMode(KProcess::MergedChannels);
                             pProcess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
                             pProcess->setProgram(m_cliProps->property("extractProgram").toString(),
-                                                 m_cliProps->extractArgs(absoluteDestinationPath, allFileList, true, password));
+                                                 m_cliProps->extractArgs(absoluteDestinationPath, allFileList, false, password));
                             pProcess->start();
                             pProcess->waitForFinished(-1);
 
