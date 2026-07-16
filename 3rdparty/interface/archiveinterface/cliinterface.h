@@ -56,6 +56,12 @@ enum ParseState {
     ParseStateEntryInformation
 };
 
+enum LongNamePhase {
+    LNE_None,
+    LNE_Rename,
+    LNE_Extract
+};
+
 class PasswordNeededQuery;
 
 class CliInterface : public ReadWriteArchiveInterface
@@ -202,6 +208,18 @@ private:
 
     bool handleLongNameExtract(const QList<FileEntry> &files);
 
+    /**
+     * @brief startLongNameProcess 启动长文件名处理的异步子进程 (7z rn 或 7z e)
+     * @param program  程序名 (如 "7z")
+     * @param args     命令参数
+     * @param workDir  工作目录 (为空则不设置)
+     * @return true 进程已成功启动; false 启动失败
+     *
+     * 供 handleLongNameExtract 及 onLongNameProcessFinished 内部使用,
+     * 复用 m_process 成员和 readStdout 信号链。
+     */
+    bool startLongNameProcess(const QString &program, const QStringList &args, const QString &workDir = QString());
+
     bool checkMoveCapability();
 
     /**
@@ -237,6 +255,14 @@ private slots:
      * @param exitStatus  结束状态
      */
     void extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+
+    /**
+     * @brief onLongNameProcessFinished 长文件名异步处理子进程结束
+     *
+     * 负责在 7z rn (重命名) 完成后启动 7z e (解压),
+     * 在 7z e 完成后调用 list() 刷新文件列表。
+     */
+    void onLongNameProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
     /**
      * @brief getChildProcessIdNormal7z  对于调用7z出现多个子进程的处理
@@ -277,6 +303,14 @@ private:
     QMap<QString, int> m_mapLongDirName;    // 长文件夹统计
     QMap<QString, int> m_mapRealDirValue;    // 真实文件统计
     QString m_scriptPath; // 脚本路径
+
+    // 长文件名异步解压状态
+    LongNamePhase m_longNamePhase = LNE_None;              // 当前阶段
+    QList<FileEntry> m_renameEntries;                       // 需要重命名的条目
+    QStringList m_allFileList;                              // 所有待解压文件列表
+    QString m_longNameTempArchivePath;                      // 临时目录中合并后的压缩包路径
+    QString m_longNamePassword;                             // 解压密码
+    QScopedPointer<QTemporaryDir> m_longNameTempDir;        // 临时目录 (合并分卷/解压用)
 };
 
 #endif // CLIINTERFACE_H
