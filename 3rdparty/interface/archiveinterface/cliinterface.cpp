@@ -276,6 +276,11 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
         }
     }
     if (bHandleLongName) {
+        if (m_longNamePhase != LNE_None) {
+            // 异步长文件名解压已启动, 返回 PFT_Nomral 表示"操作进行中"非"已完成";
+            // 最终结果由 onLongNameProcessFinished 通过 signalFinished 发出
+            return PFT_Nomral;
+        }
         m_eErrorType = ET_LongNameError;
         return list();
     }
@@ -1245,10 +1250,11 @@ bool CliInterface::copyArchiveVolumesToDir(const QString &srcArchive, const QStr
     QString srcDir = srcInfo.absolutePath();
     QString srcName = srcInfo.fileName();
 
-    // 7z/zip 分卷: xxx.7z.001, xxx.7z.002 ... / xxx.zip.001, xxx.zip.002 ...
-    // 合并为单个文件, 使 7z rn (重命名) 能正常工作 (7z rn 不支持分卷包)
-    static const QRegularExpression reDotNNN(QStringLiteral("^(.+)\\.[0-9]{3}$"));
-    QRegularExpressionMatch m = reDotNNN.match(srcName);
+    // 7z/zip 分卷: xxx.7z.001, xxx.zip.001 ...
+    // 合并为单个文件, 使 7z rn (不支持分卷) 能正常工作
+    // (.+\.(?:7z|zip)) 捕获含扩展名的完整基本名, 确保 7z 能识别合并后的文件格式
+    static const QRegularExpression reSplitVol(QStringLiteral("^(.+\\.(?:7z|zip))\\.[0-9]{3}$"));
+    QRegularExpressionMatch m = reSplitVol.match(srcName);
     if (m.hasMatch()) {
         QString base = m.captured(1);   // 例如 "archive.7z" / "archive.zip"
         QStringList volumePaths;
@@ -1300,7 +1306,12 @@ bool CliInterface::copyArchiveVolumesToDir(const QString &srcArchive, const QStr
                 }
                 volFile.close();
             }
+            // 检查 flush 结果, 避免 write 缓冲区写入失败时静默丢数据
             mergedFile.close();
+            if (mergedFile.error() != QFile::NoError) {
+                qWarning() << "copyArchiveVolumesToDir: write error on merged file" << mergedPath;
+                return false;
+            }
 
             outFirstVolumePath = mergedPath;
             qInfo() << "copyArchiveVolumesToDir: merged" << volumePaths.count()
@@ -1339,20 +1350,22 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
     } else {
         password = options.password;
     }
-    QScopedPointer<QTemporaryDir> extractTempDir;
-    extractTempDir.reset(new QTemporaryDir());
+    m_longNamePassword = password;
+
+    m_longNameTempDir.reset(new QTemporaryDir());
     QString absoluteDestinationPath;
-    // 复制压缩包到临时目录, 分卷包需复制所有卷, 否则 7z 解压时后续卷缺失会报错或卡死
-    if (!copyArchiveVolumesToDir(m_strArchiveName, extractTempDir->path(), absoluteDestinationPath)) {
-        qWarning() << "handleLongNameExtract: Failed to copy archive volumes to temp dir" << extractTempDir->path();
+    if (!copyArchiveVolumesToDir(m_strArchiveName, m_longNameTempDir->path(), absoluteDestinationPath)) {
+        qWarning() << "handleLongNameExtract: Failed to copy archive volumes to temp dir" << m_longNameTempDir->path();
         m_eErrorType = ET_FileWriteError;
+        m_longNameTempDir.reset();
         return false;
     }
+    m_longNameTempArchivePath = absoluteDestinationPath;
 
-    // 第一遍：遍历所有文件，分离需要重命名的文件和普通文件，同时创建目录结构
-    QList<FileEntry> renameEntries;
+    // 遍历所有文件，分离需要重命名的文件和普通文件，同时创建目录结构
+    m_renameEntries.clear();
+    m_allFileList.clear();
     QStringList normalFileList;
-    QScopedPointer<KPtyProcess> pProcess(new KPtyProcess);
     qInfo() << "handleLongNameExtract: total files:" << files.count();
 
     for (const FileEntry &entry : files) {
@@ -1377,10 +1390,18 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
             if (m_mapLongName[tempFilePathName]++ >= LONGFILE_SAME_FILES) {
                 emit signalCurFileName(entry.strFullPath);
                 m_eErrorType = ET_LongNameError;
+                m_longNameTempDir.reset();
                 return false;
             }
             m_eErrorType = ET_LongNameError;
-            QString strTempFileName = strTemp + QString("(%1)").arg(m_mapLongName[tempFilePathName], LONGFILE_SUFFIX_FieldWidth, BINARY_NUM, QChar('0')) + "." + QFileInfo(entry.strFullPath).completeSuffix();
+            QString sSuffix = QFileInfo(entry.strFullPath).completeSuffix();
+            if (10 < sSuffix.length()) {
+                sSuffix = QFileInfo(entry.strFullPath).suffix();
+                if (10 < sSuffix.length()) {
+                    sSuffix = sSuffix.right(10);
+                }
+            }
+            QString strTempFileName = strTemp + QString("(%1)").arg(m_mapLongName[tempFilePathName], LONGFILE_SUFFIX_FieldWidth, BINARY_NUM, QChar('0')) + "." + sSuffix;
             strFileName = strTempFileName;
             if (strFilePath != ".") {
                 strFileName = strFilePath + QDir::separator() + strTempFileName;
@@ -1403,6 +1424,7 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
         if (entry.strFullPath.endsWith(QDir::separator())) {
             if (!QDir(strDestFileName).exists()) {
                 if (!QDir(strDestFileName).mkpath(strDestFileName)) {
+                    m_longNameTempDir.reset();
                     return false;
                 }
             }
@@ -1410,7 +1432,7 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
             FileEntry newEntry = entry;
             newEntry.strAlias = QFileInfo(strFileName).fileName();
             if (needRename) {
-                renameEntries.append(newEntry);
+                m_renameEntries.append(newEntry);
             } else {
                 if (info.path() != ".") {
                     normalFileList.append(info.path() + QDir::separator() + newEntry.strAlias);
@@ -1421,95 +1443,142 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
         }
     }
 
-    // 第二步：对需要重命名的文件逐个执行 7z rn
-    qInfo() << "handleLongNameExtract: rename entries:" << renameEntries.count() << ", normal files:" << normalFileList.count();
-    for (const FileEntry &entry : renameEntries) {
-        qInfo() << "handleLongNameExtract: rename" << entry.strFullPath << "->" << entry.strAlias;
-        QList<FileEntry> lstFile;
-        lstFile.append(entry);
-        pProcess->setPtyChannels(KPtyProcess::StdinChannel);
-        pProcess->setOutputChannelMode(KProcess::MergedChannels);
-        pProcess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
-        pProcess->setProgram(m_cliProps->property("moveProgram").toString(), m_cliProps->moveArgs(absoluteDestinationPath, lstFile, DataManager::get_instance().archiveData(), password));
-        pProcess->start();
-        pProcess->waitForFinished(-1);
-    }
-
-    // 第三步：一次性批量解压所有文件（包括重命名后的和普通的）
-    QStringList allFileList;
-    for (const FileEntry &entry : renameEntries) {
+    // 构建解压文件列表
+    for (const FileEntry &entry : m_renameEntries) {
         QFileInfo info(entry.strFullPath);
         if (info.path() != ".") {
-            allFileList.append(info.path() + QDir::separator() + entry.strAlias);
+            m_allFileList.append(info.path() + QDir::separator() + entry.strAlias);
         } else {
-            allFileList.append(entry.strAlias);
+            m_allFileList.append(entry.strAlias);
         }
     }
-    allFileList.append(normalFileList);
-    qInfo() << "handleLongNameExtract: batch extract files:" << allFileList.count();
+    m_allFileList.append(normalFileList);
 
-    if (!allFileList.isEmpty()) {
-        pProcess->setWorkingDirectory(options.strTargetPath);
-        pProcess->setPtyChannels(KPtyProcess::StdinChannel);
-        pProcess->setOutputChannelMode(KProcess::MergedChannels);
-        pProcess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
-        pProcess->setProgram(m_cliProps->property("extractProgram").toString(),
-                             m_cliProps->extractArgs(absoluteDestinationPath, allFileList, false, password));
-        pProcess->start();
+    qInfo() << "handleLongNameExtract: rename entries:" << m_renameEntries.count()
+            << ", normal files:" << normalFileList.count()
+            << ", all files:" << m_allFileList.count();
 
-        if (password.isEmpty()) {
-            bool bPasswordEntered = false;
-            while (!pProcess->waitForFinished(200)) {
-                if (pProcess->bytesAvailable() > 0) {
-                    QByteArray output = pProcess->readAllStandardOutput();
-                    QStringList lines = QString::fromLocal8Bit(output).split('\n');
-                    for (const QString &line : lines) {
-                        if (isPasswordPrompt(line)) {
-                            pProcess->kill();
-                            pProcess->waitForFinished(3000);
-
-                            PasswordNeededQuery query(m_strArchiveName);
-                            emit signalQuery(&query);
-                            query.waitForResponse();
-
-                            if (query.responseCancelled()) {
-                                m_eErrorType = ET_NeedPassword;
-                                return false;
-                            }
-
-                            password = query.password();
-                            DataManager::get_instance().archiveData().strPassword = password;
-
-                            pProcess->setPtyChannels(KPtyProcess::StdinChannel);
-                            pProcess->setOutputChannelMode(KProcess::MergedChannels);
-                            pProcess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
-                            pProcess->setProgram(m_cliProps->property("extractProgram").toString(),
-                                                 m_cliProps->extractArgs(absoluteDestinationPath, allFileList, false, password));
-                            pProcess->start();
-                            pProcess->waitForFinished(-1);
-
-                            if (pProcess->exitCode() != 0) {
-                                QByteArray output = pProcess->readAllStandardOutput();
-                                if (output.contains("Wrong password")) {
-                                    m_eErrorType = ET_WrongPassword;
-                                    return false;
-                                }
-                            }
-
-                            bPasswordEntered = true;
-                            break;
-                        }
-                    }
-                    if (bPasswordEntered)
-                        break;
-                }
-            }
-        } else {
-            pProcess->waitForFinished(-1);
+    // 异步执行 7z rn
+    if (!m_renameEntries.isEmpty()) {
+        m_longNamePhase = LNE_Rename;
+        QString program = m_cliProps->property("moveProgram").toString();
+        QStringList args = m_cliProps->moveArgs(m_longNameTempArchivePath, m_renameEntries,
+                                                 DataManager::get_instance().archiveData(), m_longNamePassword);
+        qInfo() << "handleLongNameExtract: starting async rename" << m_renameEntries.count() << "files";
+        if (!startLongNameProcess(program, args)) {
+            m_longNamePhase = LNE_None;
+            m_longNameTempDir.reset();
+            m_renameEntries.clear();
+            m_allFileList.clear();
+            return false;
         }
+        return true;
+    }
+
+    // 异步执行 7z x
+    if (!m_allFileList.isEmpty()) {
+        m_longNamePhase = LNE_Extract;
+        QString program = m_cliProps->property("extractProgram").toString();
+        QStringList args = m_cliProps->extractArgs(m_longNameTempArchivePath, m_allFileList, true, m_longNamePassword);
+        qInfo() << "handleLongNameExtract: starting async extract" << m_allFileList.count() << "files";
+        if (!startLongNameProcess(program, args, options.strTargetPath)) {
+            m_longNamePhase = LNE_None;
+            m_longNameTempDir.reset();
+            m_renameEntries.clear();
+            m_allFileList.clear();
+            return false;
+        }
+        return true;
     }
 
     return true;
+}
+
+bool CliInterface::startLongNameProcess(const QString &program, const QStringList &args, const QString &workDir)
+{
+    Q_ASSERT(!m_process);
+
+    QString programPath = QStandardPaths::findExecutable(program);
+    if (programPath.isEmpty()) {
+        return false;
+    }
+
+    m_process = new KPtyProcess;
+    m_process->setPtyChannels(KPtyProcess::StdinChannel);
+    m_process->setOutputChannelMode(KProcess::MergedChannels);
+    m_process->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+    if (!workDir.isEmpty()) {
+        m_process->setWorkingDirectory(workDir);
+    }
+    m_process->setProgram(programPath, args);
+
+    connect(m_process, &QProcess::readyReadStandardOutput, this, [this]() {
+        readStdout();
+    });
+    connect(m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+            this, &CliInterface::onLongNameProcessFinished);
+
+    m_stdOutData.clear();
+    m_isProcessKilled = false;
+    m_finishType = PFT_Nomral;
+
+    m_process->start();
+    m_process->waitForStarted();
+    m_childProcessId.clear();
+    m_processId = m_process->processId();
+
+    return true;
+}
+
+void CliInterface::onLongNameProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    qInfo() << "LongName process finished, exitcode:" << exitCode
+             << "exitstatus:" << exitStatus << "phase:" << m_longNamePhase;
+
+    deleteProcess();
+
+    if (m_isProcessKilled || exitCode != 0) {
+        qWarning() << "LongName extraction failed in phase" << m_longNamePhase
+                   << "killed:" << m_isProcessKilled << "exitCode:" << exitCode
+                   << "archive:" << m_longNameTempArchivePath;
+        if (m_finishType == PFT_Nomral) {
+            m_finishType = PFT_Error;
+        }
+        m_longNamePhase = LNE_None;
+        m_longNameTempDir.reset();
+        m_renameEntries.clear();
+        m_allFileList.clear();
+        emit signalprogress(100);
+        emit signalFinished(m_finishType);
+        return;
+    }
+
+    m_finishType = PFT_Nomral;
+
+    if (m_longNamePhase == LNE_Rename) {
+        m_longNamePhase = LNE_Extract;
+        QString program = m_cliProps->property("extractProgram").toString();
+        QStringList args = m_cliProps->extractArgs(m_longNameTempArchivePath, m_allFileList,
+                                                    true, m_longNamePassword);
+        qInfo() << "LongName: rename done, starting async extract" << m_allFileList.count() << "files";
+        if (!startLongNameProcess(program, args, m_extractOptions.strTargetPath)) {
+            qWarning() << "LongName: FAILED to start extract process, archive:" << m_longNameTempArchivePath;
+            m_longNamePhase = LNE_None;
+            m_longNameTempDir.reset();
+            m_renameEntries.clear();
+            m_allFileList.clear();
+            emit signalprogress(100);
+            emit signalFinished(PFT_Error);
+        }
+    } else if (m_longNamePhase == LNE_Extract) {
+        m_longNamePhase = LNE_None;
+        m_longNameTempDir.reset();
+        m_renameEntries.clear();
+        m_allFileList.clear();
+        m_eErrorType = ET_LongNameError;
+        qInfo() << "LongName: extract done, refreshing file list";
+        list();
+    }
 }
 
 void CliInterface::readStdout(bool handleAll)

@@ -56,6 +56,12 @@ enum ParseState {
     ParseStateEntryInformation
 };
 
+enum LongNamePhase {
+    LNE_None,
+    LNE_Rename,
+    LNE_Extract
+};
+
 class PasswordNeededQuery;
 
 class CliInterface : public ReadWriteArchiveInterface
@@ -202,18 +208,14 @@ private:
 
     bool handleLongNameExtract(const QList<FileEntry> &files);
 
+    bool startLongNameProcess(const QString &program, const QStringList &args, const QString &workDir = QString());
+
     bool checkMoveCapability();
 
     /**
      * @brief copyArchiveVolumesToDir 将压缩包(含分卷)完整复制到目标目录
-     * @param srcArchive 原始压缩包路径(分卷时为第一卷, 如 xxx.7z.001 / xxx.zip.001 / xxx.part01.rar)
-     * @param destDir    目标目录
-     * @param outFirstVolumePath 输出: 目标目录中第一卷的完整路径
-     * @return true 全部卷复制成功; false 复制失败
      *
-     * 用于 handleLongNameExtract 中将压缩包复制到临时目录后再做重命名/解压。
-     * 原实现仅复制单个文件, 对于分卷压缩包(如 .7z.001/.002, .zip.001-.010)
-     * 会导致后续卷缺失, 7z 解压时会报错或卡死。
+     * 7z/zip 分卷合并为单个文件 (7z rn 不支持分卷), rar/非分卷直接复制。
      */
     bool copyArchiveVolumesToDir(const QString &srcArchive, const QString &destDir, QString &outFirstVolumePath);
 
@@ -237,6 +239,8 @@ private slots:
      * @param exitStatus  结束状态
      */
     void extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+
+    void onLongNameProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
     /**
      * @brief getChildProcessIdNormal7z  对于调用7z出现多个子进程的处理
@@ -277,6 +281,13 @@ private:
     QMap<QString, int> m_mapLongDirName;    // 长文件夹统计
     QMap<QString, int> m_mapRealDirValue;    // 真实文件统计
     QString m_scriptPath; // 脚本路径
+
+    LongNamePhase m_longNamePhase = LNE_None;
+    QList<FileEntry> m_renameEntries;
+    QStringList m_allFileList;
+    QString m_longNameTempArchivePath;
+    QString m_longNamePassword;
+    QScopedPointer<QTemporaryDir> m_longNameTempDir;
 };
 
 #endif // CLIINTERFACE_H
