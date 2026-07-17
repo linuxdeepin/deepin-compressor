@@ -204,6 +204,19 @@ private:
 
     bool checkMoveCapability();
 
+    /**
+     * @brief copyArchiveVolumesToDir 将压缩包(含分卷)完整复制到目标目录
+     * @param srcArchive 原始压缩包路径(分卷时为第一卷, 如 xxx.7z.001 / xxx.zip.001 / xxx.part01.rar)
+     * @param destDir    目标目录
+     * @param outFirstVolumePath 输出: 目标目录中第一卷的完整路径
+     * @return true 全部卷复制成功; false 复制失败
+     *
+     * 用于 handleLongNameExtract 中将压缩包复制到临时目录后再做重命名/解压。
+     * 原实现仅复制单个文件, 对于分卷压缩包(如 .7z.001/.002, .zip.001-.010)
+     * 会导致后续卷缺失, 7z 解压时会报错或卡死。
+     */
+    bool copyArchiveVolumesToDir(const QString &srcArchive, const QString &destDir, QString &outFirstVolumePath);
+
 private slots:
     /**
      * @brief readStdout  读取命令行输出
