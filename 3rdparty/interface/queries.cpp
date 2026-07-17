@@ -1,5 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -329,6 +328,126 @@ void OverwriteQuery::setWidgetColor(QWidget *pWgt, DPalette::ColorRole ct, doubl
 }
 
 void OverwriteQuery::setWidgetType(QWidget *pWgt, DPalette::ColorType ct, double alphaF)
+{
+    DPalette palette = DPaletteHelper::instance()->palette(pWgt);
+    QColor color = palette.color(ct);
+    color.setAlphaF(alphaF);
+    palette.setColor(DPalette::WindowText, color);
+    pWgt->setPalette(palette);
+}
+
+ExtractToQuery::ExtractToQuery(const QString &filename, const QString &targetName, QObject *parent)
+    : Query(parent)
+{
+    m_data[QStringLiteral("filename")] = filename;
+    m_data[QStringLiteral("targetName")] = targetName;
+}
+
+ExtractToQuery::~ExtractToQuery()
+{
+
+}
+
+void ExtractToQuery::execute()
+{
+    if (m_pParent == nullptr) {
+        m_pParent = getMainWindow();
+    }
+
+    CustomDDialog *dialog = new CustomDDialog(m_pParent);
+    dialog->setAccessibleName("ExtractTo_dialog");
+    dialog->setFixedWidth(380);
+    QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
+    dialog->setIcon(pixmap);
+
+    DLabel *pFileNameLbl = new DLabel;
+    pFileNameLbl->setMinimumSize(QSize(280, 20));
+    pFileNameLbl->setAlignment(Qt::AlignCenter);
+    DFontSizeManager::instance()->bind(pFileNameLbl, DFontSizeManager::T6, QFont::Medium);
+    pFileNameLbl->setFixedWidth(340);
+
+    m_strFileName = m_data.value(QStringLiteral("filename")).toString();
+
+    DLabel *pTipLbl = new DLabel;
+    pTipLbl->setFixedWidth(340);
+    pTipLbl->setAlignment(Qt::AlignCenter);
+    DFontSizeManager::instance()->bind(pTipLbl, DFontSizeManager::T6, QFont::Medium);
+    pTipLbl->setText(QObject::tr("Another file with the same name already exists, extract to %1?").arg(m_data.value(QStringLiteral("targetName")).toString()));
+    m_strDesText = pTipLbl->text();
+
+    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
+    if (themeType == DGuiApplicationHelper::LightType) {
+        setWidgetColor(pFileNameLbl, DPalette::ToolTipText, 0.7);
+        setWidgetColor(pTipLbl, DPalette::ToolTipText, 1);
+    } else if (themeType == DGuiApplicationHelper::DarkType) {
+        setWidgetType(pFileNameLbl, DPalette::TextLively, 0.7);
+        setWidgetType(pTipLbl, DPalette::TextLively, 1);
+    }
+
+    dialog->addButton(QObject::tr("Cancel", "button"));
+    dialog->addButton(QObject::tr("OK", "button"), true, DDialog::ButtonWarning);
+
+    dialog->addContent(pTipLbl, Qt::AlignHCenter);
+    dialog->addContent(pFileNameLbl, Qt::AlignHCenter);
+
+    dialog->setTabOrder(dialog->getButton(0), dialog->getButton(1));
+
+    autoFeed(pFileNameLbl, pTipLbl, dialog);
+    connect(dialog, &CustomDDialog::signalFontChange, this, [&]() {
+        autoFeed(pFileNameLbl, pTipLbl, dialog);
+    }, Qt::DirectConnection);
+
+    const int mode = dialog->exec();
+    if (1 == mode) {
+        setResponse(Result_Overwrite);
+    } else {
+        setResponse(Result_Cancel);
+    }
+
+    delete dialog;
+}
+
+bool ExtractToQuery::responseCancelled()
+{
+    return m_data.value(QStringLiteral("response")).toInt() == Result_Cancel;
+}
+
+bool ExtractToQuery::responseAccepted()
+{
+    return m_data.value(QStringLiteral("response")).toInt() == Result_Overwrite;
+}
+
+void ExtractToQuery::autoFeed(DLabel *label1, DLabel *label2, CustomDDialog *dialog)
+{
+    NewStr newstr = autoCutText(m_strDesText, label2);
+    label2->setText(newstr.resultStr);
+    int height_lable = newstr.strList.size() * newstr.fontHeifht;
+    label2->setMinimumHeight(height_lable);
+
+    QFont font;
+    QFontMetrics elideFont(font);
+    label1->setText(elideFont.elidedText(m_strFileName, Qt::ElideMiddle, 340));
+
+    if (0 == m_iLabelOldHeight) {
+        dialog->adjustSize();
+    } else {
+        dialog->setMinimumHeight(m_iDialogOldHeight - m_iLabelOldHeight - m_iLabelOld1Height + height_lable + newstr.fontHeifht);
+    }
+    m_iLabelOldHeight = height_lable;
+    m_iLabelOld1Height = newstr.fontHeifht;
+    m_iDialogOldHeight = dialog->height();
+}
+
+void ExtractToQuery::setWidgetColor(QWidget *pWgt, DPalette::ColorRole ct, double alphaF)
+{
+    DPalette palette = DPaletteHelper::instance()->palette(pWgt);
+    QColor color = palette.color(ct);
+    color.setAlphaF(alphaF);
+    palette.setColor(DPalette::Window, color);
+    pWgt->setPalette(palette);
+}
+
+void ExtractToQuery::setWidgetType(QWidget *pWgt, DPalette::ColorType ct, double alphaF)
 {
     DPalette palette = DPaletteHelper::instance()->palette(pWgt);
     QColor color = palette.color(ct);

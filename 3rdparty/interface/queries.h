@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -182,6 +182,32 @@ private:
     int m_iLabelOldHeight = 0;
     int m_iLabelOld1Height = 0;
     int m_iCheckboxOld1Height = 0;
+    int m_iDialogOldHeight = 0;
+};
+
+// 询问是否解压到自动生成的新目录
+class ExtractToQuery : public Query
+{
+    Q_OBJECT
+public:
+    explicit ExtractToQuery(const QString &filename, const QString &targetName, QObject *parent = nullptr);
+    ~ExtractToQuery() override;
+
+    void execute() override;
+    bool responseCancelled();
+    bool responseAccepted();
+
+    void autoFeed(DLabel *label1, DLabel *label2, CustomDDialog *dialog);
+
+private:
+    void setWidgetColor(QWidget *pWgt, DPalette::ColorRole ct, double alphaF);
+    void setWidgetType(QWidget *pWgt, DPalette::ColorType ct, double alphaF);
+
+private:
+    QString m_strDesText;
+    QString m_strFileName;
+    int m_iLabelOldHeight = 0;
+    int m_iLabelOld1Height = 0;
     int m_iDialogOldHeight = 0;
 };
 

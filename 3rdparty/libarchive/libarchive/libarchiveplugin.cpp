@@ -27,7 +27,7 @@
  */
 
 #include "libarchiveplugin.h"
-#include "queries.h"
+#include "../../interface/queries.h"
 #include "datamanager.h"
 #include "common.h"
 
@@ -144,31 +144,108 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         }
     }
 
+    QString targetPath = options.strTargetPath;
+    QFileInfo targetInfo(targetPath);
+    qWarning() << "DC_EXTRACT_TRACE target before mkpath"
+               << "archive" << m_strArchiveName
+               << "target" << targetPath
+               << "exists" << targetInfo.exists()
+               << "isDir" << targetInfo.isDir()
+               << "isFile" << targetInfo.isFile()
+               << "cwd" << QDir::currentPath()
+               << "bExistList" << options.bExistList
+               << "allExtract" << options.bAllExtract;
+
+    if (targetInfo.exists() && !targetInfo.isDir()) {
+        if (targetInfo.absoluteFilePath() == QFileInfo(m_strArchiveName).absoluteFilePath()) {
+            QString newTargetPath;
+            QString newTargetName;
+            const QString targetBaseName = targetInfo.fileName();
+            int index = 1;
+            do {
+                newTargetName = QStringLiteral("%1_%2").arg(targetBaseName).arg(index++);
+                newTargetPath = targetInfo.absolutePath() + QDir::separator() + newTargetName;
+            } while (QFileInfo::exists(newTargetPath));
+
+            ExtractToQuery query(targetInfo.fileName(), newTargetName);
+            emit signalQuery(&query);
+            query.waitForResponse();
+            if (query.responseCancelled()) {
+                emit signalCancel();
+                m_eErrorType = ET_UserCancelOpertion;
+                return PFT_Cancel;
+            }
+
+            targetPath = newTargetPath;
+            targetInfo = QFileInfo(targetPath);
+        } else {
+            m_eErrorType = ET_FileWriteError;
+            qWarning() << "DC_EXTRACT_TRACE target is not directory"
+                       << "target" << targetPath
+                       << "cwd" << QDir::currentPath();
+            return PFT_Error;
+        }
+    }
+
+    if (targetInfo.exists() && !targetInfo.isDir()) {
+        m_eErrorType = ET_FileWriteError;
+        qWarning() << "DC_EXTRACT_TRACE target is not directory"
+                   << "target" << targetPath
+                   << "cwd" << QDir::currentPath();
+        return PFT_Error;
+    }
+
     // 判断解压路径是否存在，不存在则创建文件夹
-    if (QDir().exists(options.strTargetPath) == false) {
-        if (!QDir().mkpath(options.strTargetPath)) {
-            if (isInsufficientDiskSpace(options.strTargetPath, 10 * 1024 * 1024)) { // 暂取小于10M作为磁盘空间不足的判断标准
+    if (!targetInfo.exists()) {
+        qWarning() << "DC_EXTRACT_TRACE mkpath start"
+                   << "target" << targetPath
+                   << "cwd" << QDir::currentPath();
+        if (!QDir().mkpath(targetPath)) {
+            if (isInsufficientDiskSpace(targetPath, 10 * 1024 * 1024)) { // 暂取小于10M作为磁盘空间不足的判断标准
                 m_eErrorType = ET_InsufficientDiskSpace;
             } else {
                 m_eErrorType = ET_FileWriteError;
             }
 
-            qInfo() << "Failed to create extractDestDir";
+            qWarning() << "DC_EXTRACT_TRACE mkpath failed"
+                       << "target" << targetPath
+                       << "cwd" << QDir::currentPath()
+                       << "error" << m_eErrorType;
+            return PFT_Error;
+        }
+        qWarning() << "DC_EXTRACT_TRACE mkpath success"
+                   << "target" << targetPath
+                   << "cwd" << QDir::currentPath();
+        targetInfo.refresh();
+        if (!targetInfo.isDir()) {
+            m_eErrorType = ET_FileWriteError;
+            qWarning() << "DC_EXTRACT_TRACE target not directory after mkpath"
+                       << "target" << targetPath
+                       << "cwd" << QDir::currentPath();
             return PFT_Error;
         }
     }
 
     // 更改应用工作目录，结束时自动恢复原来路径
     HandleWorkingDir handleWorkingDir(&m_oldWorkingDir);
-    handleWorkingDir.change(options.strTargetPath);
-    m_extractDestDir = options.strTargetPath;
+    qWarning() << "DC_EXTRACT_TRACE before change cwd"
+               << "target" << targetPath
+               << "cwd" << QDir::currentPath();
+    if (!handleWorkingDir.change(targetPath)) {
+        m_eErrorType = ET_FileWriteError;
+        return PFT_Error;
+    }
+    qWarning() << "DC_EXTRACT_TRACE after change cwd"
+               << "target" << targetPath
+               << "cwd" << QDir::currentPath();
+    m_extractDestDir = targetPath;
 
     int extractedEntriesCount = 0; //记录已经解压的文件数量
 
     struct archive_entry *entry = nullptr;
 
     QString extractDst;
-    bool bLnfs = m_common->isSubpathOfLnfs(options.strTargetPath);
+    bool bLnfs = m_common->isSubpathOfLnfs(targetPath);
     // Iterate through all entries in archive.
     int iIndex = 0;     // 存储索引值
     while (!QThread::currentThread()->isInterruptionRequested() && (archive_read_next_header(m_archiveReader.data(), &entry) == ARCHIVE_OK)) {
@@ -301,6 +378,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
             }
         }
         QFileInfo entryFI(entryName);
+        const QString entryBeforeCopy = entryName;
 
         // If the file has a rootNode attached, remove it from file path.
         // 提取操作不需要保留上层目录
@@ -329,6 +407,19 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
             archive_entry_copy_pathname(entry, entryName.toUtf8().constData());
         }
 
+        qWarning() << "DC_EXTRACT_TRACE entry resolved"
+                   << "archive" << m_strArchiveName
+                   << "target" << targetPath
+                   << "cwd" << QDir::currentPath()
+                   << "origin" << strOriginName
+                   << "entryBeforeCopy" << entryBeforeCopy
+                   << "entry" << entryName
+                   << "absolute" << entryFI.absoluteFilePath()
+                   << "exists" << entryFI.exists()
+                   << "isDir" << entryFI.isDir()
+                   << "entryIsDir" << entryIsDir
+                   << "bLongName" << bLongName;
+
         if (bLongName) {
             emit signalCurFileName(strOriginName); // 发送当前正在解压的文件名
         } else {
@@ -337,6 +428,11 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
 
         // Check if the file about to be written already exists.
         if (!entryIsDir && entryFI.exists() && !m_setLongName.contains(entryName)) {
+            qWarning() << "DC_EXTRACT_TRACE overwrite query"
+                       << "entry" << entryName
+                       << "absolute" << entryFI.absoluteFilePath()
+                       << "cwd" << QDir::currentPath()
+                       << "target" << targetPath;
             if (m_bSkipAll) {
                 archive_read_data_skip(m_archiveReader.data());
                 archive_entry_clear(entry);
@@ -854,15 +950,24 @@ HandleWorkingDir::HandleWorkingDir(QString *oldWorkingDir)
 
 }
 
-void HandleWorkingDir::change(const QString &newWorkingDir)
+bool HandleWorkingDir::change(const QString &newWorkingDir)
 {
     *m_oldWorkingDir = QDir::currentPath();
-    QDir::setCurrent(newWorkingDir);
+    const bool changed = QDir::setCurrent(newWorkingDir);
+    qWarning() << "DC_EXTRACT_TRACE setCurrent"
+               << "target" << newWorkingDir
+               << "old" << *m_oldWorkingDir
+               << "ok" << changed
+               << "current" << QDir::currentPath();
+    return changed;
 }
 
 HandleWorkingDir::~HandleWorkingDir()
 {
     if (!m_oldWorkingDir->isEmpty() && QDir::setCurrent(*m_oldWorkingDir)) {
+        qWarning() << "DC_EXTRACT_TRACE restore cwd"
+                   << "restored" << *m_oldWorkingDir
+                   << "current" << QDir::currentPath();
         m_oldWorkingDir->clear();
     }
 }
