@@ -57,7 +57,7 @@
         <location filename="../src/source/page/compresspage.cpp" line="120"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>Ok</translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -230,7 +230,7 @@
         <location filename="../src/source/page/compresssettingpage.cpp" line="727"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>Ok</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="989"/>
@@ -740,7 +740,7 @@
         <location filename="../src/source/mainwindow.cpp" line="3236"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>Ok</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="784"/>
@@ -1244,7 +1244,7 @@
         <location filename="../3rdparty/interface/queries.cpp" line="398"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>Ok</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="211"/>
@@ -1340,7 +1340,7 @@
         <location filename="../src/source/dialog/popupdialog.cpp" line="671"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>Ok</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="681"/>
@@ -1479,7 +1479,7 @@
         <location filename="../src/source/page/uncompresspage.cpp" line="209"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>Ok</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="225"/>
@@ -1498,7 +1498,7 @@
         <location filename="../src/source/tree/uncompressview.cpp" line="424"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>Ok</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="664"/>
