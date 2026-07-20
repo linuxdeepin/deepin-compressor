@@ -1327,7 +1327,7 @@
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="376"/>
         <source>Another file with the same name already exists, extract to %1?</source>
-        <translation type="unfinished"/>
+        <translation>Ja existeix un altre fitxer amb el mateix nom. Voleu extreure&apos;l a %1?</translation>
     </message>
 </context>
 <context>
