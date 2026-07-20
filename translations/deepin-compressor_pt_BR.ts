@@ -1327,7 +1327,7 @@
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="376"/>
         <source>Another file with the same name already exists, extract to %1?</source>
-        <translation type="unfinished"/>
+        <translation>Já existe outro arquivo com o mesmo nome. Extrair para %1?</translation>
     </message>
 </context>
 <context>
