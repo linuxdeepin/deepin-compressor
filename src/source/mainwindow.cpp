@@ -1228,6 +1228,14 @@ void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
 
 void MainWindow::slotReceiveProgress(double dPercentage)
 {
+    // 负值是长文件名 rename→extract 阶段切换时的进度重置哨兵，
+    // 由 CliInterface::onLongNameProcessFinished 在 LNE_Rename→LNE_Extract 切换时发出。
+    // 收到后重置进度页（进度值、剩余时间、速度、计时器），确保 extract 阶段进度从 0 开始。
+    if (dPercentage < 0) {
+        m_pProgressPage->resetProgress();
+        return;
+    }
+
     if (Operation_SingleExtract == m_operationtype) { //提取删除操作使用小弹窗进度
         //需要添加dPercentage < 100判断，否则会出现小文件提取进度对话框不会自动关闭
         if (!m_pProgressdialog->isVisible() && dPercentage < 100 && dPercentage > 0) {
