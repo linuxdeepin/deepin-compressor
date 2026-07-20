@@ -833,6 +833,15 @@ void CliInterface::deleteProcess()
 
 void CliInterface::handleProgress(const QString &line)
 {
+    // 长文件名 rename 阶段（7z rn）不向 UI 发送真实进度。
+    // 原因：ZipCrypto 只加密文件内容不加密文件名，7z rn 无需密码即可运行并输出进度，
+    // 会导致进度条在密码框弹出前先跳一大截；而随后的 extract 阶段从 0 重新计数，
+    // 进度值被 ProgressPage 的单调递增逻辑丢弃，剩余时间卡死。
+    // 解决：rename 阶段屏蔽进度，真实进度仅在 extract 阶段（LNE_Extract）上报。
+    if (m_longNamePhase == LNE_Rename) {
+        return;
+    }
+
     if (m_process && m_process->program().at(0).contains("7z")) {   // 解析7z相关进度、文件名
         int pos = line.indexOf(QLatin1Char('%'));
         if (pos > 1) {
@@ -1557,6 +1566,13 @@ void CliInterface::onLongNameProcessFinished(int exitCode, QProcess::ExitStatus 
 
     if (m_longNamePhase == LNE_Rename) {
         m_longNamePhase = LNE_Extract;
+        // rename→extract 阶段切换时重置进度条。
+        // 虽然已在 handleProgress 中屏蔽了 rename 阶段的进度上报，
+        // 但 extractFiles 入口处可能已 emit 过 signalprogress(1)，
+        // 且 rename 阶段可能有少量进度泄露（非 handleProgress 路径）。
+        // 这里用负值作为重置哨兵，由 MainWindow::slotReceiveProgress 捕获并调用 resetProgress()，
+        // 确保 extract 阶段的进度从 0 开始单调递增，剩余时间计算正确。
+        emit signalprogress(-1.0);
         QString program = m_cliProps->property("extractProgram").toString();
         QStringList args = m_cliProps->extractArgs(m_longNameTempArchivePath, m_allFileList,
                                                     true, m_longNamePassword);
