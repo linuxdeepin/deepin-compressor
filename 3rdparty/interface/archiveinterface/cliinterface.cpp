@@ -921,6 +921,44 @@ void CliInterface::handleProgress(const QString &line)
                     }
                 }
             } else {
+                // percentage == 0：固实压缩（solid）的小包解压时，7z 的进度百分比始终为 0%，
+                // 因为固实块（solid block）数据量小，解压瞬间完成，进度停留在 0% 直到文件全部写出。
+                // 此时根据 7z 输出的文件索引估算进度，避免进度条一直停留在"计算中"。
+                // 7z 输出格式：  0% 1233 - filename
+                if (line.contains("\b\b\b\b") && m_workStatus == WT_Extract) {
+                    int sepPos = line.indexOf("-");   // 查找文件名分隔符
+                    if (sepPos > 0) {
+                        QString strfilename = line.mid(sepPos + 2);   // 文件名
+                        // 在 '-' 之前反向查找最近的 '%'，用于定位文件索引
+                        // （一行可能包含多个进度更新，第一个 % 是初始 0%，需要找到与当前文件名关联的 %）
+                        int percentPos = line.lastIndexOf(QLatin1Char('%'), sepPos);
+                        if (percentPos > 0) {
+                            QString numPart = line.mid(percentPos + 1, sepPos - percentPos - 1).trimmed();
+                            bool ok = false;
+                            int fileIndex = numPart.toInt(&ok);
+                            if (ok && fileIndex > 0) {
+                                int totalFiles = DataManager::get_instance().archiveData().mapFileEntry.count();
+                                if (totalFiles > 0) {
+                                    int estimatedPercent = (fileIndex * 100) / totalFiles;
+                                    if (estimatedPercent > 0 && estimatedPercent < 100) {
+                                        emit signalprogress(estimatedPercent);
+                                    }
+                                }
+                            }
+                        }
+                        if (!strfilename.isEmpty()) {
+                            emit signalCurFileName(strfilename);
+                        }
+                        // 右键解压到当前文件夹
+                        if (!m_extractOptions.bExistList && m_indexOfListRootEntry == 0) {
+                            m_indexOfListRootEntry++;
+                            FileEntry entry;
+                            entry.strFullPath = strfilename;
+                            DataManager::get_instance().archiveData().listRootEntry << entry;
+                        }
+                    }
+                }
+
                 // 7z解压小文件无法获取文件名添加一个空的entry
                 if (m_workStatus == WT_Extract && !m_extractOptions.bExistList && m_indexOfListRootEntry == 0 && m_isEmptyArchive == false) {
                     m_indexOfListRootEntry++;
@@ -1488,8 +1526,12 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
     if (!m_allFileList.isEmpty()) {
         m_longNamePhase = LNE_Extract;
         QString program = m_cliProps->property("extractProgram").toString();
-        QStringList args = m_cliProps->extractArgs(m_longNameTempArchivePath, m_allFileList, true, m_longNamePassword);
-        qInfo() << "handleLongNameExtract: starting async extract" << m_allFileList.count() << "files";
+        // 全量解压时不传文件列表，避免文件数过多导致命令行超过 ARG_MAX；
+        // 7z x 不带文件参数时默认解压全部文件。
+        const QStringList &extractFileList = m_extractOptions.bAllExtract ? QStringList() : m_allFileList;
+        QStringList args = m_cliProps->extractArgs(m_longNameTempArchivePath, extractFileList, true, m_longNamePassword);
+        qInfo() << "handleLongNameExtract: starting async extract" << m_allFileList.count() << "files"
+                << (m_extractOptions.bAllExtract ? "(all extract, no file list)" : "(partial extract)");
         if (!startLongNameProcess(program, args, options.strTargetPath)) {
             m_longNamePhase = LNE_None;
             m_longNameTempDir.reset();
@@ -1532,7 +1574,11 @@ bool CliInterface::startLongNameProcess(const QString &program, const QStringLis
     m_finishType = PFT_Nomral;
 
     m_process->start();
-    m_process->waitForStarted();
+    if (!m_process->waitForStarted()) {
+        qWarning() << "startLongNameProcess: failed to start process:" << program;
+        deleteProcess();
+        return false;
+    }
     m_childProcessId.clear();
     m_processId = m_process->processId();
 
@@ -1574,9 +1620,11 @@ void CliInterface::onLongNameProcessFinished(int exitCode, QProcess::ExitStatus 
         // 确保 extract 阶段的进度从 0 开始单调递增，剩余时间计算正确。
         emit signalprogress(-1.0);
         QString program = m_cliProps->property("extractProgram").toString();
-        QStringList args = m_cliProps->extractArgs(m_longNameTempArchivePath, m_allFileList,
+        QStringList args = m_cliProps->extractArgs(m_longNameTempArchivePath,
+                                                    m_extractOptions.bAllExtract ? QStringList() : m_allFileList,
                                                     true, m_longNamePassword);
-        qInfo() << "LongName: rename done, starting async extract" << m_allFileList.count() << "files";
+        qInfo() << "LongName: rename done, starting async extract" << m_allFileList.count() << "files"
+                << (m_extractOptions.bAllExtract ? "(all extract, no file list)" : "(partial extract)");
         if (!startLongNameProcess(program, args, m_extractOptions.strTargetPath)) {
             qWarning() << "LongName: FAILED to start extract process, archive:" << m_longNameTempArchivePath;
             m_longNamePhase = LNE_None;
