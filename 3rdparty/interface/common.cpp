@@ -439,27 +439,19 @@ bool Common::isSupportSeek(QString sFileName)
         }
         file.close();
     } else {
-        // 指定临时文件的目录
-        QString tempDir = info.absoluteDir().path(); // 替换为你的目录路径
-        QString fileTemplate = tempDir + "/tempfile_XXXXXX"; // 文件名模板
-        // 创建 QTemporaryFile
+        QString tempDir = info.absoluteDir().path();
+        QString fileTemplate = tempDir + "/tempfile_XXXXXX";
         QTemporaryFile tempFile(fileTemplate);
         tempFile.setAutoRemove(true);
-        // 尝试打开临时文件
         if (tempFile.open()) {
             tempFile.write("test\n");
             tempFile.flush();
-        }
-        tempFile.close();
-        QString sFileName = tempFile.fileName();
-        QFile file(sFileName);
-        if(file.open(QIODevice::ReadOnly)) {
-            if (file.seek(0)) {
-                file.close();
-                return true; // 支持 seek
+            if (tempFile.seek(0)) {
+                tempFile.close();
+                return true;
             }
         }
-        file.close();
+        tempFile.close();
     }
     return false;
 }
