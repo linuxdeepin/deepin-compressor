@@ -1511,8 +1511,14 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
         QString program = m_cliProps->property("moveProgram").toString();
         QStringList args = m_cliProps->moveArgs(m_longNameTempArchivePath, m_renameEntries,
                                                  DataManager::get_instance().archiveData(), m_longNamePassword);
+        // -w 插在命令之后、归档之前，符合 7z 惯例
+        QString wdir = options.strTargetPath;
+        if (wdir.isEmpty()) {
+            wdir = QDir::tempPath();
+        }
+        args.insert(1, QStringLiteral("-w%1").arg(wdir));
         qInfo() << "handleLongNameExtract: starting async rename" << m_renameEntries.count() << "files";
-        if (!startLongNameProcess(program, args)) {
+        if (!startLongNameProcess(program, args, options.strTargetPath)) {
             m_longNamePhase = LNE_None;
             m_longNameTempDir.reset();
             m_renameEntries.clear();
