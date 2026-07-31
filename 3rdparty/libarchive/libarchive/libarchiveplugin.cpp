@@ -397,6 +397,10 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
             m_mapLongName[tempFilePathName]++;   // 保存文件路径，不同目录下的同名文件分开计数，解压成功，添加计数
 
             copyDataFromSource(m_archiveReader.data(), writer.data(), QFileInfo(m_strArchiveName).size());
+            // 数据写入失败（如磁盘空间不足）时立即终止解压，避免误报成功
+            if (m_eErrorType != ET_NoError) {
+                return PFT_Error;
+            }
 
             // qInfo() <<  destinationDirectory + QDir::separator() + entryName;
             // 文件权限设置
@@ -684,6 +688,12 @@ void LibarchivePlugin::copyDataFromSource(struct archive *source, struct archive
     char buff[10240]; //缓存大小
     auto readBytes = archive_read_data(source, buff, sizeof(buff)); //读压缩包数据到buff
 
+    // 读取压缩包数据失败（如压缩包损坏）时设置错误类型，避免解压仍误报成功
+    if (readBytes < 0) {
+        m_eErrorType = ET_FileReadError;
+        return;
+    }
+
     while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
         if (m_bPause) { //解压暂停
             sleep(1);
@@ -693,6 +703,12 @@ void LibarchivePlugin::copyDataFromSource(struct archive *source, struct archive
 
         archive_write_data(dest, buff, static_cast<size_t>(readBytes)); //写数据
         if (archive_errno(dest) != ARCHIVE_OK) {
+            //ENOSPC /* No space left on device */ EDQUOT /* Disk quota exceeded */
+            if (archive_errno(dest) == ENOSPC || archive_errno(dest) == EDQUOT) {
+                m_eErrorType = ET_InsufficientDiskSpace;
+            } else {
+                m_eErrorType = ET_FileWriteError;
+            }
             return;
         }
 
@@ -700,6 +716,11 @@ void LibarchivePlugin::copyDataFromSource(struct archive *source, struct archive
         emit signalprogress(double(archive_filter_bytes(source, -1)) / totalSize * 100);
 
         readBytes = archive_read_data(source, buff, sizeof(buff));
+        // 循环尾部读取失败同样需要检查，避免多分块文件中途读损坏时误报成功
+        if (readBytes < 0) {
+            m_eErrorType = ET_FileReadError;
+            return;
+        }
     }
 }
 
