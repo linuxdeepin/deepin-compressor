@@ -69,6 +69,7 @@ ReadWriteLibarchivePlugin::~ReadWriteLibarchivePlugin()
 PluginFinishType ReadWriteLibarchivePlugin::addFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
     qInfo()<<"ReadWriteLibarchivePlugin addFiles";
+    m_eErrorType = ET_NoError;
     if( !m_tempDir.isValid()) {
         return PFT_Error;
     }
@@ -151,6 +152,7 @@ PluginFinishType ReadWriteLibarchivePlugin::addFiles(const QList<FileEntry> &fil
 
 PluginFinishType ReadWriteLibarchivePlugin::deleteFiles(const QList<FileEntry> &files)
 {
+    m_eErrorType = ET_NoError;
     if (files.count() == 0) {
         return PFT_Error;
     }
@@ -596,9 +598,21 @@ void ReadWriteLibarchivePlugin::copyDataFromSourceAdd(archive *source, archive *
     char buff[10240];
     auto readBytes = archive_read_data(source, buff, sizeof(buff));
 
+    // 读取压缩包数据失败时设置错误类型，避免误报成功
+    if (readBytes < 0) {
+        m_eErrorType = ET_FileReadError;
+        return;
+    }
+
     while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
         archive_write_data(dest, buff, static_cast<size_t>(readBytes));
         if (archive_errno(dest) != ARCHIVE_OK) {
+            //ENOSPC /* No space left on device */ EDQUOT /* Disk quota exceeded */
+            if (archive_errno(dest) == ENOSPC || archive_errno(dest) == EDQUOT) {
+                m_eErrorType = ET_InsufficientDiskSpace;
+            } else {
+                m_eErrorType = ET_FileWriteError;
+            }
             return;
         }
 
@@ -606,6 +620,11 @@ void ReadWriteLibarchivePlugin::copyDataFromSourceAdd(archive *source, archive *
         emit signalprogress((double(m_currentAddFilesSize)) / totalsize * 100);
 
         readBytes = archive_read_data(source, buff, sizeof(buff));
+        // 循环尾部读取失败同样需要检查，避免多分块文件中途读损坏时误报成功
+        if (readBytes < 0) {
+            m_eErrorType = ET_FileReadError;
+            return;
+        }
     }
 }
 
@@ -722,6 +741,9 @@ bool ReadWriteLibarchivePlugin::writeEntryDelete(struct archive_entry *entry, co
         // If the whole archive is extracted and the total filesize is
         // available, we use partial progress.
         copyDataFromSource(m_archiveReader.data(), m_archiveWriter.data(), totalSize);
+        if (m_eErrorType != ET_NoError) {
+            return false;
+        }
         break;
     case ARCHIVE_FAILED:
     case ARCHIVE_FATAL:
@@ -742,6 +764,9 @@ bool ReadWriteLibarchivePlugin::writeEntryAdd(archive_entry *entry, const qlongl
         // If the whole archive is extracted and the total filesize is
         // available, we use partial progress.
         copyDataFromSourceAdd(m_archiveReader.data(), m_archiveWriter.data(), totalSize);
+        if (m_eErrorType != ET_NoError) {
+            return false;
+        }
         break;
     case ARCHIVE_FAILED:
     case ARCHIVE_FATAL:
