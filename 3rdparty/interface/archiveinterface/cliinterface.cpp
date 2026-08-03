@@ -41,6 +41,7 @@
 #include <QTemporaryDir>
 #include <QTimer>
 #include <QUuid>
+#include <algorithm>
 
 #include "common.h"
 #include <linux/limits.h>
@@ -221,7 +222,9 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
             qInfo() << "extract temp path--- " << destPath;
         }
         if (bHandleLongName) {
-            if (!handleLongNameExtract(m_files)) {
+            // 部分解压时补全长名目录条目（files 中可能不含目录本身）
+            QList<FileEntry> filesWithDirs = collectLongDirEntries(m_files);
+            if (!handleLongNameExtract(filesWithDirs)) {
                 if (m_eErrorType == ET_NoError) {
                     m_eErrorType = ET_FileWriteError;
                 }
@@ -838,7 +841,7 @@ void CliInterface::handleProgress(const QString &line)
     // 会导致进度条在密码框弹出前先跳一大截；而随后的 extract 阶段从 0 重新计数，
     // 进度值被 ProgressPage 的单调递增逻辑丢弃，剩余时间卡死。
     // 解决：rename 阶段屏蔽进度，真实进度仅在 extract 阶段（LNE_Extract）上报。
-    if (m_longNamePhase == LNE_Rename) {
+    if (m_longNamePhase == LNE_Rename || m_longNamePhase == LNE_RenameDirs) {
         return;
     }
 
@@ -1387,6 +1390,47 @@ bool CliInterface::copyArchiveVolumesToDir(const QString &srcArchive, const QStr
     return true;
 }
 
+QList<FileEntry> CliInterface::collectLongDirEntries(const QList<FileEntry> &files) const
+{
+    // 部分解压时，若只选中了长名目录下的文件（未选中目录本身），
+    // files 列表中没有目录条目，导致 handleLongNameExtract 无法检测到长名目录。
+    // 此函数遍历每个文件路径的各级父目录，从 mapFileEntry 中查找并补全超长目录条目。
+    QSet<QString> existingPaths;  // files 中已有的路径（用于去重）
+    for (const FileEntry &entry : files) {
+        existingPaths.insert(entry.strFullPath);
+    }
+
+    QList<FileEntry> result = files;
+    ArchiveData stArchiveData = DataManager::get_instance().archiveData();
+
+    for (const FileEntry &entry : files) {
+        // 从文件路径逐级向上查找父目录条目
+        QString path = entry.strFullPath;
+        // 去掉尾部斜杠（文件不会有，目录会有）
+        if (path.endsWith(QDir::separator())) {
+            path.chop(1);
+        }
+        while (path.contains(QDir::separator())) {
+            int idx = path.lastIndexOf(QDir::separator());
+            path = path.left(idx);  // 父目录路径（不含分隔符）
+            QString dirKey = path + QDir::separator();  // mapFileEntry 中目录的 key 带尾部分隔符
+            if (existingPaths.contains(dirKey)) {
+                continue;  // 已在列表中
+            }
+            auto it = stArchiveData.mapFileEntry.find(dirKey);
+            if (it != stArchiveData.mapFileEntry.end() && it->isDirectory) {
+                // 检查目录名是否超长，只补全超长的目录
+                QString dirName = QFileInfo(path).fileName();
+                if (NAME_MAX < dirName.toLocal8Bit().length()) {
+                    result.prepend(it.value());  // 插入到前面，保证目录在文件之前被处理
+                    existingPaths.insert(dirKey);
+                }
+            }
+        }
+    }
+    return result;
+}
+
 bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
 {
     ExtractionOptions &options = m_extractOptions;
@@ -1411,8 +1455,8 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
 
     // 遍历所有文件，分离需要重命名的文件和普通文件，同时创建目录结构
     m_renameEntries.clear();
+    m_renameDirEntries.clear();
     m_allFileList.clear();
-    QStringList normalFileList;
     qInfo() << "handleLongNameExtract: total files:" << files.count();
 
     for (const FileEntry &entry : files) {
@@ -1455,6 +1499,52 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
             }
         }
 
+        // 检测目录名是否超过 NAME_MAX，需要将目录在归档内重命名为缩短名
+        // （7z rn 重命名目录时会自动移动其下所有子条目）
+        if (entry.strFullPath.endsWith(QDir::separator())) {
+            QString dirPath = entry.strFullPath;
+            dirPath.chop(1);  // 去掉尾部分隔符
+            QString ownName = QFileInfo(dirPath).fileName();
+            if (NAME_MAX < ownName.toLocal8Bit().length()) {
+                m_eErrorType = ET_LongNameError;
+                QString strTemp = ownName.left(TRUNCATION_FILE_LONG);
+                // 使用归档内原始父路径构造计数 key，与 handleLongNameforPath 的 key 一致
+                // （handleLongNameforPath 使用 dirInfo.path() 即原始父路径，不能用可能已被 sDir 缩短过的 strFilePath）
+                QString originalParentPath = QFileInfo(dirPath).path();
+                QString tempFilePathName;
+                if (originalParentPath == ".") {
+                    tempFilePathName = strTemp;
+                } else {
+                    tempFilePathName = originalParentPath + QDir::separator() + strTemp;
+                }
+                // handleLongNameforPath 已在上方调用时为长名目录递增了 m_mapLongDirName
+                int count = m_mapLongDirName.value(tempFilePathName, 0);
+                if (count == 0) {
+                    count = 1;  // handleLongNameforPath 未填充时使用默认值
+                }
+                if (count > LONGFILE_SAME_FILES) {
+                    emit signalCurFileName(entry.strFullPath);
+                    m_longNameTempDir.reset();
+                    return false;
+                }
+                QString shortDirName = strTemp + QString("(%1)").arg(count, LONGFILE_SUFFIX_FieldWidth, BINARY_NUM, QChar('0'));
+                FileEntry newEntry = entry;
+                newEntry.strAlias = shortDirName;
+                m_renameDirEntries.append(newEntry);
+                // 更新 strFileName 为缩短后的目录路径。
+                // 注意：sDir 已是完整短目录路径（含父目录前缀 + 短目录名），
+                // 不能再用可能已被 sDir 覆盖过的 strFilePath 拼接 shortDirName，
+                // 否则目录名会重复（如 AAA/short(001)/short(001)/）。
+                if (!sDir.isEmpty()) {
+                    strFileName = sDir;
+                } else if (originalParentPath == "." || originalParentPath.isEmpty()) {
+                    strFileName = shortDirName + QDir::separator();
+                } else {
+                    strFileName = originalParentPath + QDir::separator() + shortDirName + QDir::separator();
+                }
+            }
+        }
+
         QString strDestFileName = options.strTargetPath + QDir::separator() + strFileName;
         if (!m_extractOptions.bAllExtract) {
             int nCnt = m_rootNode.count(QDir::separator());
@@ -1480,29 +1570,23 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
             newEntry.strAlias = QFileInfo(strFileName).fileName();
             if (needRename) {
                 m_renameEntries.append(newEntry);
-            } else {
-                if (info.path() != ".") {
-                    normalFileList.append(info.path() + QDir::separator() + newEntry.strAlias);
-                } else {
-                    normalFileList.append(newEntry.strAlias);
-                }
             }
+            // 使用缩短后的路径构建解压文件列表
+            m_allFileList.append(strFileName);
         }
     }
 
-    // 构建解压文件列表
-    for (const FileEntry &entry : m_renameEntries) {
-        QFileInfo info(entry.strFullPath);
-        if (info.path() != ".") {
-            m_allFileList.append(info.path() + QDir::separator() + entry.strAlias);
-        } else {
-            m_allFileList.append(entry.strAlias);
-        }
-    }
-    m_allFileList.append(normalFileList);
+    // 嵌套长目录重命名必须从深到浅排序：
+    // 7z rn 重命名父目录时自动移动子条目，但如果子目录尚未重命名，
+    // 父目录重命名后子目录的旧路径已失效。
+    // 因此先重命名最深的目录，再逐层向上重命名父目录。
+    std::sort(m_renameDirEntries.begin(), m_renameDirEntries.end(),
+              [](const FileEntry &a, const FileEntry &b) {
+                  return a.strFullPath.count(QDir::separator()) > b.strFullPath.count(QDir::separator());
+              });
 
     qInfo() << "handleLongNameExtract: rename entries:" << m_renameEntries.count()
-            << ", normal files:" << normalFileList.count()
+            << ", rename dir entries:" << m_renameDirEntries.count()
             << ", all files:" << m_allFileList.count();
 
     // 异步执行 7z rn
@@ -1522,6 +1606,30 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
             m_longNamePhase = LNE_None;
             m_longNameTempDir.reset();
             m_renameEntries.clear();
+            m_renameDirEntries.clear();
+            m_allFileList.clear();
+            return false;
+        }
+        return true;
+    }
+
+    // 异步执行 7z rn（目录重命名，从深到浅）
+    if (!m_renameDirEntries.isEmpty()) {
+        m_longNamePhase = LNE_RenameDirs;
+        QString program = m_cliProps->property("moveProgram").toString();
+        QStringList args = m_cliProps->longNameDirRenameArgs(m_longNameTempArchivePath, m_renameDirEntries,
+                                                              m_longNamePassword);
+        QString wdir = options.strTargetPath;
+        if (wdir.isEmpty()) {
+            wdir = QDir::tempPath();
+        }
+        args.insert(1, QStringLiteral("-w%1").arg(wdir));
+        qInfo() << "handleLongNameExtract: starting async dir rename" << m_renameDirEntries.count() << "dirs";
+        if (!startLongNameProcess(program, args, options.strTargetPath)) {
+            m_longNamePhase = LNE_None;
+            m_longNameTempDir.reset();
+            m_renameEntries.clear();
+            m_renameDirEntries.clear();
             m_allFileList.clear();
             return false;
         }
@@ -1542,6 +1650,7 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
             m_longNamePhase = LNE_None;
             m_longNameTempDir.reset();
             m_renameEntries.clear();
+            m_renameDirEntries.clear();
             m_allFileList.clear();
             return false;
         }
@@ -1608,6 +1717,7 @@ void CliInterface::onLongNameProcessFinished(int exitCode, QProcess::ExitStatus 
         m_longNamePhase = LNE_None;
         m_longNameTempDir.reset();
         m_renameEntries.clear();
+        m_renameDirEntries.clear();
         m_allFileList.clear();
         emit signalprogress(100);
         emit signalFinished(m_finishType);
@@ -1617,37 +1727,84 @@ void CliInterface::onLongNameProcessFinished(int exitCode, QProcess::ExitStatus 
     m_finishType = PFT_Nomral;
 
     if (m_longNamePhase == LNE_Rename) {
-        m_longNamePhase = LNE_Extract;
-        // rename→extract 阶段切换时重置进度条。
-        // 虽然已在 handleProgress 中屏蔽了 rename 阶段的进度上报，
-        // 但 extractFiles 入口处可能已 emit 过 signalprogress(1)，
-        // 且 rename 阶段可能有少量进度泄露（非 handleProgress 路径）。
-        // 这里用负值作为重置哨兵，由 MainWindow::slotReceiveProgress 捕获并调用 resetProgress()，
-        // 确保 extract 阶段的进度从 0 开始单调递增，剩余时间计算正确。
-        emit signalprogress(-1.0);
-        QString program = m_cliProps->property("extractProgram").toString();
-        QStringList args = m_cliProps->extractArgs(m_longNameTempArchivePath,
-                                                    m_extractOptions.bAllExtract ? QStringList() : m_allFileList,
-                                                    true, m_longNamePassword);
-        qInfo() << "LongName: rename done, starting async extract" << m_allFileList.count() << "files"
-                << (m_extractOptions.bAllExtract ? "(all extract, no file list)" : "(partial extract)");
-        if (!startLongNameProcess(program, args, m_extractOptions.strTargetPath)) {
-            qWarning() << "LongName: FAILED to start extract process, archive:" << m_longNameTempArchivePath;
-            m_longNamePhase = LNE_None;
-            m_longNameTempDir.reset();
-            m_renameEntries.clear();
-            m_allFileList.clear();
-            emit signalprogress(100);
-            emit signalFinished(PFT_Error);
+        // 文件重命名完成，接下来重命名目录或直接解压
+        if (!m_renameDirEntries.isEmpty()) {
+            m_longNamePhase = LNE_RenameDirs;
+            emit signalprogress(-1.0);
+            QString program = m_cliProps->property("moveProgram").toString();
+            QStringList args = m_cliProps->longNameDirRenameArgs(m_longNameTempArchivePath, m_renameDirEntries,
+                                                                     m_longNamePassword);
+            QString wdir = m_extractOptions.strTargetPath;
+            if (wdir.isEmpty()) {
+                wdir = QDir::tempPath();
+            }
+            args.insert(1, QStringLiteral("-w%1").arg(wdir));
+            qInfo() << "LongName: file rename done, starting async dir rename" << m_renameDirEntries.count() << "dirs";
+            if (!startLongNameProcess(program, args, m_extractOptions.strTargetPath)) {
+                qWarning() << "LongName: FAILED to start dir rename, archive:" << m_longNameTempArchivePath;
+                m_longNamePhase = LNE_None;
+                m_longNameTempDir.reset();
+                m_renameEntries.clear();
+                m_renameDirEntries.clear();
+                m_allFileList.clear();
+                emit signalprogress(100);
+                emit signalFinished(PFT_Error);
+            }
+        } else {
+            // 没有目录需要重命名，直接进入解压阶段
+            startLongNameExtractAfterRename();
         }
+    } else if (m_longNamePhase == LNE_RenameDirs) {
+        // 目录重命名完成，进入解压阶段
+        startLongNameExtractAfterRename();
     } else if (m_longNamePhase == LNE_Extract) {
         m_longNamePhase = LNE_None;
         m_longNameTempDir.reset();
         m_renameEntries.clear();
+        m_renameDirEntries.clear();
         m_allFileList.clear();
         m_eErrorType = ET_LongNameError;
         qInfo() << "LongName: extract done, refreshing file list";
         list();
+    }
+}
+
+void CliInterface::startLongNameExtractAfterRename()
+{
+    // 重命名阶段（文件/目录）完成后，重置进度条并启动解压阶段。
+    // 用负值作为重置哨兵，由 MainWindow::slotReceiveProgress 捕获并调用 resetProgress()，
+    // 确保 extract 阶段的进度从 0 开始单调递增。
+    emit signalprogress(-1.0);
+
+    if (m_allFileList.isEmpty()) {
+        // 没有文件需要解压（如仅含空目录），直接完成
+        m_longNamePhase = LNE_None;
+        m_longNameTempDir.reset();
+        m_renameEntries.clear();
+        m_renameDirEntries.clear();
+        m_allFileList.clear();
+        m_eErrorType = ET_LongNameError;
+        qInfo() << "LongName: rename done, no files to extract, refreshing file list";
+        list();
+        return;
+    }
+
+    m_longNamePhase = LNE_Extract;
+    QString program = m_cliProps->property("extractProgram").toString();
+    QStringList args = m_cliProps->extractArgs(m_longNameTempArchivePath,
+                                                m_extractOptions.bAllExtract ? QStringList() : m_allFileList,
+                                                true, m_longNamePassword);
+    qInfo() << "LongName: rename done, starting async extract" << m_allFileList.count() << "files"
+            << (m_extractOptions.bAllExtract ? "(all extract, no file list)" : "(partial extract)");
+    if (!startLongNameProcess(program, args, m_extractOptions.strTargetPath)) {
+        qWarning() << "LongName: FAILED to start extract process, archive:" << m_longNameTempArchivePath;
+        m_longNamePhase = LNE_None;
+        m_longNameTempDir.reset();
+        m_renameEntries.clear();
+        m_renameDirEntries.clear();
+        m_allFileList.clear();
+        emit signalprogress(100);
+        emit signalFinished(PFT_Error);
     }
 }
 

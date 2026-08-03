@@ -59,6 +59,7 @@ enum ParseState {
 enum LongNamePhase {
     LNE_None,
     LNE_Rename,
+    LNE_RenameDirs,
     LNE_Extract
 };
 
@@ -210,6 +211,22 @@ private:
 
     bool startLongNameProcess(const QString &program, const QStringList &args, const QString &workDir = QString());
 
+    /**
+     * @brief startLongNameExtractAfterRename 重命名阶段完成后启动解压阶段
+     *
+     * 在 LNE_Rename / LNE_RenameDirs 完成后调用，重置进度条并启动 LNE_Extract。
+     * 若没有文件需要解压则直接完成。
+     */
+    void startLongNameExtractAfterRename();
+
+    /**
+     * @brief collectLongDirEntries 补全部分解压时缺失的长名目录条目
+     *
+     * 部分解压时若只选中了长名目录下的文件，files 中不含目录条目，
+     * 此函数从 mapFileEntry 中查找各级超长父目录条目并补全。
+     */
+    QList<FileEntry> collectLongDirEntries(const QList<FileEntry> &files) const;
+
     bool checkMoveCapability();
 
     /**
@@ -284,6 +301,7 @@ private:
 
     LongNamePhase m_longNamePhase = LNE_None;
     QList<FileEntry> m_renameEntries;
+    QList<FileEntry> m_renameDirEntries;   // 长名目录重命名条目（目录名超过 NAME_MAX）
     QStringList m_allFileList;
     QString m_longNameTempArchivePath;
     QString m_longNamePassword;

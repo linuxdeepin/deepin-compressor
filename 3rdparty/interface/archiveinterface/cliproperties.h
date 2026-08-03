@@ -88,6 +88,14 @@ public:
     QStringList extractArgs(const QString &archive, const QStringList &files, bool preservePaths, const QString &password);
     QStringList listArgs(const QString &archive, const QString &password);
     QStringList moveArgs(const QString &archive, const QList<FileEntry> &entries, const ArchiveData &stArchiveData, const QString &password);
+    /**
+     * @brief longNameDirRenameArgs 构造长名目录重命名参数（7z rn）
+     *
+     * 与 moveArgs 不同，每个目录条目只发出一对重命名命令（oldPath -> newPath），
+     * 依赖 7z rn 重命名目录时自动移动子条目。entries 需按深度从深到浅排序。
+     * 仅用于长文件名解压流程，不影响普通 renameFiles。
+     */
+    QStringList longNameDirRenameArgs(const QString &archive, const QList<FileEntry> &entries, const QString &password);
     QStringList testArgs(const QString &archive, const QString &password);
 
     bool isTestPassedMsg(const QString &line);
