@@ -1253,6 +1253,8 @@ void CliInterface::removeExtractedFilesOnFailure(const QString &strTargetPath, c
         return;
     }
 
+    const QString canonicalTarget = QDir::cleanPath(targetDir.absolutePath());
+
     QList<QPair<QString, bool> > paths;   // path, isDirectory
     for (const FileEntry &entry : listToRemove) {
         QString relPath = entry.strFullPath;
@@ -1262,7 +1264,12 @@ void CliInterface::removeExtractedFilesOnFailure(const QString &strTargetPath, c
         if (relPath.isEmpty()) {
             continue;
         }
-        paths.append(qMakePair(targetDir.absoluteFilePath(relPath), entry.isDirectory));
+        // 路径规范化后校验仍位于目标目录内，防止 "../" 路径遍历越界删除（PMS BUG-371831）
+        const QString absPath = QDir::cleanPath(targetDir.absoluteFilePath(relPath));
+        if (!absPath.startsWith(canonicalTarget + QLatin1Char('/')) && absPath != canonicalTarget) {
+            continue;
+        }
+        paths.append(qMakePair(absPath, entry.isDirectory));
     }
 
     for (const auto &p : paths) {
@@ -1772,7 +1779,10 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
     }
 
     if (!m_extractOptions.bAllExtract && (!(m_extractOptions.strTargetPath.startsWith("/tmp") && m_extractOptions.strTargetPath.contains("/deepin-compressor-") && m_extractOptions.strDestination.isEmpty()))) {
-        if (0 == exitCode) {   // job正常结束
+        // job正常结束，或提取（非"打开"操作）失败时也搬运：使提取在分卷缺失等失败
+        // 场景下保留已成功解出的文件，与"解压"（bAllExtract）行为保持一致（PMS BUG-371831）。
+        // 以 !m_extractOptions.bOpen 收窄，"打开解压列表文件"（bOpen=true）失败仍维持原行为。
+        if (0 == exitCode || !m_extractOptions.bOpen) {   // 正常结束，或提取（非打开）失败也搬运
             // 提取操作和打开解压列表文件非第一层的文件
             // 将文件从临时文件夹内移出
             bool droppedFilesMoved = moveExtractTempFilesToDest(m_files, m_extractOptions);
@@ -1782,6 +1792,11 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
                 emit signalFinished(m_finishType);
                 return;
             }
+        }
+
+        // 提取（非"打开"操作）失败时，清理目标路径下 size 为 0 的残留文件，与解压失败处理对齐（PMS BUG-371831）
+        if (0 != exitCode && !m_extractOptions.bOpen && !m_extractOptions.strTargetPath.isEmpty()) {
+            removeExtractedFilesOnFailure(m_extractOptions.strTargetPath, m_files);
         }
 
         m_rootNode.clear();   // 清空缓存数据
