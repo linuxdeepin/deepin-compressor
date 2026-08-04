@@ -1769,6 +1769,11 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
                 sendMessage(new CustomFloatingMessage(icon, tr("Extraction failed: the file name is too long"), 1000, this));
                 break;
             }
+            // 分卷缺失：与解压分支对齐提示，避免提取失败时静默无提示（PMS BUG-371831）
+            case ET_MissingVolume:
+                showErrorMessage(FI_Uncompress, EI_ArchiveMissingVolume,
+                                 !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_Extractto == m_eStartupType));
+                break;
             default:
                 break;
             }
