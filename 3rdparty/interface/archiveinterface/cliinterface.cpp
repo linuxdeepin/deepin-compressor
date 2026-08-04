@@ -225,6 +225,7 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
             // 部分解压时补全长名目录条目（files 中可能不含目录本身）
             QList<FileEntry> filesWithDirs = collectLongDirEntries(m_files);
             if (!handleLongNameExtract(filesWithDirs)) {
+                qWarning() << "extractFiles(partial): handleLongNameExtract failed, errorType:" << m_eErrorType;
                 if (m_eErrorType == ET_NoError) {
                     m_eErrorType = ET_FileWriteError;
                 }
@@ -270,6 +271,7 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
 
         if (bHandleLongName) {
             if (!handleLongNameExtract(arcData.mapFileEntry.values())) {
+                qWarning() << "extractFiles(all): handleLongNameExtract failed, errorType:" << m_eErrorType;
                 if (m_eErrorType == ET_NoError) {
                     m_eErrorType = ET_FileWriteError;
                 }
@@ -1402,6 +1404,7 @@ QList<FileEntry> CliInterface::collectLongDirEntries(const QList<FileEntry> &fil
 
     QList<FileEntry> result = files;
     ArchiveData stArchiveData = DataManager::get_instance().archiveData();
+    int supplementCount = 0;
 
     for (const FileEntry &entry : files) {
         // 从文件路径逐级向上查找父目录条目
@@ -1424,10 +1427,12 @@ QList<FileEntry> CliInterface::collectLongDirEntries(const QList<FileEntry> &fil
                 if (NAME_MAX < dirName.toLocal8Bit().length()) {
                     result.prepend(it.value());  // 插入到前面，保证目录在文件之前被处理
                     existingPaths.insert(dirKey);
+                    supplementCount++;
                 }
             }
         }
     }
+    qInfo() << "collectLongDirEntries: supplemented" << supplementCount << "long-named dir entries, total files:" << files.count();
     return result;
 }
 
@@ -1479,6 +1484,7 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
             QString strTemp = info.fileName().left(TRUNCATION_FILE_LONG);
             QString tempFilePathName = strFilePath + QDir::separator() + strTemp;
             if (m_mapLongName[tempFilePathName]++ >= LONGFILE_SAME_FILES) {
+                qWarning() << "handleLongNameExtract: too many files share same truncated name, aborting long-name extraction, count:" << m_mapLongName[tempFilePathName];
                 emit signalCurFileName(entry.strFullPath);
                 m_eErrorType = ET_LongNameError;
                 m_longNameTempDir.reset();
@@ -1523,6 +1529,7 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
                     count = 1;  // handleLongNameforPath 未填充时使用默认值
                 }
                 if (count > LONGFILE_SAME_FILES) {
+                    qWarning() << "handleLongNameExtract: too many long-named dirs share same truncated name, aborting long-name extraction, count:" << count;
                     emit signalCurFileName(entry.strFullPath);
                     m_longNameTempDir.reset();
                     return false;
@@ -1561,6 +1568,7 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
         if (entry.strFullPath.endsWith(QDir::separator())) {
             if (!QDir(strDestFileName).exists()) {
                 if (!QDir(strDestFileName).mkpath(strDestFileName)) {
+                    qWarning() << "handleLongNameExtract: failed to create target dir:" << strDestFileName;
                     m_longNameTempDir.reset();
                     return false;
                 }
@@ -1603,6 +1611,7 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
         args.insert(1, QStringLiteral("-w%1").arg(wdir));
         qInfo() << "handleLongNameExtract: starting async rename" << m_renameEntries.count() << "files";
         if (!startLongNameProcess(program, args, options.strTargetPath)) {
+            qWarning() << "handleLongNameExtract: FAILED to start async rename (file rename phase), entries:" << m_renameEntries.count();
             m_longNamePhase = LNE_None;
             m_longNameTempDir.reset();
             m_renameEntries.clear();
@@ -1626,6 +1635,7 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
         args.insert(1, QStringLiteral("-w%1").arg(wdir));
         qInfo() << "handleLongNameExtract: starting async dir rename" << m_renameDirEntries.count() << "dirs";
         if (!startLongNameProcess(program, args, options.strTargetPath)) {
+            qWarning() << "handleLongNameExtract: FAILED to start async dir rename (dir rename phase), entries:" << m_renameDirEntries.count();
             m_longNamePhase = LNE_None;
             m_longNameTempDir.reset();
             m_renameEntries.clear();
@@ -1647,6 +1657,7 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
         qInfo() << "handleLongNameExtract: starting async extract" << m_allFileList.count() << "files"
                 << (m_extractOptions.bAllExtract ? "(all extract, no file list)" : "(partial extract)");
         if (!startLongNameProcess(program, args, options.strTargetPath)) {
+            qWarning() << "handleLongNameExtract: FAILED to start async extract (extract phase), files:" << m_allFileList.count();
             m_longNamePhase = LNE_None;
             m_longNameTempDir.reset();
             m_renameEntries.clear();
@@ -1666,6 +1677,7 @@ bool CliInterface::startLongNameProcess(const QString &program, const QStringLis
 
     QString programPath = QStandardPaths::findExecutable(program);
     if (programPath.isEmpty()) {
+        qWarning() << "startLongNameProcess: program not found:" << program;
         return false;
     }
 
@@ -1710,6 +1722,7 @@ void CliInterface::onLongNameProcessFinished(int exitCode, QProcess::ExitStatus 
     if (m_isProcessKilled || exitCode != 0) {
         qWarning() << "LongName extraction failed in phase" << m_longNamePhase
                    << "killed:" << m_isProcessKilled << "exitCode:" << exitCode
+                   << "exitStatus:" << exitStatus
                    << "archive:" << m_longNameTempArchivePath;
         if (m_finishType == PFT_Nomral) {
             m_finishType = PFT_Error;
@@ -1878,6 +1891,10 @@ void CliInterface::readStdout(bool handleAll)
         // 第二个判断条件是处理rar的list，当rar文件含有comment信息的时候需要根据空行解析
         if (!line.isEmpty() || (m_listEmptyLines && m_workStatus == WT_List)) {
             if (!handleLine(QString::fromLocal8Bit(line), m_workStatus)) {
+                if (m_longNamePhase != LNE_None) {
+                    qWarning() << "readStdout: handleLine returned false, killing long-name process. phase:" << m_longNamePhase
+                               << "workStatus:" << m_workStatus << "line:" << line;
+                }
                 emit signalprogress(100);
                 killProcess();
                 return;
