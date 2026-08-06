@@ -293,6 +293,44 @@ QStringList CliProperties::moveArgs(const QString &archive, const QList<FileEntr
     return args;
 }
 
+QStringList CliProperties::longNameDirRenameArgs(const QString &archive, const QList<FileEntry> &entries, const QString &password)
+{
+    // 专用于长名目录重命名的参数构造。
+    // 与 moveArgs 不同，此处每个目录条目只发出一对重命名命令（oldPath -> newPath），
+    // 7z rn 重命名目录时会自动移动其下所有子条目。
+    // entries 必须按深度从深到浅排序（最深的目录先重命名），
+    // 这样父目录重命名时其子目录已经改短名，不会被父级重命名破坏。
+    QStringList args;
+    args << m_moveSwitch;
+
+    if (!m_progressarg.isEmpty()) {
+        args << m_progressarg;
+    }
+
+    if (!password.isEmpty()) {
+        args << substitutePasswordSwitch(password);
+    }
+
+    args << archive;
+    for (const FileEntry &entry : entries) {
+        QString oldName = entry.strFullPath;
+        if (oldName.endsWith(QDir::separator())) {
+            oldName.chop(1);  // 7z rn 不接受尾部分隔符
+        }
+        QString parentPath = QFileInfo(oldName).path();
+        QString newName;
+        if (parentPath == "." || parentPath.isEmpty()) {
+            newName = entry.strAlias;
+        } else {
+            newName = parentPath + QDir::separator() + entry.strAlias;
+        }
+        args << oldName << newName;
+    }
+
+    args.removeAll(QString());
+    return args;
+}
+
 QStringList CliProperties::testArgs(const QString &archive, const QString &password)
 {
     QStringList args;
