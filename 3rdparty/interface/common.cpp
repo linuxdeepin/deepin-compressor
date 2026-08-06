@@ -375,15 +375,19 @@ QString Common::handleLongNameforPath(const QString &strFilePath, const QString 
     QFileInfo info(strFilePath);
      if(entryName.endsWith(QDir::separator())){
          //目录计数+1
-        if(NAME_MAX < info.fileName().toLocal8Bit().length()) {
-            QString strTemp = info.fileName().left(TRUNCATION_FILE_LONG);
-            if(info.path() == ".") {
+        // 检查目录自身的名字（而非父目录名）是否超过 NAME_MAX
+        QString dirPath = entryName;
+        dirPath.chop(1);  // 去掉尾部分隔符
+        QFileInfo dirInfo(dirPath);
+        if(NAME_MAX < dirInfo.fileName().toLocal8Bit().length()) {
+            QString strTemp = dirInfo.fileName().left(TRUNCATION_FILE_LONG);
+            if(dirInfo.path() == ".") {
                 tempFilePathName = strTemp;
             } else {
-                tempFilePathName = info.path() + QDir::separator() + strTemp;
+                tempFilePathName = dirInfo.path() + QDir::separator() + strTemp;
             }
             mapLongDirName[tempFilePathName]++;
-            mapRealDirValue[info.filePath()] = mapLongDirName[tempFilePathName];
+            mapRealDirValue[dirInfo.filePath()] = mapLongDirName[tempFilePathName];
             bLongName = true;
         }
     }
