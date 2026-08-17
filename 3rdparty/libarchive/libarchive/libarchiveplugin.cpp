@@ -255,6 +255,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         }
 
         const bool entryIsDir = S_ISDIR(archive_entry_mode(entry)); //该条entry是否是文件夹
+        const bool entryIsLink = (archive_entry_filetype(entry) == AE_IFLNK); //该条entry是否是符号链接
 
         const char *name = archive_entry_pathname(entry);
         QString entryName = m_common->trans2uft8(name, m_mapCode[QString(name)]); //该条entry在压缩包内文件名(全路径)
@@ -487,13 +488,17 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
 
             copyDataFromSource(m_archiveReader.data(), writer.data(), QFileInfo(m_strArchiveName).size());
 
-            // qInfo() <<  destinationDirectory + QDir::separator() + entryName;
-            // 文件权限设置
-            QFileDevice::Permissions per = getPermissions(archive_entry_perm(entry));
-            if (entryIsDir) {
-                per |= QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ExeUser;
+            // 文件权限设置（cwd 已切到解压目录，entryName 为相对路径）。
+            // 符号链接条目跳过：QFile::setPermissions 底层是 chmod，会跟随符号链接
+            // 作用到其指向的真实目标文件上，导致解压目录外文件权限被篡改
+            // (UT-2026-0114 / BUG-373791)。Linux 上符号链接自身 mode 无意义。
+            if (!entryIsLink) {
+                QFileDevice::Permissions per = getPermissions(archive_entry_perm(entry));
+                if (entryIsDir) {
+                    per |= QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ExeUser;
+                }
+                QFile::setPermissions(entryName, per);
             }
-            QFile::setPermissions(/*destinationDirectory + QDir::separator() + */entryName, per);
         }
         break;
         case ARCHIVE_FAILED: {
