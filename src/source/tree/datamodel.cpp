@@ -47,8 +47,17 @@ QVariant DataModel::headerData(int section, Qt::Orientation orientation, int rol
 
 QVariant DataModel::data(const QModelIndex &index, int role) const
 {
+    if (!index.isValid()) {
+        return QVariant();
+    }
+
     int iRow = index.row();
     int iColumn = index.column();
+
+    if (iRow < 0 || iRow >= m_listEntry.size()
+            || iColumn < 0 || iColumn >= m_listColumn.size()) {
+        return QVariant();
+    }
 
     FileEntry entry = m_listEntry[iRow];
 
