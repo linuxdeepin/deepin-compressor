@@ -283,17 +283,32 @@ ErrorType LibminizipPlugin::extractEntry(unzFile zipfile, unz_file_info file_inf
         strFileName = strFileName.remove(0, options.strDestination.size());
     }
 
-    while (strFileName.contains(QStringLiteral("../"))) {
-        qInfo() << "skipped ../ path component(s) in " << strFileName;
-        strFileName = strFileName.replace(QStringLiteral("../"), QString());
-    }
+    // 先统一路径分隔符，避免反斜杠形式的 "../" 绕过后续剥离
     if (strFileName.contains(QLatin1Char('\\'))) {
         strFileName = strFileName.replace(QLatin1Char('\\'), QDir::separator());
     }
 
-    emit signalCurFileName(strFileName);        // 发送当前正在解压的文件名
+    // 目录条目以分隔符结尾，先记录，避免规范化丢失尾部分隔符
+    const bool bIsDirectory = strFileName.endsWith(QDir::separator());
 
-    bool bIsDirectory = strFileName.endsWith(QDir::separator());    // 是否为文件夹
+    // 安全规范化路径：按分隔符拆分后用栈过滤 "." 与 ".."，替代易出错的字符串替换
+    const QStringList pathParts = strFileName.split(QDir::separator(), QString::SkipEmptyParts);
+    QStringList safeParts;
+    for (const QString &part : pathParts) {
+        if (part == QLatin1String("..")) {
+            if (!safeParts.isEmpty()) {
+                safeParts.removeLast();
+            }
+        } else if (part != QLatin1String(".")) {
+            safeParts.append(part);
+        }
+    }
+    strFileName = safeParts.join(QDir::separator());
+    if (bIsDirectory && !strFileName.isEmpty() && !strFileName.endsWith(QDir::separator())) {
+        strFileName += QDir::separator();
+    }
+
+    emit signalCurFileName(strFileName);        // 发送当前正在解压的文件名
 
     // 判断解压路径是否存在，不存在则创建文件夹
     if (QDir().exists(options.strTargetPath) == false)
@@ -301,6 +316,16 @@ ErrorType LibminizipPlugin::extractEntry(unzFile zipfile, unz_file_info file_inf
 
     // 解压完整文件名（含路径）
     QString strDestFileName = options.strTargetPath + QDir::separator() + strFileName;
+
+    // 词法包含校验：规范化后最终写入路径必须位于解压目录内，拦截 "../" 路径穿越
+    const QString cleanTargetPath = QDir::cleanPath(QDir(options.strTargetPath).absolutePath());
+    const QString cleanDestPath = QDir::cleanPath(QDir(strDestFileName).absolutePath());
+    if (!cleanDestPath.startsWith(cleanTargetPath + QDir::separator()) &&
+        cleanDestPath != cleanTargetPath) {
+        qInfo() << "Path traversal detected! Rejected path: " << strFileName;
+        return ET_FileWriteError;
+    }
+
     QFile file(strDestFileName);
 
     if (bIsDirectory) {     // 文件夹
