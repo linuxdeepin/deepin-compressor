@@ -65,6 +65,13 @@ public :
     bool checkHerePath(const QString &strPath);
 
     /**
+     * @brief checkArchiveLocalDevice 检查拖拽追加的压缩包是否位于本地设备
+     * @param strArchivePath  dragdropadd 入参的压缩包路径（可为符号链接/gvfs 挂载路径等）
+     * @return true=本地设备（可继续追加）；false=非本地设备（已提示并应退出）
+     */
+    bool checkArchiveLocalDevice(const QString &strArchivePath);
+
+    /**
      * @brief checkSettings 检测目标文件合法性
      * @param file  文件名
      * @return
