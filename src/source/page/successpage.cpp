@@ -68,7 +68,7 @@ void SuccessPage::initUI()
     DFontSizeManager::instance()->bind(m_pDetailLbl, DFontSizeManager::T8);
 
     //查看文件按钮
-    m_pShowFileBtn = new CustomPushButton(this);
+    m_pShowFileBtn = new CustomSuggestButton(this);
     m_pShowFileBtn->setMinimumWidth(340);
     m_pShowFileBtn->setText(tr("View"));
 
