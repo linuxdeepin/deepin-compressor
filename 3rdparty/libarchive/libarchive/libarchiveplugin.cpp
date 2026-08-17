@@ -178,6 +178,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         }
 
         const bool entryIsDir = S_ISDIR(archive_entry_mode(entry)); //该条entry是否是文件夹
+        const bool entryIsSymLink = S_ISLNK(archive_entry_mode(entry)); //该条entry是否是软链接
 
         const char *name = archive_entry_pathname(entry);
         QString entryName = m_common->trans2uft8(name, m_mapCode[QString(name)]); //该条entry在压缩包内文件名(全路径)
@@ -404,11 +405,15 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
 
             // qInfo() <<  destinationDirectory + QDir::separator() + entryName;
             // 文件权限设置
-            QFileDevice::Permissions per = getPermissions(archive_entry_perm(entry));
-            if (entryIsDir) {
-                per |= QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ExeUser;
+            // 软链接跳过：Linux 下软链接本身无权限位，chmod 会穿透到链接指向的真实文件，
+            // 导致解压目录外的目标文件权限被归档中的 mode 篡改，此处与 libzipplugin 的 if(!isLink) 逻辑保持一致
+            if (!entryIsSymLink) {
+                QFileDevice::Permissions per = getPermissions(archive_entry_perm(entry));
+                if (entryIsDir) {
+                    per |= QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ExeUser;
+                }
+                QFile::setPermissions(/*destinationDirectory + QDir::separator() + */entryName, per);
             }
-            QFile::setPermissions(/*destinationDirectory + QDir::separator() + */entryName, per);
         }
         break;
         case ARCHIVE_FAILED: {
