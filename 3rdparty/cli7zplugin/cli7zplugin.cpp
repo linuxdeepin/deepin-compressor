@@ -329,7 +329,11 @@ bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
             DataManager::get_instance().archiveData().isListEncrypted = true; // 列表加密文件
         }
 
-        m_eErrorType = ET_NeedPassword;
+        // 加密分卷缺失时 7z 已置 ET_MissingVolume，密码提示不得覆盖
+        // 分卷缺失判定（PMS BUG-373669）
+        if (m_eErrorType != ET_MissingVolume) {
+            m_eErrorType = ET_NeedPassword;
+        }
         if (handlePassword() == PFT_Cancel) {
             m_finishType = PFT_Cancel;
             m_bWaitingPassword = true;

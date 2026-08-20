@@ -1044,7 +1044,11 @@ void CliInterface::handleProgress(const QString &line)
 
 PluginFinishType CliInterface::handlePassword()
 {
-    m_eErrorType = ET_NoError;
+    // 加密分卷缺失时 7z 已置 ET_MissingVolume，handlePassword 入口不得
+    // 无条件清零，否则后续 CRC 失败行会误判为「密码错误」（PMS BUG-373669）
+    if (m_eErrorType != ET_MissingVolume) {
+        m_eErrorType = ET_NoError;
+    }
 
     QString name;
     if (m_process && m_process->program().at(0).contains("unrar")) {   // rar解压会提示加密的文件名
