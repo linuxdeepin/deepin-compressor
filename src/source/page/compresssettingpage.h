@@ -89,6 +89,13 @@ public:
      */
     bool isOrderMode();
 
+protected:
+    /**
+     * @brief mousePressEvent 鼠标点击事件，点击空白区域取消输入框焦点
+     * @param event
+     */
+    void mousePressEvent(QMouseEvent *event) override;
+
 private:
     /**
      * @brief initUI    初始化界面
