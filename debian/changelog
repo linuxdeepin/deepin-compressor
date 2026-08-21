@@ -1,3 +1,25 @@
+deepin-compressor (6.5.33) unstable; urgency=medium
+
+  * [skip CI] Translate desktop.ts in pt_BR
+  * [skip CI] Translate deepin-compressor.ts in pt_BR
+  * [skip CI] Translate deepin-compressor.ts in pt_BR
+  * [skip CI] Removing deepin-compressor.ts in pt_BR
+  * [skip CI] Translate deepin-compressor.ts in ca
+  * [skip CI] Translate deepin-compressor.ts in pt_BR
+  * [skip CI] Translate deepin-compressor.ts in fi
+  * [skip CI] Translate deepin-compressor.ts in pl
+  * [skip CI] Translate deepin-compressor.ts in pt
+  * [skip CI] Translate deepin-compressor.ts in ru
+  * fix(security): skip chmod on symlink entries during tar extraction
+  * fix: validate index before accessing entry in DataModel::data
+  * chore: Sync by
+    https://github.com/linuxdeepin/.github/commit/a300f8523d4876677112ed
+    ab6a0772f7ad112976
+  * fix(security): fix backslash path traversal in minizip extraction
+    (#461)
+
+ -- liuzheng <liuzheng@uniontech.com>  Fri, 21 Aug 2026 14:16:51 +0800
+
 deepin-compressor (6.5.32) unstable; urgency=medium
 
   * chore: Update version to 6.5.32
