@@ -1061,7 +1061,8 @@ PluginFinishType CliInterface::handlePassword()
         }
     }
 
-    PasswordNeededQuery query(name);
+    PasswordNeededQuery query(name, m_bWrongPasswordRetry);
+    m_bWrongPasswordRetry = false;
     emit signalQuery(&query);
     query.waitForResponse();
 

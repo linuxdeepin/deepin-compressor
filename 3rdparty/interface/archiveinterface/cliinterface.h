@@ -285,6 +285,7 @@ protected:
     bool m_isProcessKilled = false;  // 进程已经结束
     bool m_isEmptyArchive = false;  // 压缩包内无数据
     bool m_isCorruptArchive = false; // 是否非致命错误
+    bool m_bWrongPasswordRetry = false; // 密码错误后重弹密码框标记，供 handlePassword 区分重试文案
 
 private:
     QList<FileEntry> m_files; // 文件

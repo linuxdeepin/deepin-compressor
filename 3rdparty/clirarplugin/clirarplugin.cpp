@@ -292,6 +292,7 @@ bool CliRarPlugin::handleLine(const QString &line, WorkType workStatus)
             return false;
         } else { // RAR5密码错误：发送错误提示但不中断进程，允许用户重新输入密码
             emit error(tr("Wrong password"), tr("The password entered is incorrect. Please try again."));
+            m_bWrongPasswordRetry = true; // 标记下次重弹密码框时使用「密码错误」文案
             return true;
         }
     }
