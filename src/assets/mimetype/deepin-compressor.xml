@@ -12,5 +12,11 @@ SPDX-License-Identifier: GPL-3.0-or-later
 		<generic-icon name="deepin-compressor"/>
 		<glob pattern="*.7z.*" weight="80"/>
 	</mime-type>
+	<mime-type type="application/x-zip-split">
+		<comment>ZIP Split Archive Part</comment>
+		<generic-icon name="deepin-compressor"/>
+		<glob pattern="*.zip.[0-9]*" weight="80"/>
+		<glob pattern="*.z[0-9]*" weight="80"/>
+	</mime-type>
 </mime-info>
 
