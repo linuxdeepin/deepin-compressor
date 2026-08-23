@@ -332,10 +332,11 @@ void OverwriteQuery::setWidgetType(QWidget *pWgt, DPalette::ColorType ct, double
 
 
 
-PasswordNeededQuery::PasswordNeededQuery(const QString &strFileName, QObject *parent)
+PasswordNeededQuery::PasswordNeededQuery(const QString &strFileName, QObject *parent, bool isWrongPassword)
     : Query(parent)
 {
     m_data[QStringLiteral("fileName")] = strFileName;
+    m_data[QStringLiteral("isWrongPassword")] = isWrongPassword;
 }
 
 PasswordNeededQuery::~PasswordNeededQuery()
@@ -376,7 +377,11 @@ void PasswordNeededQuery::execute()
     pTipLbl->setForegroundRole(DPalette::WindowText);
 //    pTipLbl->setWordWrap(true);
     DFontSizeManager::instance()->bind(pTipLbl, DFontSizeManager::T6, QFont::Normal);
-    pTipLbl->setText(tr("Encrypted file, please enter the password"));
+    if (m_data[QStringLiteral("isWrongPassword")].toBool()) {
+        pTipLbl->setText(tr("Wrong password, please re-enter"));
+    } else {
+        pTipLbl->setText(tr("Encrypted file, please enter the password"));
+    }
     pTipLbl->setAlignment(Qt::AlignCenter);
     m_strDesText = pTipLbl->text();
 

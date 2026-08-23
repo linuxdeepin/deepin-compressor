@@ -38,12 +38,12 @@
 <context>
     <name>CliRarPlugin</name>
     <message>
-        <location filename="../3rdparty/clirarplugin/clirarplugin.cpp" line="294"/>
+        <location filename="../3rdparty/clirarplugin/clirarplugin.cpp" line="295"/>
         <source>Wrong password</source>
         <translation>密碼錯誤</translation>
     </message>
     <message>
-        <location filename="../3rdparty/clirarplugin/clirarplugin.cpp" line="294"/>
+        <location filename="../3rdparty/clirarplugin/clirarplugin.cpp" line="295"/>
         <source>The password entered is incorrect. Please try again.</source>
         <translation>密碼輸入錯誤，請重新輸入。</translation>
     </message>
@@ -190,97 +190,97 @@
         <translation>注釋內容不得超過%1字元</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="305"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="306"/>
         <source>Name</source>
         <translation>檔案名</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="306"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="307"/>
         <source>Save to</source>
         <translation>儲存到</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="585"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="586"/>
         <source>Invalid file name</source>
         <translation>請輸入有效的檔案名</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="591"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="592"/>
         <source>Please enter the path</source>
         <translation>請填寫儲存路徑</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="596"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="597"/>
         <source>The path does not exist, please retry</source>
         <translation>目前路徑不存在，請重試</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="601"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="602"/>
         <source>You do not have permission to save files here, please change and retry</source>
         <translation>您沒有權限在此路徑儲存文件，請重試</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="609"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="610"/>
         <source>Too many volumes, please change and retry</source>
         <translation>分卷過多，請更改後重試</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="618"/>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="646"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="619"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="647"/>
         <source>%1 does not exist on the disk, please check and try again</source>
         <translation>“%1”不存在，請檢查後重試</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="624"/>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="653"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="625"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="654"/>
         <source>You do not have permission to compress %1</source>
         <translation>您沒有權限壓縮“%1”文件</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="644"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="645"/>
         <source>The original file of %1 does not exist, please check and try again</source>
         <translation>“%1”指向的來源文件不存在，請檢查後重試</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="679"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="680"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>確 定</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="919"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="920"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>取 消</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="919"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="920"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>替 換</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="827"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="828"/>
         <source>Total size: %1</source>
         <translation>文件總大小：%1</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="847"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="848"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
         <translation>檔案名與被壓縮文件同名，請修改檔案名稱</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="855"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="856"/>
         <source>The password for ZIP volumes cannot be in Chinese</source>
         <translation>zip分卷不支援中文密碼</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="919"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="920"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>文件已存在，是否取代？</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="959"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="960"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
         <translation>僅支援中英文字元及部分符號</translation>
     </message>
@@ -376,7 +376,7 @@
 <context>
     <name>DataModel</name>
     <message>
-        <location filename="../src/source/tree/datamodel.cpp" line="59"/>
+        <location filename="../src/source/tree/datamodel.cpp" line="68"/>
         <source>item(s)</source>
         <translation>項</translation>
     </message>
@@ -422,17 +422,17 @@
 <context>
     <name>LoadCorruptQuery</name>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="510"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="515"/>
         <source>The archive is damaged</source>
         <translation>當前壓縮包文件已損壞</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="513"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="518"/>
         <source>Open as read-only</source>
         <translation>以只讀模式打開</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="514"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="519"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>取 消</translation>
@@ -490,115 +490,115 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="548"/>
-        <location filename="../src/source/mainwindow.cpp" line="2250"/>
-        <location filename="../src/source/mainwindow.cpp" line="2284"/>
-        <location filename="../src/source/mainwindow.cpp" line="2313"/>
+        <location filename="../src/source/mainwindow.cpp" line="2261"/>
+        <location filename="../src/source/mainwindow.cpp" line="2295"/>
+        <location filename="../src/source/mainwindow.cpp" line="2324"/>
         <source>Plugin error</source>
         <translation>插件異常</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1360"/>
+        <location filename="../src/source/mainwindow.cpp" line="1366"/>
         <source>Adding successful</source>
         <translation>追加成功</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1392"/>
-        <location filename="../src/source/mainwindow.cpp" line="2337"/>
+        <location filename="../src/source/mainwindow.cpp" line="1398"/>
+        <location filename="../src/source/mainwindow.cpp" line="2348"/>
         <source>No data in it</source>
         <translation>壓縮包無數據</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1598"/>
+        <location filename="../src/source/mainwindow.cpp" line="1604"/>
         <source>Adding canceled</source>
         <translation>已取消追加</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1706"/>
+        <location filename="../src/source/mainwindow.cpp" line="1712"/>
         <source>Adding failed</source>
         <translation>追加失敗</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1763"/>
+        <location filename="../src/source/mainwindow.cpp" line="1769"/>
         <source>Extraction failed: the file name is too long</source>
         <translation>提取失敗，檔案名超長</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1790"/>
-        <location filename="../src/source/mainwindow.cpp" line="2333"/>
+        <location filename="../src/source/mainwindow.cpp" line="1801"/>
+        <location filename="../src/source/mainwindow.cpp" line="2344"/>
         <source>Failed to create &quot;%1&quot;</source>
         <translation>創建“%1”文件失敗</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1916"/>
+        <location filename="../src/source/mainwindow.cpp" line="1927"/>
         <source>Open failed: the file name is too long</source>
         <translation>打開失敗，檔案名超長</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2223"/>
+        <location filename="../src/source/mainwindow.cpp" line="2234"/>
         <source>Compression successful</source>
         <translation>壓縮成功</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2229"/>
+        <location filename="../src/source/mainwindow.cpp" line="2240"/>
         <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
         <translation>檔案名超長，已為您自動截取前60個字元</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2258"/>
-        <location filename="../src/source/mainwindow.cpp" line="2341"/>
+        <location filename="../src/source/mainwindow.cpp" line="2269"/>
+        <location filename="../src/source/mainwindow.cpp" line="2352"/>
         <source>Insufficient disk space</source>
         <translation>磁盤空間不足</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2266"/>
+        <location filename="../src/source/mainwindow.cpp" line="2277"/>
         <source>No compression support in current directory. Download the files to a local device.</source>
         <translation>當前目錄不支援壓縮操作，請下載檔案到本地裝置操作。</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2296"/>
-        <location filename="../src/source/mainwindow.cpp" line="2321"/>
+        <location filename="../src/source/mainwindow.cpp" line="2307"/>
+        <location filename="../src/source/mainwindow.cpp" line="2332"/>
         <source>Some volumes are missing</source>
         <translation>分卷缺失</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2300"/>
+        <location filename="../src/source/mainwindow.cpp" line="2311"/>
         <source>Can&apos;t open compressed packages in current directory. Download the compressed package to a local device.</source>
         <translation>當前目錄不支援開啟壓縮包，請下載壓縮包到本地裝置操作。</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2325"/>
+        <location filename="../src/source/mainwindow.cpp" line="2336"/>
         <source>Wrong password, please retry</source>
         <translation>解壓密碼錯誤，請重試</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2270"/>
-        <location filename="../src/source/mainwindow.cpp" line="2329"/>
-        <location filename="../src/source/mainwindow.cpp" line="2357"/>
+        <location filename="../src/source/mainwindow.cpp" line="2281"/>
+        <location filename="../src/source/mainwindow.cpp" line="2340"/>
+        <location filename="../src/source/mainwindow.cpp" line="2368"/>
         <source>The file name is too long. Keep the name within 60 characters please.</source>
         <translation>檔案名超長，請修改為60個字元以內</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2354"/>
+        <location filename="../src/source/mainwindow.cpp" line="2365"/>
         <source>Conversion failed</source>
         <translation>轉換失敗</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2552"/>
+        <location filename="../src/source/mainwindow.cpp" line="2563"/>
         <source>Select file</source>
         <translation>選擇文件</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3454"/>
+        <location filename="../src/source/mainwindow.cpp" line="3477"/>
         <source>Enter up to %1 characters</source>
         <translation>注釋內容不得超過%1字元</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3330"/>
+        <location filename="../src/source/mainwindow.cpp" line="3352"/>
         <source>File info</source>
         <translation>文件訊息</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1469"/>
+        <location filename="../src/source/mainwindow.cpp" line="1475"/>
         <source>Do you want to delete the archive?</source>
         <translation>您是否要刪除此壓縮文件？</translation>
     </message>
@@ -639,7 +639,8 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="538"/>
-        <location filename="../src/source/mainwindow.cpp" line="3146"/>
+        <location filename="../src/source/mainwindow.cpp" line="2611"/>
+        <location filename="../src/source/mainwindow.cpp" line="3168"/>
         <source>Loading, please wait...</source>
         <translation>正在載入，請稍候...</translation>
     </message>
@@ -649,49 +650,49 @@
         <translation>您確定要停止正在進行的任務嗎？</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1366"/>
-        <location filename="../src/source/mainwindow.cpp" line="1493"/>
-        <location filename="../src/source/mainwindow.cpp" line="1509"/>
+        <location filename="../src/source/mainwindow.cpp" line="1372"/>
+        <location filename="../src/source/mainwindow.cpp" line="1499"/>
+        <location filename="../src/source/mainwindow.cpp" line="1515"/>
         <source>Updating, please wait...</source>
         <translation>正在更新，請稍候...</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1785"/>
+        <location filename="../src/source/mainwindow.cpp" line="1796"/>
         <source>File name too long</source>
         <translation>文件名過長</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2254"/>
+        <location filename="../src/source/mainwindow.cpp" line="2265"/>
         <source>Failed to create file</source>
         <translation>創建文件失敗</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2247"/>
+        <location filename="../src/source/mainwindow.cpp" line="2258"/>
         <source>Compression failed</source>
         <translation>壓縮失敗</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2682"/>
+        <location filename="../src/source/mainwindow.cpp" line="2704"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>替 換</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2746"/>
+        <location filename="../src/source/mainwindow.cpp" line="2768"/>
         <source>Find directory</source>
         <translation>解壓到目錄</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2281"/>
+        <location filename="../src/source/mainwindow.cpp" line="2292"/>
         <source>Open failed</source>
         <translation>打開失敗</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1702"/>
-        <location filename="../src/source/mainwindow.cpp" line="1780"/>
-        <location filename="../src/source/mainwindow.cpp" line="1859"/>
-        <location filename="../src/source/mainwindow.cpp" line="1914"/>
-        <location filename="../src/source/mainwindow.cpp" line="2292"/>
+        <location filename="../src/source/mainwindow.cpp" line="1708"/>
+        <location filename="../src/source/mainwindow.cpp" line="1791"/>
+        <location filename="../src/source/mainwindow.cpp" line="1870"/>
+        <location filename="../src/source/mainwindow.cpp" line="1925"/>
+        <location filename="../src/source/mainwindow.cpp" line="2303"/>
         <source>Wrong password</source>
         <translation>密碼錯誤</translation>
     </message>
@@ -710,11 +711,11 @@
         <location filename="../src/source/mainwindow.cpp" line="648"/>
         <location filename="../src/source/mainwindow.cpp" line="657"/>
         <location filename="../src/source/mainwindow.cpp" line="697"/>
-        <location filename="../src/source/mainwindow.cpp" line="1392"/>
-        <location filename="../src/source/mainwindow.cpp" line="2512"/>
-        <location filename="../src/source/mainwindow.cpp" line="2532"/>
-        <location filename="../src/source/mainwindow.cpp" line="2840"/>
-        <location filename="../src/source/mainwindow.cpp" line="3005"/>
+        <location filename="../src/source/mainwindow.cpp" line="1398"/>
+        <location filename="../src/source/mainwindow.cpp" line="2523"/>
+        <location filename="../src/source/mainwindow.cpp" line="2543"/>
+        <location filename="../src/source/mainwindow.cpp" line="2862"/>
+        <location filename="../src/source/mainwindow.cpp" line="3027"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>確 定</translation>
@@ -732,16 +733,16 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="614"/>
-        <location filename="../src/source/mainwindow.cpp" line="1469"/>
-        <location filename="../src/source/mainwindow.cpp" line="2682"/>
-        <location filename="../src/source/mainwindow.cpp" line="3176"/>
+        <location filename="../src/source/mainwindow.cpp" line="1475"/>
+        <location filename="../src/source/mainwindow.cpp" line="2704"/>
+        <location filename="../src/source/mainwindow.cpp" line="3198"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>取 消</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="614"/>
-        <location filename="../src/source/mainwindow.cpp" line="1469"/>
+        <location filename="../src/source/mainwindow.cpp" line="1475"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>確 定</translation>
@@ -752,157 +753,157 @@
         <translation>沒有那個文件或目錄</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1408"/>
+        <location filename="../src/source/mainwindow.cpp" line="1414"/>
         <source>Extraction successful</source>
         <comment>提取成功</comment>
         <translation>提取成功</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1619"/>
+        <location filename="../src/source/mainwindow.cpp" line="1625"/>
         <source>Extraction canceled</source>
         <comment>取消提取</comment>
         <translation>已取消提取</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1775"/>
-        <location filename="../src/source/mainwindow.cpp" line="1854"/>
-        <location filename="../src/source/mainwindow.cpp" line="2288"/>
-        <location filename="../src/source/mainwindow.cpp" line="2317"/>
+        <location filename="../src/source/mainwindow.cpp" line="1786"/>
+        <location filename="../src/source/mainwindow.cpp" line="1865"/>
+        <location filename="../src/source/mainwindow.cpp" line="2299"/>
+        <location filename="../src/source/mainwindow.cpp" line="2328"/>
         <source>The archive is damaged</source>
         <translation>當前壓縮包文件已損壞</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2149"/>
-        <location filename="../src/source/mainwindow.cpp" line="2154"/>
+        <location filename="../src/source/mainwindow.cpp" line="2160"/>
+        <location filename="../src/source/mainwindow.cpp" line="2165"/>
         <source>Failed to create temporary directory, please check and try again.</source>
         <translation>無法建立暫存目錄，請檢查後再試一次。</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2165"/>
-        <location filename="../src/source/mainwindow.cpp" line="2175"/>
+        <location filename="../src/source/mainwindow.cpp" line="2176"/>
+        <location filename="../src/source/mainwindow.cpp" line="2186"/>
         <source>Failed to prepare renamed item &quot;%1&quot; for compression, please check permissions and available space.</source>
         <translation>準備壓縮重新命名項目 “%1” 時失敗，請檢查權限與可用空間。</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2227"/>
+        <location filename="../src/source/mainwindow.cpp" line="2238"/>
         <source>Extraction successful</source>
         <comment>解压成功</comment>
         <translation>解壓成功</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2233"/>
+        <location filename="../src/source/mainwindow.cpp" line="2244"/>
         <source>Conversion successful</source>
         <translation>轉換成功</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2262"/>
+        <location filename="../src/source/mainwindow.cpp" line="2273"/>
         <source>The compressed volumes already exist</source>
         <translation>當前路徑已存在壓縮分卷</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2310"/>
+        <location filename="../src/source/mainwindow.cpp" line="2321"/>
         <source>Extraction failed</source>
         <comment>解压失败</comment>
         <translation>解壓失敗</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2345"/>
+        <location filename="../src/source/mainwindow.cpp" line="2356"/>
         <source>No extraction support in current directory. Download the compressed package to a local device.</source>
         <translation>當前目錄不支援解壓操作，請下載壓縮包到本地裝置操作。</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2544"/>
+        <location filename="../src/source/mainwindow.cpp" line="2555"/>
         <source>Close</source>
         <translation>關閉</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2548"/>
+        <location filename="../src/source/mainwindow.cpp" line="2559"/>
         <source>Help</source>
         <translation>說明</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2556"/>
+        <location filename="../src/source/mainwindow.cpp" line="2567"/>
         <source>Delete</source>
         <translation>刪除</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2564"/>
+        <location filename="../src/source/mainwindow.cpp" line="2575"/>
         <source>Display shortcuts</source>
         <translation>顯示快捷鍵</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2576"/>
+        <location filename="../src/source/mainwindow.cpp" line="2587"/>
         <source>Shortcuts</source>
         <translation>快捷鍵</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2674"/>
+        <location filename="../src/source/mainwindow.cpp" line="2696"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
         <translation>檔案名與被壓縮文件同名，請修改檔案名稱</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2682"/>
+        <location filename="../src/source/mainwindow.cpp" line="2704"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>文件已存在，是否取代？</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2825"/>
+        <location filename="../src/source/mainwindow.cpp" line="2847"/>
         <source>You cannot add the archive to itself</source>
         <translation>無法將壓縮文件添加到自身</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2840"/>
+        <location filename="../src/source/mainwindow.cpp" line="2862"/>
         <source>You cannot add files to archives in this file type</source>
         <translation>此壓縮包格式不支援追加文件</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3176"/>
+        <location filename="../src/source/mainwindow.cpp" line="3198"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>更 新</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3354"/>
+        <location filename="../src/source/mainwindow.cpp" line="3376"/>
         <source>Basic info</source>
         <translation>基本訊息</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3370"/>
+        <location filename="../src/source/mainwindow.cpp" line="3392"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3371"/>
+        <location filename="../src/source/mainwindow.cpp" line="3393"/>
         <source>Type</source>
         <translation>類型</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3372"/>
+        <location filename="../src/source/mainwindow.cpp" line="3394"/>
         <source>Location</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3373"/>
+        <location filename="../src/source/mainwindow.cpp" line="3395"/>
         <source>Time created</source>
         <translation>創建時間</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3374"/>
+        <location filename="../src/source/mainwindow.cpp" line="3396"/>
         <source>Time accessed</source>
         <translation>訪問時間</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3375"/>
+        <location filename="../src/source/mainwindow.cpp" line="3397"/>
         <source>Time modified</source>
         <translation>修改時間</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3385"/>
+        <location filename="../src/source/mainwindow.cpp" line="3407"/>
         <source>Archive</source>
         <translation>壓縮文件</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3416"/>
+        <location filename="../src/source/mainwindow.cpp" line="3438"/>
         <source>Comment</source>
         <translation>注釋</translation>
     </message>
@@ -912,8 +913,8 @@
         <translation>請在歸檔管理器的設定中勾選此文件類型</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2512"/>
-        <location filename="../src/source/mainwindow.cpp" line="2532"/>
+        <location filename="../src/source/mainwindow.cpp" line="2523"/>
+        <location filename="../src/source/mainwindow.cpp" line="2543"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>目前壓縮文件已經發生變化，請重新匯入文件。</translation>
     </message>
@@ -1014,7 +1015,12 @@
 <context>
     <name>PasswordNeededQuery</name>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="379"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="381"/>
+        <source>Wrong password, please re-enter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../3rdparty/interface/queries.cpp" line="383"/>
         <source>Encrypted file, please enter the password</source>
         <translation>此文件已加密，請輸入解壓密碼</translation>
     </message>
@@ -1235,7 +1241,7 @@
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3173"/>
+        <location filename="../src/source/mainwindow.cpp" line="3195"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
         <translation>文件“%1”已修改，是否將此修改更新到壓縮包？</translation>
     </message>
@@ -1308,14 +1314,14 @@
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="467"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="390"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="395"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>取 消</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="468"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="391"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="396"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>確 定</translation>
@@ -1443,18 +1449,18 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3636"/>
-        <location filename="../src/source/mainwindow.cpp" line="3691"/>
+        <location filename="../src/source/mainwindow.cpp" line="3659"/>
+        <location filename="../src/source/mainwindow.cpp" line="3714"/>
         <source>Open file</source>
         <translation>打開文件</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3639"/>
+        <location filename="../src/source/mainwindow.cpp" line="3662"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3695"/>
+        <location filename="../src/source/mainwindow.cpp" line="3718"/>
         <source>File info</source>
         <translation>文件訊息</translation>
     </message>

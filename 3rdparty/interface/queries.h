@@ -194,7 +194,7 @@ public:
      * @param strFileName       文件名（含路径）
      * @param parent
      */
-    explicit PasswordNeededQuery(const QString &strFileName, QObject *parent = nullptr);
+    explicit PasswordNeededQuery(const QString &strFileName, QObject *parent = nullptr, bool isWrongPassword = false);
     ~PasswordNeededQuery() override;
 
     /**

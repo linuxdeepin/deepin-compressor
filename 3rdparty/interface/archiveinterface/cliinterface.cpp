@@ -1044,6 +1044,14 @@ void CliInterface::handleProgress(const QString &line)
 
 PluginFinishType CliInterface::handlePassword()
 {
+    // RAR5 错误密码后不终止进程，unrar 会再次输出密码提示并重入
+    // handlePassword。此时 m_eErrorType 已被调用方覆盖为 ET_NeedPassword，
+    // 无法据此判断是否为密码错误重试。改用 m_bWrongPasswordRetry 标记，
+    // 该标记在 isWrongPasswordMsg 的 RAR5 分支中设置，在 m_eErrorType
+    // 被覆盖前已持久化，不会丢失（PMS BUG-266113）
+    bool isWrongPassword = m_bWrongPasswordRetry;
+    m_bWrongPasswordRetry = false;
+
     // 加密分卷缺失时 7z 已置 ET_MissingVolume，handlePassword 入口不得
     // 无条件清零，否则后续 CRC 失败行会误判为「密码错误」（PMS BUG-373669）
     if (m_eErrorType != ET_MissingVolume) {
@@ -1061,7 +1069,7 @@ PluginFinishType CliInterface::handlePassword()
         }
     }
 
-    PasswordNeededQuery query(name);
+    PasswordNeededQuery query(name, nullptr, isWrongPassword);
     emit signalQuery(&query);
     query.waitForResponse();
 

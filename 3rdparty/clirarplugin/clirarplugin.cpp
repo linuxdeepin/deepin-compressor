@@ -291,6 +291,7 @@ bool CliRarPlugin::handleLine(const QString &line, WorkType workStatus)
             m_finishType = PFT_Error;
             return false;
         } else { // RAR5密码错误：发送错误提示但不中断进程，允许用户重新输入密码
+            m_bWrongPasswordRetry = true;
             emit error(tr("Wrong password"), tr("The password entered is incorrect. Please try again."));
             return true;
         }

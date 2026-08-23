@@ -223,6 +223,7 @@ protected:
     WorkType m_workStatus = WT_List;  // 记录当前工作状态（add、list、extract...）
 
     ErrorType m_eErrorType = ET_NoError;    // 错误类型
+    bool m_bWrongPasswordRetry = false;  // RAR5错误密码重试标记
     QString m_strPassword;          // 密码
 
     bool m_bCancel = false;     // 是否取消
