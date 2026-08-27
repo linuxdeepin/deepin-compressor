@@ -45,6 +45,7 @@
 
 #include "common.h"
 #include <linux/limits.h>
+#include <unistd.h>
 
 CliInterface::CliInterface(QObject *parent, const QVariantList &args)
     : ReadWriteArchiveInterface(parent, args)
@@ -1389,9 +1390,16 @@ bool CliInterface::copyArchiveVolumesToDir(const QString &srcArchive, const QStr
     QString destPath = destDir + QDir::separator() + srcName;
     QString tempPath = destDir + QDir::separator() + srcName + QStringLiteral(".tmpcopy.") + QUuid::createUuid().toString(QUuid::WithoutBraces);
 
-    if (!QFile::copy(srcArchive, tempPath)) {
-        qWarning() << "copyArchiveVolumesToDir: FAILED to copy" << srcArchive << "->" << tempPath;
-        return false;
+    // 同文件系统时优先硬链接(零拷贝), 失败(跨盘/不支持硬链)回退整包复制。
+    // 安全性: 7z rn 重写归档采用"先 DeleteFileAlways 删目录项、再 MyMoveFile 搬新归档",
+    // 从不向既有 inode 内写字节, 因此硬链被 rn 替换后源归档 inode 引用 2→1 原样保留。
+    if (::link(srcArchive.toLocal8Bit().constData(), tempPath.toLocal8Bit().constData()) == 0) {
+        qInfo() << "copyArchiveVolumesToDir: hardlinked" << srcArchive << "->" << tempPath;
+    } else {
+        if (!QFile::copy(srcArchive, tempPath)) {
+            qWarning() << "copyArchiveVolumesToDir: FAILED to copy" << srcArchive << "->" << tempPath;
+            return false;
+        }
     }
     QFile::remove(destPath);
     if (!QFile::rename(tempPath, destPath)) {
@@ -1401,6 +1409,62 @@ bool CliInterface::copyArchiveVolumesToDir(const QString &srcArchive, const QStr
     }
     outFirstVolumePath = destPath;
     return true;
+}
+
+qint64 CliInterface::longNameArchiveSize() const
+{
+    QFileInfo srcInfo(m_strArchiveName);
+    const QString srcDir = srcInfo.absolutePath();
+    const QString srcName = srcInfo.fileName();
+
+    // 7z/zip 分卷: 合并后单文件大小 = 各卷大小之和
+    // 正则与 copyArchiveVolumesToDir 保持一致
+    static const QRegularExpression reSplitVol(QStringLiteral("^(.+\\.(?:7z|zip))\\.[0-9]{3}$"));
+    QRegularExpressionMatch m = reSplitVol.match(srcName);
+    if (m.hasMatch()) {
+        const QString base = m.captured(1);   // 例如 "archive.7z" / "archive.zip"
+        qint64 total = 0;
+        for (int i = 1;; ++i) {
+            const QString volPath = srcDir + QDir::separator() + QString("%1.%2").arg(base).arg(i, 3, 10, QChar('0'));
+            if (!QFile::exists(volPath)) {
+                break;
+            }
+            total += QFileInfo(volPath).size();
+        }
+        return total;
+    }
+
+    return srcInfo.size();
+}
+
+bool CliInterface::prepareLongNameTempDir()
+{
+    // 工作归档落点固定为压缩包所在目录(源目录), 不使用 /tmp:
+    // tmpfs 为独立内存盘且通常很小, 大包复制到其中易 ENOSPC;
+    // 源目录与压缩包同盘, 可硬链接零拷贝。
+    const QString srcDir = QFileInfo(m_strArchiveName).absolutePath();
+    const qint64 archiveSize = longNameArchiveSize();
+    const qint64 margin = 16LL * 1024 * 1024;   // 预留 16MB 安全余量(文件系统元数据/头部开销)
+
+    // 空间预检: rn 重写会在源目录新生成一个整包大小的工作归档, 需源目录有足够剩余空间。
+    // 不足直接提示用户, 避免中途 ENOSPC 留下半解压状态。
+    if (isInsufficientDiskSpace(srcDir, archiveSize + margin)) {
+        qWarning() << "prepareLongNameTempDir: 源目录磁盘空间不足, 需" << archiveSize << "srcDir=" << srcDir;
+        m_eErrorType = ET_InsufficientDiskSpace;
+        return false;
+    }
+
+    QTemporaryDir *tmp = new QTemporaryDir(srcDir + QDir::separator() + QStringLiteral(".deepin-compressor-XXXXXX"));
+    if (tmp->isValid()) {
+        m_longNameTempDir.reset(tmp);
+        qInfo() << "prepareLongNameTempDir: 源目录作为临时拷贝目录" << srcDir
+                << " 归档大小=" << archiveSize;
+        return true;
+    }
+    delete tmp;
+    qWarning() << "prepareLongNameTempDir: 无法在源目录创建临时目录" << srcDir;
+    m_eErrorType = ET_FileWriteError;
+    return false;
 }
 
 QList<FileEntry> CliInterface::collectLongDirEntries(const QList<FileEntry> &files) const
@@ -1459,7 +1523,13 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
     }
     m_longNamePassword = password;
 
-    m_longNameTempDir.reset(new QTemporaryDir());
+    // 工作归档固定落在源目录(压缩包所在目录), 不用 /tmp; 空间不足时提前提示用户
+    if (!prepareLongNameTempDir()) {
+        // prepareLongNameTempDir 已设置具体错误类型:
+        //   空间不足 -> ET_InsufficientDiskSpace; 无法创建临时目录 -> ET_FileWriteError
+        m_longNameTempDir.reset();
+        return false;
+    }
     QString absoluteDestinationPath;
     if (!copyArchiveVolumesToDir(m_strArchiveName, m_longNameTempDir->path(), absoluteDestinationPath)) {
         qWarning() << "handleLongNameExtract: Failed to copy archive volumes to temp dir" << m_longNameTempDir->path();
