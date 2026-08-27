@@ -193,7 +193,11 @@ bool Cli7zPlugin::readListLine(const QString &line)
         return false;
     }
 
-    const QRegularExpression rxVersionLine(QStringLiteral("^p7zip Version ([\\d\\.]+) .*$"));
+    // 兼容老 p7zip(输出 "p7zip Version 16.02 ...")与新版本 7-Zip(输出 "7-Zip 26.02 ...",
+    // 某些发行版首行可能形如 "7-Zip [64] 26.02" 或 "7-Zip (z) 26.02")。
+    // 仅以行首关键字作为"版本信息读取完毕"的哨兵，不依赖版本号做后续逻辑，
+    // 因此对输入尾部各种描述串 (locale=、CPUs、[64]、括号等) 均保持容错。
+    const QRegularExpression rxVersionLine(QStringLiteral("^(?:p7zip Version|7-Zip)"));
     QRegularExpressionMatch matchVersion;
 
     switch (m_parseState) {
