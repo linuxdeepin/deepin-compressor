@@ -242,8 +242,26 @@ private:
      * @brief copyArchiveVolumesToDir 将压缩包(含分卷)完整复制到目标目录
      *
      * 7z/zip 分卷合并为单个文件 (7z rn 不支持分卷), rar/非分卷直接复制。
+     * 非分卷分支在源目录同文件系统(固定落点)时优先硬链接(零拷贝), 失败回退整包复制。
      */
     bool copyArchiveVolumesToDir(const QString &srcArchive, const QString &destDir, QString &outFirstVolumePath);
+
+    /**
+     * @brief 计算工作归档大小 x
+     *
+     * 非分卷取归档文件大小; 7z/zip 分卷取所有卷大小之和(合并后单文件大小)。
+     */
+    qint64 longNameArchiveSize() const;
+
+    /**
+     * @brief 在压缩包所在目录(源目录)创建工作归档临时目录
+     *
+     * 不使用 /tmp (tmpfs 易满且为独立内存盘, 大包易 ENOSPC)。
+     * 固定以源目录为临时拷贝目录: 与压缩包同盘可硬链接零拷贝。
+     * 空间不足(源目录可用空间 < 工作归档大小 x)时返回 false,
+     * 由调用方置 ET_InsufficientDiskSpace 提示用户, 避免中途 ENOSPC。
+     */
+    bool prepareLongNameTempDir();
 
 private slots:
     /**
