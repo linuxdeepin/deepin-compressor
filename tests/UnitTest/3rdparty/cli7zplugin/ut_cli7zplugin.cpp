@@ -309,6 +309,14 @@ TEST_F(UT_Cli7zPlugin, test_readListLine_002)
     EXPECT_EQ(m_tester->m_parseState, ParseStateHeader);
 }
 
+TEST_F(UT_Cli7zPlugin, test_readListLine_version_7zip)
+{
+    // 新版本 7-Zip 的输出版本行不含 "p7zip Version"，需能正确推进解析状态
+    m_tester->m_parseState = ParseStateTitle;
+    EXPECT_EQ(m_tester->readListLine("7-Zip 26.02 (x64) : Copyright (c) 1999-2026 Igor Pavlov : 2026-08-05"), true);
+    EXPECT_EQ(m_tester->m_parseState, ParseStateHeader);
+}
+
 TEST_F(UT_Cli7zPlugin, test_readListLine_003)
 {
     m_tester->m_parseState = ParseStateHeader;
