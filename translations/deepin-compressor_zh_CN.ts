@@ -917,6 +917,11 @@
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>当前压缩文件已经发生变化，请重新导入文件。</translation>
     </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="182"/>
+        <source>Dragging files to the shortcut of a compressed file on a non-local device is not supported</source>
+        <translation>不支持拖拽到压缩文件快捷方式里</translation>
+    </message>
 </context>
 <context>
     <name>MimeTypeDisplayManager</name>

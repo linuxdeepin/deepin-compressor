@@ -288,12 +288,9 @@ int main(int argc, char *argv[])
             if (strType == "dragdropadd") {
                 // 最后一个参数为“dragdropadd”时，说明是拖拽追加
                 eType = MainWindow::AT_DragDropAdd;
-                QFileInfo info(newfilelist.first());
-                if (info.isSymLink()) {
-                    QUrl fileName = QUrl::fromLocalFile(info.symLinkTarget());
-                    if (!UiTools::isLocalDeviceFile(fileName.toLocalFile())) {
-                        return -1;
-                    }
+                // 校验入参压缩包是否位于本地设备（符号链接解析其指向，兼容 276309；非本地如 ftp/gvfs 挂载则拒绝）
+                if (!w.checkArchiveLocalDevice(newfilelist.first())) {
+                    return -1;
                 }
             } else if (strType == "compress" || strType == "compress_to_7z" || strType == "compress_to_zip" ||
                        strType == "extract" || strType == "extract_here" || strType == "extract_to_specifypath") {

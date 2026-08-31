@@ -169,6 +169,23 @@ bool MainWindow::checkHerePath(const QString &strPath)
     return true;
 }
 
+bool MainWindow::checkArchiveLocalDevice(const QString &strArchivePath)
+{
+    // 解析真实路径：符号链接取其指向（兼容 276309 场景），其余取路径本身（含 gvfs/ftp 挂载路径）
+    QFileInfo info(strArchivePath);
+    QString strRealPath = info.isSymLink() ? info.symLinkTarget() : info.filePath();
+
+    // 非本地设备（ftp/smb/手机等）不支持拖拽追加，提示并退出
+    if (!UiTools::isLocalDeviceFile(strRealPath)) {
+        TipDialog dialog(this);
+        moveDialogToCenter(&dialog);
+        dialog.showDialog(tr("Dragging files to the shortcut of a compressed file on a non-local device is not supported"), tr("OK", "button"), DDialog::ButtonNormal);
+        return false;
+    }
+
+    return true;
+}
+
 void MainWindow::initUI()
 {
     // 初始化界面
