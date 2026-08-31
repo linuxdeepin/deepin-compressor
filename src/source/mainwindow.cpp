@@ -281,8 +281,20 @@ void MainWindow::initConnections()
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalTempMessage, this, &MainWindow::slotReceiveTempMessage);
 
     connect(m_pOpenFileWatcher, &OpenFileWatcher::fileChanged, this, &MainWindow::slotOpenFileChanged);
-    //定制需求不显示ctrl+shift+？快捷键菜单
-    if(!property(ORDER_JSON).isValid()) {
+    //定制需求默认不显示ctrl+shift+？快捷键菜单，但具有编辑权限(edit)时仍需显示
+    bool bShowShortcut = true;
+    if(property(ORDER_JSON).isValid()) {
+        bShowShortcut = false;
+        QJsonObject obj = QJsonDocument::fromJson(property(ORDER_JSON).toString().toLower().toLocal8Bit()).object();
+        QVariantMap mapdata = obj.toVariantMap();
+        if(mapdata.contains("permission")) {
+            QVariantMap permission = mapdata.value("permission").toMap();
+            if(permission.contains(ORDER_EDIT) && permission.value(ORDER_EDIT).toBool()) {
+                bShowShortcut = true;
+            }
+        }
+    }
+    if(bShowShortcut) {
         connect(m_openkey, &QShortcut::activated, this, &MainWindow::slotShowShortcutTip);
     }
 }
