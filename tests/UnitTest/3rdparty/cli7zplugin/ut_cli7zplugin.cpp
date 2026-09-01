@@ -429,6 +429,16 @@ TEST_F(UT_Cli7zPlugin, test_readListLine_018)
     EXPECT_EQ(m_tester->m_fileEntry.uLastModifiedTime, QDateTime::fromString("2021-06-18 15:27:01", "yyyy-MM-dd hh:mm:ss").toTime_t());
 }
 
+// 新版 7-Zip (26.x) 的 -slt 输出带小数秒, 如 "Modified = 2021-06-18 15:27:01.8826983",
+// 应截断小数部分后解析, 保证与老版 p7zip 只输出到秒的格式结果一致。
+TEST_F(UT_Cli7zPlugin, test_readListLine_025)
+{
+    m_tester->m_parseState = ParseStateEntryInformation;
+    m_tester->m_archiveType = Cli7zPlugin::ArchiveType::ArchiveType7z;
+    EXPECT_EQ(m_tester->readListLine("Modified = 2021-06-18 15:27:01.8826983"), true);
+    EXPECT_EQ(m_tester->m_fileEntry.uLastModifiedTime, QDateTime::fromString("2021-06-18 15:27:01", "yyyy-MM-dd hh:mm:ss").toTime_t());
+}
+
 TEST_F(UT_Cli7zPlugin, test_readListLine_019)
 {
     m_tester->m_parseState = ParseStateEntryInformation;
