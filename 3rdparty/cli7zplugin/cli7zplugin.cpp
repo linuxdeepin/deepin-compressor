@@ -262,7 +262,15 @@ bool Cli7zPlugin::readListLine(const QString &line)
             stArchiveData.qSize += m_fileEntry.qSize;
         } else if (line.startsWith(QLatin1String("Modified = "))) {
             // 文件最后修改时间
-            m_fileEntry.uLastModifiedTime = QDateTime::fromString(line.mid(11).trimmed(),
+            // 新版 7-Zip (24.09+/26.x) 的 -slt 输出带小数秒, 如 "2025-06-04 11:11:04.8826983",
+            // 老版 p7zip 只输出到秒 "2025-06-04 11:11:04"。uLastModifiedTime 是秒精度,
+            // 先截断小数点后的部分再解析, 兼容新旧两种输出, 避免解析失败得到 0xFFFFFFFF(2106-02-07)。
+            QString modified = line.mid(11).trimmed();
+            const int dotIndex = modified.indexOf(QLatin1Char('.'));
+            if (dotIndex != -1) {
+                modified = modified.left(dotIndex);
+            }
+            m_fileEntry.uLastModifiedTime = QDateTime::fromString(modified,
                                                                   QStringLiteral("yyyy-MM-dd hh:mm:ss")).toTime_t();
             if (ArchiveTypeIso == m_archiveType || ArchiveTypeUdf == m_archiveType) { // 读取的压缩包是iso、udf文件，读到Modified的时候已经结束了
 //                QString name = m_fileEntry.strFullPath;
