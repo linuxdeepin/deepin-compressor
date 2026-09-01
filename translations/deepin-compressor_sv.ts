@@ -676,7 +676,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3699"/>
         <source>Enter up to %1 characters</source>
-        <translation type="unfinished"/>
+        <translation>Ange högst %1 tecken</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1983"/>
@@ -949,7 +949,7 @@
     <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="39"/>
         <source>Executable</source>
-        <translation type="unfinished"/>
+        <translation>Körbar fil</translation>
     </message>
     <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="40"/>
@@ -1051,13 +1051,13 @@
         <location filename="../src/source/dialog/progressdialog.cpp" line="186"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="186"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Bekräfta</translation>
     </message>
 </context>
 <context>
@@ -1069,7 +1069,7 @@
         <location filename="../src/source/page/progresspage.cpp" line="387"/>
         <source>Speed</source>
         <comment>compress</comment>
-        <translation type="unfinished"/>
+        <translation>Hastighet</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="46"/>
@@ -1080,7 +1080,7 @@
         <location filename="../src/source/page/progresspage.cpp" line="59"/>
         <location filename="../src/source/page/progresspage.cpp" line="178"/>
         <source>Calculating...</source>
-        <translation type="unfinished"/>
+        <translation>Beräknar …</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="48"/>
@@ -1088,7 +1088,7 @@
         <location filename="../src/source/page/progresspage.cpp" line="394"/>
         <source>Speed</source>
         <comment>delete</comment>
-        <translation type="unfinished"/>
+        <translation>Hastighet</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="50"/>
@@ -1096,7 +1096,7 @@
         <location filename="../src/source/page/progresspage.cpp" line="401"/>
         <source>Speed</source>
         <comment>rename</comment>
-        <translation type="unfinished"/>
+        <translation>Hastighet</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="52"/>
@@ -1105,7 +1105,7 @@
         <location filename="../src/source/page/progresspage.cpp" line="419"/>
         <source>Speed</source>
         <comment>convert</comment>
-        <translation type="unfinished"/>
+        <translation>Hastighet</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="56"/>
@@ -1114,18 +1114,18 @@
         <location filename="../src/source/page/progresspage.cpp" line="410"/>
         <source>Speed</source>
         <comment>uncompress</comment>
-        <translation type="unfinished"/>
+        <translation>Hastighet</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="59"/>
         <location filename="../src/source/page/progresspage.cpp" line="376"/>
         <source>Time left</source>
-        <translation type="unfinished"/>
+        <translation>Återstående tid</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="148"/>
         <source>Compressing</source>
-        <translation type="unfinished"/>
+        <translation>Komprimerar</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="150"/>
