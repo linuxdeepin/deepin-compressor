@@ -1130,28 +1130,28 @@
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="150"/>
         <source>Deleting</source>
-        <translation type="unfinished"/>
+        <translation>Tar bort</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="152"/>
         <source>Renaming</source>
-        <translation type="unfinished"/>
+        <translation>Byter namn</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="154"/>
         <source>Converting</source>
-        <translation type="unfinished"/>
+        <translation>Konverterar</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="156"/>
         <location filename="../src/source/page/progresspage.cpp" line="176"/>
         <source>Updating the comment...</source>
-        <translation type="unfinished"/>
+        <translation>Uppdaterar kommentaren …</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="158"/>
         <source>Extracting</source>
-        <translation type="unfinished"/>
+        <translation>Extraherar</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="170"/>
@@ -1159,48 +1159,48 @@
         <location filename="../src/source/page/progresspage.cpp" line="439"/>
         <source>Pause</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Pausa</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="223"/>
         <location filename="../src/source/page/progresspage.cpp" line="475"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="210"/>
         <location filename="../src/source/page/progresspage.cpp" line="434"/>
         <source>Continue</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Fortsätt</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="475"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Bekräfta</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="461"/>
         <source>Are you sure you want to stop the decompression?</source>
-        <translation type="unfinished"/>
+        <translation>Är du säker på att du vill avbryta uppackningen?</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="464"/>
         <source>Are you sure you want to stop the deletion?</source>
-        <translation type="unfinished"/>
+        <translation>Är du säker på att du vill avbryta borttagningen?</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="458"/>
         <location filename="../src/source/page/progresspage.cpp" line="467"/>
         <source>Are you sure you want to stop the compression?</source>
-        <translation type="unfinished"/>
+        <translation>Är du säker på att du vill avbryta komprimeringen?</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="470"/>
         <source>Are you sure you want to stop the conversion?</source>
-        <translation type="unfinished"/>
+        <translation>Är du säker på att du vill avbryta konverteringen?</translation>
     </message>
 </context>
 <context>
@@ -1211,26 +1211,26 @@
         <location filename="../3rdparty/interface/queries.cpp" line="236"/>
         <source>Skip</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Hoppa över</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="219"/>
         <source>Merge</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Slå samman</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="222"/>
         <location filename="../3rdparty/interface/queries.cpp" line="213"/>
         <source>Another file with the same name already exists, replace it?</source>
-        <translation type="unfinished"/>
+        <translation>En annan fil med samma namn finns redan. Vill du ersätta den?</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="225"/>
         <location filename="../3rdparty/interface/queries.cpp" line="237"/>
         <source>Replace</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Ersätt</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="522"/>
@@ -1238,7 +1238,7 @@
         <location filename="../3rdparty/interface/queries.cpp" line="517"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="523"/>
@@ -1246,88 +1246,88 @@
         <location filename="../3rdparty/interface/queries.cpp" line="518"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="216"/>
         <source>Another folder with the same name already exists, replace it?</source>
-        <translation type="unfinished"/>
+        <translation>En annan mapp med samma namn finns redan. Vill du ersätta den?</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="228"/>
         <location filename="../3rdparty/interface/queries.cpp" line="218"/>
         <source>Apply to all</source>
-        <translation type="unfinished"/>
+        <translation>Tillämpa på alla</translation>
     </message>
     <message>
         <location filename="../src/source/tree/datamodel.h" line="56"/>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../src/source/tree/datamodel.h" line="56"/>
         <source>Time modified</source>
-        <translation type="unfinished"/>
+        <translation>Ändringstid</translation>
     </message>
     <message>
         <location filename="../src/source/tree/datamodel.h" line="56"/>
         <source>Type</source>
-        <translation type="unfinished"/>
+        <translation>Typ</translation>
     </message>
     <message>
         <location filename="../src/source/tree/datamodel.h" line="56"/>
         <source>Size</source>
-        <translation type="unfinished"/>
+        <translation>Storlek</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3402"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
-        <translation type="unfinished"/>
+        <translation>%1 har ändrats. Vill du spara ändringarna i arkivet?</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="12"/>
         <source>General</source>
-        <translation type="unfinished"/>
+        <translation>Allmänt</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="13"/>
         <source>Extraction</source>
-        <translation type="unfinished"/>
+        <translation>Uppackning</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="14"/>
         <source>Auto create a folder for multiple extracted files</source>
-        <translation type="unfinished"/>
+        <translation>Skapa automatiskt en mapp för flera extraherade filer</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="15"/>
         <source>Show extracted files when completed</source>
-        <translation type="unfinished"/>
+        <translation>Visa extraherade filer när åtgärden är klar</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="16"/>
         <source>File Management</source>
-        <translation type="unfinished"/>
+        <translation>Filhantering</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="17"/>
         <source>Delete files after compression</source>
-        <translation type="unfinished"/>
+        <translation>Ta bort filer efter komprimering</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="18"/>
         <source>Files Associated</source>
-        <translation type="unfinished"/>
+        <translation>Associerade filer</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="19"/>
         <source>File Type</source>
-        <translation type="unfinished"/>
+        <translation>Filtyp</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="376"/>
         <source>Another file with the same name already exists, extract to %1?</source>
-        <translation type="unfinished"/>
+        <translation>En annan fil med samma namn finns redan. Vill du extrahera till %1?</translation>
     </message>
 </context>
 <context>
@@ -1335,24 +1335,24 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="631"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Byt namn</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="682"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="683"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="693"/>
         <source>The name already exists</source>
-        <translation type="unfinished"/>
+        <translation>Namnet finns redan</translation>
     </message>
 </context>
 <context>
@@ -1361,63 +1361,63 @@
         <location filename="../src/source/dialog/settingdialog.cpp" line="131"/>
         <source>Select All</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Markera alla</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="132"/>
         <source>Clear All</source>
-        <translation type="unfinished"/>
+        <translation>Rensa alla</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="133"/>
         <source>Recommended</source>
-        <translation type="unfinished"/>
+        <translation>Rekommenderat</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="168"/>
         <source>Extract archives to</source>
-        <translation type="unfinished"/>
+        <translation>Extrahera arkiv till</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="174"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="203"/>
         <source>Current directory</source>
-        <translation type="unfinished"/>
+        <translation>Aktuell mapp</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="174"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="208"/>
         <source>Desktop</source>
-        <translation type="unfinished"/>
+        <translation>Skrivbord</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="174"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="213"/>
         <source>Other directory</source>
-        <translation type="unfinished"/>
+        <translation>Annan mapp</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="281"/>
         <source>Delete archives after extraction</source>
-        <translation type="unfinished"/>
+        <translation>Ta bort arkiv efter uppackning</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="287"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="308"/>
         <source>Never</source>
-        <translation type="unfinished"/>
+        <translation>Aldrig</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="287"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="311"/>
         <source>Ask for confirmation</source>
-        <translation type="unfinished"/>
+        <translation>Fråga om bekräftelse</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="287"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="314"/>
         <source>Always</source>
-        <translation type="unfinished"/>
+        <translation>Alltid</translation>
     </message>
 </context>
 <context>
@@ -1425,17 +1425,17 @@
     <message>
         <location filename="../src/source/page/successpage.cpp" line="70"/>
         <source>Compression successful</source>
-        <translation type="unfinished"/>
+        <translation>Komprimeringen lyckades</translation>
     </message>
     <message>
         <location filename="../src/source/page/successpage.cpp" line="80"/>
         <source>View</source>
-        <translation type="unfinished"/>
+        <translation>Visa</translation>
     </message>
     <message>
         <location filename="../src/source/page/successpage.cpp" line="83"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Tillbaka</translation>
     </message>
 </context>
 <context>
@@ -1444,17 +1444,17 @@
         <location filename="../src/source/mainwindow.cpp" line="3881"/>
         <location filename="../src/source/mainwindow.cpp" line="3936"/>
         <source>Open file</source>
-        <translation type="unfinished"/>
+        <translation>Öppna fil</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3884"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Tillbaka</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3940"/>
         <source>File info</source>
-        <translation type="unfinished"/>
+        <translation>Filinformation</translation>
     </message>
 </context>
 <context>
@@ -1464,34 +1464,34 @@
         <location filename="../src/source/page/uncompresspage.cpp" line="82"/>
         <location filename="../src/source/page/uncompresspage.cpp" line="116"/>
         <source>Extract to:</source>
-        <translation type="unfinished"/>
+        <translation>Extrahera till:</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="117"/>
         <source>Extract</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Extrahera</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="202"/>
         <source>The default extraction path does not exist, please retry</source>
-        <translation type="unfinished"/>
+        <translation>Standardplatsen för uppackning finns inte. Försök igen.</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="205"/>
         <source>You do not have permission to save files here, please change and retry</source>
-        <translation type="unfinished"/>
+        <translation>Du har inte behörighet att spara filer här. Ändra plats och försök igen.</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="209"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="225"/>
         <source>Find directory</source>
-        <translation type="unfinished"/>
+        <translation>Hitta mapp</translation>
     </message>
 </context>
 <context>
@@ -1499,67 +1499,67 @@
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="426"/>
         <source>You cannot add the archive to itself</source>
-        <translation type="unfinished"/>
+        <translation>Du kan inte lägga till arkivet i sig självt</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="426"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="666"/>
         <source>Extract</source>
         <comment>提取</comment>
-        <translation type="unfinished"/>
+        <translation>Extrahera</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="668"/>
         <source>Extract to current directory</source>
-        <translation type="unfinished"/>
+        <translation>Extrahera till aktuell mapp</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="670"/>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>Öppna</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="672"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Byt namn</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="680"/>
         <source>Delete</source>
-        <translation type="unfinished"/>
+        <translation>Ta bort</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="689"/>
         <source>Open with</source>
-        <translation type="unfinished"/>
+        <translation>Öppna med</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="693"/>
         <location filename="../src/source/tree/uncompressview.cpp" line="858"/>
         <source>Select default program</source>
-        <translation type="unfinished"/>
+        <translation>Välj standardprogram</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="753"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="753"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Bekräfta</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="753"/>
         <source>Do you want to delete the selected file(s)?</source>
-        <translation type="unfinished"/>
+        <translation>Vill du ta bort de markerade filerna?</translation>
     </message>
 </context>
 </TS>
