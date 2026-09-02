@@ -1286,7 +1286,8 @@ void CliInterface::removeExtractedFilesOnFailure(const QString &strTargetPath, c
         const QString &path = p.first;
         if (!p.second) {   // 文件
             QFileInfo fi(path);
-            if (fi.exists() && fi.isFile() && fi.size() == 0) {
+            // 密码错误时（Copy 存储 + 流式加密会把乱码写满整个文件）也删除非空文件，避免目标目录残留完整大小乱码
+            if (fi.exists() && fi.isFile() && ((m_eErrorType == ET_WrongPassword) || (fi.size() == 0))) {
                 QFile::remove(path);
             }
         }
