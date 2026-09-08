@@ -356,12 +356,11 @@ bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
     }
 
     if (isWrongPasswordMsg(line)) {  // 提示密码错误
-        // 加密分卷包缺失分卷时，7z 先输出 "Unexpected end of archive"（已置
-        // ET_MissingVolume），随后输出 "CRC Failed in encrypted file. Wrong
-        // password?"。根因是分卷缺失而非密码错误，密码错误不得覆盖已判定的
-        // 分卷缺失（PMS BUG-371879）。
-        if (workStatus == WT_Extract && ET_MissingVolume == m_eErrorType) {
-            return true;  // 已判定分卷缺失，忽略密码错误行，继续解析
+        // 分卷缺失时（密码正确）7z 输出 "CRC Failed in encrypted file. Wrong password?"，
+        // 根因是分卷缺失，不覆盖 ET_MissingVolume；其余 "Wrong password" 行为真正密码错误。
+        if (workStatus == WT_Extract && ET_MissingVolume == m_eErrorType
+                && line.contains(QLatin1String("CRC Failed in encrypted file."))) {
+            return true;
         }
         m_eErrorType = ET_WrongPassword;
         if (workStatus != WT_Delete) { // 区分删除操作密码错误的处理

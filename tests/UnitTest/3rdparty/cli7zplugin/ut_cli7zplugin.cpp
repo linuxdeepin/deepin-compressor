@@ -527,6 +527,35 @@ TEST_F(UT_Cli7zPlugin, test_handleLine_006)
     EXPECT_EQ(m_tester->m_finishType, PFT_Error);
 }
 
+// 分卷缺失且密码正确：CRC Failed 行不覆盖 ET_MissingVolume（回归保护）。
+TEST_F(UT_Cli7zPlugin, test_handleLine_MissingVolume_WithCRCFailedWrongPasswordMsg)
+{
+    m_tester->m_eErrorType = ET_MissingVolume;
+    m_tester->m_finishType = PFT_Error;
+    EXPECT_EQ(m_tester->handleLine("ERROR: CRC Failed in encrypted file. Wrong password? : file1.txt", WT_Extract), true);
+    EXPECT_EQ(m_tester->m_eErrorType, ET_MissingVolume);
+}
+
+// 分卷缺失但密码错误：真正 "Wrong password" 行覆盖为密码错误。
+TEST_F(UT_Cli7zPlugin, test_handleLine_MissingVolume_WithWrongPasswordMsg)
+{
+    m_tester->m_eErrorType = ET_MissingVolume;
+    m_tester->m_finishType = PFT_Error;
+    EXPECT_EQ(m_tester->handleLine("ERROR: Wrong password : file1.txt", WT_Extract), false);
+    EXPECT_EQ(m_tester->m_eErrorType, ET_WrongPassword);
+    EXPECT_EQ(m_tester->m_finishType, PFT_Error);
+}
+
+// 分卷缺失但错误密码（7z 格式的 Data Error 变体）：同样覆盖为密码错误。
+TEST_F(UT_Cli7zPlugin, test_handleLine_MissingVolume_WithDataErrorWrongPasswordMsg)
+{
+    m_tester->m_eErrorType = ET_MissingVolume;
+    m_tester->m_finishType = PFT_Error;
+    EXPECT_EQ(m_tester->handleLine("ERROR: Data Error in encrypted file. Wrong password? : file2.txt", WT_Extract), false);
+    EXPECT_EQ(m_tester->m_eErrorType, ET_WrongPassword);
+    EXPECT_EQ(m_tester->m_finishType, PFT_Error);
+}
+
 TEST_F(UT_Cli7zPlugin, test_handleLine_007)
 {
     EXPECT_EQ(m_tester->handleLine("No files to process", WT_Extract), true);
