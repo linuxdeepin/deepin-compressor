@@ -1,0 +1,35 @@
+elements:
+  HomePage_ChooseButton:
+    accessible_id: HomePage_ChooseButton
+  NextButton:
+    accessible_id: NextButton
+  CompressSettingPage_CompressButton:
+    accessible_id: CompressSettingPage_CompressButton
+  UnCompressButton:
+    accessible_id: UnCompressButton
+  OpenFileChooseButton:
+    accessible_id: OpenFileChooseButton
+  OpenWithDialog_ChooseButton:
+    accessible_id: OpenWithDialog_ChooseButton
+  ListEncryptionButton:
+    accessible_id: ListEncryptionButton
+  SplitCheckBox:
+    accessible_id: SplitCheckBox
+  PauseContinueButton:
+    accessible_id: PauseContinueButton
+  ProgressPage_CancelButton:
+    accessible_id: ProgressPage_CancelButton
+  ReturnButton:
+    accessible_id: ReturnButton
+  CommandLinkBackButton:
+    accessible_id: CommandLinkBackButton
+  CpuComboBox:
+    accessible_id: CpuComboBox
+  PopupDialog_LineEdit:
+    accessible_id: PopupDialog_LineEdit
+  CheckButton:
+    accessible_id: CheckButton
+  ShowFileButton:
+    accessible_id: ShowFileButton
+  UncompressPathButton:
+    accessible_id: UncompressPathButton
