@@ -1,35 +1,54 @@
 elements:
-  HomePage_ChooseButton:
-    accessible_id: HomePage_ChooseButton
-  NextButton:
-    accessible_id: NextButton
-  CompressSettingPage_CompressButton:
-    accessible_id: CompressSettingPage_CompressButton
-  UnCompressButton:
-    accessible_id: UnCompressButton
-  OpenFileChooseButton:
-    accessible_id: OpenFileChooseButton
-  OpenWithDialog_ChooseButton:
-    accessible_id: OpenWithDialog_ChooseButton
-  ListEncryptionButton:
-    accessible_id: ListEncryptionButton
-  SplitCheckBox:
-    accessible_id: SplitCheckBox
-  PauseContinueButton:
-    accessible_id: PauseContinueButton
-  ProgressPage_CancelButton:
-    accessible_id: ProgressPage_CancelButton
-  ReturnButton:
-    accessible_id: ReturnButton
-  CommandLinkBackButton:
-    accessible_id: CommandLinkBackButton
-  CpuComboBox:
-    accessible_id: CpuComboBox
-  PopupDialog_LineEdit:
-    accessible_id: PopupDialog_LineEdit
   CheckButton:
-    accessible_id: CheckButton
+    name: 推荐选择
+    role: button
+  CommandLinkBackButton:
+    name: 重 试
+    role: button
+  CompressSettingPage_CompressButton:
+    name: 压 缩
+    role: button
+  CpuComboBox:
+    name: 单线程
+    role: combo box
+  HomePage_ChooseButton:
+    name: 选择文件
+    role: button
+  ListEncryptionButton:
+    index: 1
+    role: check box
+  NextButton:
+    name: 下一步
+    role: button
+  OpenFileChooseButton:
+    name: 添加其他程序
+    role: button
+  OpenWithDialog_ChooseButton:
+    name: 确 定
+    role: button
+  PauseContinueButton:
+    name: 暂 停
+    role: check box
+  PopupDialog_LineEdit:
+    index: 0
+    name: DLineEditChildLineEdit
+    role: text
+  ProgressPage_CancelButton:
+    name: 取 消
+    role: button
+  ReturnButton:
+    index: 0
+    name: 返回
+    role: button
   ShowFileButton:
-    accessible_id: ShowFileButton
+    name: 查看文件
+    role: button
+  SplitCheckBox:
+    name: '分卷压缩:'
+    role: check box
+  UnCompressButton:
+    name: 解 压
+    role: button
   UncompressPathButton:
-    accessible_id: UncompressPathButton
+    name: 解压到： ~/Desktop
+    role: button
