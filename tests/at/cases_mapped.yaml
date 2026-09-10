@@ -7,9 +7,14 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: HomePage_ChooseButton
-      role: push button
+      name: 选择文件
+      role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
   - step_type: action
     action: file_dialog_select
     path: ${TEST_TXT}
@@ -17,8 +22,8 @@ cases:
   - step_type: assert
     action: assert_element
     selector:
-      accessible_id: HomePage_ChooseButton
-      role: push button
+      name: 选择文件
+      role: button
 - id: suite_归档管理器_011_s1
   name: 压缩设置与执行-【归档管理器】压缩深路径文件；【归档管理器】压缩快捷键；【归档管理器】特殊符号命名压缩包；【归档管理器】
   module: 归档管理器
@@ -26,9 +31,14 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: HomePage_ChooseButton
-      role: push button
+      name: 选择文件
+      role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
   - step_type: action
     action: file_dialog_select
     path: ${TEST_TXT}
@@ -36,20 +46,20 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: NextButton
-      role: push button
+      name: 下一步
+      role: button
     do: click
   - step_type: action
     action: element_action
     selector:
-      accessible_id: CompressSettingPage_CompressButton
-      role: push button
+      name: 压 缩
+      role: button
     do: click
   - step_type: assert
     action: assert_element
     selector:
-      accessible_id: CompressSettingPage_CompressButton
-      role: push button
+      name: 压 缩
+      role: button
 - id: suite_归档管理器_015_s1
   name: 解压操作-【归档管理器】解压列表打开；【归档管理器】解压列表打开2；【归档管理器】授权提示02；【归档管理器】成功界面点
   module: 归档管理器
@@ -57,9 +67,14 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: HomePage_ChooseButton
-      role: push button
+      name: 选择文件
+      role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
   - step_type: action
     action: file_dialog_select
     path: ${TEST_ZIP}
@@ -67,26 +82,26 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: UnCompressButton
-      role: push button
+      name: 解 压
+      role: button
     do: click
   - step_type: action
     action: element_action
     selector:
-      accessible_id: OpenFileChooseButton
-      role: push button
+      name: 添加其他程序
+      role: button
     do: click
   - step_type: action
     action: element_action
     selector:
-      accessible_id: OpenWithDialog_ChooseButton
-      role: push button
+      name: 确 定
+      role: button
     do: click
   - step_type: assert
     action: assert_element
     selector:
-      accessible_id: UnCompressButton
-      role: push button
+      name: 解 压
+      role: button
 - id: suite_归档管理器_016_s1
   name: 解压操作-【归档管理器】提取文件取消；【归档管理器】右键解压缩；【归档管理器】右键解压到当前文件夹；【归档管理器】右键解
   module: 归档管理器
@@ -94,9 +109,14 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: HomePage_ChooseButton
-      role: push button
+      name: 选择文件
+      role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
   - step_type: action
     action: file_dialog_select
     path: ${TEST_ZIP}
@@ -104,14 +124,14 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: UnCompressButton
-      role: push button
+      name: 解 压
+      role: button
     do: click
   - step_type: assert
     action: assert_element
     selector:
-      accessible_id: UnCompressButton
-      role: push button
+      name: 解 压
+      role: button
 - id: suite_归档管理器_020_s1
   name: 密码与加密-【归档管理器】[008]汉字密码加密包02；【归档管理器】[007]汉字密码加密包01；【归档管理器】密码框
   module: 归档管理器
@@ -119,18 +139,21 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: HomePage_ChooseButton
-      role: push button
+      name: 选择文件
+      role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
   - step_type: action
     action: file_dialog_select
     path: ${TEST_TXT}
     wait_after: 1000
   - step_type: action
     action: element_action
-    selector:
-      accessible_id: ListEncryptionButton
-      role: push button
+    ref: ListEncryptionButton
     do: click
   - step_type: action
     action: keyboard_type
@@ -138,14 +161,12 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: NextButton
-      role: push button
+      name: 下一步
+      role: button
     do: click
   - step_type: assert
     action: assert_element
-    selector:
-      accessible_id: ListEncryptionButton
-      role: push button
+    ref: ListEncryptionButton
 - id: suite_归档管理器_023_s1
   name: 分卷压缩-【归档管理器】分卷压缩；【归档管理器】解压分卷压缩包；【归档管理器】解压分卷压缩包2；【归档管理器】zip分卷
   module: 归档管理器
@@ -153,9 +174,14 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: HomePage_ChooseButton
-      role: push button
+      name: 选择文件
+      role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
   - step_type: action
     action: file_dialog_select
     path: ${TEST_TXT}
@@ -163,13 +189,13 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: NextButton
-      role: push button
+      name: 下一步
+      role: button
     do: click
   - step_type: action
     action: element_action
     selector:
-      accessible_id: SplitCheckBox
+      name: '分卷压缩:'
       role: check box
     do: click
   - step_type: action
@@ -178,13 +204,13 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: CompressSettingPage_CompressButton
-      role: push button
+      name: 压 缩
+      role: button
     do: click
   - step_type: assert
     action: assert_element
     selector:
-      accessible_id: SplitCheckBox
+      name: '分卷压缩:'
       role: check box
 - id: suite_归档管理器_025_s1
   name: 进度暂停与取消-【归档管理器】解压速率显示；【归档管理器】压缩速率显示；【归档管理器】压缩过程中取消压缩；【归档管理器】
@@ -193,9 +219,14 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: HomePage_ChooseButton
-      role: push button
+      name: 选择文件
+      role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
   - step_type: action
     action: file_dialog_select
     path: ${TEST_TXT}
@@ -203,32 +234,32 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: NextButton
-      role: push button
+      name: 下一步
+      role: button
     do: click
   - step_type: action
     action: element_action
     selector:
-      accessible_id: CompressSettingPage_CompressButton
-      role: push button
+      name: 压 缩
+      role: button
     do: click
   - step_type: action
     action: element_action
     selector:
-      accessible_id: PauseContinueButton
-      role: push button
+      name: 暂 停
+      role: check box
     do: click
   - step_type: action
     action: element_action
     selector:
-      accessible_id: ProgressPage_CancelButton
-      role: push button
+      name: 取 消
+      role: button
     do: click
   - step_type: assert
     action: assert_element
     selector:
-      accessible_id: ProgressPage_CancelButton
-      role: push button
+      name: 取 消
+      role: button
 - id: suite_归档管理器_027_s1
   name: 导航与返回-【归档管理器】帮助手册；【归档管理器】关于
   module: 归档管理器
@@ -236,9 +267,14 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: HomePage_ChooseButton
-      role: push button
+      name: 选择文件
+      role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
   - step_type: action
     action: file_dialog_select
     path: ${TEST_TXT}
@@ -252,20 +288,22 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: ReturnButton
-      role: push button
+      name: 返回
+      role: button
+      index: 0
     do: click
   - step_type: action
     action: element_action
     selector:
-      accessible_id: CommandLinkBackButton
-      role: push button
+      name: 重 试
+      role: button
     do: click
   - step_type: assert
     action: assert_element
     selector:
-      accessible_id: ReturnButton
-      role: push button
+      name: 返回
+      role: button
+      index: 0
 - id: suite_归档管理器_031_s1
   name: CPU线程设置-【归档管理器】CPU线程数-八线程；【归档管理器】CPU线程数-单线程；【归档管理器】追加压缩时候的并行
   module: 归档管理器
@@ -273,9 +311,14 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: HomePage_ChooseButton
-      role: push button
+      name: 选择文件
+      role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
   - step_type: action
     action: file_dialog_select
     path: ${TEST_TXT}
@@ -283,13 +326,13 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: NextButton
-      role: push button
+      name: 下一步
+      role: button
     do: click
   - step_type: action
     action: element_action
     selector:
-      accessible_id: CpuComboBox
+      name: 单线程
       role: combo box
     do: click
   - step_type: action
@@ -298,7 +341,7 @@ cases:
   - step_type: assert
     action: assert_element
     selector:
-      accessible_id: CpuComboBox
+      name: 单线程
       role: combo box
 - id: suite_归档管理器_032_s1
   name: 重命名操作-【归档管理器】[010]压缩包重命名；【归档管理器】文件变动提示；【归档管理器】文件默认名称重命名；【归档管
@@ -307,9 +350,14 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: HomePage_ChooseButton
-      role: push button
+      name: 选择文件
+      role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
   - step_type: action
     action: file_dialog_select
     path: ${TEST_ZIP}
@@ -317,14 +365,15 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: UnCompressButton
-      role: push button
+      name: 解 压
+      role: button
     do: right_click
   - step_type: action
     action: element_action
     selector:
-      accessible_id: PopupDialog_LineEdit
+      name: DLineEditChildLineEdit
       role: text
+      index: 0
     do: focus
   - step_type: action
     action: keyboard_type
@@ -332,8 +381,9 @@ cases:
   - step_type: assert
     action: assert_element
     selector:
-      accessible_id: PopupDialog_LineEdit
+      name: DLineEditChildLineEdit
       role: text
+      index: 0
 - id: suite_归档管理器_033_s1
   name: 设置选项-解压后删除压缩文件与推荐选项设置
   module: 归档管理器
@@ -341,9 +391,14 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: HomePage_ChooseButton
-      role: push button
+      name: 选择文件
+      role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
   - step_type: action
     action: file_dialog_select
     path: ${TEST_TXT}
@@ -351,8 +406,8 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: NextButton
-      role: push button
+      name: 下一步
+      role: button
     do: click
   - step_type: action
     action: keyboard_press
@@ -360,14 +415,14 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: CheckButton
-      role: check box
+      name: 推荐选择
+      role: button
     do: click
   - step_type: assert
     action: assert_element
     selector:
-      accessible_id: CheckButton
-      role: check box
+      name: 推荐选择
+      role: button
 - id: suite_归档管理器_034_s1
   name: 结果显示与查看-解压成功后显示文件
   module: 归档管理器
@@ -375,9 +430,14 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: HomePage_ChooseButton
-      role: push button
+      name: 选择文件
+      role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
   - step_type: action
     action: file_dialog_select
     path: ${TEST_ZIP}
@@ -385,22 +445,22 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: UnCompressButton
-      role: push button
+      name: 解 压
+      role: button
     do: click
   - step_type: action
     action: element_action
     selector:
-      accessible_id: ShowFileButton
-      role: push button
+      name: 查看文件
+      role: button
     do: click
   - step_type: action
     action: screenshot
   - step_type: assert
     action: assert_element
     selector:
-      accessible_id: ShowFileButton
-      role: push button
+      name: 查看文件
+      role: button
 - id: suite_归档管理器_035_s1
   name: 解压操作-设置解压路径
   module: 归档管理器
@@ -408,9 +468,14 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: HomePage_ChooseButton
-      role: push button
+      name: 选择文件
+      role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
   - step_type: action
     action: file_dialog_select
     path: ${TEST_ZIP}
@@ -418,14 +483,14 @@ cases:
   - step_type: action
     action: element_action
     selector:
-      accessible_id: UnCompressButton
-      role: push button
+      name: 解 压
+      role: button
     do: click
   - step_type: action
     action: element_action
     selector:
-      accessible_id: UncompressPathButton
-      role: push button
+      name: 解压到： ~/Desktop
+      role: button
     do: click
   - step_type: action
     action: keyboard_type
@@ -436,5 +501,5 @@ cases:
   - step_type: assert
     action: assert_element
     selector:
-      accessible_id: UncompressPathButton
-      role: push button
+      name: 解压到： ~/Desktop
+      role: button
