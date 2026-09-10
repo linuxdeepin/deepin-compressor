@@ -10,6 +10,15 @@ cases:
       name: 选择文件
       role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
+  - step_type: action
+    action: file_dialog_select
+    path: ${TEST_TXT}
+    wait_after: 1000
   - step_type: assert
     action: assert_element
     selector:
@@ -25,6 +34,15 @@ cases:
       name: 选择文件
       role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
+  - step_type: action
+    action: file_dialog_select
+    path: ${TEST_TXT}
+    wait_after: 1000
   - step_type: action
     action: element_action
     selector:
@@ -52,6 +70,15 @@ cases:
       name: 选择文件
       role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
+  - step_type: action
+    action: file_dialog_select
+    path: ${TEST_ZIP}
+    wait_after: 1000
   - step_type: action
     action: element_action
     selector:
@@ -85,6 +112,15 @@ cases:
       name: 选择文件
       role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
+  - step_type: action
+    action: file_dialog_select
+    path: ${TEST_ZIP}
+    wait_after: 1000
   - step_type: action
     action: element_action
     selector:
@@ -106,6 +142,15 @@ cases:
       name: 选择文件
       role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
+  - step_type: action
+    action: file_dialog_select
+    path: ${TEST_TXT}
+    wait_after: 1000
   - step_type: action
     action: element_action
     ref: ListEncryptionButton
@@ -132,6 +177,15 @@ cases:
       name: 选择文件
       role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
+  - step_type: action
+    action: file_dialog_select
+    path: ${TEST_TXT}
+    wait_after: 1000
   - step_type: action
     action: element_action
     selector:
@@ -168,6 +222,15 @@ cases:
       name: 选择文件
       role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
+  - step_type: action
+    action: file_dialog_select
+    path: ${TEST_TXT}
+    wait_after: 1000
   - step_type: action
     action: element_action
     selector:
@@ -207,6 +270,15 @@ cases:
       name: 选择文件
       role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
+  - step_type: action
+    action: file_dialog_select
+    path: ${TEST_TXT}
+    wait_after: 1000
   - step_type: action
     action: keyboard_press
     key: Down
@@ -242,6 +314,15 @@ cases:
       name: 选择文件
       role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
+  - step_type: action
+    action: file_dialog_select
+    path: ${TEST_TXT}
+    wait_after: 1000
   - step_type: action
     action: element_action
     selector:
@@ -272,6 +353,15 @@ cases:
       name: 选择文件
       role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
+  - step_type: action
+    action: file_dialog_select
+    path: ${TEST_ZIP}
+    wait_after: 1000
   - step_type: action
     action: element_action
     selector:
@@ -304,6 +394,15 @@ cases:
       name: 选择文件
       role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
+  - step_type: action
+    action: file_dialog_select
+    path: ${TEST_TXT}
+    wait_after: 1000
   - step_type: action
     action: element_action
     selector:
@@ -334,6 +433,15 @@ cases:
       name: 选择文件
       role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
+  - step_type: action
+    action: file_dialog_select
+    path: ${TEST_ZIP}
+    wait_after: 1000
   - step_type: action
     action: element_action
     selector:
@@ -363,6 +471,15 @@ cases:
       name: 选择文件
       role: button
     do: click
+    wait_for:
+      selector:
+        name: 选择文件
+      timeout: 15000
+      interval: 500
+  - step_type: action
+    action: file_dialog_select
+    path: ${TEST_ZIP}
+    wait_after: 1000
   - step_type: action
     action: element_action
     selector:
