@@ -1,94 +1,94 @@
 version: '1.0'
 source: at-case-authoring:element-map.yaml
-scan_total: 16
+scan_total: 17
 elements:
-  DLineEditChildLineEdit:
+  PopupDialog_LineEdit:
     role: text
     ui_name: 重命名
     desc: 'deepin-compressor UI元素: 重命名'
-    locator: name
-  推荐选择:
-    role: button
+    locator: accessible_id
+  CheckButton:
+    role: check box
     ui_name: 推荐选项
     desc: 'deepin-compressor UI元素: 推荐选项'
-    locator: name
-  添加其他程序:
-    role: button
+    locator: accessible_id
+  OpenFileChooseButton:
+    role: push button
     ui_name: 打开
     desc: 'deepin-compressor UI元素: 打开'
-    locator: name
-  确 定:
-    role: button
+    locator: accessible_id
+  OpenWithDialog_ChooseButton:
+    role: push button
     ui_name: 其他打开方式
     desc: 'deepin-compressor UI元素: 其他打开方式'
-    locator: name
-  下一步:
-    role: button
+    locator: accessible_id
+  NextButton:
+    role: push button
     ui_name: 下一步按钮
     desc: 'deepin-compressor UI元素: 下一步按钮'
-    locator: name
-  重 试:
-    role: button
+    locator: accessible_id
+  CommandLinkBackButton:
+    role: push button
     ui_name: 返回
     desc: 'deepin-compressor UI元素: 返回'
-    locator: name
-  解压到： ~/Desktop:
-    role: button
+    locator: accessible_id
+  UncompressPathButton:
+    role: push button
     ui_name: 提取文件到当前文件夹
     desc: 'deepin-compressor UI元素: 提取文件到当前文件夹'
-    locator: name
-  取 消:
-    role: button
+    locator: accessible_id
+  ProgressPage_CancelButton:
+    role: push button
     ui_name: 取消按钮
     desc: 'deepin-compressor UI元素: 取消按钮'
-    locator: name
-  解 压:
-    role: button
+    locator: accessible_id
+  UnCompressButton:
+    role: push button
     ui_name: 解压
     desc: 'deepin-compressor UI元素: 解压'
-    locator: name
-  '分卷压缩:':
+    locator: accessible_id
+  ListEncryptionButton:
+    role: push button
+    ui_name: 密码显示按钮
+    desc: 'deepin-compressor UI元素: 密码显示按钮'
+    locator: accessible_id
+  SplitCheckBox:
     role: check box
     ui_name: 分卷压缩
     desc: 'deepin-compressor UI元素: 分卷压缩'
-    locator: name
-  压 缩:
-    role: button
+    locator: accessible_id
+  CompressSettingPage_CompressButton:
+    role: push button
     ui_name: 压缩按钮
     desc: 'deepin-compressor UI元素: 压缩按钮'
-    locator: name
-  查看文件:
-    role: button
+    locator: accessible_id
+  ShowFileButton:
+    role: push button
     ui_name: 显示文件按钮
     desc: 'deepin-compressor UI元素: 显示文件按钮'
-    locator: name
-  选择文件:
-    role: button
+    locator: accessible_id
+  HomePage_ChooseButton:
+    role: push button
     ui_name: 选择文件
     desc: 'deepin-compressor UI元素: 选择文件'
-    locator: name
-  返回:
-    role: button
+    locator: accessible_id
+  ReturnButton:
+    role: push button
     ui_name: 返回按钮
     desc: 'deepin-compressor UI元素: 返回按钮'
-    locator: name
-  暂 停:
-    role: check box
+    locator: accessible_id
+  PauseContinueButton:
+    role: push button
     ui_name: 界面上暂停按钮
     desc: 'deepin-compressor UI元素: 界面上暂停按钮'
-    locator: name
-  单线程:
+    locator: accessible_id
+  CpuComboBox:
     role: combo box
     ui_name: 双线程
     desc: 'deepin-compressor UI元素: 双线程'
-    locator: name
+    locator: accessible_id
 transient_items: []
 unresolved:
-- name: 密码显示按钮
-  role: check box
-  ui_name: 密码显示按钮
-  desc: 'deepin-compressor UI元素: 密码显示按钮'
-  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
 - name: 确定按钮
   role: ''
   ui_name: 确定按钮
