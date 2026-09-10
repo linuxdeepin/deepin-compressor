@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -43,6 +43,8 @@ void HomePage::initUI()
     m_pTipLbl = new DLabel(tr("Drag file or folder here"), this);
     m_pSplitLbl = new DLabel(this);
     m_pChooseBtn = new CustomCommandLinkButton(tr("Select File"), this);
+    m_pChooseBtn->setObjectName("HomePage_ChooseButton");
+    m_pChooseBtn->setAccessibleName("HomePage_ChooseButton");
     m_pSettings = new QSettings(QDir(UiTools::getConfigPath()).filePath("config.conf"), QSettings::IniFormat, this);
 
     // 初始化控件布局

@@ -1,0 +1,54 @@
+elements:
+  CheckButton:
+    name: 推荐选择
+    role: button
+  CommandLinkBackButton:
+    name: 重 试
+    role: button
+  CompressSettingPage_CompressButton:
+    name: 压 缩
+    role: button
+  CpuComboBox:
+    name: 单线程
+    role: combo box
+  HomePage_ChooseButton:
+    name: 选择文件
+    role: button
+  ListEncryptionButton:
+    index: 1
+    role: check box
+  NextButton:
+    name: 下一步
+    role: button
+  OpenFileChooseButton:
+    name: 添加其他程序
+    role: button
+  OpenWithDialog_ChooseButton:
+    name: 确 定
+    role: button
+  PauseContinueButton:
+    name: 暂 停
+    role: check box
+  PopupDialog_LineEdit:
+    index: 0
+    name: DLineEditChildLineEdit
+    role: text
+  ProgressPage_CancelButton:
+    name: 取 消
+    role: button
+  ReturnButton:
+    index: 0
+    name: 返回
+    role: button
+  ShowFileButton:
+    name: 查看文件
+    role: button
+  SplitCheckBox:
+    name: '分卷压缩:'
+    role: check box
+  UnCompressButton:
+    name: 解 压
+    role: button
+  UncompressPathButton:
+    name: 解压到： ~/Desktop
+    role: button
