@@ -1774,6 +1774,10 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
                 showErrorMessage(FI_Uncompress, EI_ArchiveMissingVolume,
                                  !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_Extractto == m_eStartupType));
                 break;
+            case ET_WrongPassword: {
+                sendMessage(new CustomFloatingMessage(icon, tr("Wrong password"), 1000, this));
+                break;
+            }
             default:
                 break;
             }
