@@ -187,7 +187,9 @@ bool Cli7zPlugin::readListLine(const QString &line)
     static const QLatin1String entryInfoDelimiter("----------"); // 分隔符后面是内部压缩文件信息
 
     // 加载时7z分卷文件不完整的情况
-    if (line.startsWith(QLatin1String("Open ERROR: Can not open the file as [7z] archive"))) {
+    // 兼容旧版 p7zip 输出 "Can not"（两个单词）与新版 7-Zip 26.02 输出 "Cannot"（一个单词）
+    if (line.startsWith(QLatin1String("Open ERROR: Can not open the file as [7z] archive")) ||
+        line.startsWith(QLatin1String("Open ERROR: Cannot open the file as [7z] archive"))) {
         m_eErrorType = ET_ArchiveDamaged;
         m_finishType = PFT_Error;
         return false;
