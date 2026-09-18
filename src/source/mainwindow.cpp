@@ -329,6 +329,9 @@ void MainWindow::refreshPage()
                     m_pOpenAction->setEnabled(bShowAddBtn);
                 }
             }
+        } else {
+            // 非外部权限控制模式，按压缩包是否可修改恢复“打开文件”菜单项
+            m_pOpenAction->setEnabled(m_stUnCompressParameter.bModifiable);
         }
         setTitleButtonStyle(bShowAddBtn, true, DStyle::StandardPixmap::SP_IncreaseElement);
         titlebar()->setTitle(QFileInfo(m_pUnCompressPage->archiveFullPath()).fileName());
@@ -386,12 +389,14 @@ void MainWindow::refreshPage()
     case PI_Success: {
         m_pMainWidget->setCurrentIndex(5);
         setTitleButtonStyle(false, false);
+        m_pOpenAction->setEnabled(false);
         titlebar()->setTitle("");
     }
     break;
     case PI_Failure: {
         m_pMainWidget->setCurrentIndex(6);
         setTitleButtonStyle(false, false);
+        m_pOpenAction->setEnabled(false);
         titlebar()->setTitle("");
     }
     break;
@@ -929,6 +934,10 @@ void MainWindow::slotChoosefiles()
                 if(!mapdata.value(ORDER_EDIT).toBool()) return;
             }
         }
+    }
+    // 成功/失败页无对应处理分支，直接忽略，避免用户选择被静默丢弃
+    if (PI_Success == m_ePageID || PI_Failure == m_ePageID) {
+        return;
     }
     // 创建文件选择对话框
     DFileDialog dialog(this);
@@ -2005,6 +2014,7 @@ void MainWindow::resetMainwindow()
     m_iCompressedWatchTimerID = 0;      // 初始化定时器返回值
     m_pProgressPage->resetProgress();   // 重置进度
     m_pOpenFileWatcher->reset();
+    m_pOpenAction->setEnabled(true);    // 恢复“打开文件”菜单项（成功/失败页会将其置灰）
 
     // 重置数据
     m_stUpdateOptions = UpdateOptions();
