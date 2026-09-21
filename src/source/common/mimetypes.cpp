@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -9,7 +9,72 @@
 #include <QMimeDatabase>
 #include <QRegularExpression>
 #include <QDebug>
+#include <QFile>
 #include <QProcess>
+#include <QtEndian>
+
+namespace {
+/**
+ * @brief 检测 ELF64 小端文件是否包含指定 section 名
+ *
+ * 玲珑 uab 包本质是 ELF 容器，内容识别命中 x-executable 及其子类型（如新版
+ * mime db 中的 x-pie-executable），与普通 ELF 可执行文件仅能靠 section 特征
+ * 区分，mime magic 无法安全表达（ELF magic 会误伤所有可执行文件），因此在此
+ * 精确检测。
+ */
+bool elfContainsSection(const QString &path, const QByteArray &sectionName)
+{
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly)) {
+        return false;
+    }
+    const QByteArray ehdr = file.read(64);
+    if (ehdr.size() != 64) {
+        return false;
+    }
+    const uchar *e = reinterpret_cast<const uchar *>(ehdr.constData());
+    if (memcmp(e, "\x7f""ELF", 4) != 0 || e[4] != 2 || e[5] != 1) {   // \x7fELF, 64-bit LE
+        return false;
+    }
+    const quint64 shoff = qFromLittleEndian<quint64>(e + 40);          // e_shoff
+    const quint16 shentsize = qFromLittleEndian<quint16>(e + 58);      // e_shentsize
+    const quint16 shnum = qFromLittleEndian<quint16>(e + 60);          // e_shnum
+    const quint16 shstrndx = qFromLittleEndian<quint16>(e + 62);       // e_shstrndx
+    if (shoff == 0 || shentsize != 64 || shnum == 0 || shstrndx >= shnum) {
+        return false;
+    }
+    if (shoff > static_cast<quint64>(file.size())
+        || static_cast<qint64>(shnum) * shentsize > file.size() - static_cast<qint64>(shoff)) {
+        return false;
+    }
+    file.seek(static_cast<qint64>(shoff));
+    const QByteArray shdrs = file.read(static_cast<qint64>(shnum) * shentsize);
+    if (shdrs.size() != static_cast<qint64>(shnum) * shentsize) {
+        return false;
+    }
+    const uchar *strSh = reinterpret_cast<const uchar *>(shdrs.constData()) + qint64(shstrndx) * 64;
+    const quint64 strOff = qFromLittleEndian<quint64>(strSh + 24);     // sh_offset
+    const quint64 strSize = qFromLittleEndian<quint64>(strSh + 32);    // sh_size
+    if (strSize == 0 || strSize > 16 * 1024 * 1024
+        || strSize > static_cast<quint64>(file.size())
+        || strOff > static_cast<quint64>(file.size()) - strSize) {
+        return false;
+    }
+    file.seek(static_cast<qint64>(strOff));
+    const QByteArray shstrtab = file.read(static_cast<qint64>(strSize));
+    for (int i = 0; i < shnum; ++i) {
+        const uchar *sh = reinterpret_cast<const uchar *>(shdrs.constData()) + qint64(i) * 64;
+        const quint32 nameOff = qFromLittleEndian<quint32>(sh);        // sh_name
+        if (nameOff >= static_cast<quint32>(shstrtab.size())) {
+            continue;
+        }
+        if (shstrtab.mid(int(nameOff), sectionName.size() + 1) == sectionName + '\0') {
+            return true;
+        }
+    }
+    return false;
+}
+}   // namespace
 
 CustomMimeType determineMimeType(const QString &filename)
 {
@@ -162,6 +227,16 @@ CustomMimeType determineMimeType(const QString &filename)
     stMimeType.m_bUnKnown = false;
     // 对于内容和后缀不一致的情况进行的处理
     if (mimeFromExtension != mimeFromContent) {
+        // 玲珑 uab 包：系统 mimetype 归属为官方 linglong-bin 注册的
+        // application/vnd.linyaps.uab（ELF 容器，sub-class-of x-executable），此处
+        // 用 ELF section 特征精确确认；inherits 同时匹配自身与子类型
+        // （x-pie-executable 等），检测失败则保持内容识别结果（非 uab 的 ELF）
+        if (extName == QStringLiteral("application/vnd.linyaps.uab")
+                && mimeFromContent.inherits(QStringLiteral("application/x-executable"))
+                && elfContainsSection(filename, QByteArrayLiteral("linglong.meta"))) {
+            stMimeType.m_mimeType = mimeFromExtension;
+            return stMimeType;
+        }
         if ((mimeFromContent.inherits(QStringLiteral("text/x-qml")) && fileinfo.completeSuffix().toLower().contains(QStringLiteral("rar")))
                 || (mimeFromContent.name() == QStringLiteral("image/svg+xml") && mimeFromExtension.name() == QStringLiteral("application/zip"))) {
             stMimeType.m_mimeType = mimeFromExtension;

@@ -191,7 +191,11 @@ bool KPluginLoader::load()
 
     Q_ASSERT(!fileName().isEmpty());
     QLibrary lib(fileName());
-    Q_ASSERT(lib.isLoaded()); // already loaded by QPluginLoader::load()
+    // Qt6 中 QLibrary 与 QPluginLoader 不再共享加载状态，Q_ASSERT(lib.isLoaded()) 会在调试构建中误触发。
+    // 显式加载（对已加载库只是引用计数 +1，语义不变）。
+    if (!lib.isLoaded()) {
+        lib.load();
+    }
 
     // TODO: this messes up KPluginLoader::errorString(): it will change from unknown error to could not resolve kde_plugin_version
     quint32 *version = reinterpret_cast<quint32 *>(lib.resolve("kde_plugin_version"));
