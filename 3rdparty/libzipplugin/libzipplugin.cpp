@@ -545,39 +545,156 @@ PluginFinishType LibzipPlugin::addComment(const QString &comment)
     return PFT_Nomral;
 }
 
-PluginFinishType LibzipPlugin::updateArchiveData(const UpdateOptions &/*options*/)
+PluginFinishType LibzipPlugin::updateArchiveData(const UpdateOptions &options)
 {
-    m_mapFileCode.clear();
-    m_setHasHandlesDirs.clear();
-    m_setHasRootDirs.clear();
-    DataManager::get_instance().resetArchiveData();
+    ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
+    QString rootEntry;
 
-    // 处理加载流程
-    int errcode = 0;
-    zip_error_t err;
+    foreach (FileEntry entry, options.listEntry) {
+        if (options.eType == UpdateOptions::Delete ) { // 删除，更新压缩包数据
+            if (entry.isDirectory) { // 删除文件夹
+                // 在map中查找该文件夹下的文件并删除
+                QMap<QString, FileEntry>::iterator itor = stArchiveData.mapFileEntry.begin();
+                while (itor != stArchiveData.mapFileEntry.end()) {
+                    if (itor->strFullPath.startsWith(entry.strFullPath)) {
+                        if (!itor->isDirectory) {
+                            stArchiveData.qSize -= itor->qSize; // 更新压缩包内文件原始总大小
+                        }
+                        itor = stArchiveData.mapFileEntry.erase(itor);
+                    } else {
+                        ++itor;
+                    }
+                }
 
-    zip_t *archive = zip_open(QFile::encodeName(m_strArchiveName).constData(), ZIP_RDONLY, &errcode);   // 打开压缩包文件
-    zip_error_init_with_code(&err, errcode);
+                // 更新文件夹第一层的数据
+                if (entry.strFullPath.endsWith(QLatin1Char('/')) && entry.strFullPath.count(QLatin1Char('/')) == 1) {
+                    for (int i = 0; i < stArchiveData.listRootEntry.count(); i++) {
+                        if (stArchiveData.listRootEntry.at(i).strFullPath == entry.strFullPath) { // 在第一次层数据中找到entry移除
+                            stArchiveData.listRootEntry.removeAt(i);
+                            break;
+                        }
+                    }
+                }
+            } else { // 删除文件
+                stArchiveData.qSize -= entry.qSize; // 更新压缩包内文件原始总大小
+                stArchiveData.mapFileEntry.remove(entry.strFullPath); //在map中删除该文件
+                // 更新文件夹第一层的数据
+                if (!entry.strFullPath.contains(QLatin1Char('/'))) {
+                    for (int i = 0; i < stArchiveData.listRootEntry.count(); i++) {
+                        if (stArchiveData.listRootEntry.at(i).strFullPath == entry.strFullPath) { // 在第一次层数据中找到entry移除
+                            stArchiveData.listRootEntry.removeAt(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        } else if (options.eType == UpdateOptions::Rename) { // 重命名，更新压缩包数据
+            QMap<QString, FileEntry> tmpMapFileEntry;
+            QString strAlias;
+            if (entry.isDirectory) { // 重命名文件夹
+                // 在map中查找该文件夹下的文件并重命名
+                QMap<QString, FileEntry>::iterator itor = stArchiveData.mapFileEntry.begin();
+                while (itor != stArchiveData.mapFileEntry.end()) {
+                    if (itor->strFullPath.startsWith(entry.strFullPath)) {
+                        QString strPath = QFileInfo(entry.strFullPath.left(entry.strFullPath.length() - 1)).path();
+                        if(strPath == "."){
+                            strAlias = entry.strAlias + QDir::separator();
+                        } else {
+                            strAlias = strPath + QDir::separator() + entry.strAlias + QDir::separator();
+                        }
+                        strAlias = strAlias + QString(itor->strFullPath).right(QString(itor->strFullPath).length()-entry.strFullPath.length());
+                        FileEntry tmpEntry = itor.value();
+                        tmpEntry.strFullPath = strAlias;
+                        if(tmpEntry.isDirectory) {
+                            tmpEntry.strFileName = QFileInfo(strAlias.left(strAlias.length() - 1)).fileName();
+                        } else {
+                            tmpEntry.strFileName = QFileInfo(strAlias).fileName();
+                        }
+                        tmpEntry.strAlias.clear();
+                        tmpMapFileEntry.insert(strAlias, tmpEntry);
+                        itor = stArchiveData.mapFileEntry.erase(itor);
+                    } else {
+                        ++itor;
+                    }
+                }
+                if(!tmpMapFileEntry.isEmpty()) {
+                    for (QString strFullPath: tmpMapFileEntry.keys()) {
+                        stArchiveData.mapFileEntry.insert(strFullPath, tmpMapFileEntry.value(strFullPath));
+                    }
+                }
+                // 更新文件夹第一层的数据
+                if (entry.strFullPath.endsWith(QLatin1Char('/')) && entry.strFullPath.count(QLatin1Char('/')) == 1) {
+                    for (int i = 0; i < stArchiveData.listRootEntry.count(); i++) {
+                        if (stArchiveData.listRootEntry.at(i).strFullPath == entry.strFullPath) { // 在第一次层数据中找到entry移除
+                            stArchiveData.listRootEntry.removeAt(i);
+                            strAlias = entry.strAlias + QDir::separator();
+                            entry.strFullPath = strAlias;
+                            entry.strFileName = strAlias;
+                            stArchiveData.listRootEntry.append(entry);
+                            break;
+                        }
+                    }
+                }
+            } else { // 重命名文件
+                stArchiveData.mapFileEntry.remove(entry.strFullPath); //在map中重命名该文件
+                QString strPath = QFileInfo(entry.strFullPath).path();
+                if(strPath == "." || strPath.isEmpty() || strPath.isNull()) {
+                    strAlias = entry.strAlias;
+                } else {
+                    strAlias = strPath + QDir::separator() + entry.strAlias;
+                }
+                FileEntry tmpEntry = entry;
+                tmpEntry.strFullPath = strAlias;
+                stArchiveData.mapFileEntry.insert(strAlias, tmpEntry);
+                // 更新文件夹第一层的数据
+                if (!entry.strFullPath.contains(QLatin1Char('/'))) {
+                    for (int i = 0; i < stArchiveData.listRootEntry.count(); i++) {
+                        if (stArchiveData.listRootEntry.at(i).strFullPath == entry.strFullPath) { // 在第一次层数据中找到entry重命名
+                            stArchiveData.listRootEntry.removeAt(i);
+                            strAlias = entry.strAlias;
+                            entry.strFullPath = strAlias;
+                            entry.strFileName = strAlias;
+                            stArchiveData.listRootEntry.append(entry);
+                            break;
+                        }
+                    }
+                }
+            }
+        } else if (options.eType == UpdateOptions::Add) { // 追加，更新压缩包数据
+            QString destinationPath = options.strParentPath; // 在压缩包中追加的路径
+            QFileInfo file(entry.strFullPath); // 注意此时entry.strFullPath如果是是文件夹还没有'/'
+            if (rootEntry.isEmpty()) { // 获取所有追加文件的父目录
+                rootEntry = file.filePath().left(file.filePath().size() - file.fileName().size());
+            }
 
-    //某些特殊文件，如.crx用zip打不开，需要替换minizip
-    if (!archive) {
-//        m_bAllEntry = true;
-//        return minizip_list();
-    }
+            entry.strFullPath = destinationPath + entry.strFullPath.remove(rootEntry); // entry在压缩包中的全路径
+            if (file.isDir()) { // 文件夹
+                entry.strFullPath = entry.strFullPath + QDir::separator(); // 手动添加'/'
+            } else {
+                // 更新压缩包内文件原始总大小
+                stArchiveData.qSize -= stArchiveData.mapFileEntry.value(entry.strFullPath).qSize;
+                stArchiveData.qSize += entry.qSize;
+            }
 
-    // 获取文件压缩包文件数目
-    const auto nofEntries = zip_get_num_entries(archive, 0);
+            // 判断是否追加到第一层数据
+            if (destinationPath.isEmpty() && ((entry.strFullPath.count('/') == 1 && entry.strFullPath.endsWith('/')) || entry.strFullPath.count('/') == 0)) {
+                for (int i = 0; i < stArchiveData.listRootEntry.count(); i++) {
+                    if (stArchiveData.listRootEntry.at(i).strFullPath == entry.strFullPath) { // 在第一层数据中找到entry，不添加数据
+                        stArchiveData.listRootEntry.removeAt(i);
+                        break;
+                    }
+                }
 
-    // 循环构建数据
-    for (zip_int64_t i = 0; i < nofEntries; i++) {
-        if (QThread::currentThread()->isInterruptionRequested()) {
-            break;
+                // 在第一层数据中没有找到entry，在第一层数据中添加entry
+                stArchiveData.listRootEntry.push_back(entry);
+            }
+
+            // 更新压缩包map
+            stArchiveData.mapFileEntry.insert(entry.strFullPath, entry);
         }
-
-        handleArchiveData(archive, i);  // 构建数据
     }
 
-    zip_close(archive);
+    stArchiveData.qComressSize = QFileInfo(m_strArchiveName).size(); // 更新压缩包大小
 
     return PFT_Nomral;
 }

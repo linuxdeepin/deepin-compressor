@@ -1556,6 +1556,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
 // 追加/删除更新
     case ArchiveJob::JT_Update: {
         qInfo() << "更新结束";
+        m_bInternalArchiveOperation = false;
         m_pLoadingPage->stopLoading();      // 停止更新
 
         if (DataManager::get_instance().archiveData().listRootEntry.count() == 0) {
@@ -1606,6 +1607,7 @@ void MainWindow::handleJobCancelFinished(ArchiveJob::JobType eType)
     break;
     // 添加文件至压缩包
     case ArchiveJob::JT_Add: {
+        m_bInternalArchiveOperation = false;
         //拖拽追加取消后不需要返回列表界面
         if (StartupType::ST_DragDropAdd != m_eStartupType) {
             m_ePageID = PI_UnCompress;
@@ -1650,6 +1652,13 @@ void MainWindow::handleJobCancelFinished(ArchiveJob::JobType eType)
     break;
     // 删除
     case ArchiveJob::JT_Delete: {
+        m_bInternalArchiveOperation = false;
+        m_ePageID = PI_UnCompress;
+    }
+    break;
+    // 重命名
+    case ArchiveJob::JT_Rename: {
+        m_bInternalArchiveOperation = false;
         m_ePageID = PI_UnCompress;
     }
     break;
@@ -1707,6 +1716,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
     break;
     // 压缩包追加文件错误
     case ArchiveJob::JT_Add: {
+        m_bInternalArchiveOperation = false;
         //拖拽追加失败后需要跳转到失败界面，
         if (StartupType::ST_DragDropAdd != m_eStartupType) {
             m_ePageID = PI_UnCompress;
@@ -1869,6 +1879,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
     break;
     // 删除错误
     case ArchiveJob::JT_Delete: {
+        m_bInternalArchiveOperation = false;
         m_ePageID = PI_UnCompress;
 #if 0 // 删除错误提示暂时不需要
         QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
@@ -1947,7 +1958,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
         break;
     // 更新压缩包数据错误
     case ArchiveJob::JT_Update:
-
+        m_bInternalArchiveOperation = false;
         break;
     default:
         break;
@@ -2003,6 +2014,7 @@ void MainWindow::addFiles2Archive(const QStringList &listFiles, const QString &s
 
 void MainWindow::resetMainwindow()
 {
+    m_bInternalArchiveOperation = false;
 #ifdef __aarch64__
     maxFileSize_ = 0;
 #endif
@@ -2529,6 +2541,7 @@ void MainWindow::watcherArchiveFile(const QString &strFullPath)
     m_pFileWatcher->startWatcher();
 
     connect(m_pFileWatcher, &DFileWatcher::fileMoved, this, [ = ]() { //监控压缩包，重命名时提示
+        if (m_bInternalArchiveOperation) return;
         // 取消操作
         slotCancel();
 
@@ -2542,6 +2555,7 @@ void MainWindow::watcherArchiveFile(const QString &strFullPath)
     });
 
     connect(m_pFileWatcher, &DFileWatcher::fileDeleted, this, [ = ]() { //监控压缩包，重命名时提示
+        if (m_bInternalArchiveOperation) return;
         QTimer::singleShot(1000, this, [=]()
         {
             if(QFile::exists(strFullPath)) {
@@ -3091,6 +3105,7 @@ void MainWindow::slotDelFiles(const QList<FileEntry> &listSelEntry, qint64 qTota
     qInfo() << "删除文件:";
     m_operationtype = Operation_DELETE; //提取操作
     QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();
+    m_bInternalArchiveOperation = true;
     if (ArchiveManager::get_instance()->deleteFiles(strArchiveFullPath, listSelEntry)) {
         // 设置更新选项
         m_stUpdateOptions.reset();
@@ -3144,6 +3159,7 @@ void MainWindow::slotRenameFile(const FileEntry &SelEntry, qint64 qTotalSize)
         return;
     }
     QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();
+    m_bInternalArchiveOperation = true;
     if (ArchiveManager::get_instance()->renameFiles(strArchiveFullPath, sListEntry)) {
         // 设置更新选项
         m_stUpdateOptions.reset();
@@ -3191,6 +3207,7 @@ void MainWindow::slotOpenFile(const FileEntry &entry, const QString &strProgram)
 
 void MainWindow::slotOpenFileChanged(const QString &strPath)
 {
+    if (m_bInternalArchiveOperation) return;
     QMap<QString, bool> &mapStatus = m_pOpenFileWatcher->getFileHasModified();
     QMap<QString, QString> mapPassword = m_pOpenFileWatcher->getFilePassword();
     qInfo() << strPath;
@@ -3621,6 +3638,7 @@ void MainWindow::slotFinishCalculateSize(qint64 size, QString strArchiveFullPath
         }
     } else {
         // 调用添加文件接口
+        m_bInternalArchiveOperation = true;
         if (ArchiveManager::get_instance()->addFiles(strArchiveFullPath, listAddEntry, stOptions)) {
             // 切换进度界面
             m_pProgressPage->setTotalSize(size);
