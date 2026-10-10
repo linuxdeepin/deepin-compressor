@@ -453,9 +453,12 @@ bool ArchiveManager::cancelOperation()
     // 调用job取消接口
     if (m_pArchiveJob) {
         qDebug() << "Canceling archive job";
+        ArchiveJob *job = m_pArchiveJob;
         m_pArchiveJob->kill();
-        m_pArchiveJob->deleteLater();
-        m_pArchiveJob = nullptr;
+        if (m_pArchiveJob == job) {
+            m_pArchiveJob->deleteLater();
+            m_pArchiveJob = nullptr;
+        }
 
         return true;
     }
