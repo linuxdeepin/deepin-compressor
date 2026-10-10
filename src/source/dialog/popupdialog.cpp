@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -604,6 +604,8 @@ int RenameDialog::showDialog(const QString &strReName, const QString &strAlias, 
     qDebug() << "Showing RenameDialog for:" << strReName << "isDirectory:" << isDirectory << "isRepeat:" << isRepeat;
     if(m_lineEdit == NULL) {//创建DLineEdit,设定显示规则。
         m_lineEdit = new DLineEdit(this);
+        m_lineEdit->setObjectName("PopupDialog_LineEdit");
+        m_lineEdit->setAccessibleName("PopupDialog_LineEdit");
         //使用 QValidator 在输入时直接拒绝非法字符，避免在 textChanged 中 setText 导致光标跳动
         //第一位不允许空格和特殊字符，后续位不允许特殊字符（中间空格允许）
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)

@@ -1,0 +1,211 @@
+version: '1.0'
+source: at-case-authoring:element-map.yaml
+scan_total: 16
+elements:
+  DLineEditChildLineEdit:
+    role: text
+    ui_name: 重命名
+    desc: 'deepin-compressor UI元素: 重命名'
+    locator: name
+  推荐选择:
+    role: button
+    ui_name: 推荐选项
+    desc: 'deepin-compressor UI元素: 推荐选项'
+    locator: name
+  添加其他程序:
+    role: button
+    ui_name: 打开
+    desc: 'deepin-compressor UI元素: 打开'
+    locator: name
+  确 定:
+    role: button
+    ui_name: 其他打开方式
+    desc: 'deepin-compressor UI元素: 其他打开方式'
+    locator: name
+  下一步:
+    role: button
+    ui_name: 下一步按钮
+    desc: 'deepin-compressor UI元素: 下一步按钮'
+    locator: name
+  重 试:
+    role: button
+    ui_name: 返回
+    desc: 'deepin-compressor UI元素: 返回'
+    locator: name
+  解压到： ~/Desktop:
+    role: button
+    ui_name: 提取文件到当前文件夹
+    desc: 'deepin-compressor UI元素: 提取文件到当前文件夹'
+    locator: name
+  取 消:
+    role: button
+    ui_name: 取消按钮
+    desc: 'deepin-compressor UI元素: 取消按钮'
+    locator: name
+  解 压:
+    role: button
+    ui_name: 解压
+    desc: 'deepin-compressor UI元素: 解压'
+    locator: name
+  '分卷压缩:':
+    role: check box
+    ui_name: 分卷压缩
+    desc: 'deepin-compressor UI元素: 分卷压缩'
+    locator: name
+  压 缩:
+    role: button
+    ui_name: 压缩按钮
+    desc: 'deepin-compressor UI元素: 压缩按钮'
+    locator: name
+  查看文件:
+    role: button
+    ui_name: 显示文件按钮
+    desc: 'deepin-compressor UI元素: 显示文件按钮'
+    locator: name
+  选择文件:
+    role: button
+    ui_name: 选择文件
+    desc: 'deepin-compressor UI元素: 选择文件'
+    locator: name
+  返回:
+    role: button
+    ui_name: 返回按钮
+    desc: 'deepin-compressor UI元素: 返回按钮'
+    locator: name
+  暂 停:
+    role: check box
+    ui_name: 界面上暂停按钮
+    desc: 'deepin-compressor UI元素: 界面上暂停按钮'
+    locator: name
+  单线程:
+    role: combo box
+    ui_name: 双线程
+    desc: 'deepin-compressor UI元素: 双线程'
+    locator: name
+transient_items: []
+unresolved:
+- name: 密码显示按钮
+  role: check box
+  ui_name: 密码显示按钮
+  desc: 'deepin-compressor UI元素: 密码显示按钮'
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 确定按钮
+  role: ''
+  ui_name: 确定按钮
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 确认按钮
+  role: ''
+  ui_name: 确认按钮
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: dock上的图标
+  role: ''
+  ui_name: dock上的图标
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 启动器点击图标
+  role: ''
+  ui_name: 启动器点击图标
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 帮助
+  role: ''
+  ui_name: 帮助
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 主菜单
+  role: ''
+  ui_name: 主菜单
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 关于
+  role: ''
+  ui_name: 关于
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 取消或X按钮
+  role: ''
+  ui_name: 取消或X按钮
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 添加按钮
+  role: ''
+  ui_name: 添加按钮
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 在新窗口中打开
+  role: ''
+  ui_name: 在新窗口中打开
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 添加
+  role: ''
+  ui_name: 添加
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 删除
+  role: ''
+  ui_name: 删除
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 替换按钮
+  role: ''
+  ui_name: 替换按钮
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 从不
+  role: ''
+  ui_name: 从不
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 询问确认
+  role: ''
+  ui_name: 询问确认
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 压缩后删除原来的文件
+  role: ''
+  ui_name: 压缩后删除原来的文件
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 提示框上转换按钮
+  role: ''
+  ui_name: 提示框上转换按钮
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 转换按钮
+  role: ''
+  ui_name: 转换按钮
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 提示框上取消按钮
+  role: ''
+  ui_name: 提示框上取消按钮
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 右上角x按钮
+  role: ''
+  ui_name: 右上角x按钮
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: dock栏上图标
+  role: ''
+  ui_name: dock栏上图标
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 右键弹出菜单
+  role: ''
+  ui_name: 右键弹出菜单
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 信息图标
+  role: ''
+  ui_name: 信息图标
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 或右键菜单
+  role: ''
+  ui_name: 或右键菜单
+  desc: ''
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位

@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -28,6 +28,8 @@ OpenWithDialogListItem::OpenWithDialogListItem(const QIcon &icon, const QString 
     }
 
     m_pCheckBtn = new DIconButton(this);
+    m_pCheckBtn->setObjectName("CheckButton");
+    m_pCheckBtn->setAccessibleName("CheckButton");
     m_pCheckBtn->setFixedSize(10, 10);
     m_pCheckBtn->setFlat(true);
 
@@ -320,10 +322,18 @@ void OpenWithDialog::init()
     qDebug() << "Created recommended and other apps layouts";
 
     m_pOpenFileChooseButton = new QCommandLinkButton(tr("Add other programs"));
+    m_pOpenFileChooseButton->setObjectName("OpenFileChooseButton");
+    m_pOpenFileChooseButton->setAccessibleName("OpenFileChooseButton");
     m_pSetToDefaultCheckBox = new QCheckBox(tr("Set as default"));
+    m_pSetToDefaultCheckBox->setObjectName("SetToDefaultCheckBox");
+    m_pSetToDefaultCheckBox->setAccessibleName("SetToDefaultCheckBox");
     m_pSetToDefaultCheckBox->setChecked(true);
     m_pCancelButton = new QPushButton(tr("Cancel", "button"));
+    m_pCancelButton->setObjectName("OpenWithDialog_CancelButton");
+    m_pCancelButton->setAccessibleName("OpenWithDialog_CancelButton");
     m_pChooseButton = new QPushButton(tr("Confirm", "button"));
+    m_pChooseButton->setObjectName("OpenWithDialog_ChooseButton");
+    m_pChooseButton->setAccessibleName("OpenWithDialog_ChooseButton");
     qDebug() << "Created all buttons and controls";
 
     QVBoxLayout *content_layout = new QVBoxLayout;

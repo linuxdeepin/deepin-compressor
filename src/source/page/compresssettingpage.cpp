@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -230,21 +230,43 @@ void CompressSettingPage::initUI()
     DLabel *pAdvancedLbl = new DLabel(tr("Advanced Options"), this);
     pAdvancedLbl->setForegroundRole(DPalette::WindowText);
     m_pFileNameEdt = new DLineEdit(this);
+    m_pFileNameEdt->setObjectName("FileNameEdit");
+    m_pFileNameEdt->setAccessibleName("FileNameEdit");
     m_pSavePathEdt = new DFileChooserEdit(this);
+    m_pSavePathEdt->setObjectName("SavePathEdit");
+    m_pSavePathEdt->setAccessibleName("SavePathEdit");
     m_pCompressLevelLbl = new DLabel(tr("Compression method") + ":", this);
     m_pCompressLevelCmb = new CustomCombobox(this);
+    m_pCompressLevelCmb->setObjectName("CompressLevelComboBox");
+    m_pCompressLevelCmb->setAccessibleName("CompressLevelComboBox");
     m_pAdvancedBtn = new CustomSwitchButton(this);
+    m_pAdvancedBtn->setObjectName("AdvancedButton");
+    m_pAdvancedBtn->setAccessibleName("AdvancedButton");
     m_pEncryptedLbl = new DLabel(tr("Encrypt the archive") + ":", this);
     m_pPasswordEdt = new DPasswordEdit(this);
+    m_pPasswordEdt->setObjectName("PasswordEdit");
+    m_pPasswordEdt->setAccessibleName("PasswordEdit");
     m_pCpuLbl = new DLabel(tr("CPU threads") + ":", this);
     m_pCpuCmb = new CustomCombobox(this);
+    m_pCpuCmb->setObjectName("CpuComboBox");
+    m_pCpuCmb->setAccessibleName("CpuComboBox");
     m_pListEncryptionLbl = new DLabel(tr("Encrypt the file list too"), this);
     m_pListEncryptionBtn = new CustomSwitchButton(this);
+    m_pListEncryptionBtn->setObjectName("ListEncryptionButton");
+    m_pListEncryptionBtn->setAccessibleName("ListEncryptionButton");
     m_pSplitCkb = new CustomCheckBox(tr("Split to volumes") + ":", this);
+    m_pSplitCkb->setObjectName("SplitCheckBox");
+    m_pSplitCkb->setAccessibleName("SplitCheckBox");
     m_pSplitValueEdt = new DDoubleSpinBox(this);
+    m_pSplitValueEdt->setObjectName("SplitValueEdit");
+    m_pSplitValueEdt->setAccessibleName("SplitValueEdit");
     m_pCommentLbl = new DLabel(tr("Comment") + ":", this);
     m_pCommentEdt = new DTextEdit(this);
+    m_pCommentEdt->setObjectName("CommentEdit");
+    m_pCommentEdt->setAccessibleName("CommentEdit");
     m_pCompressBtn = new CustomPushButton(tr("Compress", "button"), this);
+    m_pCompressBtn->setObjectName("CompressSettingPage_CompressButton");
+    m_pCompressBtn->setAccessibleName("CompressSettingPage_CompressButton");
 
     m_pFileNameEdt->setMinimumWidth(260);    // 配置文件名属性
     QLineEdit *pNameEdt = m_pFileNameEdt->lineEdit();
@@ -381,6 +403,8 @@ void CompressSettingPage::initUI()
 
     // 初始化菜单
     m_pTypeMenu = new QMenu(this);
+    m_pTypeMenu->setObjectName("TypeMenu");
+    m_pTypeMenu->setAccessibleName("TypeMenu");
     m_pTypeMenu->setMinimumWidth(162);
 
     setBackgroundRole(DPalette::Base);
