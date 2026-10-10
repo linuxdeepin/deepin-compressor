@@ -1,3 +1,10 @@
+deepin-compressor (6.5.35) unstable; urgency=medium
+
+  * fix: 修复取消追加/移除文件操作时应用崩溃的问题
+  * [skip CI] Translate deepin-compressor.ts in ms
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Sat, 10 Oct 2026 14:18:07 +0800
+
 deepin-compressor (6.5.34) unstable; urgency=medium
 
   * fix: update Arabic (ar) translations
