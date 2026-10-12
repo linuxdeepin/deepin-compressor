@@ -1,3 +1,9 @@
+deepin-compressor (6.5.36) unstable; urgency=medium
+
+  * fix: switch to progress page before creating archive
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Mon, 12 Oct 2026 17:30:51 +0800
+
 deepin-compressor (6.5.35) unstable; urgency=medium
 
   * fix: 修复取消追加/移除文件操作时应用崩溃的问题
