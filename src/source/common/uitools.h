@@ -12,6 +12,7 @@
 #include "mimetypes.h"
 
 #include <QObject>
+#include <QIcon>
 
 
 #define SAFE_DELETE_ELE( ptr ) \
@@ -152,6 +153,13 @@ public:
      * @return
      */
     static bool isWayland();
+
+    /**
+     * @brief getArchiveIcon  获取压缩文件图标，带回退处理
+     * @param fileName         文件名（含路径或仅后缀名）
+     * @return                 压缩文件图标
+     */
+    static QIcon getArchiveIcon(const QString &fileName);
 
 public:
     static QStringList m_associtionlist;

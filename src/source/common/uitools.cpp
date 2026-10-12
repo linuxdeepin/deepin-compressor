@@ -28,6 +28,7 @@
 #include <QRegularExpression>
 #include <QUuid>
 #include <QStorageInfo>
+#include <QFileIconProvider>
 #include <QProcessEnvironment>
 
 #include <KEncodingProber>
@@ -108,6 +109,31 @@ QPixmap UiTools::renderSVG(const QString &filePath, const QSize &size)
     }
 
     return pixmap;
+}
+
+QIcon UiTools::getArchiveIcon(const QString &fileName)
+{
+    qDebug() << "Getting archive icon for:" << fileName;
+    QFileIconProvider provider;
+    QIcon icon = provider.icon(QFileInfo(fileName));
+
+    // For some formats (e.g. jar, tar.bz2), QFileIconProvider may return an
+    // empty icon when the system icon theme lacks a matching entry. Fall back
+    // to the mime-type icon from QMimeDatabase, then to a generic archive icon.
+    if (icon.isNull() || icon.availableSizes().isEmpty()) {
+        QMimeDatabase mimeDb;
+        QMimeType mimeType = mimeDb.mimeTypeForFile(fileName, QMimeDatabase::MatchExtension);
+        QString iconName = mimeType.iconName();
+        if (!iconName.isEmpty()) {
+            icon = QIcon::fromTheme(iconName);
+        }
+    }
+
+    if (icon.isNull() || icon.availableSizes().isEmpty()) {
+        icon = QIcon::fromTheme(QStringLiteral("application-x-archive"));
+    }
+
+    return icon;
 }
 
 QString UiTools::humanReadableSize(const qint64 &size, int precision)

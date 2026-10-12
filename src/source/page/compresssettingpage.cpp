@@ -408,8 +408,7 @@ void CompressSettingPage::initConnections()
 void CompressSettingPage::setTypeImage(const QString &strType)
 {
     qDebug() << "setTypeImage: " << strType;
-    QFileIconProvider provider;
-    QIcon icon = provider.icon(QFileInfo("temp." + strType));
+    QIcon icon = UiTools::getArchiveIcon("temp." + strType);
 
     m_pTypePixmapLbl->setPixmap(icon.pixmap(128, 128));
 }

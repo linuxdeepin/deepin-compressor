@@ -6,6 +6,7 @@
 #include "progresspage.h"
 #include "popupdialog.h"
 #include "customwidget.h"
+#include "uitools.h"
 
 #include <DFontSizeManager>
 
@@ -76,8 +77,7 @@ void ProgressPage::setArchiveName(const QString &strArchiveName)
     m_pArchiveNameLbl->setToolTip(fileinfo.absoluteFilePath());
 
     // 设置类型图片
-    QFileIconProvider provider;
-    QIcon icon = provider.icon(fileinfo);
+    QIcon icon = UiTools::getArchiveIcon(strArchiveName);
     m_pPixmapLbl->setPixmap(icon.pixmap(128, 128));
 }
 
