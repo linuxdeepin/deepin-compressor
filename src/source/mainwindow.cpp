@@ -2125,6 +2125,13 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
     case ArchiveJob::JT_Update:
 
         break;
+    // 更新压缩包注释错误
+    case ArchiveJob::JT_Comment: {
+        m_commentProgressDialog->setFinished();
+        QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
+        sendMessage(new CustomFloatingMessage(icon, tr("Failed to update comment"), 1000, this));
+    }
+    break;
     default:
         break;
     }
@@ -3764,7 +3771,9 @@ void MainWindow::slotTitleCommentButtonPressed()
 
         int mode = dialog->exec();
         delete dialog;
-        if (-1 == mode && m_comment != newComment) {
+        // 无按钮 DDialog 关闭(X/ESC)时, DTK6 的 exec() 返回 QDialog::Rejected(0),
+        // 旧版 DTK 返回 -1; 两种返回值均视为关闭对话框并确认注释修改
+        if ((-1 == mode || QDialog::Rejected == mode) && m_comment != newComment) {
             m_isFirstViewComment = false;
             m_comment = newComment;
             updateArchiveComment();
