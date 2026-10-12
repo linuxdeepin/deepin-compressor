@@ -1299,17 +1299,19 @@ void MainWindow::slotCompress(const QVariant &val)
         }
     }
 
-    if (ArchiveManager::get_instance()->createArchive(listEntry, strDestination, options, eType)) {
-        // 切换进度界面
-        m_pProgressPage->setProgressType(PT_Compress);
-        m_pProgressPage->setTotalSize(m_stCompressParameter.qSize);
-        m_pProgressPage->setArchiveName(m_stCompressParameter.strArchiveName);
-        m_pProgressPage->restartTimer();
+    // 必须先切换进度界面再启动压缩：cli7z 等同步插件在 MTP 目标下的完成链会在
+    // createArchive() 调用内部同步执行并切至成功/失败页，若之后才切进度页，
+    // 会把结果页覆盖回进度页，导致界面永久停留在"正在压缩"
+    m_pProgressPage->setProgressType(PT_Compress);
+    m_pProgressPage->setTotalSize(m_stCompressParameter.qSize);
+    m_pProgressPage->setArchiveName(m_stCompressParameter.strArchiveName);
+    m_pProgressPage->restartTimer();
 
-        m_operationtype = Operation_Create;
-        m_ePageID = PI_CompressProgress;
-        refreshPage();
-    } else {
+    m_operationtype = Operation_Create;
+    m_ePageID = PI_CompressProgress;
+    refreshPage();
+
+    if (!ArchiveManager::get_instance()->createArchive(listEntry, strDestination, options, eType)) {
         cleanupCompressAliasEntries();
         // 无可用插件
         showErrorMessage(FI_Compress, EI_NoPlugin);
