@@ -2119,6 +2119,13 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
     case ArchiveJob::JT_Convert:
         showErrorMessage(FI_Convert, EI_LongFileName);
         break;
+    // 注释操作错误
+    case ArchiveJob::JT_Comment: {
+        m_ePageID = PI_UnCompress;
+        QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
+        sendMessage(new CustomFloatingMessage(icon, tr("Failed to update comment"), 1000, this));
+    }
+    break;
     // 更新压缩包数据错误
     case ArchiveJob::JT_Update:
 
