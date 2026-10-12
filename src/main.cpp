@@ -318,8 +318,14 @@ int main(int argc, char *argv[])
                 eType = MainWindow::AT_DragDropAdd;
                 QFileInfo info(newfilelist.first());
                 if (info.isSymLink()) {
-                    QUrl fileName = QUrl::fromLocalFile(info.symLinkTarget());
+                    QString symLinkTarget = info.symLinkTarget();
+                    if (symLinkTarget.isEmpty()) {
+                        qWarning() << "Symlink target is empty, cannot resolve:" << info.filePath();
+                        return -1;
+                    }
+                    QUrl fileName = QUrl::fromLocalFile(symLinkTarget);
                     if (!UiTools::isLocalDeviceFile(fileName.toLocalFile())) {
+                        qWarning() << "Symlink target is not on a supported device file system:" << fileName.toLocalFile();
                         return -1;
                     }
                 }

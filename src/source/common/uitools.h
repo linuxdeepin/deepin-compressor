@@ -141,6 +141,13 @@ public:
     static bool isLocalDeviceFile(const QString &strFileName);
 
     /**
+     * @brief isNetworkFileSystem 判断文件是否位于网络文件系统（SMB/NFS等）
+     * @param strFileName
+     * @return
+     */
+    static bool isNetworkFileSystem(const QString &strFileName);
+
+    /**
      * @brief hasSameFileName   是否存在同名文件（不考虑路径）
      * @param listFiles
      * @return

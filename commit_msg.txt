@@ -1,0 +1,41 @@
+fix: skip MIME content detection on network filesystems
+
+1. Root cause: determineMimeType() called MatchContent on SMB/NFS
+   paths, blocking the main thread with synchronous remote file reads;
+   isLocalDeviceFile() rejected SMB paths, silently dropping drag-drops
+2. Fix: add UiTools::isNetworkFileSystem() to unify network FS detection;
+   skip MatchContent and file-command fallback for network paths;
+   extend isLocalDeviceFile() to accept SMB and NFS mount types;
+   add symlink target empty-check and warning in main.cpp
+3. Impact: drag-drop to SMB archives no longer hangs; SMB shortcuts
+   accept dropped files; NFS paths now treated consistently
+
+Log: Fix hang and missing files when dragging to SMB archives
+
+Influence:
+1. Test dragging local files to SMB archive (should not hang)
+2. Test dragging local files to SMB archive shortcut (files added)
+3. Test NFS path drag-drop behavior for consistency
+4. Verify local archive drag-drop still works as before
+
+fix: 网络文件系统跳过 MIME 内容检测
+
+1. 根因：determineMimeType() 在 SMB/NFS 路径上调用 MatchContent，
+   同步读取远程文件导致主线程阻塞卡死；isLocalDeviceFile() 拒绝
+   SMB 路径，拖拽到 SMB 快捷方式时静默退出
+2. 方案：新增 UiTools::isNetworkFileSystem() 统一网络文件系统检测；
+   网络路径跳过 MatchContent 和 file 命令回退；扩展
+   isLocalDeviceFile() 支持 SMB 和 NFS 挂载类型；main.cpp 增加
+   符号链接目标空值检查和警告日志
+3. 影响：拖拽到 SMB 压缩包不再卡死；SMB 快捷方式可接受拖拽文件；
+   NFS 路径行为与 SMB 一致
+
+Log: 修复拖拽到 SMB 压缩包卡死和文件丢失问题
+
+Influence:
+1. 测试拖拽本地文件到 SMB 压缩包（不应卡死）
+2. 测试拖拽本地文件到 SMB 压缩包快捷方式（文件应被添加）
+3. 测试 NFS 路径拖拽行为一致性
+4. 验证本地压缩包拖拽功能无回归
+
+PMS: BUG-379193

@@ -515,6 +515,15 @@ QString UiTools::handleFileName(const QString &strFileName)
     return strName;
 }
 
+bool UiTools::isNetworkFileSystem(const QString &strFileName)
+{
+    QStorageInfo info(strFileName);
+    QString sFileSystemType = info.fileSystemType();
+    return sFileSystemType == "cifs" || sFileSystemType == "smb3" ||
+           sFileSystemType == "smbfs" || sFileSystemType == "fuse.gvfs" ||
+           sFileSystemType == "nfs" || sFileSystemType == "nfs4";
+}
+
 bool UiTools::isLocalDeviceFile(const QString &strFileName)
 {
     qDebug() << "Checking if file is on local device:" << strFileName;
@@ -529,6 +538,16 @@ bool UiTools::isLocalDeviceFile(const QString &strFileName)
 
     // 检查长文件名文件系统类型
     if (sFileSystemType == "fuse.dlnfs" || sFileSystemType == "ulnfs") {
+        return true;
+    }
+
+    // 支持网络文件系统挂载类型（SMB/NFS等）
+    if (isNetworkFileSystem(strFileName)) {
+        return true;
+    }
+
+    // SMB 挂载的设备名以 "//" 开头（如 "//server/share"）
+    if (sDevice.startsWith("//")) {
         return true;
     }
 

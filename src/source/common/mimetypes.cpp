@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "mimetypes.h"
+#include "uitools.h"
 
 #include <QFileInfo>
 #include <QMimeDatabase>
@@ -71,7 +72,17 @@ CustomMimeType determineMimeType(const QString &filename)
 
 //    QMimeType mimeFromDefault = db.mimeTypeForFile(inputFile, QMimeDatabase::MatchDefault);
     QMimeType mimeFromExtension = db.mimeTypeForFile(inputFile, QMimeDatabase::MatchExtension);
-    QMimeType mimeFromContent = db.mimeTypeForFile(filename, QMimeDatabase::MatchContent);
+
+    // 网络文件系统（SMB/NFS等）上跳过内容检测和 file 命令回退，
+    // 避免同步读取远程文件内容导致主线程阻塞卡死
+    bool isNetwork = UiTools::isNetworkFileSystem(filename);
+    QMimeType mimeFromContent;
+    if (isNetwork) {
+        qDebug() << "Network file system detected, using extension-only MIME detection:" << filename;
+        mimeFromContent = mimeFromExtension;
+    } else {
+        mimeFromContent = db.mimeTypeForFile(filename, QMimeDatabase::MatchContent);
+    }
 
 
 //    qInfo() << "mimeFromDefault******************" << mimeFromDefault.name() << mimeFromDefault.parentMimeTypes();
@@ -122,7 +133,7 @@ CustomMimeType determineMimeType(const QString &filename)
     const QString &extName = mimeFromExtension.name();
     bool isZipExtension = (extName == QStringLiteral("application/zip"));
     bool isContentZip = mimeFromContent.inherits(QStringLiteral("application/zip"));
-    bool needFileCommandFallback = mimeFromContent.isDefault() || (isZipExtension && !isContentZip);
+    bool needFileCommandFallback = !isNetwork && (mimeFromContent.isDefault() || (isZipExtension && !isContentZip));
     if (needFileCommandFallback) {
         qDebug() << "Using file command to detect MIME type for:" << filename;
         QProcess process;
