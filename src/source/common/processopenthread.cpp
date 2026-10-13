@@ -4,8 +4,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "processopenthread.h"
-#include "kprocess.h"
 #include <QDebug>
+#include <QDesktopServices>
+#include <QProcess>
+#include <QUrl>
 
 ProcessOpenThread::ProcessOpenThread(QObject *parent)
     : QThread(parent)
@@ -28,13 +30,27 @@ void ProcessOpenThread::setArguments(const QStringList &listArguments)
 void ProcessOpenThread::run()
 {
     qDebug() << "Starting external process:" << m_strProgramPath;
-    // 启动外部进程
-    KProcess *cmdprocess = new KProcess;
-    cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
-    cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
-    cmdprocess->setProgram(m_strProgramPath, m_listArguments);
-    cmdprocess->start();
-    cmdprocess->waitForFinished(-1);
-    qDebug() << "Process finished with exit code:" << cmdprocess->exitCode();
-    delete cmdprocess;
+
+    // 默认应用场景（xdg-open 或程序路径为空）：
+    // 使用 QDesktopServices::openUrl 由 Qt 平台插件正确处理 file:// URI 和 D-Bus 激活，
+    // 避免文件路径在异步 D-Bus 握手过程中丢失
+    if (m_strProgramPath.isEmpty() || m_strProgramPath.endsWith(QLatin1String("xdg-open"))) {
+        if (m_listArguments.isEmpty()) {
+            qWarning() << "No file to open, arguments is empty";
+            return;
+        }
+        const QString &file = m_listArguments.first();
+        bool ok = QDesktopServices::openUrl(QUrl::fromLocalFile(file));
+        if (!ok) {
+            qWarning() << "QDesktopServices::openUrl failed for file:" << file;
+        }
+        return;
+    }
+
+    // 指定程序场景：使用 QProcess::startDetached 非阻塞启动
+    bool ok = QProcess::startDetached(m_strProgramPath, m_listArguments);
+    if (!ok) {
+        qWarning() << "QProcess::startDetached failed for program:" << m_strProgramPath
+                   << "arguments:" << m_listArguments;
+    }
 }
