@@ -264,7 +264,13 @@ bool Cli7zPlugin::readListLine(const QString &line)
             stArchiveData.qSize += m_fileEntry.qSize;
         } else if (line.startsWith(QLatin1String("Modified = "))) {
             // 文件最后修改时间
-            m_fileEntry.uLastModifiedTime = QDateTime::fromString(line.mid(11).trimmed(),
+            // 截断小数秒部分，兼容新版 7-Zip 输出中带小数秒的时间格式（如 2025-06-04 11:11:04.8826983）
+            QString modifiedTime = line.mid(11).trimmed();
+            int dotIndex = modifiedTime.indexOf(QLatin1Char('.'));
+            if (dotIndex != -1) {
+                modifiedTime.truncate(dotIndex);
+            }
+            m_fileEntry.uLastModifiedTime = QDateTime::fromString(modifiedTime,
             #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
                 QStringLiteral("yyyy-MM-dd hh:mm:ss")).toTime_t();
             #else

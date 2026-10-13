@@ -1,0 +1,38 @@
+fix: truncate fractional seconds in 7-Zip Modified time
+
+1. Root cause: new 7-Zip (24.09+/26.x) -slt output includes
+   fractional seconds in "Modified" field (e.g. 2025-06-04
+   11:11:04.8826983), QDateTime::fromString with format
+   "yyyy-MM-dd hh:mm:ss" fails to parse, returns invalid QDateTime
+2. Fix: truncate the fractional seconds part (dot and after) before
+   calling fromString, so both old and new 7-Zip time formats work
+3. Impact: archive Modified time now displays correctly instead of
+   1970/01/01; no effect on archives without fractional seconds
+
+Log: Fix archive file Modified time showing as 1970/01/01
+
+Influence:
+1. Test opening 7z archives created by new 7-Zip with fractional
+   seconds in Modified field
+2. Test opening 7z archives created by old 7-Zip without fractional
+   seconds
+3. Verify Modified time displays correctly for various archive types
+
+fix: 截断7-Zip Modified时间字段的小数秒部分
+
+1. 根因：新版7-Zip（24.09+/26.x）的-slt输出中"Modified"字段带小数秒
+   （如2025-06-04 11:11:04.8826983），QDateTime::fromString使用
+   "yyyy-MM-dd hh:mm:ss"格式解析失败，返回无效QDateTime
+2. 方案：在调用fromString前截断小数秒部分（小数点及之后内容），
+   兼容新旧两种7-Zip时间格式
+3. 影响：修复后压缩包修改时间正常显示，不再显示为1970/01/01；
+   对不含小数秒的旧格式压缩包无影响
+
+Log: 修复压缩包文件修改时间显示为1970/01/01的问题
+
+Influence:
+1. 测试使用新版7-Zip创建的带小数秒Modified字段的7z压缩包
+2. 测试使用旧版7-Zip创建的不带小数秒的7z压缩包
+3. 验证各种压缩包类型的修改时间显示正确
+
+PMS: BUG-378795
