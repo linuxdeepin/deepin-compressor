@@ -53,9 +53,29 @@ TEST_F(UT_ProcessOpenThread, test_setArguments)
     EXPECT_EQ(m_tester->m_listArguments == listArguments, true);
 }
 
-TEST_F(UT_ProcessOpenThread, testrun)
+TEST_F(UT_ProcessOpenThread, testrun_startDetached)
 {
     Stub stub;
-    CommonStub::stub_KProcess_start(stub);
+    CommonStub::stub_QProcess_startDetached(stub);
+    m_tester->setProgramPath("test-app");
+    m_tester->setArguments(QStringList() << "test.txt");
+    m_tester->run();
+}
+
+TEST_F(UT_ProcessOpenThread, testrun_openUrl_emptyProgramPath)
+{
+    Stub stub;
+    CommonStub::stub_QDesktopServices_openUrl(stub);
+    m_tester->setProgramPath("");
+    m_tester->setArguments(QStringList() << "test.txt");
+    m_tester->run();
+}
+
+TEST_F(UT_ProcessOpenThread, testrun_openUrl_xdgOpen)
+{
+    Stub stub;
+    CommonStub::stub_QDesktopServices_openUrl(stub);
+    m_tester->setProgramPath("/usr/bin/xdg-open");
+    m_tester->setArguments(QStringList() << "test.txt");
     m_tester->run();
 }
