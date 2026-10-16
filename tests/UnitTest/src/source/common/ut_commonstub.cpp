@@ -11,7 +11,6 @@
 #include "processopenthread.h"
 #include "openwithdialog.h"
 #include "ddesktopservices.h"
-#include "kprocess.h"
 #include "archivemanager.h"
 #include "queries.h"
 #include "batchjob.h"
@@ -22,6 +21,8 @@
 #include <QFileInfo>
 #include <QThreadPool>
 #include <QProcess>
+#include <QDesktopServices>
+#include <QUrl>
 
 DWIDGET_USE_NAMESPACE
 
@@ -141,11 +142,6 @@ void processOpenThread_start_stub(void *obj)
     return;
 }
 
-void kProcess_start_stub()
-{
-    return;
-}
-
 QObject *qObject_sender_stub()
 {
     return g_QObject_sender_result;
@@ -187,6 +183,11 @@ bool qThreadPool_waitForDone_stub()
 }
 
 bool qProcess_startDetached_stub(const QString &, const QStringList &)
+{
+    return true;
+}
+
+bool qDesktopServices_openUrl_stub(const QUrl &)
 {
     return true;
 }
@@ -234,11 +235,6 @@ void CommonStub::stub_QObject_sender(Stub &stub, QObject *pObject)
 {
     g_QObject_sender_result = pObject;
     stub.set(ADDR(QObject, sender), qObject_sender_stub);
-}
-
-void CommonStub::stub_KProcess_start(Stub &stub)
-{
-    stub.set(ADDR(KProcess, start), kProcess_start_stub);
 }
 
 void CommonStub::stub_DDialog_exec(Stub &stub, int iResult)
@@ -314,6 +310,13 @@ void CommonStub::stub_QProcess_startDetached(Stub &stub)
 {
 #if !defined(Q_QDOC) && (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     stub.set((bool(*)(const QString &, const QStringList &))ADDR(QProcess, startDetached), qProcess_startDetached_stub);
+#endif
+}
+
+void CommonStub::stub_QDesktopServices_openUrl(Stub &stub)
+{
+#if !defined(Q_QDOC) && (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    stub.set((bool(*)(const QUrl &))ADDR(QDesktopServices, openUrl), qDesktopServices_openUrl_stub);
 #endif
 }
 

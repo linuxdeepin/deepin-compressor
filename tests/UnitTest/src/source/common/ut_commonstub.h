@@ -137,12 +137,6 @@ public:
     static void stub_QObject_sender(Stub &stub, QObject *pObject);
 
     /**
-     * @brief stub_KProcess_start     针对KProcess的start打桩
-     * @param stub
-     * @return
-     */
-    static void stub_KProcess_start(Stub &stub);
-
     /**
      * @brief stub_DDialog_exec     针对DDialog的exec打桩
      * @param stub
@@ -218,6 +212,12 @@ public:
      * @param stub
      */
     static void stub_QProcess_startDetached(Stub &stub);
+
+    /**
+     * @brief stub_QDesktopServices_openUrl     针对QDesktopServices的openUrl打桩
+     * @param stub
+     */
+    static void stub_QDesktopServices_openUrl(Stub &stub);
 
     /**
      * @brief stub_UiTools_createInterface     针对UiTools的createInterface打桩
