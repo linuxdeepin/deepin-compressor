@@ -53,9 +53,32 @@ TEST_F(UT_ProcessOpenThread, test_setArguments)
     EXPECT_EQ(m_tester->m_listArguments == listArguments, true);
 }
 
-TEST_F(UT_ProcessOpenThread, testrun)
+// 测试 QProcess::startDetached 分支（指定程序路径）
+TEST_F(UT_ProcessOpenThread, testrun_startDetached)
 {
     Stub stub;
-    CommonStub::stub_KProcess_start(stub);
+    CommonStub::stub_QProcess_startDetached(stub);
+    m_tester->setProgramPath("test-app");
+    m_tester->setArguments(QStringList() << "1.txt");
+    m_tester->run();
+}
+
+// 测试 QDesktopServices::openUrl 分支（程序路径为空）
+TEST_F(UT_ProcessOpenThread, testrun_openUrl_emptyProgramPath)
+{
+    Stub stub;
+    CommonStub::stub_QDesktopServices_openUrl(stub);
+    m_tester->setProgramPath("");
+    m_tester->setArguments(QStringList() << "1.txt");
+    m_tester->run();
+}
+
+// 测试 QDesktopServices::openUrl 分支（程序路径为 xdg-open）
+TEST_F(UT_ProcessOpenThread, testrun_openUrl_xdgOpen)
+{
+    Stub stub;
+    CommonStub::stub_QDesktopServices_openUrl(stub);
+    m_tester->setProgramPath("/usr/bin/xdg-open");
+    m_tester->setArguments(QStringList() << "1.txt");
     m_tester->run();
 }
