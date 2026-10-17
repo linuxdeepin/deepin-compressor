@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -64,7 +64,9 @@ QStringList UiTools::m_associtionlist = QStringList() << "file_association.file_
                                         << "file_association.file_association_type.x-iso9660-image"
                                         << "file_association.file_association_type.x-iso9660-appimage"
                                         << "file_association.file_association_type.x-source-rpm"
-                                        << "file_association.file_association_type.x-chrome-extension";
+                                        << "file_association.file_association_type.x-chrome-extension"
+                                        << "file_association.file_association_type.vnd.linglong.layer"
+                                        << "file_association.file_association_type.vnd.linyaps.uab";
 
 UiTools::UiTools(QObject *parent)
     : QObject(parent)
