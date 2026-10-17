@@ -584,6 +584,7 @@ private:
     bool m_isFirstViewComment = true;
 
     DFileWatcher *m_pFileWatcher = nullptr;                 // 文件监控
+    bool m_bInternalArchiveOperation = false;               // 内部操作（重命名/删除/追加）进行中，抑制文件监控
     QString m_strFinalConvertFile;     // 格式转换最终的文件全路径
     QString m_fileWriteErrorName;     // 创建失败的文件名
 
