@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -221,7 +221,11 @@ void ProgressPage::initUI()
     m_pSpeedLbl = new DLabel(this);
     m_pRemainingTimeLbl = new DLabel(this);
     m_pCancelBtn = new CustomPushButton(tr("Cancel", "button"), this);
+    m_pCancelBtn->setObjectName("ProgressPage_CancelButton");
+    m_pCancelBtn->setAccessibleName("ProgressPage_CancelButton");
     m_pPauseContinueButton = new CustomSuggestButton(tr("Pause", "button"), this);
+    m_pPauseContinueButton->setObjectName("PauseContinueButton");
+    m_pPauseContinueButton->setAccessibleName("PauseContinueButton");
 
     // 初始化压缩包名称样式
     DFontSizeManager::instance()->bind(m_pArchiveNameLbl, DFontSizeManager::T5, QFont::DemiBold);

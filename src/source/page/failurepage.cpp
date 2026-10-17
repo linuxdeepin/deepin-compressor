@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -93,11 +93,15 @@ void FailurePage::initUI()
 
     //重试按钮
     m_pRetrybutton = new CustomPushButton(this);
+    m_pRetrybutton->setObjectName("RetryButton");
+    m_pRetrybutton->setAccessibleName("RetryButton");
     m_pRetrybutton->setMinimumWidth(340);
     m_pRetrybutton->setText(tr("Retry", "button"));
 
     //返回按钮
     commandLinkBackButton = new CustomCommandLinkButton(tr("Back"), this);
+    commandLinkBackButton->setObjectName("CommandLinkBackButton");
+    commandLinkBackButton->setAccessibleName("CommandLinkBackButton");
 
     //界面布局
     QVBoxLayout *mainlayout = new QVBoxLayout(this);
