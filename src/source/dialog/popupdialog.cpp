@@ -517,7 +517,7 @@ RenameDialog::RenameDialog(QWidget *parent)
 {
     m_nOkBtnIndex = -1;
     m_lineEdit = NULL;
-    setFixedSize(g_nDlgWidth, g_nDlgHeight); // 提示框宽度固定
+    setFixedWidth(g_nDlgWidth); // 提示框宽度固定
     m_isDirectory = false;
     QPixmap pixmap = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     setIcon(pixmap);
@@ -565,7 +565,7 @@ int RenameDialog::showDialog(const QString &strReName, const QString &strAlias, 
     }
     DLabel *strlabel = new DLabel;
     strlabel->setObjectName("ContentLabel");
-    strlabel->setFixedSize(g_nDlgWidth, g_nLableHeight); // 宽度固定
+    strlabel->setFixedWidth(340); // 宽度固定
     strlabel->setText(tr("Rename"));
     strlabel->setAlignment(Qt::AlignCenter);
     strlabel->setForegroundRole(DPalette::ToolTipText);
@@ -615,6 +615,7 @@ int RenameDialog::showDialog(const QString &strReName, const QString &strAlias, 
     widget->setFixedWidth(360);
     widget->setLayout(labelLayout);
     addContent(strlabel, Qt::AlignHCenter); // 使用Qt::AlignHCenter效果最好
+    addSpacing(5);
     addContent(widget, Qt::AlignHCenter);
     // 添加取消和转换按钮
     addButton(tr("Cancel", "button"));
