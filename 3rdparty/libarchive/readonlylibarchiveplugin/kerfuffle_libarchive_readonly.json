@@ -47,7 +47,9 @@
             "application/vnd.ms-cab-compressed",
             "application/x-xar",
             "application/x-iso9660-appimage",
-            "application/x-archive"
+            "application/x-archive",
+            "application/vnd.rar",
+            "application/x-rar"
         ],
         "Name": "Libarchive plugin (read-only formats)",
         "Name[ca@valencia]": "Connector del Libarchive (formats de només lectura)",
