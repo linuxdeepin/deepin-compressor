@@ -31,6 +31,7 @@
 #include "calculatesizethread.h"
 #include "eventlogutils.h"
 #include "qtcompat.h"
+#include "common/ddlog.h"
 
 #include <DFileDialog>
 #include <DTitlebar>
@@ -102,71 +103,71 @@ MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent)
     , m_strProcessID(QString::number(QCoreApplication::applicationPid()))   // 获取应用进程号
 {
-    qDebug() << "MainWindow constructor started";
+    qCDebug(appLog) << "MainWindow constructor started";
     setWindowTitle(tr("Archive Manager"));
 
     // 先构建初始界面
-    qDebug() << "Creating main UI components";
+    qCDebug(appLog) << "Creating main UI components";
     m_pMainWidget = new QStackedWidget(this);  // 中心面板
     m_pHomePage = new HomePage(this);            // 首页
     m_pMainWidget->addWidget(m_pHomePage);
     setCentralWidget(m_pMainWidget);    // 设置中心面板
     m_pMainWidget->setCurrentIndex(0);
-    qDebug() << "Main UI components created";
+    qCDebug(appLog) << "Main UI components created";
 
     // Initialize DBus interface
-    qDebug() << "Initializing DBus interface";
+    qCDebug(appLog) << "Initializing DBus interface";
     // m_compressorInterface = new ApplicationAdaptor(qApp);
     // m_compressorInterface->setMainWindow(this);
-    qDebug() << "DBus interface initialized";
+    qCDebug(appLog) << "DBus interface initialized";
 
 #if QT_VERSION < QT_VERSION_CHECK(6 ,0, 0)
-    qDebug() << "Creating shortcut for Qt5";
+    qCDebug(appLog) << "Creating shortcut for Qt5";
     m_openkey = new QShortcut(QKeySequence(Qt::Key_Slash + Qt::CTRL + Qt::SHIFT), this); // Ctrl+Shift+/
 #else
-    qDebug() << "Creating shortcut for Qt6";
+    qCDebug(appLog) << "Creating shortcut for Qt6";
     m_openkey = new QShortcut(QKeyCombination(Qt::CTRL | Qt::SHIFT, Qt::Key_Slash), this); // Ctrl+Shift+/
 #endif
     m_openkey->setContext(Qt::ApplicationShortcut);
 
     // 初始化标题栏
-    qDebug() << "Initializing title bar";
+    qCDebug(appLog) << "Initializing title bar";
     initTitleBar();
-    qDebug() << "Initializing application data";
+    qCDebug(appLog) << "Initializing application data";
     initData();
     // 开启定时器刷新界面
     m_iInitUITimer = startTimer(500);
-    qDebug() << "UI refresh timer started with ID:" << m_iInitUITimer;
+    qCDebug(appLog) << "UI refresh timer started with ID:" << m_iInitUITimer;
 
-    qDebug() << "Writing startup event log";
+    qCDebug(appLog) << "Writing startup event log";
     QJsonObject obj{
         {"tid", EventLogUtils::Start},
         {"version", QCoreApplication::applicationVersion()},
         {"mode", 1}
     };
     EventLogUtils::get().writeLogs(obj);
-    qDebug() << "MainWindow constructor completed";
+    qCDebug(appLog) << "MainWindow constructor completed";
 }
 
 MainWindow::~MainWindow()
 {
-    qDebug() << "MainWindow destructor started";
+    qCDebug(appLog) << "MainWindow destructor started";
     // 保存窗口大小状态
-    qDebug() << "Saving window size configuration";
+    qCDebug(appLog) << "Saving window size configuration";
     saveConfigWinState();
 
-    qDebug() << "Destroying ArchiveManager instance";
+    qCDebug(appLog) << "Destroying ArchiveManager instance";
     ArchiveManager::get_instance()->destory_instance();
 
     // Clean up DBus interface
-    qDebug() << "Cleaning up DBus interface";
+    qCDebug(appLog) << "Cleaning up DBus interface";
     // if (m_compressorInterface) {
     //     delete m_compressorInterface;
     //     m_compressorInterface = nullptr;
     // }
 
     // 清除缓存数据
-    qDebug() << "Cleaning up temporary files";
+    qCDebug(appLog) << "Cleaning up temporary files";
     QProcess p;
     QString command = "rm";
     QStringList args;
@@ -176,26 +177,26 @@ MainWindow::~MainWindow()
     p.waitForFinished();
 
     if (nullptr != m_mywork && m_mywork->isRunning()) {
-        qDebug() << "Stopping calculate size thread";
+        qCDebug(appLog) << "Stopping calculate size thread";
         m_mywork->set_thread_stop(true); // 结束计算大小线程
         m_mywork->wait(); //必须等待线程结束
     }
 
     if (nullptr != m_mywork) {
-        qDebug() << "Deleting calculate size thread object";
+        qCDebug(appLog) << "Deleting calculate size thread object";
         m_mywork->deleteLater();
         m_mywork = nullptr;
     }
-    qInfo() << "Application exited normally";
-    qDebug() << "MainWindow destructor completed";
+    qCInfo(appLog) << "Application exited normally";
+    qCDebug(appLog) << "MainWindow destructor completed";
 }
 
 bool MainWindow::checkHerePath(const QString &strPath)
 {
-    qDebug() << "Checking path permissions:" << strPath;
+    qCDebug(appLog) << "Checking path permissions:" << strPath;
     QFileInfo info(strPath);
     if (!(info.isWritable() && info.isExecutable())) { // 检查一选择保存路径是否有权限
-        qWarning() << "Path permission denied:" << strPath;
+        qCWarning(appLog) << "Path permission denied:" << strPath;
         TipDialog dialog(this);
         // 屏幕居中显示
         moveDialogToCenter(&dialog);
@@ -203,13 +204,13 @@ bool MainWindow::checkHerePath(const QString &strPath)
         return false;
     }
 
-    qDebug() << "Path permission granted:" << strPath;
+    qCDebug(appLog) << "Path permission granted:" << strPath;
     return true;
 }
 
 void MainWindow::initUI()
 {
-    qDebug() << "initUI";
+    qCDebug(appLog) << "initUI";
     // 初始化界面
     m_pLoadingPage = new LoadingPage(this);  // 加载界面
 
@@ -243,7 +244,7 @@ void MainWindow::initUI()
 
 void MainWindow::initTitleBar()
 {
-    qDebug() << "MainWindow::initTitleBar";
+    qCDebug(appLog) << "MainWindow::initTitleBar";
     // 创建菜单
     QMenu *menu = new QMenu(this);
     m_pOpenAction = menu->addAction(tr("Open file"), this, &MainWindow::slotChoosefiles);
@@ -270,26 +271,26 @@ void MainWindow::initTitleBar()
 
 void MainWindow::initData()
 {
-    qDebug() << "Initializing application data";
+    qCDebug(appLog) << "Initializing application data";
     // 初始化数据配置
     m_pSettings = new QSettings(QDir(UiTools::getConfigPath()).filePath("config.conf"), QSettings::IniFormat, this);
 
     if (m_pSettings->value("dir").toString().isEmpty()) {
-        qDebug() << "Setting default directory path in config";
+        qCDebug(appLog) << "Setting default directory path in config";
         m_pSettings->setValue("dir", "");
     }
 
-    qDebug() << "Setting window size and minimum size";
+    qCDebug(appLog) << "Setting window size and minimum size";
     restoreConfigWinState(); // 恢复窗口状态（大小和最大化状态）
     setMinimumSize(620, 300);   // task 16309调整最小大小
-    qDebug() << "Application data initialized";
+    qCDebug(appLog) << "Application data initialized";
 }
 
 void MainWindow::initConnections()
 {
-    qDebug() << "Initializing signal-slot connections";
+    qCDebug(appLog) << "Initializing signal-slot connections";
     
-    qDebug() << "Connecting UI signals";
+    qCDebug(appLog) << "Connecting UI signals";
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MainWindow::slotThemeChanged);
 
     connect(m_pTitleWidget, &TitleWidget::sigTitleClicked, this, &MainWindow::slotTitleBtnClicked);
@@ -319,7 +320,7 @@ void MainWindow::initConnections()
     connect(m_pFailurePage, &FailurePage::sigFailRetry, this, &MainWindow::slotFailureRetry);
     connect(m_pFailurePage, &FailurePage::sigBackButtonClickedOnFail, this, &MainWindow::slotFailureReturn);
 
-    qDebug() << "Connecting ArchiveManager signals";
+    qCDebug(appLog) << "Connecting ArchiveManager signals";
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalJobFinished, this, &MainWindow::slotJobFinished);
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalprogress, this, &MainWindow::slotReceiveProgress);
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalCurFileName, this, &MainWindow::slotReceiveCurFileName);
@@ -327,24 +328,24 @@ void MainWindow::initConnections()
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalCurArchiveName, this, &MainWindow::slotReceiveCurArchiveName);
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalQuery, this, &MainWindow::slotQuery);
 
-    qDebug() << "Connecting file watcher signals";
+    qCDebug(appLog) << "Connecting file watcher signals";
     connect(m_pOpenFileWatcher, &OpenFileWatcher::fileChanged, this, &MainWindow::slotOpenFileChanged);
     
     //定制需求不显示ctrl+shift+？快捷键菜单
     if(!property(ORDER_JSON).isValid()) {
-        qDebug() << "Connecting shortcut signals";
+        qCDebug(appLog) << "Connecting shortcut signals";
         connect(m_openkey, &QShortcut::activated, this, &MainWindow::slotShowShortcutTip);
     }
     
-    qDebug() << "All signal-slot connections initialized";
+    qCDebug(appLog) << "All signal-slot connections initialized";
 }
 
 void MainWindow::refreshPage()
 {
-    qInfo() << "Refreshing page, current page ID:" << m_ePageID;
+    qCInfo(appLog) << "Refreshing page, current page ID:" << m_ePageID;
     switch (m_ePageID) {
     case PI_Home: {
-        qDebug() << "Switching to Home page";
+        qCDebug(appLog) << "Switching to Home page";
         resetMainwindow();
         m_pMainWidget->setCurrentIndex(0);
         setTitleButtonStyle(false, false);
@@ -352,11 +353,11 @@ void MainWindow::refreshPage()
     }
     break;
     case PI_Compress: {
-        qDebug() << "Switching to Compress page";
+        qCDebug(appLog) << "Switching to Compress page";
         m_pMainWidget->setCurrentIndex(1);
         setTitleButtonStyle(true, false, DStyle::StandardPixmap::SP_IncreaseElement);
         if (0 == m_iCompressedWatchTimerID) {
-            qDebug() << "Starting compressed watch timer";
+            qCDebug(appLog) << "Starting compressed watch timer";
             m_iCompressedWatchTimerID = startTimer(1);
         }
 
@@ -364,11 +365,11 @@ void MainWindow::refreshPage()
     }
     break;
     case PI_CompressSetting: {
-        qDebug() << "Switching to Compress Setting page";
+        qCDebug(appLog) << "Switching to Compress Setting page";
         m_pMainWidget->setCurrentIndex(2);
         setTitleButtonStyle(true, false, DStyle::StandardPixmap::SP_ArrowLeave);
         if (0 == m_iCompressedWatchTimerID) {
-            qDebug() << "Starting compressed watch timer";
+            qCDebug(appLog) << "Starting compressed watch timer";
             m_iCompressedWatchTimerID = startTimer(1);
         }
 
@@ -376,16 +377,16 @@ void MainWindow::refreshPage()
     }
     break;
     case PI_UnCompress: {
-        qDebug() << "Switching to Uncompress page";
+        qCDebug(appLog) << "Switching to Uncompress page";
         m_pMainWidget->setCurrentIndex(3);
         bool bShowAddBtn = true;
         if(property(ORDER_JSON).isValid()) {
-            qDebug() << "property ORDER_JSON is valid";
+            qCDebug(appLog) << "property ORDER_JSON is valid";
             if(m_pUnCompressPage) {
-                qDebug() << "m_pUnCompressPage is not null";
+                qCDebug(appLog) << "m_pUnCompressPage is not null";
                 QVariantMap mapdata = m_pUnCompressPage->mapOrderJson();
                 if(mapdata.contains(ORDER_EDIT)) {
-                    qDebug() << "mapdata contains ORDER_EDIT";
+                    qCDebug(appLog) << "mapdata contains ORDER_EDIT";
                     bShowAddBtn = mapdata.value(ORDER_EDIT).toBool();
                     m_pOpenAction->setEnabled(bShowAddBtn);
                 }
@@ -396,7 +397,7 @@ void MainWindow::refreshPage()
     }
     break;
     case PI_AddCompressProgress: {
-        qDebug() << "Switching to Add Compress Progress page";
+        qCDebug(appLog) << "Switching to Add Compress Progress page";
         m_pMainWidget->setCurrentIndex(4);
         setTitleButtonStyle(false, false);
         m_pProgressPage->resetProgress();
@@ -404,7 +405,7 @@ void MainWindow::refreshPage()
     }
     break;
     case PI_CompressProgress: {
-        qDebug() << "Switching to Compress Progress page";
+        qCDebug(appLog) << "Switching to Compress Progress page";
         m_pMainWidget->setCurrentIndex(4);
         setTitleButtonStyle(false, false);
         m_pProgressPage->resetProgress();
@@ -412,7 +413,7 @@ void MainWindow::refreshPage()
     }
     break;
     case PI_UnCompressProgress: {
-        qDebug() << "Switching to Uncompress Progress page";
+        qCDebug(appLog) << "Switching to Uncompress Progress page";
         m_pMainWidget->setCurrentIndex(4);
         setTitleButtonStyle(false, false);
         m_pProgressPage->resetProgress();
@@ -420,7 +421,7 @@ void MainWindow::refreshPage()
     }
     break;
     case PI_DeleteProgress: {
-        qDebug() << "Switching to Delete Progress page";
+        qCDebug(appLog) << "Switching to Delete Progress page";
         m_pMainWidget->setCurrentIndex(4);
         setTitleButtonStyle(false, false);
         m_pProgressPage->resetProgress();
@@ -428,7 +429,7 @@ void MainWindow::refreshPage()
     }
     break;
     case PI_RenameProgress: {
-        qDebug() << "Switching to Rename Progress page";
+        qCDebug(appLog) << "Switching to Rename Progress page";
         m_pMainWidget->setCurrentIndex(4);
         setTitleButtonStyle(false, false);
         m_pProgressPage->resetProgress();
@@ -436,7 +437,7 @@ void MainWindow::refreshPage()
     }
     break;
     case PI_ConvertProgress: {
-        qDebug() << "MainWindow::refreshPage PI_ConvertProgress";
+        qCDebug(appLog) << "MainWindow::refreshPage PI_ConvertProgress";
         m_pMainWidget->setCurrentIndex(4);
         setTitleButtonStyle(false, false);
         m_pProgressPage->resetProgress();
@@ -444,7 +445,7 @@ void MainWindow::refreshPage()
     }
     break;
     case PI_CommentProgress: {
-        qDebug() << "MainWindow::refreshPage PI_CommentProgress";
+        qCDebug(appLog) << "MainWindow::refreshPage PI_CommentProgress";
         m_pMainWidget->setCurrentIndex(4);
         setTitleButtonStyle(false, false);
         m_pProgressPage->resetProgress();
@@ -452,21 +453,21 @@ void MainWindow::refreshPage()
     }
     break;
     case PI_Success: {
-        qDebug() << "MainWindow::refreshPage PI_Success";
+        qCDebug(appLog) << "MainWindow::refreshPage PI_Success";
         m_pMainWidget->setCurrentIndex(5);
         setTitleButtonStyle(false, false);
         titlebar()->setTitle("");
     }
     break;
     case PI_Failure: {
-        qDebug() << "MainWindow::refreshPage PI_Failure";
+        qCDebug(appLog) << "MainWindow::refreshPage PI_Failure";
         m_pMainWidget->setCurrentIndex(6);
         setTitleButtonStyle(false, false);
         titlebar()->setTitle("");
     }
     break;
     case PI_Loading: {
-        qDebug() << "MainWindow::refreshPage PI_Loading";
+        qCDebug(appLog) << "MainWindow::refreshPage PI_Loading";
         m_pMainWidget->setCurrentIndex(7);
         setTitleButtonStyle(false, false);
         titlebar()->setTitle("");
@@ -475,7 +476,7 @@ void MainWindow::refreshPage()
     }
     //压缩文件焦点需压缩文件名上
     if(m_ePageID == PI_CompressSetting) {
-        qDebug() << "m_ePageID is PI_CompressSetting, return";
+        qCDebug(appLog) << "m_ePageID is PI_CompressSetting, return";
         return;
     }
     //切换界面后焦点默认在标题栏上
@@ -484,17 +485,17 @@ void MainWindow::refreshPage()
 
 qint64 MainWindow::calSelectedTotalFileSize(const QStringList &files)
 {
-    qDebug() << "Calculating total size of selected files, count:" << files.size();
+    qCDebug(appLog) << "Calculating total size of selected files, count:" << files.size();
     QElapsedTimer time1;
     time1.start();
-    qDebug() << "File size calculation started";
+    qCDebug(appLog) << "File size calculation started";
 
     m_stCompressParameter.qSize = 0;
 
     foreach (QString file, files) {
         QFileInfo fi(file);
         if (fi.isFile()) {  // 如果为文件，直接获取大小
-            qDebug() << "Calculate file size:" << file;
+            qCDebug(appLog) << "Calculate file size:" << file;
             qint64 curFileSize = fi.size();
 
 #ifdef __aarch64__
@@ -504,7 +505,7 @@ qint64 MainWindow::calSelectedTotalFileSize(const QStringList &files)
 #endif
             m_stCompressParameter.qSize += curFileSize;
         } else if (fi.isDir()) {    // 如果是文件夹，递归获取所有子文件大小总和
-            qDebug() << "Calculate directory size:" << file;
+            qCDebug(appLog) << "Calculate directory size:" << file;
 #if QT_VERSION < QT_VERSION_CHECK(6 ,0, 0)
             QtConcurrent::run(this, &MainWindow::calFileSizeByThread, file);
 #else
@@ -517,29 +518,29 @@ qint64 MainWindow::calSelectedTotalFileSize(const QStringList &files)
 
     // 等待线程池结束
     QThreadPool::globalInstance()->waitForDone();
-    qInfo() << QString("计算大小线程结束，耗时:%1ms，文件总大小:%2B").arg(time1.elapsed()).arg(m_stCompressParameter.qSize);
+    qCInfo(appLog) << QString("计算大小线程结束，耗时:%1ms，文件总大小:%2B").arg(time1.elapsed()).arg(m_stCompressParameter.qSize);
 
     return m_stCompressParameter.qSize;
 }
 
 void MainWindow::calFileSizeByThread(const QString &path)
 {
-    qDebug() << "Calculating folder size:" << path;
+    qCDebug(appLog) << "Calculating folder size:" << path;
     QDir dir(path);
     if (!dir.exists()) {
-        qWarning() << "Directory does not exist:" << path;
+        qCWarning(appLog) << "Directory does not exist:" << path;
         return;
     }
 
     // 获得文件夹中的文件列表
     QFileInfoList list = dir.entryInfoList(QDir::AllEntries | QDir::System
                                            | QDir::NoDotAndDotDot | QDir::Hidden);
-    qDebug() << "Found" << list.count() << "items in directory:" << path;
+    qCDebug(appLog) << "Found" << list.count() << "items in directory:" << path;
 
     for (int i = 0; i < list.count(); ++i) {
         QFileInfo fileInfo = list.at(i);
         if (fileInfo.isDir()) {
-            qDebug() << "Processing subdirectory:" << fileInfo.filePath();
+            qCDebug(appLog) << "Processing subdirectory:" << fileInfo.filePath();
             // 如果是文件夹 则将此文件夹放入线程池中进行计算
 #if QT_VERSION < QT_VERSION_CHECK(6 ,0, 0)
             QtConcurrent::run(this, &MainWindow::calFileSizeByThread, fileInfo.filePath());
@@ -554,30 +555,30 @@ void MainWindow::calFileSizeByThread(const QString &path)
             qint64 curFileSize = fileInfo.size();
 #ifdef __aarch64__
             if (maxFileSize_ < curFileSize) {
-                qDebug() << "Updating max file size to:" << curFileSize;
+                qCDebug(appLog) << "Updating max file size to:" << curFileSize;
                 maxFileSize_ = curFileSize;
             }
 #endif
             m_stCompressParameter.qSize += curFileSize;
             mutex.unlock();
-            qDebug() << "Processed file:" << fileInfo.filePath() << "size:" << curFileSize;
+            qCDebug(appLog) << "Processed file:" << fileInfo.filePath() << "size:" << curFileSize;
         }
     }
-    qDebug() << "Finished calculating size for directory:" << path;
+    qCDebug(appLog) << "Finished calculating size for directory:" << path;
 }
 
 void MainWindow::setTitleButtonStyle(bool bVisible, bool bVisible2, DStyle::StandardPixmap pixmap)
 {
-    qDebug() << "MainWindow::setTitleButtonStyle" << bVisible << bVisible2 << pixmap;
+    qCDebug(appLog) << "MainWindow::setTitleButtonStyle" << bVisible << bVisible2 << pixmap;
     m_pTitleWidget->setVisible(bVisible || bVisible2);
     m_pTitleWidget->setTitleButtonStyle(bVisible, bVisible2, pixmap);
 }
 
 void MainWindow::loadArchive(const QString &strArchiveFullPath)
 {
-    qDebug() << "Loading archive:" << strArchiveFullPath;
+    qCDebug(appLog) << "Loading archive:" << strArchiveFullPath;
     if (!QFileInfo(strArchiveFullPath).isReadable()) {
-        qWarning() << "No permission to load archive:" << strArchiveFullPath;
+        qCWarning(appLog) << "No permission to load archive:" << strArchiveFullPath;
         TipDialog dialog(this);
         dialog.showDialog(tr("You do not have permission to load %1").arg(strArchiveFullPath), tr("OK", "button"), DDialog::ButtonNormal);
         return;
@@ -585,14 +586,14 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
 
     PERF_PRINT_BEGIN("POINT-05", "加载时间");
     m_operationtype = Operation_Load;
-    qDebug() << "Archive load operation started";
+    qCDebug(appLog) << "Archive load operation started";
 
     //处理分卷包名称
     QString transFile = strArchiveFullPath;
-    qDebug() << "Processing split archive name";
+    qCDebug(appLog) << "Processing split archive name";
     QStringList listSupportedMimeTypes = PluginManager::get_instance().supportedWriteMimeTypes(PluginManager::SortByComment);     // 获取支持的压缩格式
     CustomMimeType mimeType = determineMimeType(transFile);
-    qDebug() << "Archive mime type:" << mimeType.name();
+    qCDebug(appLog) << "Archive mime type:" << mimeType.name();
 
     // 构建压缩包加载之后的数据
     m_stUnCompressParameter.strFullPath = strArchiveFullPath;
@@ -600,7 +601,7 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
     QFileInfo fileinfo(transFile);
     if (!fileinfo.exists()) {
         // 分卷不完整（损坏）
-        qCritical() << "Split archive volume missing:" << transFile;
+        qCCritical(appLog) << "Split archive volume missing:" << transFile;
         m_ePageID = PI_Failure;
         showErrorMessage(FI_Load, EI_ArchiveMissingVolume);
         return;
@@ -610,47 +611,47 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
     m_stUnCompressParameter.bMultiplePassword = (mimeType.name() == "application/zip") ? true : false;
     m_stUnCompressParameter.bModifiable = (listSupportedMimeTypes.contains(mimeType.name()) && fileinfo.isWritable()
                                            && m_stUnCompressParameter.eSplitVolume == UnCompressParameter::ST_No); // 支持压缩且文件可写的非分卷格式才能修改数据
-    qDebug() << "Archive properties - modifiable:" << m_stUnCompressParameter.bModifiable 
+    qCDebug(appLog) << "Archive properties - modifiable:" << m_stUnCompressParameter.bModifiable 
             << ", commentModifiable:" << m_stUnCompressParameter.bCommentModifiable
             << ", multiplePassword:" << m_stUnCompressParameter.bMultiplePassword;
 
     // 监听压缩包
-    qDebug() << "Setting up archive file watcher";
+    qCDebug(appLog) << "Setting up archive file watcher";
     watcherArchiveFile(transFile);
     if(property(ORDER_JSON).isValid()) {
         if(m_pUnCompressPage)
             m_pUnCompressPage->setProperty(ORDER_JSON, property(ORDER_JSON));
     }
     m_pUnCompressPage->setArchiveFullPath(transFile, m_stUnCompressParameter);     // 设置压缩包全路径和是否分卷
-    qDebug() << "Archive path set to:" << transFile;
+    qCDebug(appLog) << "Archive path set to:" << transFile;
 
     // 根据是否可修改压缩包标志位设置打开文件选项是否可用
     m_pTitleWidget->setTitleButtonEnable(m_stUnCompressParameter.bModifiable);
     m_pOpenAction->setEnabled(m_stUnCompressParameter.bModifiable);
-    qDebug() << "UI controls enabled state set based on archive properties";
+    qCDebug(appLog) << "UI controls enabled state set based on archive properties";
 
     // 设置默认解压路径
     if (m_pSettingDlg->getDefaultExtractPath().isEmpty()) {
-        qDebug() << "Setting default extract path to archive location:" << fileinfo.absolutePath();
+        qCDebug(appLog) << "Setting default extract path to archive location:" << fileinfo.absolutePath();
         m_pUnCompressPage->setDefaultUncompressPath(fileinfo.absolutePath());  // 设置默认解压路径
     } else {
-        qDebug() << "Setting default extract path from settings:" << m_pSettingDlg->getDefaultExtractPath();
+        qCDebug(appLog) << "Setting default extract path from settings:" << m_pSettingDlg->getDefaultExtractPath();
         m_pUnCompressPage->setDefaultUncompressPath(m_pSettingDlg->getDefaultExtractPath());  // 设置默认解压路径
     }
 
     // zip分卷指定使用cli7zplugin
     UiTools::AssignPluginType eType = (UnCompressParameter::ST_Zip == m_stUnCompressParameter.eSplitVolume) ?
                                       (UiTools::AssignPluginType::APT_Cli7z) : (UiTools::AssignPluginType::APT_Auto);
-    qDebug() << "Using plugin type:" << static_cast<int>(eType);
+    qCDebug(appLog) << "Using plugin type:" << static_cast<int>(eType);
     
     // 加载操作
     if (ArchiveManager::get_instance()->loadArchive(transFile, eType)) {
-        qDebug() << "Archive load started, showing loading page";
+        qCDebug(appLog) << "Archive load started, showing loading page";
         m_pLoadingPage->setDes(tr("Loading, please wait..."));
         m_pLoadingPage->startLoading();     // 开始加载
         m_ePageID = PI_Loading;
     } else {
-        qCritical() << "No available plugin for archive type:" << mimeType.name();
+        qCCritical(appLog) << "No available plugin for archive type:" << mimeType.name();
         // 无可用插件，回到首页
         m_ePageID = PI_Home;
         refreshPage();
@@ -659,16 +660,16 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
         TipDialog dialog(this);
         dialog.showDialog(tr("Plugin error"), tr("OK", "button"), DDialog::ButtonNormal);
     }
-    qDebug() << "Archive load operation completed";
+    qCDebug(appLog) << "Archive load operation completed";
 }
 
 void MainWindow::timerEvent(QTimerEvent *event)
 {
-    // qDebug() << "MainWindow::timerEvent" << event->timerId();
+    // qCDebug(appLog) << "MainWindow::timerEvent" << event->timerId();
     if (m_iInitUITimer == event->timerId()) {
         if (!m_initFlag) {
             // 初始化界面
-            qInfo() << "Initializing UI components";
+            qCInfo(appLog) << "Initializing UI components";
             initUI();
             initConnections();
             m_initFlag = true;
@@ -676,21 +677,21 @@ void MainWindow::timerEvent(QTimerEvent *event)
 
         killTimer(m_iInitUITimer);
         m_iInitUITimer = 0;
-        qDebug() << "UI initialization timer stopped";
+        qCDebug(appLog) << "UI initialization timer stopped";
     } else if (m_iCompressedWatchTimerID == event->timerId()) {
-        qDebug() << "Checking compressed files status";
+        qCDebug(appLog) << "Checking compressed files status";
         // 对压缩文件的监控
         QStringList listFiles = m_pCompressPage->compressFiles();
-        qDebug() << "Monitoring" << listFiles.count() << "compressed files";
+        qCDebug(appLog) << "Monitoring" << listFiles.count() << "compressed files";
 
         for (int i = 0; i < listFiles.count(); i++) {
             QFileInfo info(listFiles[i]);
 
             if (!info.exists()) {
-                qWarning() << "Compressed file missing:" << listFiles[i];
+                qCWarning(appLog) << "Compressed file missing:" << listFiles[i];
                 // 先暂停操作
                 ArchiveManager::get_instance()->pauseOperation();
-                qDebug() << "Paused current operation due to file change";
+                qCDebug(appLog) << "Paused current operation due to file change";
 
                 QString displayName = UiTools::toShortString(info.fileName());
                 QString strTips = tr("%1 was changed on the disk, please import it again.").arg(displayName);
@@ -699,21 +700,21 @@ void MainWindow::timerEvent(QTimerEvent *event)
                 dialog.showDialog(strTips, tr("OK", "button"), DDialog::ButtonNormal);
 
                 m_pCompressPage->refreshCompressedFiles(true, listFiles[i]);
-                qDebug() << "Refreshed compressed files list";
+                qCDebug(appLog) << "Refreshed compressed files list";
 
                 ArchiveManager::get_instance()->cancelOperation();
-                qDebug() << "Canceled current operation";
+                qCDebug(appLog) << "Canceled current operation";
 
                 // 返回到列表界面
                 if (m_ePageID != PI_Compress) {
-                    qDebug() << "Switching to compress page";
+                    qCDebug(appLog) << "Switching to compress page";
                     m_ePageID = PI_Compress;
                     refreshPage();
                 }
 
                 // 如果待压缩文件列表数目为空，回到首页
                 if (m_pCompressPage->compressFiles().count() == 0) {
-                    qDebug() << "No more files to compress, switching to home page";
+                    qCDebug(appLog) << "No more files to compress, switching to home page";
                     m_ePageID = PI_Home;
                     refreshPage();
                 }
@@ -724,15 +725,15 @@ void MainWindow::timerEvent(QTimerEvent *event)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    // qDebug() << "MainWindow::closeEvent";
+    // qCDebug(appLog) << "MainWindow::closeEvent";
     if (m_operationtype != Operation_NULL) {
-        qDebug() << "Application close requested with ongoing operation";
+        qCDebug(appLog) << "Application close requested with ongoing operation";
         // 保存当前操作的状态以便还原操作
         bool isPause = m_pProgressPage->isPause();
-        qInfo() << "Current operation status before close - paused:" << isPause;
+        qCInfo(appLog) << "Current operation status before close - paused:" << isPause;
         // 当前还有操作正在进行
         slotPause();    // 先暂停当前操作
-        qDebug() << "Operation paused for close confirmation";
+        qCDebug(appLog) << "Operation paused for close confirmation";
 
         // 创建询问关闭对话框
         SimpleQueryDialog dialog(this);
@@ -740,29 +741,29 @@ void MainWindow::closeEvent(QCloseEvent *event)
         
         // 点击确认时，停止当前操作，关闭应用
         if (QDialog::Accepted == iResult) {
-            qDebug() << "User confirmed close, canceling operation";
+            qCDebug(appLog) << "User confirmed close, canceling operation";
             slotCancel();       // 执行取消操作
             event->accept();
         } else {
-            qDebug() << "User canceled close request";
+            qCDebug(appLog) << "User canceled close request";
             if (!isPause) {  // 之前未暂停
-                qDebug() << "Resuming operation";
+                qCDebug(appLog) << "Resuming operation";
                 slotContinue(); // 继续之前的操作
             }
             event->ignore();    // 忽略退出
         }
     } else {
-        qDebug() << "Application closed with no ongoing operations";
+        qCDebug(appLog) << "Application closed with no ongoing operations";
         event->accept();    // 忽略退出
     }
 }
 
 bool MainWindow::checkSettings(const QString &file)
 {
-    qDebug() << "Checking file settings for:" << file;
+    qCDebug(appLog) << "Checking file settings for:" << file;
     QFileInfo info(file);
     if (!info.exists()) {
-        qWarning() << "File does not exist:" << file;
+        qCWarning(appLog) << "File does not exist:" << file;
         // 文件不存在
         TipDialog dialog(this);
         moveDialogToCenter(&dialog);
@@ -770,21 +771,21 @@ bool MainWindow::checkSettings(const QString &file)
         return false;
     } else {
         if (!info.isReadable()) {
-            qWarning() << "No read permission for file:" << file;
+            qCWarning(appLog) << "No read permission for file:" << file;
             TipDialog dialog(this);
             dialog.showDialog(tr("You do not have permission to load %1").arg(file), tr("OK", "button"), DDialog::ButtonNormal);
             return false;
         }
 
         if (info.isDir()) {
-            qDebug() << "Selected item is a directory:" << file;
+            qCDebug(appLog) << "Selected item is a directory:" << file;
             // 选择打开的是文件夹
             TipDialog dialog(this);
             moveDialogToCenter(&dialog);
             dialog.showDialog(tr("The file format is not supported by Archive Manager"), tr("OK", "button"), DDialog::ButtonNormal);
             return false;
         } else {
-            qDebug() << "Checking file mime type";
+            qCDebug(appLog) << "Checking file mime type";
             // 文件判断
             QString fileMime;
             bool existMime = false; // 在设置界面是否被勾选
@@ -793,19 +794,19 @@ bool MainWindow::checkSettings(const QString &file)
 
             // 判断内容
             if (file.isEmpty()) {
-                qDebug() << "Empty file path";
+                qCDebug(appLog) << "Empty file path";
                 existMime = true;
             } else {
                 fileMime = determineMimeType(file).name();
-                qDebug() << "Detected mime type:" << fileMime;
+                qCDebug(appLog) << "Detected mime type:" << fileMime;
                 if (fileMime.contains("application/"))
                     fileMime = fileMime.remove("application/");
 
                 if (fileMime.size() > 0) {
                     existMime = UiTools::isExistMimeType(fileMime, bArchive);
-                    qDebug() << "Mime type exists in settings:" << existMime << ", is archive:" << bArchive;
+                    qCDebug(appLog) << "Mime type exists in settings:" << existMime << ", is archive:" << bArchive;
                 } else {
-                    qDebug() << "Unknown mime type";
+                    qCDebug(appLog) << "Unknown mime type";
                     existMime = false;
                 }
             }
@@ -814,11 +815,11 @@ bool MainWindow::checkSettings(const QString &file)
             if (!existMime) {
                 QString str;
                 if (bArchive) {
-                    qDebug() << "Archive format not enabled in settings";
+                    qCDebug(appLog) << "Archive format not enabled in settings";
                     // 如果是压缩包，提示勾选关联类型
                     str = tr("Please check the file association type in the settings of Archive Manager");
                 } else {
-                    qDebug() << "Unsupported file format";
+                    qCDebug(appLog) << "Unsupported file format";
                     // 如果不是压缩包，提示非支持的压缩格式
                     str = tr("The file format is not supported by Archive Manager");
                 }
@@ -830,11 +831,11 @@ bool MainWindow::checkSettings(const QString &file)
                 int re = dialog.showDialog(str, tr("OK", "button"), DDialog::ButtonNormal);
                 if (re != 1) { // ？
                     mimeIsChecked = false;
-                    qDebug() << "User chose not to proceed with unsupported format";
+                    qCDebug(appLog) << "User chose not to proceed with unsupported format";
                 }
             }
 
-            qDebug() << "File check completed, result:" << mimeIsChecked;
+            qCDebug(appLog) << "File check completed, result:" << mimeIsChecked;
             return mimeIsChecked;
         }
     }
@@ -842,10 +843,10 @@ bool MainWindow::checkSettings(const QString &file)
 
 bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
 {
-    qDebug() << "Handling tab event for object:" << obj->objectName() << "key:" << evt->key();
+    qCDebug(appLog) << "Handling tab event for object:" << obj->objectName() << "key:" << evt->key();
 #if 0
     if (!m_pUnCompressPage || !m_pCompressPage /*|| !m_pCompressSetting*/) {
-        qDebug() << "Required pages not initialized";
+        qCDebug(appLog) << "Required pages not initialized";
         return false;
     }
 
@@ -994,17 +995,17 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
 
 void MainWindow::handleQuit()
 {
-    qDebug() << "Handling application quit request";
+    qCDebug(appLog) << "Handling application quit request";
     // 关闭处理
     close();
 }
 
 void MainWindow::slotHandleArguments(const QStringList &listParam, MainWindow::ArgumentType eType)
 {
-    qInfo() << listParam;
+    qCInfo(appLog) << listParam;
     if (!m_initFlag) {
         // 初始化界面
-        qInfo() << "初始化界面";
+        qCInfo(appLog) << "初始化界面";
         initUI();
         initConnections();
         m_initFlag = true;
@@ -1015,7 +1016,7 @@ void MainWindow::slotHandleArguments(const QStringList &listParam, MainWindow::A
         return;
     }
 
-    qInfo() << "处理传入参数";
+    qCInfo(appLog) << "处理传入参数";
 
     switch (eType) {
     case AT_Open: {         // 打开操作
@@ -1048,13 +1049,13 @@ void MainWindow::slotHandleArguments(const QStringList &listParam, MainWindow::A
 
 void MainWindow::slotTitleBtnClicked()
 {
-    qDebug() << "Title button clicked, current page:" << m_ePageID;
+    qCDebug(appLog) << "Title button clicked, current page:" << m_ePageID;
     if (PI_Home == m_ePageID || PI_Compress == m_ePageID || PI_UnCompress == m_ePageID) {
-        qDebug() << "Opening file selection dialog";
+        qCDebug(appLog) << "Opening file selection dialog";
         // 通过文件选择对话框选择文件进行操作
         slotChoosefiles();
     } else if (PI_CompressSetting == m_ePageID) {
-        qDebug() << "Returning from compress settings page";
+        qCDebug(appLog) << "Returning from compress settings page";
         // 压缩设置界面点击 返回
         m_ePageID = PI_Compress;
         refreshPage();
@@ -1063,21 +1064,21 @@ void MainWindow::slotTitleBtnClicked()
 
 void MainWindow::slotChoosefiles()
 {
-    qDebug() << "Preparing file selection dialog";
+    qCDebug(appLog) << "Preparing file selection dialog";
     if(property(ORDER_JSON).isValid()) {
-        qDebug() << "Checking order JSON restrictions";
+        qCDebug(appLog) << "Checking order JSON restrictions";
         if(m_pUnCompressPage) {
             QVariantMap mapdata = m_pUnCompressPage->mapOrderJson();
             if(mapdata.contains(ORDER_EDIT)) {
                 if(!mapdata.value(ORDER_EDIT).toBool()) {
-                    qDebug() << "Operation restricted by order JSON";
+                    qCDebug(appLog) << "Operation restricted by order JSON";
                     return;
                 }
             }
         }
     }
     // 创建文件选择对话框
-    qDebug() << "Creating file dialog";
+    qCDebug(appLog) << "Creating file dialog";
     DFileDialog dialog(this);
     dialog.setAcceptMode(DFileDialog::AcceptOpen);
     dialog.setFileMode(DFileDialog::ExistingFiles);
@@ -1100,7 +1101,7 @@ void MainWindow::slotChoosefiles()
 
     // 关闭或取消不处理
     if (mode != QDialog::Accepted) {
-        qDebug() << "File dialog canceled";
+        qCDebug(appLog) << "File dialog canceled";
         return;
     }
 
@@ -1111,7 +1112,7 @@ void MainWindow::slotChoosefiles()
     // 判断是否是本地设备文件，过滤 手机 网络 ftp smb 等
     for (const auto &url : listSelFiles) {
         if (!UiTools::isLocalDeviceFile(url)) {
-            qWarning() << "Non-local file selected, aborting:" << url;
+            qCWarning(appLog) << "Non-local file selected, aborting:" << url;
             // 提示用户无法添加非本地设备文件
             TipDialog dialog(this);
             moveDialogToCenter(&dialog);
@@ -1147,10 +1148,10 @@ void MainWindow::slotChoosefiles()
 
 void MainWindow::slotDragSelectedFiles(const QStringList &listFiles)
 {
-    qDebug() << "Processing drag selected files, count:" << listFiles.count();
+    qCDebug(appLog) << "Processing drag selected files, count:" << listFiles.count();
     // 未选择任何文件
     if (listFiles.count() == 0) {
-        qDebug() << "No files selected";
+        qCDebug(appLog) << "No files selected";
         return;
     }
 
@@ -1175,45 +1176,45 @@ void MainWindow::slotDragSelectedFiles(const QStringList &listFiles)
 
 void MainWindow::slotCompressLevelChanged(bool bRootIndex)
 {
-    qDebug() << "MainWindow::slotCompressLevelChanged" << bRootIndex;
+    qCDebug(appLog) << "MainWindow::slotCompressLevelChanged" << bRootIndex;
     m_pOpenAction->setEnabled(bRootIndex);
     m_pTitleWidget->setTitleButtonVisible(bRootIndex);
 }
 
 void MainWindow::slotCompressNext()
 {
-    qDebug() << "Preparing for compression";
+    qCDebug(appLog) << "Preparing for compression";
     QStringList listCompressFiles = m_pCompressPage->compressFiles();       // 获取待压缩的文件
-    qDebug() << "Compressing" << listCompressFiles.count() << "files";
+    qCDebug(appLog) << "Compressing" << listCompressFiles.count() << "files";
     
     qint64 totalSize = calSelectedTotalFileSize(listCompressFiles);
-    qDebug() << "Total size of files to compress:" << totalSize << "bytes";
+    qCDebug(appLog) << "Total size of files to compress:" << totalSize << "bytes";
     
     m_pCompressSettingPage->setFileSize(listCompressFiles, totalSize);
 
     // 刷新界面 切换到压缩设置界面
     m_ePageID = PI_CompressSetting;
     refreshPage();
-    qDebug() << "Switched to compress settings page";
+    qCDebug(appLog) << "Switched to compress settings page";
 }
 
 void MainWindow::slotCompress(const QVariant &val)
 {
-    qInfo() << "Compression started";
+    qCInfo(appLog) << "Compression started";
     m_operationtype = Operation_Create;
 
     m_stCompressParameter = val.value<CompressParameter>();    // 获取压缩参数
-    qDebug() << "Compression parameters:" 
+    qCDebug(appLog) << "Compression parameters:" 
              << "Type:" << m_stCompressParameter.strMimeType
              << "Encryption:" << m_stCompressParameter.bEncryption
              << "Split:" << m_stCompressParameter.bSplit
              << "Threads:" << m_stCompressParameter.iCPUTheadNum;
 
     QStringList listFiles = m_pCompressPage->compressFiles();   // 获取待压缩文件
-    qDebug() << "Files to compress:" << listFiles;
+    qCDebug(appLog) << "Files to compress:" << listFiles;
 
     if (listFiles.count() == 0) {
-        qWarning() << "No files to compress";
+        qCWarning(appLog) << "No files to compress";
         return;
     }
 
@@ -1318,7 +1319,7 @@ void MainWindow::slotCompress(const QVariant &val)
 
 void MainWindow::slotJobFinished(ArchiveJob::JobType eJobType, PluginFinishType eFinishType, ErrorType eErrorType)
 {
-    qInfo() << "操作类型：" << eJobType << "****结束类型：" << eFinishType << "****错误类型" << eErrorType;
+    qCInfo(appLog) << "操作类型：" << eJobType << "****结束类型：" << eFinishType << "****错误类型" << eErrorType;
 
     switch (eFinishType) {
     case PFT_Nomral:
@@ -1361,7 +1362,7 @@ void MainWindow::slotJobFinished(ArchiveJob::JobType eJobType, PluginFinishType 
 
 void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
 {
-    qDebug() << "Starting extraction to path:" << strUncompressPath;
+    qCDebug(appLog) << "Starting extraction to path:" << strUncompressPath;
     m_operationtype = Operation_Extract; //解压操作
 
     QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();
@@ -1414,9 +1415,9 @@ void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
 
 void MainWindow::slotReceiveProgress(double dPercentage)
 {
-    qDebug() << "Progress update:" << dPercentage << "%";
+    qCDebug(appLog) << "Progress update:" << dPercentage << "%";
     if (Operation_SingleExtract == m_operationtype) { //提取删除操作使用小弹窗进度
-        qDebug() << "Single extract operation progress";
+        qCDebug(appLog) << "Single extract operation progress";
         //需要添加dPercentage < 100判断，否则会出现小文件提取进度对话框不会自动关闭
         if (!m_pProgressdialog->isVisible() && dPercentage < 100 && dPercentage > 0) {
             m_pProgressdialog->showDialog();
@@ -1424,21 +1425,21 @@ void MainWindow::slotReceiveProgress(double dPercentage)
 
         m_pProgressdialog->setProcess(dPercentage);
     } else if (Operation_Update_Comment == m_operationtype) { // 更新压缩包注释的进度
-        qDebug() << "Comment update operation progress";
+        qCDebug(appLog) << "Comment update operation progress";
         if (!m_commentProgressDialog->isVisible()) {
             m_commentProgressDialog->exec();
         }
 
         m_commentProgressDialog->setProgress(dPercentage);
     } else {
-        qDebug() << "Main operation progress";
+        qCDebug(appLog) << "Main operation progress";
         m_pProgressPage->setProgress(dPercentage);
     }
 }
 
 void MainWindow::slotReceiveCurFileName(const QString &strName)
 {
-    qInfo() << strName;
+    qCInfo(appLog) << strName;
     m_strCurrentName = strName;
     if (Operation_SingleExtract == m_operationtype) { //提取删除操作使用小弹窗进度
         m_pProgressdialog->setCurrentFile(strName);
@@ -1449,20 +1450,20 @@ void MainWindow::slotReceiveCurFileName(const QString &strName)
 
 void MainWindow::slotReceiveFileWriteErrorName(const QString &strName)
 {
-    qDebug() << "MainWindow::slotReceiveFileWriteErrorName" << strName;
+    qCDebug(appLog) << "MainWindow::slotReceiveFileWriteErrorName" << strName;
     m_fileWriteErrorName = strName;
 }
 
 void MainWindow::slotQuery(Query *query)
 {
-    qInfo() << " query->execute()";
+    qCInfo(appLog) << " query->execute()";
     query->setParent(this);
     query->execute();
 }
 
 void MainWindow::Extract2PathFinish(const QString &msg)
 {
-    qInfo() << "Extraction completed with message:" << msg;
+    qCInfo(appLog) << "Extraction completed with message:" << msg;
     QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
     sendMessage(new CustomFloatingMessage(icon, msg, 1000, this));
 
@@ -1481,24 +1482,24 @@ void MainWindow::Extract2PathFinish(const QString &msg)
 
 QString MainWindow::createTempPath()
 {
-    qDebug() << "Creating temporary path";
+    qCDebug(appLog) << "Creating temporary path";
     // 创建临时路径
     QTemporaryDir dir;
     QString strTempPath =  dir.path();
     strTempPath = strTempPath.remove(TEMPPATH);     // 移除/tmp
-    qDebug() << "Temporary path created:" << strTempPath;
+    qCDebug(appLog) << "Temporary path created:" << strTempPath;
     return strTempPath;
 }
 
 QString MainWindow::getExtractPath(const QString &strArchiveFullPath)
 {
-    qDebug() << "Getting extract path for:" << strArchiveFullPath;
+    qCDebug(appLog) << "Getting extract path for:" << strArchiveFullPath;
     QString strpath = "";
     // 根据是否自动创建文件夹获取解压最后一层路径
     if (m_pSettingDlg->isAutoCreatDir()) {
         QFileInfo info(strArchiveFullPath);
         strpath = UiTools::handleFileName(info.filePath());
-        qDebug() << "Auto-created extract path:" << strpath;
+        qCDebug(appLog) << "Auto-created extract path:" << strpath;
     }
 
     return strpath;
@@ -1506,30 +1507,30 @@ QString MainWindow::getExtractPath(const QString &strArchiveFullPath)
 
 void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eErrorType)
 {
-    qDebug() << "Job finished, type:" << eType << ", error:" << eErrorType;
+    qCDebug(appLog) << "Job finished, type:" << eType << ", error:" << eErrorType;
     switch (eType) {
     // 创建压缩包
     case ArchiveJob::JT_Create: {
-        qInfo() << "Compression job completed successfully";
+        qCInfo(appLog) << "Compression job completed successfully";
         m_ePageID = PI_Success;
         showSuccessInfo(SI_Compress);   // 显示压缩成功
         
         // 删除文件监听定时器
         if (0 != m_iCompressedWatchTimerID) {
-            qDebug() << "Stopping file watch timer";
+            qCDebug(appLog) << "Stopping file watch timer";
             killTimer(m_iCompressedWatchTimerID);
             m_iCompressedWatchTimerID = 0;
         }
         
         // 设置了压缩完成自动删除原文件
         if (m_pSettingDlg->isAutoDeleteFile()) {
-            qDebug() << "Auto-deleting original files after compression";
+            qCDebug(appLog) << "Auto-deleting original files after compression";
             deleteWhenJobFinish(ArchiveJob::JT_Create);
         }
 
         // 初始化文件服务
         if (nullptr == m_pDDesktopServicesThread) {
-            qDebug() << "Initializing desktop services thread";
+            qCDebug(appLog) << "Initializing desktop services thread";
             m_pDDesktopServicesThread = new DDesktopServicesThread(this);
         }
 
@@ -1538,11 +1539,11 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
             m_stCompressParameter.strArchiveName + ".001" : 
             m_stCompressParameter.strArchiveName;
         QString fullPath = m_stCompressParameter.strTargetPath + QDir::separator() + name;
-        qDebug() << "Setting archive file to open:" << fullPath;
+        qCDebug(appLog) << "Setting archive file to open:" << fullPath;
         m_pDDesktopServicesThread->setOpenFiles(QStringList() << fullPath);
 
         // zip压缩包添加注释
-        qDebug() << "Adding archive comment";
+        qCDebug(appLog) << "Adding archive comment";
         addArchiveComment();
 
         cleanupCompressAliasEntries();
@@ -1550,27 +1551,27 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
     break;
     // 添加文件至压缩包
     case ArchiveJob::JT_Add: {
-        qInfo() << "File addition job completed";
+        qCInfo(appLog) << "File addition job completed";
         //拖拽追加成功后不需要刷新
         if (StartupType::ST_DragDropAdd != m_eStartupType) {
-            qDebug() << "Showing add success notification";
+            qCDebug(appLog) << "Showing add success notification";
             QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
             sendMessage(new CustomFloatingMessage(icon, tr("Adding successful"), 1000, this));
 
             // 追加完成更新压缩包数据
             m_operationtype = Operation_UpdateData;
-            qDebug() << "Updating archive cache data";
+            qCDebug(appLog) << "Updating archive cache data";
             if (ArchiveManager::get_instance()->updateArchiveCacheData(m_stUpdateOptions)) {
-                qDebug() << "Starting loading animation";
+                qCDebug(appLog) << "Starting loading animation";
                 m_pLoadingPage->setDes(tr("Updating, please wait..."));
                 m_pLoadingPage->startLoading();     // 开始加载
                 m_ePageID = PI_Loading;
             } else {
-                qWarning() << "No available plugin for update";
+                qCWarning(appLog) << "No available plugin for update";
                 showErrorMessage(FI_Add, EI_NoPlugin);
             }
         } else {
-            qDebug() << "Drag drop add completed, showing success";
+            qCDebug(appLog) << "Drag drop add completed, showing success";
             m_ePageID = PI_Success;
             showSuccessInfo(SI_Compress);   // 显示压缩成功
         }
@@ -1578,7 +1579,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
     break;
     // 加载压缩包数据
     case ArchiveJob::JT_Load: {
-        qInfo() << "加载结束";
+        qCInfo(appLog) << "加载结束";
         m_pLoadingPage->stopLoading();
 
         // 判断压缩包是否有数据
@@ -1603,12 +1604,12 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
     case ArchiveJob::JT_StepExtract:
     case ArchiveJob::JT_Extract: {
         if (Archive_OperationType::Operation_SingleExtract == m_operationtype) {
-            qInfo() << "提取结束";
+            qCInfo(appLog) << "提取结束";
             m_ePageID = PI_UnCompress;
             Extract2PathFinish(tr("Extraction successful", "提取成功")); //提取成功
             m_pProgressdialog->setFinished();
         } else {
-            qInfo() << "解压结束";
+            qCInfo(appLog) << "解压结束";
             ArchiveData stArchiveData = DataManager::get_instance().archiveData();
 
             if (stArchiveData.listRootEntry.count() == 0) {
@@ -1638,7 +1639,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
                         // 未自动创建文件夹的情况下，显示每个压缩包解压出的第一个文件
                         for (int i = 0; i < stArchiveData.listRootEntry.count(); ++i) {
                             listFiles << m_stUnCompressParameter.strExtractPath + QDir::separator() + stArchiveData.listRootEntry[i].strFullPath;
-                            qInfo() << "**********" << m_stUnCompressParameter.strExtractPath + QDir::separator() + stArchiveData.listRootEntry[i].strFullPath;
+                            qCInfo(appLog) << "**********" << m_stUnCompressParameter.strExtractPath + QDir::separator() + stArchiveData.listRootEntry[i].strFullPath;
                         }
                     }
                     // 设置最终需要打开的文件
@@ -1650,7 +1651,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
                     if (!m_pSettingDlg->isAutoCreatDir() && stArchiveData.listRootEntry.count() > 0)
                         strFile += QDir::separator() + stArchiveData.listRootEntry[0].strFullPath;
                     // 设置最终需要打开的文件
-                    qInfo() << "单压缩包解压 设置最终需要打开的文件*********************" << strFile;
+                    qCInfo(appLog) << "单压缩包解压 设置最终需要打开的文件*********************" << strFile;
                     m_pDDesktopServicesThread->setOpenFiles(QStringList() << strFile);
                 }
 
@@ -1685,7 +1686,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
 // 删除
     case ArchiveJob::JT_Delete:
 	{
-        qInfo() << "删除结束";
+        qCInfo(appLog) << "删除结束";
         // 追加完成更新压缩包数据
         m_operationtype = Operation_UpdateData;
         if (ArchiveManager::get_instance()->updateArchiveCacheData(m_stUpdateOptions)) {
@@ -1701,7 +1702,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
     break;
     case ArchiveJob::JT_Rename:
     {
-        qInfo() << "Rename end!";
+        qCInfo(appLog) << "Rename end!";
         // 追加完成更新压缩包数据
         m_operationtype = Operation_UpdateData;
         if (ArchiveManager::get_instance()->updateArchiveCacheData(m_stUpdateOptions)) {
@@ -1717,7 +1718,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
     break;
 // 打开
     case ArchiveJob::JT_Open: {
-        qInfo() << "打开结束";
+        qCInfo(appLog) << "打开结束";
         // 若压缩包文件可更改，打开文件之后对文件进行监控
         // 非分卷的rar可以进行格式转换
         if ((m_stUnCompressParameter.bModifiable) ||
@@ -1740,7 +1741,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
     break;
 // 追加/删除更新
     case ArchiveJob::JT_Update: {
-        qInfo() << "更新结束";
+        qCInfo(appLog) << "更新结束";
         m_pLoadingPage->stopLoading();      // 停止更新
 
         if (DataManager::get_instance().archiveData().listRootEntry.count() == 0) {
@@ -1759,10 +1760,10 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
 // 更新压缩包注释
     case ArchiveJob::JT_Comment: {
         if (Operation_Update_Comment == m_operationtype) {
-            qInfo() << "更新注释结束";
+            qCInfo(appLog) << "更新注释结束";
             m_commentProgressDialog->setFinished();
         } else { /* if (Operation_Add_Comment == m_operationtype)*/ // creatjob结束的时候工作类型已经置为Operation_NULL
-            qInfo() << "添加zip注释结束";
+            qCInfo(appLog) << "添加zip注释结束";
             m_ePageID = PI_Success;
             showSuccessInfo(SI_Compress);   // 显示压缩成功
         }
@@ -2135,7 +2136,7 @@ void MainWindow::addFiles2Archive(const QStringList &listFiles, const QString &s
         return;
 
 
-    qInfo() << "向压缩包中添加文件";
+    qCInfo(appLog) << "向压缩包中添加文件";
 
     QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();  // 获取压缩包全路径    CompressOptions options;
     QList<FileEntry> listEntry;
@@ -2177,7 +2178,7 @@ void MainWindow::addFiles2Archive(const QStringList &listFiles, const QString &s
 
 void MainWindow::resetMainwindow()
 {
-    qDebug() << "Resetting main window state";
+    qCDebug(appLog) << "Resetting main window state";
 #ifdef __aarch64__
     maxFileSize_ = 0;
 #endif
@@ -2187,12 +2188,12 @@ void MainWindow::resetMainwindow()
     m_ePageID = PI_Home;
     m_operationtype = Operation_NULL;   // 重置操作类型
     m_iCompressedWatchTimerID = 0;      // 初始化定时器返回值
-    qDebug() << "Resetting progress page";
+    qCDebug(appLog) << "Resetting progress page";
     m_pProgressPage->resetProgress();   // 重置进度
     m_pOpenFileWatcher->reset();
 
     // 重置数据
-    qDebug() << "Resetting all data structures";
+    qCDebug(appLog) << "Resetting all data structures";
     m_stUpdateOptions = UpdateOptions();
     m_stCompressParameter = CompressParameter();
     m_stUnCompressParameter = UnCompressParameter();
@@ -2202,30 +2203,30 @@ void MainWindow::resetMainwindow()
     m_eStartupType = StartupType::ST_Normal;
 
     // 清空压缩包监听数据
-    qDebug() << "Clearing file watcher";
+    qCDebug(appLog) << "Clearing file watcher";
     SAFE_DELETE_ELE(m_pFileWatcher);
 }
 
 void MainWindow::deleteWhenJobFinish(ArchiveJob::JobType eType)
 {
-    qDebug() << "Processing post-job cleanup for job type:" << eType;
+    qCDebug(appLog) << "Processing post-job cleanup for job type:" << eType;
     switch (eType) {
     // 压缩完成删除原文件
     case ArchiveJob::JT_Create: {
-        qInfo() << "Deleting original files after compression";
+        qCInfo(appLog) << "Deleting original files after compression";
         QStringList listCompressFiles = (m_eStartupType == StartupType::ST_Compresstozip7z) ? m_stCompressParameter.listCompressFiles : m_pCompressPage->compressFiles(); // 获取所有压缩文件
 
         for (int i = 0; i < listCompressFiles.count(); ++i) {
             QFileInfo file(listCompressFiles[i]);
             if (file.exists()) {
-                qDebug() << "Deleting file:" << listCompressFiles[i];
+                qCDebug(appLog) << "Deleting file:" << listCompressFiles[i];
                 // 删除文件
                 if (file.isDir()) {
-                    qDebug() << "Recursively removing directory:" << listCompressFiles[i];
+                    qCDebug(appLog) << "Recursively removing directory:" << listCompressFiles[i];
                     QDir dir(listCompressFiles[i]);
                     dir.removeRecursively();
                 } else {
-                    qDebug() << "Removing file:" << listCompressFiles[i];
+                    qCDebug(appLog) << "Removing file:" << listCompressFiles[i];
                     QFile fi(listCompressFiles[i]);
                     fi.remove();
                 }
@@ -2235,19 +2236,19 @@ void MainWindow::deleteWhenJobFinish(ArchiveJob::JobType eType)
     break;
     // 压缩完成删除原压缩包
     case ArchiveJob::JT_Extract: {
-        qInfo() << "Deleting original archive after extraction";
+        qCInfo(appLog) << "Deleting original archive after extraction";
         QStringList listArchivePath;
 
         if (StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_Extractto == m_eStartupType) { // 右键快捷解压
             if (m_stUnCompressParameter.bBatch) {   // 批量删除
-                qDebug() << "Batch deleting archives";
+                qCDebug(appLog) << "Batch deleting archives";
                 listArchivePath = m_stUnCompressParameter.listBatchFiles;
             } else {    // 单个压缩包
-                qDebug() << "Deleting single archive";
+                qCDebug(appLog) << "Deleting single archive";
                 listArchivePath << m_stUnCompressParameter.strFullPath;
             }
         } else {    // 打开解压
-            qDebug() << "Deleting opened archive";
+            qCDebug(appLog) << "Deleting opened archive";
             listArchivePath << m_pUnCompressPage->archiveFullPath();
         }
 
@@ -2256,14 +2257,14 @@ void MainWindow::deleteWhenJobFinish(ArchiveJob::JobType eType)
             QFile file(listArchivePath[i]);
             // 若压缩包存在，删除文件
             if (file.exists()) {
-                qDebug() << "Removing archive file:" << listArchivePath[i];
+                qCDebug(appLog) << "Removing archive file:" << listArchivePath[i];
                 file.remove();
             }
         }
     }
     break;
     default:
-        qDebug() << "No cleanup required for job type:" << eType;
+        qCDebug(appLog) << "No cleanup required for job type:" << eType;
         break;
     }
 }
@@ -2669,7 +2670,7 @@ void MainWindow::restoreConfigWinState()
 
 void MainWindow::convertArchive(const QString &convertType)
 {
-    qInfo() << "对压缩包进行格式转换" << convertType;
+    qCInfo(appLog) << "对压缩包进行格式转换" << convertType;
     m_operationtype = Operation_CONVERT;
 
     QString oldArchivePath = m_stUnCompressParameter.strFullPath; // 需要进行格式转换的压缩包的全路径
@@ -2702,7 +2703,7 @@ void MainWindow::updateArchiveComment()
 {
     m_operationtype = Operation_Update_Comment;
     if (ArchiveManager::get_instance()->updateArchiveComment(m_stUnCompressParameter.strFullPath, m_comment)) {
-        qInfo() << "更新压缩包的注释信息";
+        qCInfo(appLog) << "更新压缩包的注释信息";
     }
 }
 
@@ -2714,7 +2715,7 @@ void MainWindow::addArchiveComment()
             m_operationtype = Operation_Add_Comment;
             m_ePageID = PI_CommentProgress;
             m_pProgressPage->setProgressType(PT_Comment);
-            qInfo() << "添加zip压缩包的注释信息";
+            qCInfo(appLog) << "添加zip压缩包的注释信息";
         }
     }
 }
@@ -2813,7 +2814,7 @@ bool MainWindow::handleArguments_Open(const QStringList &listParam)
     if (listParam.count() == 0)
         return false;
 
-    qInfo() << "打开文件";
+    qCInfo(appLog) << "打开文件";
     m_eStartupType = StartupType::ST_Normal;
     // 加载单个压缩包数据
     loadArchive(listParam[0]);
@@ -2823,7 +2824,7 @@ bool MainWindow::handleArguments_Open(const QStringList &listParam)
 
 bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
 {
-    qInfo() << "右键操作";
+    qCInfo(appLog) << "右键操作";
 
     QString strType = listParam.last();     // 获取最后一个参数
     // 获取所有文件名
@@ -3065,7 +3066,7 @@ bool MainWindow::handleArguments_Append(const QStringList &listParam)
         return false;
     }
 
-    qInfo() << "向压缩包中添加文件";
+    qCInfo(appLog) << "向压缩包中添加文件";
     m_eStartupType = StartupType::ST_DragDropAdd;
 
     CompressOptions options;
@@ -3254,7 +3255,7 @@ bool MainWindow::getCurrentStatus()
 
 void MainWindow::slotExtract2Path(const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)
 {
-    qInfo() << "提取文件至:" << stOptions.strTargetPath;
+    qCInfo(appLog) << "提取文件至:" << stOptions.strTargetPath;
     m_stUnCompressParameter.strExtractPath = stOptions.strTargetPath;     // 存储提取路径
     m_operationtype = Operation_SingleExtract; //提取操作
     QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();
@@ -3281,7 +3282,7 @@ void MainWindow::slotExtract2Path(const QList<FileEntry> &listSelEntry, const Ex
 
 void MainWindow::slotDelFiles(const QList<FileEntry> &listSelEntry, qint64 qTotalSize)
 {
-    qInfo() << "删除文件:";
+    qCInfo(appLog) << "删除文件:";
     m_operationtype = Operation_DELETE; //提取操作
     QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();
     if (ArchiveManager::get_instance()->deleteFiles(strArchiveFullPath, listSelEntry)) {
@@ -3332,7 +3333,7 @@ void MainWindow::slotRenameFile(const FileEntry &SelEntry, qint64 qTotalSize)
         }
     }
     if(stArchiveData.mapFileEntry.keys().contains(strAlias)) {//判断是否重名，重名不做操作
-        qInfo() << "The name already exists! " << strAlias;
+        qCInfo(appLog) << "The name already exists! " << strAlias;
         emit sigRenameFile();
         return;
     }
@@ -3386,7 +3387,7 @@ void MainWindow::slotOpenFileChanged(const QString &strPath)
 {
     QMap<QString, bool> &mapStatus = m_pOpenFileWatcher->getFileHasModified();
     QMap<QString, QString> mapPassword = m_pOpenFileWatcher->getFilePassword();
-    qInfo() << strPath;
+    qCInfo(appLog) << strPath;
     if(property(ORDER_JSON).isValid()) {
         if(m_pUnCompressPage) {
             QVariantMap mapdata = m_pUnCompressPage->mapOrderJson();
@@ -3557,7 +3558,7 @@ void MainWindow::slotFailureReturn()
 
 void MainWindow::slotTitleCommentButtonPressed()
 {
-    //    qInfo() << __FUNCTION__;
+    //    qCInfo(appLog) << __FUNCTION__;
     // 文件名
     QFileInfo file(m_stUnCompressParameter.strFullPath);
 

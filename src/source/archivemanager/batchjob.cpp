@@ -6,6 +6,7 @@
 #include "batchjob.h"
 #include "uitools.h"
 #include "singlejob.h"
+#include "common/ddlog.h"
 
 #include <QDir>
 #include <QDebug>
@@ -13,139 +14,139 @@
 BatchJob::BatchJob(QObject *parent)
     : ArchiveJob(parent)
 {
-    qDebug() << "BatchJob instance created";
+    qCDebug(appLog) << "BatchJob instance created";
 }
 
 BatchJob::~BatchJob()
 {
-    qDebug() << "BatchJob instance destroyed";
+    qCDebug(appLog) << "BatchJob instance destroyed";
     clearSubjobs();
 }
 
 bool BatchJob::addSubjob(ArchiveJob *job)
 {
-    qDebug() << "Adding subjob to BatchJob";
+    qCDebug(appLog) << "Adding subjob to BatchJob";
     if (nullptr == job || m_listSubjobs.contains(job)) {
-        qWarning() << "Cannot add subjob - null job or already exists";
+        qCWarning(appLog) << "Cannot add subjob - null job or already exists";
         return false;
     }
 
     job->setParent(this);
     m_listSubjobs.append(job);
-    qDebug() << "Subjob added successfully, total subjobs:" << m_listSubjobs.count();
+    qCDebug(appLog) << "Subjob added successfully, total subjobs:" << m_listSubjobs.count();
     return true;
 }
 
 bool BatchJob::removeSubjob(ArchiveJob *job)
 {
-    qDebug() << "Removing subjob from BatchJob";
+    qCDebug(appLog) << "Removing subjob from BatchJob";
     if (m_listSubjobs.removeAll(job) > 0) {
         job->setParent(nullptr);
         delete job;
-        qDebug() << "Subjob removed successfully, remaining subjobs:" << m_listSubjobs.count();
+        qCDebug(appLog) << "Subjob removed successfully, remaining subjobs:" << m_listSubjobs.count();
         return true;
     }
 
-    qWarning() << "Failed to remove subjob - not found";
+    qCWarning(appLog) << "Failed to remove subjob - not found";
     return false;
 }
 
 bool BatchJob::hasSubjobs() const
 {
-    qDebug() << "Checking if BatchJob has subjobs, count:" << m_listSubjobs.count();
+    qCDebug(appLog) << "Checking if BatchJob has subjobs, count:" << m_listSubjobs.count();
     return !m_listSubjobs.isEmpty();
 }
 
 const QList<ArchiveJob *> &BatchJob::subjobs() const
 {
-    // qDebug() << "Getting subjobs list, count:" << m_listSubjobs.count();
+    // qCDebug(appLog) << "Getting subjobs list, count:" << m_listSubjobs.count();
     return m_listSubjobs;
 }
 
 void BatchJob::clearSubjobs()
 {
-    qDebug() << "Clearing all subjobs, count:" << m_listSubjobs.count();
+    qCDebug(appLog) << "Clearing all subjobs, count:" << m_listSubjobs.count();
     Q_FOREACH (ArchiveJob *job, m_listSubjobs) {
         job->setParent(nullptr);
         delete job;
     }
 
     m_listSubjobs.clear();
-    qDebug() << "All subjobs cleared";
+    qCDebug(appLog) << "All subjobs cleared";
 }
 
 void BatchJob::doPause()
 {
-    qDebug() << "Pausing BatchJob";
+    qCDebug(appLog) << "Pausing BatchJob";
     // 调用子job暂停接口
     if (m_pCurJob) {
-        qDebug() << "Pausing current subjob";
+        qCDebug(appLog) << "Pausing current subjob";
         m_pCurJob->doPause();
     } else {
-        qWarning() << "No current subjob to pause";
+        qCWarning(appLog) << "No current subjob to pause";
     }
 }
 
 void BatchJob::doContinue()
 {
-    qDebug() << "Continuing BatchJob";
+    qCDebug(appLog) << "Continuing BatchJob";
     // 调用子job继续接口
     if (m_pCurJob) {
-        qDebug() << "Continuing current subjob";
+        qCDebug(appLog) << "Continuing current subjob";
         m_pCurJob->doContinue();
     } else {
-        qWarning() << "No current subjob to continue";
+        qCWarning(appLog) << "No current subjob to continue";
     }
 }
 
 bool BatchJob::status()
 {
-    qDebug() << "Getting BatchJob status";
+    qCDebug(appLog) << "Getting BatchJob status";
     // 调用子job继续接口
     if (m_pCurJob) {
         return m_pCurJob->status();
     }
 
-    qWarning() << "No current subjob to get status";
+    qCWarning(appLog) << "No current subjob to get status";
     return false;
 }
 
 BatchExtractJob::BatchExtractJob(QObject *parent)
     : BatchJob(parent)
 {
-    qDebug() << "BatchExtractJob instance created";
+    qCDebug(appLog) << "BatchExtractJob instance created";
     m_eJobType = JT_BatchExtract;
 }
 
 BatchExtractJob::~BatchExtractJob()
 {
-    // qDebug() << "BatchExtractJob instance destroyed";
+    // qCDebug(appLog) << "BatchExtractJob instance destroyed";
 }
 
 void BatchExtractJob::start()
 {
-    qDebug() << "Starting batch extraction with" << subjobs().count() << "jobs";
+    qCDebug(appLog) << "Starting batch extraction with" << subjobs().count() << "jobs";
     if (subjobs().count() == 0) {
-        qWarning() << "No subjobs to start";
+        qCWarning(appLog) << "No subjobs to start";
         return;
     }
 
     m_iCurArchiveIndex = 0;
     m_pCurJob = subjobs().at(0);
-    qDebug() << "Starting first subjob";
+    qCDebug(appLog) << "Starting first subjob";
     m_pCurJob->start();
 }
 
 void BatchExtractJob::setExtractPath(const QString &strPath/*, bool bAutoCreatDir*/)
 {
-    qDebug() << "Setting extract path to:" << strPath;
+    qCDebug(appLog) << "Setting extract path to:" << strPath;
     m_strExtractPath = strPath;
 //    m_bAutoCreatDir = bAutoCreatDir;
 }
 
 bool BatchExtractJob::setArchiveFiles(const QStringList &listFile)
 {
-    qDebug() << "Setting archive files list, count:" << listFile.count();
+    qCDebug(appLog) << "Setting archive files list, count:" << listFile.count();
     m_listFiles = listFile;
     m_qBatchTotalSize = 0;
     m_iArchiveCount = m_listFiles.count();
@@ -154,34 +155,34 @@ bool BatchExtractJob::setArchiveFiles(const QStringList &listFile)
     // 创建解压元素
     foreach (QString strFileName, listFile) {
         QFileInfo fileInfo(strFileName);
-        qDebug() << "Processing archive file:" << fileInfo.fileName();
+        qCDebug(appLog) << "Processing archive file:" << fileInfo.fileName();
         if (addExtractItem(fileInfo)) {
             bResult = true;
             // 计算压缩包总大小
             m_qBatchTotalSize += fileInfo.size();
-            qDebug() << "Added extract item for:" << fileInfo.fileName();
+            qCDebug(appLog) << "Added extract item for:" << fileInfo.fileName();
         } else {
-            qWarning() << "Failed to add extract item for:" << fileInfo.fileName();
+            qCWarning(appLog) << "Failed to add extract item for:" << fileInfo.fileName();
         }
     }
 
-    qDebug() << "Total batch size:" << m_qBatchTotalSize << "bytes";
+    qCDebug(appLog) << "Total batch size:" << m_qBatchTotalSize << "bytes";
     return bResult;
 }
 
 bool BatchExtractJob::addExtractItem(const QFileInfo &fileInfo)
 {
-    qDebug() << "Adding extract item for file:" << fileInfo.fileName();
+    qCDebug(appLog) << "Adding extract item for file:" << fileInfo.fileName();
     QString strName = fileInfo.filePath();
     UnCompressParameter::SplitType eType = UnCompressParameter::ST_No;
     UiTools::transSplitFileName(strName, eType);
     UiTools::AssignPluginType ePluginType = (UnCompressParameter::ST_Zip == eType) ?
                                             (UiTools::AssignPluginType::APT_Cli7z) : (UiTools::AssignPluginType::APT_Auto);
-    qDebug() << "Creating interface for extract item";
+    qCDebug(appLog) << "Creating interface for extract item";
     ReadOnlyArchiveInterface *pIface = UiTools::createInterface(fileInfo.filePath(), false, ePluginType);
 
     if (pIface) {
-        qDebug() << "Interface created successfully, setting up extraction options";
+        qCDebug(appLog) << "Interface created successfully, setting up extraction options";
         // 创建解压参数
         ExtractionOptions stOptions;
         stOptions.strTargetPath = m_strExtractPath;
@@ -210,14 +211,14 @@ bool BatchExtractJob::addExtractItem(const QFileInfo &fileInfo)
         // tar.7z特殊处理，右键解压缩到当前文件夹使用cli7zplugin
         if (strName.endsWith(QLatin1String(".tar.7z"))
                 && determineMimeType(strName).name() == QLatin1String("application/x-7z-compressed")) {
-            qDebug() << "Detected tar.7z archive, using special handling";
+            qCDebug(appLog) << "Detected tar.7z archive, using special handling";
             stOptions.bTar_7z = true;
             ePluginType = UiTools::AssignPluginType::APT_Cli7z;
         }
 
         pIface->setParent(this);    // 跟随BatchExtractJob释放
         if (!stOptions.bTar_7z) {
-            qDebug() << "Creating ExtractJob for regular archive";
+            qCDebug(appLog) << "Creating ExtractJob for regular archive";
             ExtractJob *pExtractJob = new ExtractJob(QList<FileEntry>(), pIface, stOptions);
             connect(pExtractJob, &ExtractJob::signalprogress, this, &BatchExtractJob::slotHandleSingleJobProgress);
             connect(pExtractJob, &ExtractJob::signalCurFileName, this, &BatchExtractJob::slotHandleSingleJobCurFileName);
@@ -225,7 +226,7 @@ bool BatchExtractJob::addExtractItem(const QFileInfo &fileInfo)
             connect(pExtractJob, &ExtractJob::signalJobFinshed, this, &BatchExtractJob::slotHandleSingleJobFinished);
             addSubjob(pExtractJob);
         } else {
-            qDebug() << "Creating StepExtractJob for tar.7z archive";
+            qCDebug(appLog) << "Creating StepExtractJob for tar.7z archive";
             StepExtractJob *pStepExtractJob = new StepExtractJob(fileInfo.absoluteFilePath(), stOptions);
             connect(pStepExtractJob, &StepExtractJob::signalprogress, this, &BatchExtractJob::slotHandleSingleJobProgress);
             connect(pStepExtractJob, &StepExtractJob::signalCurFileName, this, &BatchExtractJob::slotHandleSingleJobCurFileName);
@@ -233,11 +234,11 @@ bool BatchExtractJob::addExtractItem(const QFileInfo &fileInfo)
             connect(pStepExtractJob, &StepExtractJob::signalJobFinshed, this, &BatchExtractJob::slotHandleSingleJobFinished);
             addSubjob(pStepExtractJob);
         }
-        qDebug() << "Extract item added successfully";
+        qCDebug(appLog) << "Extract item added successfully";
         return true;
     }
 
-    qWarning() << "Failed to create interface for extract item";
+    qCWarning(appLog) << "Failed to create interface for extract item";
     return false;
 }
 
@@ -246,21 +247,21 @@ void BatchExtractJob::slotHandleSingleJobProgress(double dPercentage)
     QFileInfo fileInfo(m_listFiles[m_iCurArchiveIndex]);
     qint64 qCurSize = fileInfo.size();      // 当前解压的压缩包大小
     double dProgress = double(qCurSize) * dPercentage /  m_qBatchTotalSize + m_dLastPercentage;
-    qDebug() << "Batch job progress:" << dProgress << "%, current file:" << fileInfo.fileName();
+    qCDebug(appLog) << "Batch job progress:" << dProgress << "%, current file:" << fileInfo.fileName();
     emit signalprogress(dProgress);
 }
 
 void BatchExtractJob::slotHandleSingleJobCurFileName(const QString &strName)
 {
-    qDebug() << "Current file being processed:" << strName;
+    qCDebug(appLog) << "Current file being processed:" << strName;
     emit signalCurFileName(strName);
 }
 
 void BatchExtractJob::slotHandleSingleJobFinished()
 {
-    qDebug() << "Single job finished handler called";
+    qCDebug(appLog) << "Single job finished handler called";
     if (m_pCurJob != nullptr) {
-        qDebug() << "Single job finished - Type:" << m_pCurJob->m_eJobType
+        qCDebug(appLog) << "Single job finished - Type:" << m_pCurJob->m_eJobType
                 << "Result:" << m_pCurJob->m_eFinishedType;
 
         if (PFT_Error == m_pCurJob->m_eFinishedType || PFT_Cancel == m_pCurJob->m_eFinishedType) {
@@ -269,25 +270,25 @@ void BatchExtractJob::slotHandleSingleJobFinished()
             m_eFinishedType = m_pCurJob->m_eFinishedType;
             m_eErrorType = m_pCurJob->m_eErrorType;
 
-            qWarning() << "Job failed or cancelled - ErrorType:" << m_eErrorType;
+            qCWarning(appLog) << "Job failed or cancelled - ErrorType:" << m_eErrorType;
             // 子job错误或取消，发送结束信号
             emit signalJobFinshed();
             return;
         }
 
         // 移除当前job
-        qDebug() << "Removing completed subjob";
+        qCDebug(appLog) << "Removing completed subjob";
         removeSubjob(m_pCurJob);
 
         if (!hasSubjobs()) {
-            qDebug() << "All subjobs completed";
+            qCDebug(appLog) << "All subjobs completed";
             // 若没有子job，发送结束信号
             emit signalJobFinshed();
         } else {
             ++m_iCurArchiveIndex;
             QFileInfo curFileInfo(m_listFiles[m_iCurArchiveIndex]);
 
-            qDebug() << "Starting next subjob for:" << curFileInfo.fileName();
+            qCDebug(appLog) << "Starting next subjob for:" << curFileInfo.fileName();
             // 还存在子job，执行子job操作
 
             m_dLastPercentage += double(curFileInfo.size()) / m_qBatchTotalSize * 100;
@@ -296,6 +297,6 @@ void BatchExtractJob::slotHandleSingleJobFinished()
             m_pCurJob->start();
         }
     } else {
-        qWarning() << "No current job to handle";
+        qCWarning(appLog) << "No current job to handle";
     }
 }

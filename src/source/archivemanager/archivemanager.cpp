@@ -10,6 +10,7 @@
 #include "pluginmanager.h"
 #include "singlejob.h"
 #include "batchjob.h"
+#include "common/ddlog.h"
 
 #include <QMimeDatabase>
 #include <QFileInfo>
@@ -23,12 +24,12 @@ QAtomicPointer<ArchiveManager> ArchiveManager::m_instance = nullptr;//原子指�
 ArchiveManager::ArchiveManager(QObject *parent)
     : QObject(parent)
 {
-    qDebug() << "ArchiveManager instance created";
+    qCDebug(appLog) << "ArchiveManager instance created";
 }
 
 ArchiveManager::~ArchiveManager()
 {
-    qDebug() << "ArchiveManager instance destroyed";
+    qCDebug(appLog) << "ArchiveManager instance destroyed";
     SAFE_DELETE_ELE(m_pArchiveJob);
     SAFE_DELETE_ELE(m_pInterface);
     SAFE_DELETE_ELE(m_pTempInterface);
@@ -36,10 +37,10 @@ ArchiveManager::~ArchiveManager()
 
 ArchiveManager *ArchiveManager::get_instance()
 {
-    // qDebug() << "get_instance called";
+    // qCDebug(appLog) << "get_instance called";
 #ifndef Q_ATOMIC_POINTER_TEST_AND_SET_IS_SOMETIMES_NATIVE
     if (!QAtomicPointer<ArchiveManager>::isTestAndSetNative()) //运行时检测
-        qInfo() << "Error: TestAndSetNative not supported!";
+        qCInfo(appLog) << "Error: TestAndSetNative not supported!";
 #endif
 
     //使用双重检测。
@@ -48,7 +49,7 @@ ArchiveManager *ArchiveManager::get_instance()
      * 不会被重新排序。
      */
     if (m_instance.testAndSetOrdered(nullptr, nullptr)) { //第一次检测
-        qDebug() << "Creating new ArchiveManager instance";
+        qCDebug(appLog) << "Creating new ArchiveManager instance";
         QMutexLocker locker(&m_mutex);//加互斥锁。
 
         m_instance.testAndSetOrdered(nullptr, new ArchiveManager);//第二次检测。
@@ -59,28 +60,28 @@ ArchiveManager *ArchiveManager::get_instance()
 
 void ArchiveManager::destory_instance()
 {
-    qDebug() << "destroy_instance called";
+    qCDebug(appLog) << "destroy_instance called";
     SAFE_DELETE_ELE(m_instance)
 }
 
 bool ArchiveManager::createArchive(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &stOptions, UiTools::AssignPluginType eType)
 {
-    qDebug() << "Starting createArchive operation for destination:" << strDestination;
+    qCDebug(appLog) << "Starting createArchive operation for destination:" << strDestination;
     // 重新创建压缩包首先释放之前的interface
     if (m_pInterface != nullptr) {
-        qDebug() << "Clearing previous archive interface";
+        qCDebug(appLog) << "Clearing previous archive interface";
         delete m_pInterface;
         m_pInterface = nullptr;
     }
     if(DFMStandardPaths::pathControl(strDestination)) {
-        qWarning() << "Path control check failed for destination:" << strDestination;
+        qCWarning(appLog) << "Path control check failed for destination:" << strDestination;
         return false;
     }
-    qDebug() << "Creating interface for destination";
+    qCDebug(appLog) << "Creating interface for destination";
     m_pTempInterface = UiTools::createInterface(strDestination, true, eType);
 
     if (m_pTempInterface) {
-        qDebug() << "Creating CreateJob";
+        qCDebug(appLog) << "Creating CreateJob";
         CreateJob *pCreateJob = new CreateJob(files, m_pTempInterface, stOptions, this);
 
         // 连接槽函数
@@ -91,29 +92,29 @@ bool ArchiveManager::createArchive(const QList<FileEntry> &files, const QString 
         m_pArchiveJob = pCreateJob;
         pCreateJob->start();
 
-        qInfo() << "CreateArchive operation started successfully";
+        qCInfo(appLog) << "CreateArchive operation started successfully";
         return true;
     }
 
-    qWarning() << "Failed to create archive interface";
+    qCWarning(appLog) << "Failed to create archive interface";
     return false;
 }
 
 bool ArchiveManager::loadArchive(const QString &strArchiveFullPath, UiTools::AssignPluginType eType)
 {
-    qDebug() << "Starting loadArchive operation for file:" << strArchiveFullPath;
+    qCDebug(appLog) << "Starting loadArchive operation for file:" << strArchiveFullPath;
     // 重新加载首先释放之前的interface
     if (m_pInterface != nullptr) {
-        qDebug() << "Clearing previous archive interface";
+        qCDebug(appLog) << "Clearing previous archive interface";
         delete m_pInterface;
         m_pInterface = nullptr;
     }
 
-    qDebug() << "Creating interface for loading";
+    qCDebug(appLog) << "Creating interface for loading";
     m_pInterface = UiTools::createInterface(strArchiveFullPath, false, eType);
 
     if (m_pInterface) {
-        qDebug() << "Creating LoadJob";
+        qCDebug(appLog) << "Creating LoadJob";
         LoadJob *pLoadJob = new LoadJob(m_pInterface);
 
         // 连接槽函数
@@ -123,17 +124,17 @@ bool ArchiveManager::loadArchive(const QString &strArchiveFullPath, UiTools::Ass
         m_pArchiveJob = pLoadJob;
         pLoadJob->start();
 
-        qInfo() << "LoadArchive operation started successfully";
+        qCInfo(appLog) << "LoadArchive operation started successfully";
         return true;
     }
 
-    qWarning() << "Failed to load archive interface";
+    qCWarning(appLog) << "Failed to load archive interface";
     return false;
 }
 
 bool ArchiveManager::addFiles(const QString &strArchiveFullPath, const QList<FileEntry> &listAddEntry, const CompressOptions &stOptions)
 {
-    qDebug() << "Starting addFiles operation for archive:" << strArchiveFullPath;
+    qCDebug(appLog) << "Starting addFiles operation for archive:" << strArchiveFullPath;
     // pzip 仅支持新建压缩，ZIP 追加时排除 pzip 后保持自动选择
     UiTools::AssignPluginType eType = UiTools::APT_Auto;
     CustomMimeType mimeType = determineMimeType(strArchiveFullPath);
@@ -141,11 +142,11 @@ bool ArchiveManager::addFiles(const QString &strArchiveFullPath, const QList<Fil
         eType = UiTools::APT_AutoWithoutPzip;
     }
 
-    qDebug() << "Creating interface for adding files, plugin type:" << eType;
+    qCDebug(appLog) << "Creating interface for adding files, plugin type:" << eType;
     m_pTempInterface = UiTools::createInterface(strArchiveFullPath, true, eType);
 
     if (m_pTempInterface) {
-        qDebug() << "Creating AddJob";
+        qCDebug(appLog) << "Creating AddJob";
         AddJob *pAddJob = new AddJob(listAddEntry, m_pTempInterface, stOptions);
 
         // 连接槽函数
@@ -157,25 +158,25 @@ bool ArchiveManager::addFiles(const QString &strArchiveFullPath, const QList<Fil
         m_pArchiveJob = pAddJob;
         pAddJob->start();
 
-        qDebug() << "AddJob started successfully";
+        qCDebug(appLog) << "AddJob started successfully";
         return true;
     }
 
-    qWarning() << "Failed to create interface for adding files";
+    qCWarning(appLog) << "Failed to create interface for adding files";
     return false;
 }
 
 bool ArchiveManager::extractFiles(const QString &strArchiveFullPath, const QList<FileEntry> &files, const ExtractionOptions &stOptions, UiTools::AssignPluginType eType)
 {
-    qDebug() << "Starting extractFiles operation for archive:" << strArchiveFullPath;
+    qCDebug(appLog) << "Starting extractFiles operation for archive:" << strArchiveFullPath;
     if (nullptr == m_pInterface) {
-        qDebug() << "Creating interface for extraction";
+        qCDebug(appLog) << "Creating interface for extraction";
         m_pInterface = UiTools::createInterface(strArchiveFullPath, false, eType);
     }
 
     if (m_pInterface) {
         if (!stOptions.bTar_7z) {
-            qDebug() << "Creating ExtractJob for regular extraction";
+            qCDebug(appLog) << "Creating ExtractJob for regular extraction";
             ExtractJob *pExtractJob = new ExtractJob(files, m_pInterface, stOptions);
 
             // 连接槽函数
@@ -190,7 +191,7 @@ bool ArchiveManager::extractFiles(const QString &strArchiveFullPath, const QList
 
             return pExtractJob->errorcode;
         } else {
-            qDebug() << "Creating StepExtractJob for tar.7z archive";
+            qCDebug(appLog) << "Creating StepExtractJob for tar.7z archive";
             // tar.7z包使用分步解压流程
             StepExtractJob *pStepExtractJob = new StepExtractJob(strArchiveFullPath, stOptions/*, strTargetFullPath, strNewArchiveFullPath*/);
             m_pArchiveJob = pStepExtractJob;
@@ -202,12 +203,12 @@ bool ArchiveManager::extractFiles(const QString &strArchiveFullPath, const QList
             connect(pStepExtractJob, &StepExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
 
             pStepExtractJob->start();
-            qDebug() << "StepExtractJob started successfully";
+            qCDebug(appLog) << "StepExtractJob started successfully";
             return true;
         }
     }
 
-    qWarning() << "Failed to create interface for extraction";
+    qCWarning(appLog) << "Failed to create interface for extraction";
     // 发送结束信号
     emit signalJobFinished(ArchiveJob::JT_Extract, PFT_Error, ET_PluginError);
     return false;
@@ -215,14 +216,14 @@ bool ArchiveManager::extractFiles(const QString &strArchiveFullPath, const QList
 
 bool ArchiveManager::extractFiles2Path(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)
 {
-    qDebug() << "Starting extractFiles2Path operation for archive:" << strArchiveFullPath;
+    qCDebug(appLog) << "Starting extractFiles2Path operation for archive:" << strArchiveFullPath;
     if (nullptr == m_pInterface) {
-        qDebug() << "Creating interface for extraction to path";
+        qCDebug(appLog) << "Creating interface for extraction to path";
         m_pInterface = UiTools::createInterface(strArchiveFullPath);
     }
 
     if (m_pInterface) {
-        qDebug() << "Creating ExtractJob for extraction to path";
+        qCDebug(appLog) << "Creating ExtractJob for extraction to path";
         ExtractJob *pExtractJob = new ExtractJob(listSelEntry, m_pInterface, stOptions);
 
         // 连接槽函数
@@ -234,24 +235,24 @@ bool ArchiveManager::extractFiles2Path(const QString &strArchiveFullPath, const 
         m_pArchiveJob = pExtractJob;
         pExtractJob->start();
 
-        qDebug() << "ExtractJob for extraction to path started successfully";
+        qCDebug(appLog) << "ExtractJob for extraction to path started successfully";
         return true;
     }
 
-    qWarning() << "Failed to create interface for extraction to path";
+    qCWarning(appLog) << "Failed to create interface for extraction to path";
     return false;
 }
 
 bool ArchiveManager::deleteFiles(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry)
 {
-    qDebug() << "Starting deleteFiles operation for archive:" << strArchiveFullPath;
+    qCDebug(appLog) << "Starting deleteFiles operation for archive:" << strArchiveFullPath;
     if (nullptr == m_pInterface) {
-        qDebug() << "Creating interface for deletion";
+        qCDebug(appLog) << "Creating interface for deletion";
         m_pInterface = UiTools::createInterface(strArchiveFullPath);
     }
 
     if (m_pInterface) {
-        qDebug() << "Creating DeleteJob";
+        qCDebug(appLog) << "Creating DeleteJob";
         DeleteJob *pDeleteJob = new DeleteJob(listSelEntry, m_pInterface);
 
         // 连接槽函数
@@ -263,24 +264,24 @@ bool ArchiveManager::deleteFiles(const QString &strArchiveFullPath, const QList<
         m_pArchiveJob = pDeleteJob;
         pDeleteJob->start();
 
-        qDebug() << "DeleteJob started successfully";
+        qCDebug(appLog) << "DeleteJob started successfully";
         return true;
     }
 
-    qWarning() << "Failed to create interface for deletion";
+    qCWarning(appLog) << "Failed to create interface for deletion";
     return false;
 }
 
 bool ArchiveManager::renameFiles(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry)
 {
-    qDebug() << "Starting renameFiles operation for archive:" << strArchiveFullPath;
+    qCDebug(appLog) << "Starting renameFiles operation for archive:" << strArchiveFullPath;
     if (nullptr == m_pInterface) {
-        qDebug() << "Creating interface for renaming";
+        qCDebug(appLog) << "Creating interface for renaming";
         m_pInterface = UiTools::createInterface(strArchiveFullPath);
     }
 
     if (m_pInterface) {
-        qDebug() << "Creating RenameJob";
+        qCDebug(appLog) << "Creating RenameJob";
         RenameJob *pRenameJob = new RenameJob(listSelEntry, m_pInterface);
 
         // 连接槽函数
@@ -292,22 +293,22 @@ bool ArchiveManager::renameFiles(const QString &strArchiveFullPath, const QList<
         m_pArchiveJob = pRenameJob;
         pRenameJob->start();
 
-        qDebug() << "RenameJob started successfully";
+        qCDebug(appLog) << "RenameJob started successfully";
         return true;
     }
 
-    qWarning() << "Failed to create interface for renaming";
+    qCWarning(appLog) << "Failed to create interface for renaming";
     return false;
 }
 
 bool ArchiveManager::batchExtractFiles(const QStringList &listFiles, const QString &strTargetPath/*, bool bAutoCreatDir*/)
 {
-    qDebug() << "Starting batchExtractFiles operation for" << listFiles.size() << "files";
+    qCDebug(appLog) << "Starting batchExtractFiles operation for" << listFiles.size() << "files";
     BatchExtractJob *pBatchExtractJob = new BatchExtractJob();
     pBatchExtractJob->setExtractPath(strTargetPath/*, bAutoCreatDir*/);
 
     if (pBatchExtractJob->setArchiveFiles(listFiles)) {
-        qDebug() << "Archive files set successfully for batch extraction";
+        qCDebug(appLog) << "Archive files set successfully for batch extraction";
         // 连接槽函数
         connect(pBatchExtractJob, &BatchExtractJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
         connect(pBatchExtractJob, &BatchExtractJob::signalprogress, this, &ArchiveManager::signalprogress);
@@ -318,25 +319,25 @@ bool ArchiveManager::batchExtractFiles(const QStringList &listFiles, const QStri
         m_pArchiveJob = pBatchExtractJob;
         pBatchExtractJob->start();
 
-        qDebug() << "BatchExtractJob started successfully";
+        qCDebug(appLog) << "BatchExtractJob started successfully";
         return true;
     }
 
-    qWarning() << "Failed to set archive files for batch extraction";
+    qCWarning(appLog) << "Failed to set archive files for batch extraction";
     SAFE_DELETE_ELE(pBatchExtractJob);
     return false;
 }
 
 bool ArchiveManager::openFile(const QString &strArchiveFullPath, const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram)
 {
-    qDebug() << "Starting openFile operation for archive:" << strArchiveFullPath;
+    qCDebug(appLog) << "Starting openFile operation for archive:" << strArchiveFullPath;
     if (nullptr == m_pInterface) {
-        qDebug() << "Creating interface for opening file";
+        qCDebug(appLog) << "Creating interface for opening file";
         m_pInterface = UiTools::createInterface(strArchiveFullPath);
     }
 
     if (m_pInterface) {
-        qDebug() << "Creating OpenJob";
+        qCDebug(appLog) << "Creating OpenJob";
         OpenJob *pOpenJob = new OpenJob(stEntry, strTempExtractPath, strProgram, m_pInterface);
 
         // 连接槽函数
@@ -347,19 +348,19 @@ bool ArchiveManager::openFile(const QString &strArchiveFullPath, const FileEntry
         m_pArchiveJob = pOpenJob;
         pOpenJob->start();
 
-        qDebug() << "OpenJob started successfully";
+        qCDebug(appLog) << "OpenJob started successfully";
         return true;
     }
 
-    qWarning() << "Failed to create interface for opening file";
+    qCWarning(appLog) << "Failed to create interface for opening file";
     return false;
 }
 
 bool ArchiveManager::updateArchiveCacheData(const UpdateOptions &stOptions)
 {
-    qDebug() << "Starting updateArchiveCacheData operation";
+    qCDebug(appLog) << "Starting updateArchiveCacheData operation";
     if (m_pInterface) {
-        qDebug() << "Creating UpdateJob";
+        qCDebug(appLog) << "Creating UpdateJob";
         UpdateJob *pUpdateJob = new UpdateJob(stOptions, m_pInterface);
 
         // 连接槽函数
@@ -368,21 +369,21 @@ bool ArchiveManager::updateArchiveCacheData(const UpdateOptions &stOptions)
         m_pArchiveJob = pUpdateJob;
         pUpdateJob->start();
 
-        qDebug() << "UpdateJob started successfully";
+        qCDebug(appLog) << "UpdateJob started successfully";
         return true;
     }
 
-    qWarning() << "No interface available for updating archive cache data";
+    qCWarning(appLog) << "No interface available for updating archive cache data";
     return false;
 }
 
 bool ArchiveManager::updateArchiveComment(const QString &strArchiveFullPath, const QString &strComment)
 {
-    qDebug() << "Starting updateArchiveComment operation for archive:" << strArchiveFullPath;
+    qCDebug(appLog) << "Starting updateArchiveComment operation for archive:" << strArchiveFullPath;
     ReadOnlyArchiveInterface *pInterface = UiTools::createInterface(strArchiveFullPath, true, UiTools::APT_Libzip); // zip添加注释使用libzipplugin
 
     if (pInterface) {
-        qDebug() << "Creating CommentJob";
+        qCDebug(appLog) << "Creating CommentJob";
         CommentJob *pCommentJob = new CommentJob(strComment, pInterface);
 
         // 连接槽函数
@@ -392,17 +393,17 @@ bool ArchiveManager::updateArchiveComment(const QString &strArchiveFullPath, con
         m_pArchiveJob = pCommentJob;
         pCommentJob->start();
 
-        qDebug() << "CommentJob started successfully";
+        qCDebug(appLog) << "CommentJob started successfully";
         return true;
     }
 
-    qWarning() << "Failed to create interface for updating archive comment";
+    qCWarning(appLog) << "Failed to create interface for updating archive comment";
     return false;
 }
 
 bool ArchiveManager::convertArchive(const QString &strOriginalArchiveFullPath, const QString &strTargetFullPath, const QString &strNewArchiveFullPath)
 {
-    qDebug() << "Starting convertArchive operation from:" << strOriginalArchiveFullPath << "to:" << strNewArchiveFullPath;
+    qCDebug(appLog) << "Starting convertArchive operation from:" << strOriginalArchiveFullPath << "to:" << strNewArchiveFullPath;
     ConvertJob *pConvertJob = new ConvertJob(strOriginalArchiveFullPath, strTargetFullPath, strNewArchiveFullPath);
     m_pArchiveJob = pConvertJob;
 
@@ -413,46 +414,46 @@ bool ArchiveManager::convertArchive(const QString &strOriginalArchiveFullPath, c
     connect(pConvertJob, &ConvertJob::signalQuery, this, &ArchiveManager::signalQuery);
 
     pConvertJob->start();
-    qDebug() << "ConvertJob started successfully";
+    qCDebug(appLog) << "ConvertJob started successfully";
     return true;
 }
 
 bool ArchiveManager::pauseOperation()
 {
-    qDebug() << "Attempting to pause current operation";
+    qCDebug(appLog) << "Attempting to pause current operation";
     // 调用job暂停接口
     if (m_pArchiveJob) {
-        qDebug() << "Pausing archive job";
+        qCDebug(appLog) << "Pausing archive job";
         m_pArchiveJob->doPause();
 
         return true;
     }
 
-    qWarning() << "No archive job available to pause";
+    qCWarning(appLog) << "No archive job available to pause";
     return false;
 }
 
 bool ArchiveManager::continueOperation()
 {
-    qDebug() << "Attempting to continue current operation";
+    qCDebug(appLog) << "Attempting to continue current operation";
     // 调用job继续接口
     if (m_pArchiveJob) {
-        qDebug() << "Continuing archive job";
+        qCDebug(appLog) << "Continuing archive job";
         m_pArchiveJob->doContinue();
 
         return true;
     }
 
-    qWarning() << "No archive job available to continue";
+    qCWarning(appLog) << "No archive job available to continue";
     return false;
 }
 
 bool ArchiveManager::cancelOperation()
 {
-    qDebug() << "Attempting to cancel current operation";
+    qCDebug(appLog) << "Attempting to cancel current operation";
     // 调用job取消接口
     if (m_pArchiveJob) {
-        qDebug() << "Canceling archive job";
+        qCDebug(appLog) << "Canceling archive job";
         m_pArchiveJob->kill();
         m_pArchiveJob->deleteLater();
         m_pArchiveJob = nullptr;
@@ -460,43 +461,43 @@ bool ArchiveManager::cancelOperation()
         return true;
     }
 
-    qWarning() << "No archive job available to cancel";
+    qCWarning(appLog) << "No archive job available to cancel";
     return false;
 }
 
 QString ArchiveManager::getCurFilePassword()
 {
-    qDebug() << "Getting current file password";
+    qCDebug(appLog) << "Getting current file password";
     if (m_pInterface) {
         return m_pInterface->getPassword();
     }
 
-    qWarning() << "No interface available to get password";
+    qCWarning(appLog) << "No interface available to get password";
     return "";
 }
 
 bool ArchiveManager::currentStatus()
 {
-    qDebug() << "Getting current operation status";
+    qCDebug(appLog) << "Getting current operation status";
     // 调用job状态接口
     if (m_pArchiveJob) {
         return m_pArchiveJob->status();
     }
 
-    qWarning() << "No archive job available to get status";
+    qCWarning(appLog) << "No archive job available to get status";
     return false;
 }
 
 void ArchiveManager::slotJobFinished()
 {
-    qDebug() << "slotJobFinished called";
+    qCDebug(appLog) << "slotJobFinished called";
     if (m_pArchiveJob) {
         // 获取结束结果
         ArchiveJob::JobType eJobType = m_pArchiveJob->m_eJobType;
         PluginFinishType eFinishType = m_pArchiveJob->m_eFinishedType;
         ErrorType eErrorType = m_pArchiveJob->m_eErrorType;
 
-        qInfo() << "Job finished - Type:" << eJobType
+        qCInfo(appLog) << "Job finished - Type:" << eJobType
                << "FinishType:" << eFinishType
                << "ErrorType:" << eErrorType;
 
@@ -510,5 +511,5 @@ void ArchiveManager::slotJobFinished()
 
     // 释放临时记录的interface
     SAFE_DELETE_ELE(m_pTempInterface);
-    qDebug() << "Temporary interface cleared";
+    qCDebug(appLog) << "Temporary interface cleared";
 }
