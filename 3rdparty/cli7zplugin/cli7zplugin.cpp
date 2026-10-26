@@ -126,8 +126,8 @@ bool Cli7zPlugin::isDiskFullMsg(const QString &line)
 
 bool Cli7zPlugin::isFileExistsMsg(const QString &line)
 {
-    return (line == QLatin1String("(Y)es / (N)o / (A)lways / (S)kip all / A(u)to rename all / (Q)uit? ") ||
-            line == QLatin1String("? (Y)es / (N)o / (A)lways / (S)kip all / A(u)to rename all / (Q)uit? "));
+    return (line.contains(QLatin1String("(Y)es")) &&
+            line.contains(QLatin1String("(Q)uit?")));
 }
 
 bool Cli7zPlugin::isFileExistsFileName(const QString &line)
