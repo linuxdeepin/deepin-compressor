@@ -242,6 +242,12 @@ void OverwriteQuery::execute()
         autoFeed(pFileNameLbl, pTipLbl, dialog);
     }, Qt::DirectConnection);
 
+    // Wayland环境下先show确保窗口映射后再进入模态事件循环
+    if (QGuiApplication::platformName() == QStringLiteral("wayland")) {
+        dialog->show();
+        QCoreApplication::processEvents();
+    }
+
     // 操作结果
     const int mode = dialog->exec();
 
