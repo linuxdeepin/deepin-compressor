@@ -1,5 +1,5 @@
 // Copyright (C) 2020 ~ 2023, Deepin Technology Co., Ltd. <support@deepin.org>
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -46,6 +46,9 @@ void ApplicationAdaptor::onActiveWindow(qint64 pid)
     m_curShowWidget = nullptr;
     if(pid != QGuiApplication::applicationPid()) return;
     if(!app) return;
+    // Check for active modal dialog first: external DBus activateProcess signal
+    // (e.g. com.wps.cryptfs) can trigger onActiveWindow() while a modal dialog
+    // is open, which would cover the dialog and cause it to lose focus.
     QWidget *activeModal = app->activeModalWidget();
     if (activeModal && activeModal->isVisible()) {
         activeModal->raise();
