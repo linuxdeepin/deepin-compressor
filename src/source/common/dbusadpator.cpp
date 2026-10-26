@@ -46,6 +46,12 @@ void ApplicationAdaptor::onActiveWindow(qint64 pid)
     m_curShowWidget = nullptr;
     if(pid != QGuiApplication::applicationPid()) return;
     if(!app) return;
+    QWidget *activeModal = app->activeModalWidget();
+    if (activeModal && activeModal->isVisible()) {
+        activeModal->raise();
+        activeModal->activateWindow();
+        return;
+    }
     for(QWidget *w : app->topLevelWidgets()) {
         if(QMainWindow *mainWnd = dynamic_cast<QMainWindow *>(w)) {
             m_curShowWidget = mainWnd;
