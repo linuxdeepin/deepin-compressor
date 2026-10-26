@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -415,7 +415,7 @@ int AppendDialog::showDialog(bool bMultiplePassword)
     // 标题
     DLabel *pTitleLbl = new DLabel(this);
     pTitleLbl->setObjectName("ContentLabel");
-    pTitleLbl->setFixedWidth(340);
+    pTitleLbl->setFixedWidth(kPasswordDialogContentWidth);
     pTitleLbl->setForegroundRole(DPalette::ToolTipText);
 //    pTitleLbl->setWordWrap(true);
     DFontSizeManager::instance()->bind(pTitleLbl, DFontSizeManager::T6, QFont::Medium);
@@ -432,7 +432,7 @@ int AppendDialog::showDialog(bool bMultiplePassword)
     pPasswordEdit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false); //隐藏密码时不能输入中文
     pPasswordEdit->setFocusPolicy(Qt::StrongFocus);
     pPasswordEdit->setMinimumHeight(36);
-    pPasswordEdit->setFixedWidth(280);
+    pPasswordEdit->setFixedWidth(kPasswordEditWidth);
     pPasswordEdit->setVisible(false);
 
     // 不支持多密码的格式不可以勾选密码框

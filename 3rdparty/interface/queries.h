@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -14,6 +14,11 @@
 #include <QWaitCondition>
 
 DWIDGET_USE_NAMESPACE
+
+// 密码弹窗标签宽度（填满内容区域）
+const int kPasswordDialogContentWidth = 340;
+// 密码输入框宽度（等于取消 + 确定按钮总宽度）
+const int kPasswordEditWidth = 360;
 
 struct NewStr {
     QStringList strList;

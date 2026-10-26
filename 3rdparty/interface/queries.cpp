@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -359,7 +359,7 @@ void PasswordNeededQuery::execute()
     // 加密文件名显示
     DLabel *pFileNameLbl = new DLabel(dialog);
 //    pFileNameLbl->setFixedSize(300, 20);
-    pFileNameLbl->setFixedWidth(340); //修复英文环境下提示语显示不全
+    pFileNameLbl->setFixedWidth(kPasswordDialogContentWidth); //修复英文环境下提示语显示不全
     pFileNameLbl->setForegroundRole(DPalette::ToolTipText);
 //    pFileNameLbl->setWordWrap(true);
     DFontSizeManager::instance()->bind(pFileNameLbl, DFontSizeManager::T6, QFont::Medium);
@@ -372,7 +372,7 @@ void PasswordNeededQuery::execute()
 
     // 提示语显示
     DLabel *pTipLbl = new DLabel(dialog);
-    pTipLbl->setFixedWidth(340); //修复英文环境下提示语显示不全
+    pTipLbl->setFixedWidth(kPasswordDialogContentWidth); //修复英文环境下提示语显示不全
     pTipLbl->setForegroundRole(DPalette::WindowText);
 //    pTipLbl->setWordWrap(true);
     DFontSizeManager::instance()->bind(pTipLbl, DFontSizeManager::T6, QFont::Normal);
@@ -385,7 +385,7 @@ void PasswordNeededQuery::execute()
     passwordedit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false); //隐藏密码时不能输入中文
     passwordedit->setFocusPolicy(Qt::StrongFocus);
     passwordedit->setMinimumHeight(36);
-    passwordedit->setFixedWidth(280);
+    passwordedit->setFixedWidth(kPasswordEditWidth);
 
     dialog->addButton(QObject::tr("Cancel", "button"), true, DDialog::ButtonNormal);
     dialog->addButton(QObject::tr("OK", "button"), true, DDialog::ButtonRecommend);
