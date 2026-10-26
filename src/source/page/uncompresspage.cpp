@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -129,8 +129,6 @@ void UnCompressPage::initUI()
     pMainLayout->addSpacing(10);
     pMainLayout->addLayout(pBtnLayout);
     pMainLayout->setStretchFactor(m_pUnCompressView, 9);
-    pMainLayout->setStretchFactor(pPathLayout, 1);
-    pMainLayout->setStretchFactor(pBtnLayout, 1);
     pMainLayout->setContentsMargins(10, 1, 10, 20);
 
 
