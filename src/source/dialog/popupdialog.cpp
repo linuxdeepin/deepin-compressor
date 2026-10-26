@@ -565,7 +565,7 @@ int RenameDialog::showDialog(const QString &strReName, const QString &strAlias, 
     }
     DLabel *strlabel = new DLabel;
     strlabel->setObjectName("ContentLabel");
-    strlabel->setFixedSize(g_nDlgWidth, g_nLableHeight); // 宽度固定
+    strlabel->setFixedWidth(340); // 宽度固定
     strlabel->setText(tr("Rename"));
     strlabel->setAlignment(Qt::AlignCenter);
     strlabel->setForegroundRole(DPalette::ToolTipText);
@@ -615,6 +615,7 @@ int RenameDialog::showDialog(const QString &strReName, const QString &strAlias, 
     widget->setFixedWidth(360);
     widget->setLayout(labelLayout);
     addContent(strlabel, Qt::AlignHCenter); // 使用Qt::AlignHCenter效果最好
+    setSpacing(10);
     addContent(widget, Qt::AlignHCenter);
     // 添加取消和转换按钮
     addButton(tr("Cancel", "button"));
