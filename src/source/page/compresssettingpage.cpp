@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -502,12 +502,15 @@ void CompressSettingPage::refreshCompressLevel(const QString &strType)
                     }
             if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialCpuTarGzCompressor")){
                         int nCpu = dconfig->value("specialCpuTarGzCompressor").toInt();
-                        m_pCpuCmb->setCurrentIndex(nCpu);
-                    }
-        } else if(strType == "tar.gz") {
-             if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialTarGzCompressor")){
-                       int nMethod = dconfig->value("specialTarGzCompressor").toInt();
-                       m_pCompressLevelCmb->setCurrentIndex(nMethod);
+                        int nCpuIndex = -1;
+                        switch (nCpu) {
+                            case 1: nCpuIndex = 0; break;
+                            case 2: nCpuIndex = 1; break;
+                            case 4: nCpuIndex = 2; break;
+                            case 8: nCpuIndex = 3; break;
+                            default: nCpuIndex = m_pCpuCmb->count() - 1; break;
+                        }
+                        m_pCpuCmb->setCurrentIndex(nCpuIndex);
                     }
         } else if(strType == "tar.lz") {
             if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialTarLzCompressor")){
@@ -754,7 +757,10 @@ void CompressSettingPage::slotTypeChanged(QAction *action)
         if (0 == selectType.compare("tar.gz")) {
             m_pCpuLbl->setEnabled(true);
             m_pCpuCmb->setEnabled(true);
-            m_pCpuCmb->setCurrentIndex(m_pCpuCmb->count() - 1);
+#ifdef DTKCORE_CLASS_DConfigFile
+            if (!m_isPanguX)
+#endif
+                m_pCpuCmb->setCurrentIndex(m_pCpuCmb->count() - 1);
         }
     }
 
@@ -810,15 +816,28 @@ void CompressSettingPage::slotAdvancedEnabled(bool bEnabled)
         m_pCommentEdt->clear();
     }
     if (m_pCompressTypeLbl->text() == "tar.gz") {
-        m_pCpuCmb->setCurrentIndex(m_pCpuCmb->count() - 1);
 #ifdef DTKCORE_CLASS_DConfigFile
         if(m_isPanguX) {
             DConfig *dconfig = (DConfig *)m_dconfig;
             if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialCpuTarGzCompressor")){
                 int nCpu = dconfig->value("specialCpuTarGzCompressor").toInt();
-                m_pCpuCmb->setCurrentIndex(nCpu);
+                int nCpuIndex = -1;
+                switch (nCpu) {
+                    case 1: nCpuIndex = 0; break;
+                    case 2: nCpuIndex = 1; break;
+                    case 4: nCpuIndex = 2; break;
+                    case 8: nCpuIndex = 3; break;
+                    default: nCpuIndex = m_pCpuCmb->count() - 1; break;
+                }
+                m_pCpuCmb->setCurrentIndex(nCpuIndex);
+            } else {
+                m_pCpuCmb->setCurrentIndex(m_pCpuCmb->count() - 1);
             }
+        } else {
+            m_pCpuCmb->setCurrentIndex(m_pCpuCmb->count() - 1);
         }
+#else
+        m_pCpuCmb->setCurrentIndex(m_pCpuCmb->count() - 1);
 #endif
     }
 }

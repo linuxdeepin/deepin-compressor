@@ -133,7 +133,7 @@
           "visibility": "private"
       },
     "specialCpuTarGzCompressor": {
-          "value": 3,
+          "value": 8,
           "serial": 0,
           "flags": ["global"],
           "name": "tar.gz multithread Compressor",
