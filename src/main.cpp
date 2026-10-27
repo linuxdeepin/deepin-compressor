@@ -79,7 +79,7 @@ void showWatermark(const QString &sJson, MainWindow *w)
     data.grayScale = true;
     //显示放大倍数
     if(mapwaterMark.contains("ignoreDevicePixelRatio") && mapwaterMark.value("ignoreDevicePixelRatio").toBool()){
-        qreal deviceRatio = qApp->devicePixelRatio();
+        qreal deviceRatio = qApp->devicePixelRatioF();
         data.font.setPointSizeF(data.font.pointSizeF()/deviceRatio);
         data.spacing /= deviceRatio;
         data.lineSpacing /= deviceRatio;
@@ -100,7 +100,7 @@ void showWatermark(const QString &sJson, MainWindow *w)
     data.setGrayScale(true);
     //显示放大倍数
     if(mapwaterMark.contains("ignoreDevicePixelRatio") && mapwaterMark.value("ignoreDevicePixelRatio").toBool()){
-        qreal deviceRatio = qApp->devicePixelRatio();
+        qreal deviceRatio = qApp->devicePixelRatioF();
         QFont ft = data.font();
         ft.setPointSizeF(ft.pointSizeF()/deviceRatio);
         data.setFont(ft);

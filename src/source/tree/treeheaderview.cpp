@@ -56,6 +56,9 @@ void PreviousLabel::paintEvent(QPaintEvent *e)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
+    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
+    int radius = style->pixelMetric(DStyle::PM_FrameRadius);
+
     QColor bgColor;
     if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType()) {
         if (focusIn_) {
@@ -76,7 +79,7 @@ void PreviousLabel::paintEvent(QPaintEvent *e)
     }
 
     QPainterPath pp;
-    pp.addRoundedRect(rectangle, 8, 8);
+    pp.addRoundedRect(rectangle, radius, radius);
     painter.fillPath(pp, bgColor);
     QLabel::paintEvent(e);
 }
@@ -308,7 +311,7 @@ void TreeHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
 
     QStyleOptionHeader option;
     initStyleOption(&option);
-    /*int margin = */style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
 
     int nHeight = TABLE_HEIGHT_NormalMode;
 #ifdef DTKWIDGET_CLASS_DSizeMode
@@ -341,7 +344,7 @@ void TreeHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
     }
 
     // TODO: dropdown icon (8x5)
-    QRect textRect(contentRect.x() + 6, contentRect.y(), contentRect.width() - 23,
+    QRect textRect(contentRect.x() + margin, contentRect.y(), contentRect.width() - margin - 17,
                    nHeight);
     QString title = model()->headerData(logicalIndex, orientation(), Qt::DisplayRole).toString();
     //    int align = model()->headerData(logicalIndex, orientation(),
@@ -352,7 +355,7 @@ void TreeHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
     painter->setFont(pFont);
     if (0 == logicalIndex) {
         QRect col0Rect = textRect;
-        col0Rect.setX(textRect.x() + 4 + SCROLLMARGIN);
+        col0Rect.setX(textRect.x() + margin + SCROLLMARGIN);
         col0Rect.setWidth(col0Rect.width() + SCROLLMARGIN);
         painter->drawText(col0Rect, static_cast<int>(align), title);
     }

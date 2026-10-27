@@ -704,7 +704,7 @@ void CompressSettingPage::slotShowRightMenu(QMouseEvent *e)
     Q_UNUSED(e)
 
     // 设置菜单弹出位置
-    m_pTypeMenu->popup(m_pCompressTypeLbl->mapToGlobal(m_pCompressTypeLbl->pos()));
+    m_pTypeMenu->popup(m_pCompressTypeLbl->mapToGlobal(QPoint(0, 0)));
 }
 
 void CompressSettingPage::slotTypeChanged(QAction *action)
@@ -982,7 +982,7 @@ bool CompressSettingPage::eventFilter(QObject *watched, QEvent *event)
         if (QEvent::KeyPress == event->type()) {
             QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(event);
             if (Qt::Key_Enter == keyEvent->key() || Qt::Key_Return == keyEvent->key()) { //响应"回车键"
-                m_pTypeMenu->popup(m_pCompressTypeLbl->mapToGlobal(m_pCompressTypeLbl->pos())); // 设置菜单弹出位置
+                m_pTypeMenu->popup(m_pCompressTypeLbl->mapToGlobal(QPoint(0, 0))); // 设置菜单弹出位置
                 m_pTypeMenu->setFocus(); // 切换焦点
                 return true;
             } else {

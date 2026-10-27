@@ -92,7 +92,7 @@ QPixmap UiTools::renderSVG(const QString &filePath, const QSize &size)
     reader.setFileName(filePath);
 
     if (reader.canRead()) {
-        const qreal ratio = qApp->devicePixelRatio();
+        const qreal ratio = qApp->devicePixelRatioF();
         reader.setScaledSize(size * ratio);
         pixmap = QPixmap::fromImage(reader.read());
         pixmap.setDevicePixelRatio(ratio);
