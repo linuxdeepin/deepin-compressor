@@ -42,7 +42,7 @@
 #include <utime.h>
 
 //#include <zlib.h>
-#define READBYTES 10240         // 每次读取文件大小
+#define READBYTES 1048576       // 每次读取文件大小
 
 LibzipPluginFactory::LibzipPluginFactory()
 {
@@ -1074,6 +1074,7 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
         if (!options.bExistList) {
             dScale = double(statBuffer.comp_size) / statBuffer.size;
         }
+        int lastProgress = -1;
         while (sum != zip_int64_t(statBuffer.size)) {
             if (QThread::currentThread()->isInterruptionRequested()) {
                 break;
@@ -1110,7 +1111,11 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
 
             // 计算进度并显示（右键快捷解压使用压缩包大小，计算比例）
             qExtractSize += readBytes * dScale;
-            emit signalprogress((double(qExtractSize)) * m_dScaleSize);
+            int curProgress = int((double(qExtractSize)) * m_dScaleSize);
+            if (curProgress != lastProgress) {
+                emit signalprogress((double(qExtractSize)) * m_dScaleSize);
+                lastProgress = curProgress;
+            }
         }
 
         file.close();

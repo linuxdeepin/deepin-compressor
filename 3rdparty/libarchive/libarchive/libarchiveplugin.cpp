@@ -690,7 +690,7 @@ bool LibarchivePlugin::initializeReader()
 
 void LibarchivePlugin::copyDataFromSource(struct archive *source, struct archive *dest, const qlonglong &totalSize)
 {
-    char buff[10240]; //缓存大小
+    char buff[1048576]; //缓存大小
     auto readBytes = archive_read_data(source, buff, sizeof(buff)); //读压缩包数据到buff
 
     // 读取压缩包数据失败（如压缩包损坏）时设置错误类型，避免解压仍误报成功
@@ -699,6 +699,7 @@ void LibarchivePlugin::copyDataFromSource(struct archive *source, struct archive
         return;
     }
 
+    int lastProgress = -1;
     while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
         if (m_bPause) { //解压暂停
             sleep(1);
@@ -718,7 +719,11 @@ void LibarchivePlugin::copyDataFromSource(struct archive *source, struct archive
         }
 
         // 获取解压过程中的压缩和解压缩文件总大小、计算并发送进度（archive_filter_bytes 0：uncomp   -1：comp）
-        emit signalprogress(double(archive_filter_bytes(source, -1)) / totalSize * 100);
+        int curProgress = int(double(archive_filter_bytes(source, -1)) / totalSize * 100);
+        if (curProgress != lastProgress) {
+            emit signalprogress(double(archive_filter_bytes(source, -1)) / totalSize * 100);
+            lastProgress = curProgress;
+        }
 
         readBytes = archive_read_data(source, buff, sizeof(buff));
         // 循环尾部读取失败同样需要检查，避免多分块文件中途读损坏时误报成功
