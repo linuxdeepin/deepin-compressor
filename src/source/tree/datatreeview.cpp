@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -233,14 +233,11 @@ void DataTreeView::drawRow(QPainter *painter, const QStyleOptionViewItem &option
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing);
 
-#ifdef ENABLE_INACTIVE_DISPLAY
     QWidget *wnd = DApplication::activeWindow();
-#endif
     DPalette::ColorGroup cg;
     if (!(options.state & DStyle::State_Enabled)) {
         cg = DPalette::Disabled;
     } else {
-#ifdef ENABLE_INACTIVE_DISPLAY
         if (!wnd) {
             cg = DPalette::Inactive;
         } else {
@@ -250,9 +247,6 @@ void DataTreeView::drawRow(QPainter *painter, const QStyleOptionViewItem &option
                 cg = DPalette::Active;
             }
         }
-#else
-        cg = DPalette::Active;
-#endif
     }
 
     auto *style = dynamic_cast<DStyle *>(DApplication::style());
