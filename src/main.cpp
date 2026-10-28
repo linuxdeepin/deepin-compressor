@@ -9,6 +9,8 @@
 #include "DebugTimeManager.h"
 #include "processopenthread.h"
 #include "uitools.h"
+#include "common/logger.h"
+#include "common/ddlog.h"
 
 #include <DWidgetUtil>
 #include <DLog>
@@ -57,7 +59,7 @@ void showWatermark(const QString &sJson, MainWindow *w)
         mapwaterMark = mapdata.value("wndWatermark").toMap();
     }
     if(mapwaterMark.isEmpty()) {
-        qDebug() << "no watermark data";
+        qCDebug(appLog) << "no watermark data";
         return;
     }
 
@@ -119,11 +121,15 @@ void showWatermark(const QString &sJson, MainWindow *w)
 
 int main(int argc, char *argv[])
 {
-    qDebug() << "Application starting with arguments:" << QCoreApplication::arguments();
+    // 动态日志规则监听：须在任何日志输出之前构造，
+    // 从 DConfig(org.deepin.compressor) 读取 log_rules 并监听调试模式切换
+    MLogger logger;
+
+    qCDebug(appLog) << "Application starting with arguments:" << QCoreApplication::arguments();
     
     //for qt5platform-plugins load DPlatformIntegration or DPlatformIntegrationParent
     if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")) {
-        qDebug() << "Setting XDG_CURRENT_DESKTOP to Deepin";
+        qCDebug(appLog) << "Setting XDG_CURRENT_DESKTOP to Deepin";
         setenv("XDG_CURRENT_DESKTOP", "Deepin", 1);
     }
     bool orderObject = false;
@@ -132,11 +138,11 @@ int main(int argc, char *argv[])
 
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);    // 使用高分屏
 
-    qDebug() << "Initializing DTK application properties";
+    qCDebug(appLog) << "Initializing DTK application properties";
     CompressorApplication app(argc, argv);
     app.setOrganizationName("deepin");
     app.setApplicationName("deepin-compressor");
-    qDebug() << "Loading application translations";
+    qCDebug(appLog) << "Loading application translations";
     app.loadTranslator();
     app.setApplicationVersion(DApplication::buildVersion(QDate::currentDate().toString("yyyyMMdd")));
     app.setApplicationAcknowledgementPage("https://www.deepin.org/original/deepin-compressor/");
@@ -146,10 +152,10 @@ int main(int argc, char *argv[])
     app.setApplicationDisplayName(DApplication::translate("Main", "Archive Manager"));
     app.setApplicationDescription(DApplication::translate("Main", "Archive Manager is a fast and lightweight application for creating and extracting archives."));
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    qDebug() << "Initializing application settings for Qt5";
+    qCDebug(appLog) << "Initializing application settings for Qt5";
     DApplicationSettings settings(&app);
 #endif
-    qDebug() << "Setting up logging system";
+    qCDebug(appLog) << "Setting up logging system";
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
 
@@ -163,7 +169,7 @@ int main(int argc, char *argv[])
     app.setProductIcon(appIcon);
     app.setWindowIcon(appIcon);
 
-    qDebug() << "Initializing command line parser";
+    qCDebug(appLog) << "Initializing command line parser";
     QCommandLineParser parser;
     parser.setApplicationDescription("Deepin Compressor.");
     parser.addHelpOption();     //添加帮助信息(-h,--help)，这个方法由QCommandLineParser自动处理
@@ -178,75 +184,75 @@ int main(int argc, char *argv[])
     QStringList newfilelist;
     if(argc == 3 && QString(argv[2]).startsWith("--param="))
     {
-        qDebug() << "Processing WPS order parameters";
+        qCDebug(appLog) << "Processing WPS order parameters";
         orderObject = true;
         QString slast = QString(argv[2]).remove(0,strlen("--param="));
         //接收时需要转换为可用数据
-        qInfo() << "Base64 encoded parameter:" << slast;
+        qCInfo(appLog) << "Base64 encoded parameter:" << slast;
         sJsonStr = QByteArray::fromBase64(slast.toLatin1().data()).data();
-        qInfo() << "Decoded JSON parameter:" << sJsonStr;
+        qCInfo(appLog) << "Decoded JSON parameter:" << sJsonStr;
         QString file = argv[1];
         if (file.contains("file://")) {
-            qDebug() << "Removing file:// prefix";
+            qCDebug(appLog) << "Removing file:// prefix";
             file.remove("file://");
         }
         newfilelist.append(file);
         newfilelist.append(QString(argv[2]));
     } else {
-        qDebug() << "Processing standard command line arguments";
+        qCDebug(appLog) << "Processing standard command line arguments";
         parser.process(app);
         foreach (QString file, parser.positionalArguments()) {
             if (file.contains("file://")) {
-                qDebug() << "Removing file:// prefix from:" << file;
+                qCDebug(appLog) << "Removing file:// prefix from:" << file;
                 file.remove("file://");
             }
             newfilelist.append(file);
         }
     }
 
-    qInfo() << "Final file list to process:" << newfilelist;
+    qCInfo(appLog) << "Final file list to process:" << newfilelist;
     if (orderObject) {
-        qDebug() << "Removing WPS parameter from file list";
+        qCDebug(appLog) << "Removing WPS parameter from file list";
         newfilelist.removeLast();
-        qDebug() << "WPS order object flag:" << orderObject;
+        qCDebug(appLog) << "WPS order object flag:" << orderObject;
     }
 
     // 创建主界面
     MainWindow w;
     showWatermark(sJsonStr, &w);
 
-    qDebug() << "Creating DBus adaptor and connecting to session bus";
+    qCDebug(appLog) << "Creating DBus adaptor and connecting to session bus";
     ApplicationAdaptor adaptor(&w);
     QDBusConnection dbus = QDBusConnection::sessionBus();
     
     if(!orderObject){
-        qDebug() << "Registering standard DBus service";
+        qCDebug(appLog) << "Registering standard DBus service";
         if (dbus.registerService("com.deepin.Compressor")) {
             dbus.registerObject("/com/deepin/Compressor", &w);
-            qDebug() << "DBus service registered successfully";
+            qCDebug(appLog) << "DBus service registered successfully";
         } else {
-            qWarning() << "Failed to register standard DBus service:" << dbus.lastError().message();
+            qCWarning(appLog) << "Failed to register standard DBus service:" << dbus.lastError().message();
         }
         // Keep window placement independent from DBus registration result.
         // Otherwise, in the "second launch" path (service already taken), the window may still
         // be at a default geometry when password queries trigger, causing mis-centered dialogs.
         Dtk::Widget::moveToCenter(&w);
     } else {
-        qDebug() << "Registering WPS-specific DBus service";
+        qCDebug(appLog) << "Registering WPS-specific DBus service";
         QString serviceName = "com.deepin.Compressor"+QString::number(QGuiApplication::applicationPid());
         if (dbus.registerService(serviceName)) {
-            qDebug() << "WPS DBus service registered successfully";
+            qCDebug(appLog) << "WPS DBus service registered successfully";
             QString objectPath = "/com/deepin/Compressor/"+QString::number(QGuiApplication::applicationPid());
             dbus.registerObject(objectPath, &w);
             adaptor.setCompressFile(newfilelist.first());
             Dtk::Widget::moveToCenter(&w);
             w.setProperty(ORDER_JSON, sJsonStr);
-            qDebug() << "Window properties set for WPS mode";
+            qCDebug(appLog) << "Window properties set for WPS mode";
         } else {
-            qWarning() << "Failed to register WPS DBus service:" << dbus.lastError().message();
+            qCWarning(appLog) << "Failed to register WPS DBus service:" << dbus.lastError().message();
         }
 
-        qDebug() << "Connecting to WPS cryptfs DBus interface";
+        qCDebug(appLog) << "Connecting to WPS cryptfs DBus interface";
         QDBusConnection dbusConnection = QDBusConnection::sessionBus();
         if (dbusConnection.connect("com.wps.cryptfs",
                                  "/com/wps/cryptfs",
@@ -255,9 +261,9 @@ int main(int argc, char *argv[])
                                  &adaptor,
                                  SLOT(onActiveWindow(qint64))))
         {
-            qInfo() << "DBus connection to WPS cryptfs established successfully";
+            qCInfo(appLog) << "DBus connection to WPS cryptfs established successfully";
         } else {
-            qCritical() << "Failed to connect to WPS cryptfs DBus interface";
+            qCCritical(appLog) << "Failed to connect to WPS cryptfs DBus interface";
         }
     }
 
@@ -353,7 +359,7 @@ int main(int argc, char *argv[])
                 }
 
                 // 打开第一个文件
-                qInfo() << "打开文件";
+                qCInfo(appLog) << "打开文件";
                 eType = MainWindow::AT_Open;
                 QString strOpenFile = listTransFiles[0];
                 listTransFiles.clear();
