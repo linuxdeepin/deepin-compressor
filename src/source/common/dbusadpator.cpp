@@ -6,6 +6,7 @@
 #include "dbusadpator.h"
 #include "mainwindow.h"
 #include "archivemanager.h"
+#include "common/ddlog.h"
 
 #include <QFileInfo>
 #include <QtDebug>
@@ -20,7 +21,7 @@ const QString SOPENLIST = "openfiles";
 ApplicationAdaptor::ApplicationAdaptor(MainWindow *mainwindow)
     : QDBusAbstractAdaptor(mainwindow), m_mainWindow(mainwindow)
 {
-    qDebug() << "ApplicationAdaptor initialized";
+    qCDebug(appLog) << "ApplicationAdaptor initialized";
 }
 
 void ApplicationAdaptor::setMainWindow(MainWindow *mainWindow)
@@ -34,15 +35,15 @@ void ApplicationAdaptor::setMainWindow(MainWindow *mainWindow)
  */
 void ApplicationAdaptor::setCompressFile(const QString &sFile)
 {
-    qInfo() << "Set compress file:" << sFile;
+    qCInfo(appLog) << "Set compress file:" << sFile;
     m_sFile = sFile;
 }
 
 bool ApplicationAdaptor::raise(const QString &sFile)
 {
-    qDebug() << "Raise window request for file:" << sFile;
+    qCDebug(appLog) << "Raise window request for file:" << sFile;
     if(m_sFile.isEmpty() || m_sFile.isNull()) {
-        qWarning() << "No compress file set, cannot raise window";
+        qCWarning(appLog) << "No compress file set, cannot raise window";
         return false;
     }
     if(m_curShowWidget && (m_sFile == sFile)) {
@@ -54,14 +55,14 @@ bool ApplicationAdaptor::raise(const QString &sFile)
 
 void ApplicationAdaptor::onActiveWindow(qint64 pid)
 {
-    qDebug() << "Active window request from pid:" << pid << ", current pid:" << QGuiApplication::applicationPid();
+    qCDebug(appLog) << "Active window request from pid:" << pid << ", current pid:" << QGuiApplication::applicationPid();
     m_curShowWidget = nullptr;
     if(pid != QGuiApplication::applicationPid()) {
-        qDebug() << "Pid mismatch, ignoring request";
+        qCDebug(appLog) << "Pid mismatch, ignoring request";
         return;
     }
     if(!app) {
-        qWarning() << "Application instance is null";
+        qCWarning(appLog) << "Application instance is null";
         return;
     }
     for(QWidget *w : app->topLevelWidgets()) {
@@ -70,14 +71,14 @@ void ApplicationAdaptor::onActiveWindow(qint64 pid)
         }
     }
     if(m_curShowWidget) {
-        qInfo() << "activateWindow by raise";
+        qCInfo(appLog) << "activateWindow by raise";
         m_curShowWidget->show();
         m_curShowWidget->raise();
         m_curShowWidget->activateWindow();
     }
     if(m_curShowWidget && !m_curShowWidget->isActiveWindow()) {
-        qDebug() << "Window not active, trying to activate via Dock DBus";
-        qInfo() << "activateWindow by Dock dbus";
+        qCDebug(appLog) << "Window not active, trying to activate via Dock DBus";
+        qCInfo(appLog) << "activateWindow by Dock dbus";
         QDBusInterface dockDbusInterfaceV20(
                 "com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", "com.deepin.dde.daemon.Dock");
         QDBusInterface dockDbusInterfaceV23(
@@ -86,9 +87,9 @@ void ApplicationAdaptor::onActiveWindow(qint64 pid)
         if (dockDbusInterface->isValid()) {
             QDBusReply<void> reply = dockDbusInterface->call("ActivateWindow", m_curShowWidget->winId());
             if (!reply.isValid()) {
-                qWarning() << "Dock dbus activateWindow failed via" << dockDbusInterface->service() << ", error:" << reply.error();
+                qCWarning(appLog) << "Dock dbus activateWindow failed via" << dockDbusInterface->service() << ", error:" << reply.error();
             } else {
-                qInfo() << "Dock dbus activateWindow success!";
+                qCInfo(appLog) << "Dock dbus activateWindow success!";
             }
         }
     }
@@ -137,18 +138,18 @@ bool ApplicationAdaptor::quitWindow()
 bool ApplicationAdaptor::compressFiles(const QStringList &filePaths)
 {
     if (filePaths.isEmpty()) {
-        qWarning() << "No files provided for compression";
+        qCWarning(appLog) << "No files provided for compression";
         return false;
     }
     
     if (!m_mainWindow) {
-        qWarning() << "MainWindow not available";
+        qCWarning(appLog) << "MainWindow not available";
         return false;
     }
 
     for (const QString &filePath : filePaths) {
         if (!QFileInfo::exists(filePath)) {
-            qWarning() << "File does not exist:" << filePath;
+            qCWarning(appLog) << "File does not exist:" << filePath;
             return false;
         }
     }
@@ -161,18 +162,18 @@ bool ApplicationAdaptor::compressFiles(const QStringList &filePaths)
 bool ApplicationAdaptor::extractFiles(const QString &archivePath, const QString &destinationPath)
 {
     if (!QFileInfo::exists(archivePath)) {
-        qWarning() << "Archive file does not exist:" << archivePath;
+        qCWarning(appLog) << "Archive file does not exist:" << archivePath;
         return false;
     }
     
     if (!m_mainWindow) {
-        qWarning() << "MainWindow not available";
+        qCWarning(appLog) << "MainWindow not available";
         return false;
     }
 
     QFileInfo destInfo(destinationPath);
     if (!destInfo.isDir() || !destInfo.isWritable()) {
-        qWarning() << "Destination path is not a writable directory:" << destinationPath;
+        qCWarning(appLog) << "Destination path is not a writable directory:" << destinationPath;
         return false;
     }
 
@@ -185,12 +186,12 @@ bool ApplicationAdaptor::extractFiles(const QString &archivePath, const QString 
 bool ApplicationAdaptor::previewArchive(const QString &archivePath)
 {
     if (!QFileInfo::exists(archivePath)) {
-        qWarning() << "Archive file does not exist:" << archivePath;
+        qCWarning(appLog) << "Archive file does not exist:" << archivePath;
         return false;
     }
     
     if (!m_mainWindow) {
-        qWarning() << "MainWindow not available";
+        qCWarning(appLog) << "MainWindow not available";
         return false;
     }
 
