@@ -32,6 +32,7 @@
 #ifdef DTKCORE_CLASS_DConfigFile
 #include <DConfig>
 DCORE_USE_NAMESPACE
+
 #endif
 
 #define SCROLL_MAX 621
@@ -468,6 +469,16 @@ void CompressSettingPage::setSplitEnabled(bool bEnabled)
 void CompressSettingPage::refreshCompressLevel(const QString &strType)
 {
 #ifdef DTKCORE_CLASS_DConfigFile
+    if (strType == "tar.gz") {
+        DConfig *dconfig = (DConfig *)m_dconfig;
+        if (dconfig && dconfig->isValid() && dconfig->keyList().contains("specialCpuTarGzCompressor")) {
+            int nCpu = dconfig->value("specialCpuTarGzCompressor").toInt();
+            if (nCpu >= 0 && nCpu < m_pCpuCmb->count()) {
+                m_pCpuCmb->setCurrentIndex(nCpu);
+            }
+        }
+    }
+
     if(m_isOrderMode) {
         // 其余格式支持设置压缩方式
         // 设置压缩方式可用
@@ -500,10 +511,6 @@ void CompressSettingPage::refreshCompressLevel(const QString &strType)
             if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialTarGzCompressor")){
                         int nMethod = dconfig->value("specialTarGzCompressor").toInt();
                         m_pCompressLevelCmb->setCurrentIndex(nMethod);
-                    }
-            if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialCpuTarGzCompressor")){
-                        int nCpu = dconfig->value("specialCpuTarGzCompressor").toInt();
-                        m_pCpuCmb->setCurrentIndex(nCpu);
                     }
         } else if(strType == "tar.gz") {
              if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialTarGzCompressor")){
@@ -804,10 +811,10 @@ void CompressSettingPage::slotAdvancedEnabled(bool bEnabled)
     if (m_pCompressTypeLbl->text() == "tar.gz") {
         m_pCpuCmb->setCurrentIndex(m_pCpuCmb->count() - 1);
 #ifdef DTKCORE_CLASS_DConfigFile
-        if(m_isOrderMode) {
-            DConfig *dconfig = (DConfig *)m_dconfig;
-            if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialCpuTarGzCompressor")){
-                int nCpu = dconfig->value("specialCpuTarGzCompressor").toInt();
+        DConfig *dconfig = (DConfig *)m_dconfig;
+        if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialCpuTarGzCompressor")){
+            int nCpu = dconfig->value("specialCpuTarGzCompressor").toInt();
+            if (nCpu >= 0 && nCpu < m_pCpuCmb->count()) {
                 m_pCpuCmb->setCurrentIndex(nCpu);
             }
         }
