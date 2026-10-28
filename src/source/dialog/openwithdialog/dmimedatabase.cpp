@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "openwithdialog/dmimedatabase.h"
+#include "common/ddlog.h"
 //#include "shutil/fileutils.h"
 
 #include <QFileInfo>
@@ -12,20 +13,20 @@
 
 DMimeDatabase::DMimeDatabase()
 {
-    qDebug() << "DMimeDatabase constructor";
+    qCDebug(appLog) << "DMimeDatabase constructor";
 }
 
 QMimeType DMimeDatabase::mimeTypeForFile(const QString &fileName, QMimeDatabase::MatchMode mode) const
 {
-    qDebug() << "Getting MIME type for file:" << fileName;
+    qCDebug(appLog) << "Getting MIME type for file:" << fileName;
     return mimeTypeForFile(QFileInfo(fileName), mode);
 }
 
 QMimeType DMimeDatabase::mimeTypeForFile(const QFileInfo &fileInfo, QMimeDatabase::MatchMode mode) const
 {
-    qDebug() << "Getting MIME type for file info:" << fileInfo.fileName() << "with mode:" << mode;
+    qCDebug(appLog) << "Getting MIME type for file info:" << fileInfo.fileName() << "with mode:" << mode;
     QMimeType result = QMimeDatabase::mimeTypeForFile(fileInfo, mode);
-    qDebug() << "Initial MIME type:" << result.name();
+    qCDebug(appLog) << "Initial MIME type:" << result.name();
 
     // temporary dirty fix, once WPS get installed, the whole mimetype database thing get fscked up.
     // we used to patch our Qt to fix this issue but the patch no longer works, we don't have time to
@@ -44,14 +45,14 @@ QMimeType DMimeDatabase::mimeTypeForFile(const QFileInfo &fileInfo, QMimeDatabas
     if (officeSuffixList.contains(fileInfo.suffix()) && wrongMimeTypeNames.contains(result.name())) {
         QList<QMimeType> results = QMimeDatabase::mimeTypesForFileName(fileInfo.fileName());
         if (!results.isEmpty()) {
-            qInfo() << "Corrected MIME type from" << result.name() << "to" << results.first().name();
+            qCInfo(appLog) << "Corrected MIME type from" << result.name() << "to" << results.first().name();
             return results.first();
         } else {
-            qWarning() << "No valid MIME types found for office file";
+            qCWarning(appLog) << "No valid MIME types found for office file";
         }
     }
 
-    qDebug() << "Final MIME type:" << result.name() << "for file:" << fileInfo.fileName();
+    qCDebug(appLog) << "Final MIME type:" << result.name() << "for file:" << fileInfo.fileName();
     return result;
 }
 
