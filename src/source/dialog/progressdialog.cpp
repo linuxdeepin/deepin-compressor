@@ -5,6 +5,7 @@
 
 #include "progressdialog.h"
 #include "popupdialog.h"
+#include "common/ddlog.h"
 
 #include <DFontSizeManager>
 #include <DWindowCloseButton>
@@ -17,20 +18,20 @@
 ProgressDialog::ProgressDialog(QWidget *parent):
     DAbstractDialog(parent)
 {
-    qDebug() << "Creating ProgressDialog";
+    qCDebug(appLog) << "Creating ProgressDialog";
     initUI();
     initConnect();
-    qDebug() << "ProgressDialog initialized with default size:"
+    qCDebug(appLog) << "ProgressDialog initialized with default size:"
              << m_defaultWidth << "x" << m_defaultHeight;
 }
 
 void ProgressDialog::initUI()
 {
-    qDebug() << "Initializing ProgressDialog UI";
+    qCDebug(appLog) << "Initializing ProgressDialog UI";
     setWindowFlags((windowFlags() & ~ Qt::WindowSystemMenuHint /*& ~Qt::Dialog*/) | Qt::Window);
     setFixedWidth(m_defaultWidth);
     setMinimumHeight(m_defaultHeight);
-    qDebug() << "Window flags and size set";
+    qCDebug(appLog) << "Window flags and size set";
 
     // 标题栏显示有几个任务正在进行
     m_titlebar = new DTitlebar(this);
@@ -88,10 +89,10 @@ void ProgressDialog::initConnect()
  */
 void ProgressDialog::setCurrentTask(const QString &file)
 {
-    qDebug() << "Setting current task to:" << file;
+    qCDebug(appLog) << "Setting current task to:" << file;
     QFileInfo fileinfo(file);
     m_tasklable->setText(tr("Task") + ":" + fileinfo.fileName());
-    qDebug() << "Task label updated";
+    qCDebug(appLog) << "Task label updated";
 }
 
 /**
@@ -100,12 +101,12 @@ void ProgressDialog::setCurrentTask(const QString &file)
  */
 void ProgressDialog::setCurrentFile(const QString &file)
 {
-    qDebug() << "Setting current file to:" << file;
+    qCDebug(appLog) << "Setting current file to:" << file;
     // 对字符串长度进行...划分
     QFontMetrics elideFont(m_filelable->font());
     QString displayText = elideFont.elidedText(tr("Extracting") + ":" + file, Qt::ElideMiddle, 330);
     m_filelable->setText(displayText);
-    qDebug() << "File label updated to:" << displayText;
+    qCDebug(appLog) << "File label updated to:" << displayText;
 }
 
 /**
@@ -114,10 +115,10 @@ void ProgressDialog::setCurrentFile(const QString &file)
  */
 void ProgressDialog::setProcess(double value)
 {
-    qDebug() << "Setting progress to:" << value;
+    qCDebug(appLog) << "Setting progress to:" << value;
 
     if ((m_dPerent - value) == 0.0 || (m_dPerent > value)) {
-        qDebug() << "Progress not changed or decreased, skipping update";
+        qCDebug(appLog) << "Progress not changed or decreased, skipping update";
         return;
     }
 
@@ -125,7 +126,7 @@ void ProgressDialog::setProcess(double value)
 
     if (100 != m_circleprogress->value()) {
         m_circleprogress->setValue(qRound(value));
-        qDebug() << "Progress updated to:" << qRound(value);
+        qCDebug(appLog) << "Progress updated to:" << qRound(value);
     }
 }
 
@@ -135,11 +136,11 @@ void ProgressDialog::setProcess(double value)
  */
 void ProgressDialog::setFinished()
 {
-    qDebug() << "Task finished, resetting progress";
+    qCDebug(appLog) << "Task finished, resetting progress";
     m_circleprogress->setValue(0);
     m_dPerent = 0.0;
     hide();
-    qDebug() << "ProgressDialog hidden";
+    qCDebug(appLog) << "ProgressDialog hidden";
 }
 
 /**
@@ -153,7 +154,7 @@ void ProgressDialog::clearprocess()
 
 void ProgressDialog::showDialog()
 {
-    qDebug() << "Showing ProgressDialog";
+    qCDebug(appLog) << "Showing ProgressDialog";
 
     //获取ddialog的标题栏
     DTitlebar *titlebar = findChild<DTitlebar *>();
@@ -169,14 +170,14 @@ void ProgressDialog::showDialog()
     }
 
     open();     // 使用open来进行模态对话框显示，不阻塞事件循环，可以一直接收进度
-    qDebug() << "ProgressDialog shown";
+    qCDebug(appLog) << "ProgressDialog shown";
 }
 
 void ProgressDialog::closeEvent(QCloseEvent *)
 {
-    qDebug() << "Close event received, current progress:" << m_circleprogress->value();
+    qCDebug(appLog) << "Close event received, current progress:" << m_circleprogress->value();
     if (m_dPerent < 100 && m_dPerent > 0) {
-        qDebug() << "Task in progress, pausing operation";
+        qCDebug(appLog) << "Task in progress, pausing operation";
         // 先暂停
         emit signalPause();
 
@@ -185,11 +186,11 @@ void ProgressDialog::closeEvent(QCloseEvent *)
         SimpleQueryDialog dialog(this);
         int iResult = dialog.showDialog(strDesText, tr("Cancel", "button"), DDialog::ButtonNormal, tr("Confirm", "button"), DDialog::ButtonRecommend);
         if (1 == iResult) {
-            qDebug() << "User confirmed cancellation";
+            qCDebug(appLog) << "User confirmed cancellation";
             // 取消操作
             emit signalCancel();
         } else {
-            qDebug() << "User chose to continue";
+            qCDebug(appLog) << "User chose to continue";
             // 继续操作
             emit signalContinue();
         }
@@ -202,7 +203,7 @@ void ProgressDialog::closeEvent(QCloseEvent *)
  */
 void ProgressDialog::slotextractpress(int index)
 {
-    qInfo() << index;
+    qCInfo(appLog) << index;
     if (1 == index) { // 取消提取
         emit stopExtract();
         emit sigResetPercentAndTime();
@@ -214,17 +215,17 @@ void ProgressDialog::slotextractpress(int index)
 CommentProgressDialog::CommentProgressDialog(QWidget *parent):
     DAbstractDialog(parent)
 {
-    qDebug() << "Creating CommentProgressDialog";
+    qCDebug(appLog) << "Creating CommentProgressDialog";
     initUI();
-    qDebug() << "CommentProgressDialog initialized with size 400x79";
+    qCDebug(appLog) << "CommentProgressDialog initialized with size 400x79";
 }
 
 void CommentProgressDialog::initUI()
 {
-    qDebug() << "Initializing CommentProgressDialog UI";
+    qCDebug(appLog) << "Initializing CommentProgressDialog UI";
     setFixedSize(400, 79);
     setWindowFlags((windowFlags() & ~ Qt::CustomizeWindowHint) | Qt::Window);
-    qDebug() << "Window flags and size set";
+    qCDebug(appLog) << "Window flags and size set";
 
     // 布局
     DLabel *label = new DLabel(this);
@@ -243,20 +244,20 @@ void CommentProgressDialog::initUI()
 
 void CommentProgressDialog::showdialog()
 {
-    qDebug() << "Showing CommentProgressDialog";
+    qCDebug(appLog) << "Showing CommentProgressDialog";
     exec();
-    qDebug() << "CommentProgressDialog shown";
+    qCDebug(appLog) << "CommentProgressDialog shown";
 }
 
 void CommentProgressDialog::setProgress(double value)
 {
-    qDebug() << "Setting comment progress to:" << value;
+    qCDebug(appLog) << "Setting comment progress to:" << value;
     m_progressBar->setValue(static_cast<int>(value));
 }
 
 void CommentProgressDialog::setFinished()
 {
-    qDebug() << "Comment update finished";
+    qCDebug(appLog) << "Comment update finished";
     m_progressBar->setValue(100);
     QTimer::singleShot(100, this, [ = ] {hide();}); // 手动延时100ms再关闭
 }
