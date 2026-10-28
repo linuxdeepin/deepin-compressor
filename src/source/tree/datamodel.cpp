@@ -8,6 +8,7 @@
 #include "mimetypedisplaymanager.h"
 #include "mimetypes.h"
 #include "uitools.h"
+#include "common/ddlog.h"
 
 #include <QDateTime>
 #include <QDebug>
@@ -23,20 +24,20 @@ DGUI_USE_NAMESPACE
 DataModel::DataModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
-    qDebug() << "DataModel constructor called";
+    qCDebug(appLog) << "DataModel constructor called";
     m_pMimetype = new MimeTypeDisplayManager(this);
-    qDebug() << "DataModel initialized with MimeTypeDisplayManager";
+    qCDebug(appLog) << "DataModel initialized with MimeTypeDisplayManager";
 }
 
 DataModel::~DataModel()
 {
-    qDebug() << "DataModel destructor called";
+    qCDebug(appLog) << "DataModel destructor called";
 
 }
 
 QVariant DataModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    // qDebug() << "Getting header data for section:" << section << "role:" << role;
+    // qCDebug(appLog) << "Getting header data for section:" << section << "role:" << role;
     Q_UNUSED(orientation)
 
     if (Qt::DisplayRole == role) {
@@ -50,7 +51,7 @@ QVariant DataModel::headerData(int section, Qt::Orientation orientation, int rol
 
 QVariant DataModel::data(const QModelIndex &index, int role) const
 {
-    // qDebug() << "Getting data for index:" << index << "role:" << role;
+    // qCDebug(appLog) << "Getting data for index:" << index << "role:" << role;
     if (!index.isValid()) {
         return QVariant();
     }
@@ -152,16 +153,16 @@ int DataModel::columnCount(const QModelIndex &parent) const
 
 void DataModel::refreshFileEntry(const QList<FileEntry> &listEntry)
 {
-    qDebug() << "Refreshing file entries, count:" << listEntry.size();
+    qCDebug(appLog) << "Refreshing file entries, count:" << listEntry.size();
     beginResetModel();
     m_listEntry = listEntry;
     endResetModel();
-    qDebug() << "File entries refreshed successfully";
+    qCDebug(appLog) << "File entries refreshed successfully";
 }
 
 QItemSelection DataModel::getSelectItem(const QStringList &listName)
 {
-    qDebug() << "Getting selection for items:" << listName;
+    qCDebug(appLog) << "Getting selection for items:" << listName;
     QItemSelection selection;
 
     for (int i = 0; i < m_listEntry.size(); ++i) {
@@ -180,7 +181,7 @@ QItemSelection DataModel::getSelectItem(const QStringList &listName)
 
 QModelIndex DataModel::getListEntryIndex(const QString &listName)
 {
-    qDebug() << "Getting index for entry:" << listName;
+    qCDebug(appLog) << "Getting index for entry:" << listName;
     for (int i = 0; i < m_listEntry.size(); ++i) {
         QModelIndex index = this->index(i, DC_Name);
         // 处理是否需要选中的文件
@@ -194,12 +195,12 @@ QModelIndex DataModel::getListEntryIndex(const QString &listName)
 
 void DataModel::sort(int column, Qt::SortOrder order)
 {
-    qDebug() << "Sorting by column:" << column << "order:" << order;
+    qCDebug(appLog) << "Sorting by column:" << column << "order:" << order;
     if (0 > column || 3 < column) {
         return;
     }
 
-//    qInfo() << "更新排序";
+//    qCInfo(appLog) << "更新排序";
 
     beginResetModel();//在开始添加此函数
     std::stable_sort(m_listEntry.begin(), m_listEntry.end(), [&](FileEntry entrya, FileEntry entryb) -> bool {
