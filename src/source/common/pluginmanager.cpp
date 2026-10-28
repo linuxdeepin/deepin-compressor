@@ -5,6 +5,7 @@
 
 #include "pluginmanager.h"
 #include "kpluginloader.h"
+#include "common/ddlog.h"
 
 #include <QPluginLoader>
 #include <QCoreApplication>
@@ -25,17 +26,17 @@ QAtomicPointer<PluginManager> PluginManager::m_instance = nullptr;//原子指针
 PluginManager::PluginManager(QObject *parent)
     : QObject(parent)
 {
-    qDebug() << "Initializing PluginManager";
+    qCDebug(appLog) << "Initializing PluginManager";
     loadPlugins();
-    qDebug() << "PluginManager initialized with" << m_plugins.size() << "plugins";
+    qCDebug(appLog) << "PluginManager initialized with" << m_plugins.size() << "plugins";
 }
 
 PluginManager &PluginManager::get_instance()
 {
-    // qDebug() << "Getting PluginManager instance";
+    // qCDebug(appLog) << "Getting PluginManager instance";
 #ifndef Q_ATOMIC_POINTER_TEST_AND_SET_IS_SOMETIMES_NATIVE
     if (!QAtomicPointer<PluginManager>::isTestAndSetNative()) //运行时检测
-        qInfo() << "Error: TestAndSetNative not supported!";
+        qCInfo(appLog) << "Error: TestAndSetNative not supported!";
 #endif
 
     //使用双重检测。
@@ -44,7 +45,7 @@ PluginManager &PluginManager::get_instance()
      * 不会被重新排序。
      */
     if (m_instance.testAndSetOrdered(nullptr, nullptr)) { //第一次检测
-        qDebug() << "Creating new PluginManager instance";
+        qCDebug(appLog) << "Creating new PluginManager instance";
         QMutexLocker locker(&m_mutex);//加互斥锁。
 
         m_instance.testAndSetOrdered(nullptr, new PluginManager);//第二次检测。
@@ -55,13 +56,13 @@ PluginManager &PluginManager::get_instance()
 
 QVector<Plugin *> PluginManager::installedPlugins() const
 {
-    qDebug() << "Getting installed plugins, count:" << m_plugins.size();
+    qCDebug(appLog) << "Getting installed plugins, count:" << m_plugins.size();
     return m_plugins;
 }
 
 QVector<Plugin *> PluginManager::availablePlugins() const
 {
-    qDebug() << "Getting available plugins";
+    qCDebug(appLog) << "Getting available plugins";
     QVector<Plugin *> availablePlugins;
     for (Plugin *plugin : qAsConst(m_plugins)) {
         if (plugin->isValid()) {
@@ -69,13 +70,13 @@ QVector<Plugin *> PluginManager::availablePlugins() const
         }
     }
 
-    qDebug() << "Found" << availablePlugins.size() << "available plugins";
+    qCDebug(appLog) << "Found" << availablePlugins.size() << "available plugins";
     return availablePlugins;
 }
 
 QVector<Plugin *> PluginManager::availableWritePlugins() const
 {
-    qDebug() << "Getting available write plugins";
+    qCDebug(appLog) << "Getting available write plugins";
     QVector<Plugin *> availableWritePlugins;
     const auto plugins = availablePlugins();
     for (Plugin *plugin : plugins) {
@@ -84,13 +85,13 @@ QVector<Plugin *> PluginManager::availableWritePlugins() const
         }
     }
 
-    qDebug() << "Found" << availableWritePlugins.size() << "available write plugins";
+    qCDebug(appLog) << "Found" << availableWritePlugins.size() << "available write plugins";
     return availableWritePlugins;
 }
 
 QVector<Plugin *> PluginManager::enabledPlugins() const
 {
-    qDebug() << "Getting enabled plugins";
+    qCDebug(appLog) << "Getting enabled plugins";
     QVector<Plugin *> enabledPlugins;
     for (Plugin *plugin : qAsConst(m_plugins)) {
         if (plugin->isEnabled()) {
@@ -98,62 +99,62 @@ QVector<Plugin *> PluginManager::enabledPlugins() const
         }
     }
 
-    qDebug() << "Found" << enabledPlugins.size() << "enabled plugins";
+    qCDebug(appLog) << "Found" << enabledPlugins.size() << "enabled plugins";
     return enabledPlugins;
 }
 
 QVector<Plugin *> PluginManager::preferredPluginsFor(const CustomMimeType &mimeType)
 {
-    qDebug() << "Getting preferred plugins for mime type:" << mimeType.name();
+    qCDebug(appLog) << "Getting preferred plugins for mime type:" << mimeType.name();
     const auto mimeName = mimeType.name();
     if (m_preferredPluginsCache.contains(mimeName)) {
-        qDebug() << "Using cached preferred plugins for:" << mimeName;
+        qCDebug(appLog) << "Using cached preferred plugins for:" << mimeName;
         return m_preferredPluginsCache.value(mimeName);
     }
 
     const auto plugins = preferredPluginsFor(mimeType, false);
     m_preferredPluginsCache.insert(mimeName, plugins);
-    qDebug() << "Cached" << plugins.size() << "preferred plugins for:" << mimeName;
+    qCDebug(appLog) << "Cached" << plugins.size() << "preferred plugins for:" << mimeName;
     return plugins;
 }
 
 QVector<Plugin *> PluginManager::preferredWritePluginsFor(const CustomMimeType &mimeType) const
 {
-    qDebug() << "Getting preferred write plugins for mime type:" << mimeType.name();
+    qCDebug(appLog) << "Getting preferred write plugins for mime type:" << mimeType.name();
     return preferredPluginsFor(mimeType, true);
 }
 
 Plugin *PluginManager::preferredPluginFor(const CustomMimeType &mimeType)
 {
-    qDebug() << "Getting preferred plugin for mime type:" << mimeType.name();
+    qCDebug(appLog) << "Getting preferred plugin for mime type:" << mimeType.name();
     const QVector<Plugin *> preferredPlugins = preferredPluginsFor(mimeType);
     if (preferredPlugins.isEmpty()) {
-        qWarning() << "No preferred plugin found for mime type:" << mimeType.name();
+        qCWarning(appLog) << "No preferred plugin found for mime type:" << mimeType.name();
         return new Plugin();
     }
-    qDebug() << "Using preferred plugin:" << preferredPlugins.first()->metaData().pluginId();
+    qCDebug(appLog) << "Using preferred plugin:" << preferredPlugins.first()->metaData().pluginId();
     return preferredPlugins.first();
 }
 
 Plugin *PluginManager::preferredWritePluginFor(const CustomMimeType &mimeType) const
 {
-    qDebug() << "Getting preferred write plugin for mime type:" << mimeType.name();
+    qCDebug(appLog) << "Getting preferred write plugin for mime type:" << mimeType.name();
     const QVector<Plugin *> preferredWritePlugins = preferredWritePluginsFor(mimeType);
     if (preferredWritePlugins.isEmpty()) {
-        qWarning() << "No preferred write plugin found for mime type:" << mimeType.name();
+        qCWarning(appLog) << "No preferred write plugin found for mime type:" << mimeType.name();
         return new Plugin();
     }
-    qDebug() << "Using preferred write plugin:" << preferredWritePlugins.first()->metaData().pluginId();
+    qCDebug(appLog) << "Using preferred write plugin:" << preferredWritePlugins.first()->metaData().pluginId();
     return preferredWritePlugins.first();
 }
 
 QStringList PluginManager::supportedMimeTypes(MimeSortingMode mode) const
 {
-    qDebug() << "Getting supported mime types with mode:" << mode;
+    qCDebug(appLog) << "Getting supported mime types with mode:" << mode;
     QSet<QString> supported;
     QMimeDatabase db;
     const auto plugins = availablePlugins();
-    qDebug() << "Processing" << plugins.size() << "available plugins";
+    qCDebug(appLog) << "Processing" << plugins.size() << "available plugins";
     for (Plugin *plugin : plugins) {
         const auto mimeTypes = plugin->metaData().mimeTypes();
         for (const auto &mimeType : mimeTypes) {
@@ -165,38 +166,38 @@ QStringList PluginManager::supportedMimeTypes(MimeSortingMode mode) const
 
     // Remove entry for lrzipped tar if lrzip executable not found in path.
     if (QStandardPaths::findExecutable(QStringLiteral("lrzip")).isEmpty()) {
-        qDebug() << "Removing lrzip-compressed-tar support - executable not found";
+        qCDebug(appLog) << "Removing lrzip-compressed-tar support - executable not found";
         supported.remove(QStringLiteral("application/x-lrzip-compressed-tar"));
     }
 
     // Remove entry for lz4-compressed tar if lz4 executable not found in path.
     if (QStandardPaths::findExecutable(QStringLiteral("lz4")).isEmpty()) {
-        qDebug() << "Removing lz4-compressed-tar support - executable not found";
+        qCDebug(appLog) << "Removing lz4-compressed-tar support - executable not found";
         supported.remove(QStringLiteral("application/x-lz4-compressed-tar"));
     }
 
     // Remove entry for lzo-compressed tar if libarchive not linked against lzo and lzop executable not found in path.
     if (!libarchiveHasLzo() && QStandardPaths::findExecutable(QStringLiteral("lzop")).isEmpty()) {
-        qDebug() << "Removing tzo support - no lzo support and lzop not found";
+        qCDebug(appLog) << "Removing tzo support - no lzo support and lzop not found";
         supported.remove(QStringLiteral("application/x-tzo"));
     }
 
     if (mode == SortByComment) {
-        qDebug() << "Sorting mime types by comment";
+        qCDebug(appLog) << "Sorting mime types by comment";
         return sortByComment(supported);
     }
 
-    qDebug() << "Found" << supported.size() << "supported mime types";
+    qCDebug(appLog) << "Found" << supported.size() << "supported mime types";
     return supported.values();
 }
 
 QStringList PluginManager::supportedWriteMimeTypes(MimeSortingMode mode) const
 {
-    qDebug() << "Getting supported write mime types with mode:" << mode;
+    qCDebug(appLog) << "Getting supported write mime types with mode:" << mode;
     QSet<QString> supported;
     QMimeDatabase db;
     const auto plugins = availableWritePlugins();
-    qDebug() << "Processing" << plugins.size() << "available write plugins";
+    qCDebug(appLog) << "Processing" << plugins.size() << "available write plugins";
     for (Plugin *plugin : plugins) {
         const auto mimeTypes = plugin->metaData().mimeTypes();
         for (const auto &mimeType : mimeTypes) {
@@ -208,42 +209,42 @@ QStringList PluginManager::supportedWriteMimeTypes(MimeSortingMode mode) const
 
     // Remove entry for lrzipped tar if lrzip executable not found in path.
     if (QStandardPaths::findExecutable(QStringLiteral("lrzip")).isEmpty()) {
-        qDebug() << "Removing lrzip-compressed-tar write support - executable not found";
+        qCDebug(appLog) << "Removing lrzip-compressed-tar write support - executable not found";
         supported.remove(QStringLiteral("application/x-lrzip-compressed-tar"));
     }
 
     // Remove entry for lz4-compressed tar if lz4 executable not found in path.
     if (QStandardPaths::findExecutable(QStringLiteral("lz4")).isEmpty()) {
-        qDebug() << "Removing lz4-compressed-tar write support - executable not found";
+        qCDebug(appLog) << "Removing lz4-compressed-tar write support - executable not found";
         supported.remove(QStringLiteral("application/x-lz4-compressed-tar"));
     }
 
     // Remove entry for lzo-compressed tar if libarchive not linked against lzo and lzop executable not found in path.
     if (!libarchiveHasLzo() && QStandardPaths::findExecutable(QStringLiteral("lzop")).isEmpty()) {
-        qDebug() << "Removing tzo write support - no lzo support and lzop not found";
+        qCDebug(appLog) << "Removing tzo write support - no lzo support and lzop not found";
         supported.remove(QStringLiteral("application/x-tzo"));
     }
 
-    qDebug() << "Removing ISO image write support";
+    qCDebug(appLog) << "Removing ISO image write support";
     supported.remove(QStringLiteral("application/x-iso9660-image"));
 
-    qDebug() << "Removing RAR write support";
+    qCDebug(appLog) << "Removing RAR write support";
     supported.remove(QStringLiteral("application/vnd.rar"));
     supported.remove(QStringLiteral("application/x-rar"));
 //    supported.remove(QStringLiteral("application/octet-stream"));
 
     if (mode == SortByComment) {
-        qDebug() << "Sorting write mime types by comment";
+        qCDebug(appLog) << "Sorting write mime types by comment";
         return sortByComment(supported);
     }
 
-    qDebug() << "Found" << supported.size() << "supported write mime types";
+    qCDebug(appLog) << "Found" << supported.size() << "supported write mime types";
     return supported.values();
 }
 
 QVector<Plugin *> PluginManager::filterBy(const QVector<Plugin *> &plugins, const CustomMimeType &mimeType) const
 {
-    qDebug() << "Filtering plugins for mime type:" << mimeType.name();
+    qCDebug(appLog) << "Filtering plugins for mime type:" << mimeType.name();
     const bool supportedMime = supportedMimeTypes().contains(mimeType.name());
     QVector<Plugin *> filteredPlugins;
     for (Plugin *plugin : plugins) {
@@ -252,15 +253,15 @@ QVector<Plugin *> PluginManager::filterBy(const QVector<Plugin *> &plugins, cons
             const QStringList mimeTypes = plugin->metaData().mimeTypes();
             for (const QString &mime : mimeTypes) {
                 if (mimeType.inherits(mime)/* && (mime != "application/octet-stream")*/) {
-                    qDebug() << "Found plugin" << plugin->metaData().pluginId() << "supporting parent mime type:" << mime;
+                    qCDebug(appLog) << "Found plugin" << plugin->metaData().pluginId() << "supporting parent mime type:" << mime;
                     filteredPlugins << plugin;
                 }
             }
         } else if (plugin->metaData().mimeTypes().contains(mimeType.name())) {
-            qDebug() << "Found plugin" << plugin->metaData().pluginId() << "directly supporting mime type:" << mimeType.name();
+            qCDebug(appLog) << "Found plugin" << plugin->metaData().pluginId() << "directly supporting mime type:" << mimeType.name();
             
             if (mimeType.name() == QString("application/x-tzo") && plugin->metaData().pluginId() == QString("kerfuffle_cli7z")) {
-                qDebug() << "Adding special case for x-tzo mime type";
+                qCDebug(appLog) << "Adding special case for x-tzo mime type";
                 filteredPlugins << plugin;
                 continue;
             }
@@ -269,29 +270,29 @@ QVector<Plugin *> PluginManager::filterBy(const QVector<Plugin *> &plugins, cons
         }
     }
 
-    qDebug() << "Found" << filteredPlugins.count() << "matching plugins";
+    qCDebug(appLog) << "Found" << filteredPlugins.count() << "matching plugins";
     return filteredPlugins;
 }
 
 void PluginManager::setFileSize(qint64 size)
 {
-    qDebug() << "Setting file size to:" << size;
+    qCDebug(appLog) << "Setting file size to:" << size;
     m_filesize = size;
 }
 
 void PluginManager::loadPlugins()
 {
-    qDebug() << "Loading plugins from /usr/lib/";
+    qCDebug(appLog) << "Loading plugins from /usr/lib/";
     QCoreApplication::addLibraryPath("/usr/lib/");
     const QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("deepin-compressor/plugins"));
-    qDebug() << "Found" << plugins.size() << "potential plugins";
+    qCDebug(appLog) << "Found" << plugins.size() << "potential plugins";
     
     QSet<QString> addedPlugins;
     for (const KPluginMetaData &metaData : plugins) {
         const auto pluginId = metaData.pluginId();
         // Filter out duplicate plugins.
         if (addedPlugins.contains(pluginId)) {
-            qDebug() << "Skipping duplicate plugin:" << pluginId;
+            qCDebug(appLog) << "Skipping duplicate plugin:" << pluginId;
             continue;
         }
 
@@ -299,17 +300,17 @@ void PluginManager::loadPlugins()
         plugin->setEnabled(true);
         addedPlugins << pluginId;
         m_plugins << plugin;
-        qDebug() << "Loaded plugin:" << pluginId;
+        qCDebug(appLog) << "Loaded plugin:" << pluginId;
     }
-    qDebug() << "Successfully loaded" << addedPlugins.size() << "unique plugins";
+    qCDebug(appLog) << "Successfully loaded" << addedPlugins.size() << "unique plugins";
 }
 
 QVector<Plugin *> PluginManager::preferredPluginsFor(const CustomMimeType &mimeType, bool readWrite) const
 {
-    qDebug() << "Getting preferred plugins for mime type:" << mimeType.name() << "readWrite:" << readWrite;
+    qCDebug(appLog) << "Getting preferred plugins for mime type:" << mimeType.name() << "readWrite:" << readWrite;
     QVector<Plugin *> preferredPlugins = filterBy((readWrite ? availableWritePlugins() : availablePlugins()), mimeType);
 
-    qDebug() << "Sorting" << preferredPlugins.size() << "plugins by priority";
+    qCDebug(appLog) << "Sorting" << preferredPlugins.size() << "plugins by priority";
     std::sort(preferredPlugins.begin(), preferredPlugins.end(), [](Plugin * p1, Plugin * p2) {
         return p1->priority() > p2->priority();
     });
@@ -340,13 +341,13 @@ QVector<Plugin *> PluginManager::preferredPluginsFor(const CustomMimeType &mimeT
 //        }
 //    }
 
-    qDebug() << "Returning" << preferredPlugins.size() << "preferred plugins";
+    qCDebug(appLog) << "Returning" << preferredPlugins.size() << "preferred plugins";
     return preferredPlugins;
 }
 
 QStringList PluginManager::sortByComment(const QSet<QString> &mimeTypes)
 {
-    qDebug() << "Sorting" << mimeTypes.size() << "mime types by comment";
+    qCDebug(appLog) << "Sorting" << mimeTypes.size() << "mime types by comment";
     QMap<QString, QString> map;
 
     // Initialize the QMap to sort by comment.
@@ -361,24 +362,24 @@ QStringList PluginManager::sortByComment(const QSet<QString> &mimeTypes)
         sortedMimeTypes << value;
     }
 
-    qDebug() << "Sorted mime types, result count:" << sortedMimeTypes.size();
+    qCDebug(appLog) << "Sorted mime types, result count:" << sortedMimeTypes.size();
     return sortedMimeTypes;
 }
 
 bool PluginManager::libarchiveHasLzo()
 {
-    qDebug() << "Checking if libarchive has LZO support";
+    qCDebug(appLog) << "Checking if libarchive has LZO support";
     // Step 1: look for the libarchive plugin, which is built against libarchive.
     const QString strPluginPath = []() {
         const QStringList paths = QCoreApplication::libraryPaths();
         for (const QString &path : paths) {
             const QString pluginPath = QStringLiteral("%1/kerfuffle/kerfuffle_libarchive.so").arg(path);
             if (QFileInfo::exists(pluginPath)) {
-                qDebug() << "Found libarchive plugin at:" << pluginPath;
+                qCDebug(appLog) << "Found libarchive plugin at:" << pluginPath;
                 return pluginPath;
             }
         }
-        qWarning() << "Libarchive plugin not found";
+        qCWarning(appLog) << "Libarchive plugin not found";
         return QString();
     }();
 
@@ -395,17 +396,17 @@ bool PluginManager::libarchiveHasLzo()
     const QString output = QString::fromUtf8(dependencyTool.readAllStandardOutput());
     QRegularExpression regex(QStringLiteral("/.*/libarchive.so|/.*/libarchive.*.dylib"));
     if (!regex.match(output).hasMatch()) {
-        qWarning() << "libarchive.so not found in dependencies";
+        qCWarning(appLog) << "libarchive.so not found in dependencies";
         return false;
     }
 
     // Step 3: check whether libarchive links against liblzo.
     const QStringList libarchivePath(regex.match(output).captured(0));
-    qDebug() << "Found libarchive at:" << libarchivePath;
+    qCDebug(appLog) << "Found libarchive at:" << libarchivePath;
     dependencyTool.setArguments(args + libarchivePath);
     dependencyTool.start();
     dependencyTool.waitForFinished();
     const bool hasLzo = dependencyTool.readAllStandardOutput().contains(QByteArrayLiteral("lzo"));
-    qDebug() << "Libarchive LZO support:" << hasLzo;
+    qCDebug(appLog) << "Libarchive LZO support:" << hasLzo;
     return hasLzo;
 }
