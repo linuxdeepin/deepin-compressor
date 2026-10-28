@@ -1,0 +1,17 @@
+{
+    "magic": "dsg.config.meta",
+    "version": "1.0",
+    "contents": {
+        "log_rules": {
+            "value": "org.deepin.compressor*.debug=false;org.deepin.compressor*.info=false;org.deepin.compressor*.warning=true",
+            "serial": 0,
+            "flags": ["global"],
+            "name": "log rules",
+            "name[zh_CN]": "日志规则",
+            "description": "Dynamic logging filter rules for debug mode",
+            "description[zh_CN]": "调试模式动态日志过滤规则",
+            "permissions": "readwrite",
+            "visibility": "public"
+        }
+    }
+}
