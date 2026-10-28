@@ -10,6 +10,7 @@
 #include "uistruct.h"
 #include "popupdialog.h"
 #include "DebugTimeManager.h"
+#include "common/ddlog.h"
 
 #include <DApplication>
 #include <DFileDialog>
@@ -40,27 +41,27 @@ DCORE_USE_NAMESPACE
 TypeLabel::TypeLabel(QWidget *parent)
     : DFrame(parent)
 {
-    qDebug() << "TypeLabel constructor";
+    qCDebug(appLog) << "TypeLabel constructor";
     setFrameShape(QFrame::NoFrame);
 }
 
 TypeLabel::~TypeLabel()
 {
-    qDebug() << "TypeLabel destructor";
+    qCDebug(appLog) << "TypeLabel destructor";
 }
 
 void TypeLabel::mousePressEvent(QMouseEvent *event)
 {
-    qDebug() << "TypeLabel mousePressEvent";
+    qCDebug(appLog) << "TypeLabel mousePressEvent";
     emit labelClickEvent(event);
     DFrame::mousePressEvent(event);
 }
 
 void TypeLabel::paintEvent(QPaintEvent *event)
 {
-    // qDebug() << "TypeLabel paintEvent";
+    // qCDebug(appLog) << "TypeLabel paintEvent";
     if (hasFocus() && (m_reson & (Qt::TabFocusReason | Qt::BacktabFocusReason | Qt::PopupFocusReason))) {
-        // qDebug() << "TypeLabel paintEvent has focus";
+        // qCDebug(appLog) << "TypeLabel paintEvent has focus";
         DStylePainter painter(this);
         DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
         QStyleOptionFrame opt;
@@ -79,14 +80,14 @@ void TypeLabel::paintEvent(QPaintEvent *event)
 
 void TypeLabel::focusInEvent(QFocusEvent *event)
 {
-    // qDebug() << "TypeLabel focusInEvent";
+    // qCDebug(appLog) << "TypeLabel focusInEvent";
     m_reson = event->reason();
     DFrame::focusInEvent(event);
 }
 
 void TypeLabel::focusOutEvent(QFocusEvent *event)
 {
-    // qDebug() << "TypeLabel focusOutEvent";
+    // qCDebug(appLog) << "TypeLabel focusOutEvent";
     m_reson = event->reason();
     DFrame::focusOutEvent(event);
 }
@@ -94,24 +95,24 @@ void TypeLabel::focusOutEvent(QFocusEvent *event)
 CompressSettingPage::CompressSettingPage(QWidget *parent)
     : DWidget(parent)
 {
-    qDebug() << "CompressSettingPage constructor called";
+    qCDebug(appLog) << "CompressSettingPage constructor called";
     initConfig();
     initUI();
     initConnections();
     slotAdvancedEnabled(m_pAdvancedBtn->isChecked());
-    qDebug() << "CompressSettingPage initialization completed";
+    qCDebug(appLog) << "CompressSettingPage initialization completed";
 }
 
 CompressSettingPage::~CompressSettingPage()
 {
-    qDebug() << "CompressSettingPage destructor called";
+    qCDebug(appLog) << "CompressSettingPage destructor called";
 }
 
 void CompressSettingPage::setFileSize(const QStringList &listFiles, qint64 qSize)
 {
-    qDebug() << "Setting file size, file count:" << listFiles.count() << "total size:" << qSize;
+    qCDebug(appLog) << "Setting file size, file count:" << listFiles.count() << "total size:" << qSize;
     if (listFiles.count() == 0) {
-        qWarning() << "Empty file list provided";
+        qCWarning(appLog) << "Empty file list provided";
         return;
     }
 
@@ -150,10 +151,10 @@ void CompressSettingPage::setFileSize(const QStringList &listFiles, qint64 qSize
 
 void CompressSettingPage::refreshMenu()
 {
-    qDebug() << "Refreshing compression type menu";
+    qCDebug(appLog) << "Refreshing compression type menu";
     m_pTypeMenu->clear();
     if (m_listSupportedMimeTypes.empty()) {
-        qInfo() << "Loading supported mime types from plugin manager";
+        qCInfo(appLog) << "Loading supported mime types from plugin manager";
         m_listSupportedMimeTypes = PluginManager::get_instance().supportedWriteMimeTypes(PluginManager::SortByComment);     // 获取支持的压缩格式
     }
 
@@ -203,7 +204,7 @@ void CompressSettingPage::refreshMenu()
 
 void CompressSettingPage::initUI()
 {
-    qDebug() << "initUI";
+    qCDebug(appLog) << "initUI";
     // 左侧界面
     m_pTypePixmapLbl = new DLabel(this);
     m_pClickLbl = new TypeLabel(this);
@@ -392,7 +393,7 @@ void CompressSettingPage::initUI()
 
 void CompressSettingPage::initConnections()
 {
-    qDebug() << "initConnections";
+    qCDebug(appLog) << "initConnections";
     connect(m_pClickLbl, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(slotShowRightMenu(QMouseEvent *)));
     connect(m_pTypeMenu, &DMenu::triggered, this, &CompressSettingPage::slotTypeChanged);
     connect(m_pFileNameEdt, &DLineEdit::textChanged, this, &CompressSettingPage::slotRefreshFileNameEdit);
@@ -407,7 +408,7 @@ void CompressSettingPage::initConnections()
 
 void CompressSettingPage::setTypeImage(const QString &strType)
 {
-    qDebug() << "setTypeImage: " << strType;
+    qCDebug(appLog) << "setTypeImage: " << strType;
     QFileIconProvider provider;
     QIcon icon = provider.icon(QFileInfo("temp." + strType));
 
@@ -421,19 +422,19 @@ bool CompressSettingPage::checkFileNameVaild(const QString &strText)
 
     // 文件名为空返回错误
     if (strArchiveName.length() == 0) {
-        qWarning() << "File name is empty";
+        qCWarning(appLog) << "File name is empty";
         return false;
     }
 
     // 文件名过长返回错误
     if (strArchiveName.length() > 255) {
-        qWarning() << "File name is too long";
+        qCWarning(appLog) << "File name is too long";
         return false;
     }
 
     // 如果文件名中包含"/"，返回错误
     if (strArchiveName.contains(QDir::separator())) {
-        qWarning() << "File name contains separator";
+        qCWarning(appLog) << "File name contains separator";
         return false;
     }
 
@@ -442,20 +443,20 @@ bool CompressSettingPage::checkFileNameVaild(const QString &strText)
 
 void CompressSettingPage::setEncryptedEnabled(bool bEnabled)
 {
-    qDebug() << "setEncryptedEnabled: " << bEnabled;
+    qCDebug(appLog) << "setEncryptedEnabled: " << bEnabled;
     // 设置加密是否可用
     m_pEncryptedLbl->setEnabled(bEnabled);
     m_pPasswordEdt->setEnabled(bEnabled);
 
     if (!bEnabled) {
-        qDebug() << "Disabling list encryption";
+        qCDebug(appLog) << "Disabling list encryption";
         setListEncryptionEnabled(bEnabled);
     }
 }
 
 void CompressSettingPage::slotEchoModeChanged(bool bEchoOn)
 {
-    qDebug() << "CompressSettingPage::slotEchoModeChanged" << bEchoOn;
+    qCDebug(appLog) << "CompressSettingPage::slotEchoModeChanged" << bEchoOn;
     // 根据明暗码决定是否屏蔽输入法
     m_pPasswordEdt->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, bEchoOn);
 }
@@ -466,35 +467,35 @@ void CompressSettingPage::slotEchoModeChanged(bool bEchoOn)
  */
 void CompressSettingPage::setListEncryptionEnabled(bool bEnabled)
 {
-    qDebug() << "setListEncryptionEnabled: " << bEnabled;
+    qCDebug(appLog) << "setListEncryptionEnabled: " << bEnabled;
     m_pListEncryptionLbl->setEnabled(bEnabled);
     m_pListEncryptionBtn->setEnabled(bEnabled);
 }
 
 void CompressSettingPage::setSplitEnabled(bool bEnabled)
 {
-    qDebug() << "setSplitEnabled: " << bEnabled;
+    qCDebug(appLog) << "setSplitEnabled: " << bEnabled;
     m_pSplitCkb->setEnabled(bEnabled);  // 设置分卷勾选框是否可用
 
     // 如果不分卷，取消勾选，清空分卷数据
     if (!bEnabled) {
-        qDebug() << "Disabling split";
+        qCDebug(appLog) << "Disabling split";
         m_pSplitCkb->setCheckState(Qt::Unchecked);
         m_pSplitValueEdt->setEnabled(bEnabled);
         m_pSplitValueEdt->clear();
         m_pSplitValueEdt->setValue(0.0);
     } else {
-        qDebug() << "Enabling split";
+        qCDebug(appLog) << "Enabling split";
         m_pSplitValueEdt->setEnabled(m_pSplitCkb->isChecked());
     }
 }
 
 void CompressSettingPage::refreshCompressLevel(const QString &strType)
 {
-    qDebug() << "refreshCompressLevel: " << strType;
+    qCDebug(appLog) << "refreshCompressLevel: " << strType;
 #ifdef DTKCORE_CLASS_DConfigFile
     if(m_isOrderMode) {
-        qDebug() << "Order mode is enabled";
+        qCDebug(appLog) << "Order mode is enabled";
         // 其余格式支持设置压缩方式
         // 设置压缩方式可用
         m_pCompressLevelCmb->setEnabled(true);
@@ -502,28 +503,28 @@ void CompressSettingPage::refreshCompressLevel(const QString &strType)
         if(!m_dconfig) return;
         DConfig *dconfig = (DConfig *)m_dconfig;
         if(strType == "7z") {
-            qDebug() << "Refresh compress level for 7z";
+            qCDebug(appLog) << "Refresh compress level for 7z";
             if(dconfig && dconfig->isValid() && dconfig->keyList().contains("special7zCompressor")){
-                        qDebug() << "Setting 7z compress level from config";
+                        qCDebug(appLog) << "Setting 7z compress level from config";
                         int nMethod = dconfig->value("special7zCompressor").toInt();
                         m_pCompressLevelCmb->setCurrentIndex(nMethod);
                     }
         } else if(strType == "jar") {
-            qDebug() << "Refresh compress level for jar";
+            qCDebug(appLog) << "Refresh compress level for jar";
             if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialJarCompressor")){
-                        qDebug() << "Setting jar compress level from config";
+                        qCDebug(appLog) << "Setting jar compress level from config";
                         int nMethod = dconfig->value("specialJarCompressor").toInt();
                         m_pCompressLevelCmb->setCurrentIndex(nMethod);
                     }
         } else if(strType == "tar") {
-            qDebug() << "Refresh compress level for tar";
+            qCDebug(appLog) << "Refresh compress level for tar";
             // tar只有存储功能
             m_pCompressLevelCmb->setCurrentIndex(0);
             // 设置压缩方式不可用
             m_pCompressLevelCmb->setEnabled(false);
             m_pCompressLevelLbl->setEnabled(false);
         } else if(strType == "tar.bz2") {
-            qDebug() << "Refresh compress level for tar.bz2";
+            qCDebug(appLog) << "Refresh compress level for tar.bz2";
             if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialTarbz2Compressor")){
                         int nMethod = dconfig->value("specialTarbz2Compressor").toInt();
                         m_pCompressLevelCmb->setCurrentIndex(nMethod);
@@ -605,7 +606,7 @@ void CompressSettingPage::refreshCompressLevel(const QString &strType)
 
 void CompressSettingPage::setCommentEnabled(bool bEnabled)
 {
-    qDebug() << "setCommentEnabled: " << bEnabled;
+    qCDebug(appLog) << "setCommentEnabled: " << bEnabled;
     m_pCommentLbl->setEnabled(bEnabled);
     m_pCommentEdt->setEnabled(bEnabled);
     // 注释不可用时,清除注释
@@ -615,28 +616,28 @@ void CompressSettingPage::setCommentEnabled(bool bEnabled)
 
 bool CompressSettingPage::checkCompressOptionValid()
 {
-    qDebug() << "Checking compress options validity";
+    qCDebug(appLog) << "Checking compress options validity";
     if (!checkFileNameVaild(m_pFileNameEdt->text())) { // 检查文件名是否有效
-        qWarning() << "Invalid file name";
+        qCWarning(appLog) << "Invalid file name";
         showWarningDialog(tr("Invalid file name"));
         return false;
     }
 
     QFileInfo fInfo(m_pSavePathEdt->text());
     if ((m_pSavePathEdt->text().remove(" ")).isEmpty()) { // 检查是否已经选择保存路径
-        qWarning() << "Save path is empty";
+        qCWarning(appLog) << "Save path is empty";
         showWarningDialog(tr("Please enter the path"));
         return false;
     }
 
     if (!fInfo.exists()) { // 检查选择保存路径是否存在
-        qWarning() << "Save path does not exist";
+        qCWarning(appLog) << "Save path does not exist";
         showWarningDialog(tr("The path does not exist, please retry"));
         return false;
     }
 
     if (!(fInfo.isWritable() && fInfo.isExecutable())) { // 检查一选择保存路径是否有权限
-        qWarning() << "No write/execute permission for save path";
+        qCWarning(appLog) << "No write/execute permission for save path";
         showWarningDialog(tr("You do not have permission to save files here, please change and retry"));
         return false;
     }
@@ -645,7 +646,7 @@ bool CompressSettingPage::checkCompressOptionValid()
             && (fabs(m_pSplitValueEdt->value()) < std::numeric_limits<double>::epsilon()
                 || (((m_qFileSize / 1024 / 1024) / (m_pSplitValueEdt->value())) > 200))
             && (m_strMimeType.contains("7z") || m_strMimeType.contains("zip"))) { // 最多允许分卷数量为200卷
-        qWarning() << "Too many volumes requested";
+        qCWarning(appLog) << "Too many volumes requested";
         showWarningDialog(tr("Too many volumes, please change and retry"));
         return false;
     }
@@ -654,14 +655,14 @@ bool CompressSettingPage::checkCompressOptionValid()
     for (int i = 0; i < m_listFiles.count(); i++) {
         QFileInfo file(m_listFiles.at(i));
         if (!file.exists()) {  // 待压缩文件已经不存在
-            qWarning() << "File to be compressed does not exist:" << file.absoluteFilePath();
+            qCWarning(appLog) << "File to be compressed does not exist:" << file.absoluteFilePath();
             bResult = false;
             showWarningDialog(tr("%1 does not exist on the disk, please check and try again").arg(file.absoluteFilePath()), file.absoluteFilePath());
             return false;
         }
 
         if (!file.isReadable()) {
-            qWarning() << "No read permission for file to be compressed:" << file.absoluteFilePath();
+            qCWarning(appLog) << "No read permission for file to be compressed:" << file.absoluteFilePath();
             bResult = false;
             showWarningDialog(tr("You do not have permission to compress %1").arg(file.absoluteFilePath()), file.absoluteFilePath());
             return false;
@@ -679,15 +680,15 @@ bool CompressSettingPage::checkCompressOptionValid()
 
 bool CompressSettingPage::checkFile(const QString &path)
 {
-    qDebug() << "Checking file access:" << path;
+    qCDebug(appLog) << "Checking file access:" << path;
     QFileInfo fileInfo(path);
 
     if (!fileInfo.exists()) {  // 待压缩文件已经不存在
         if (fileInfo.isSymLink()) {
-            qWarning() << "Symlink target does not exist:" << path;
+            qCWarning(appLog) << "Symlink target does not exist:" << path;
             showWarningDialog(tr("The original file of %1 does not exist, please check and try again").arg(fileInfo.absoluteFilePath()), fileInfo.absoluteFilePath());
         } else {
-            qWarning() << "File does not exist:" << path;
+            qCWarning(appLog) << "File does not exist:" << path;
             showWarningDialog(tr("%1 does not exist on the disk, please check and try again").arg(fileInfo.absoluteFilePath()), fileInfo.absoluteFilePath());
         }
 
@@ -695,13 +696,13 @@ bool CompressSettingPage::checkFile(const QString &path)
     }
 
     if (!fileInfo.isReadable()) {
-        qWarning() << "File not readable:" << path;
+        qCWarning(appLog) << "File not readable:" << path;
         showWarningDialog(tr("You do not have permission to compress %1").arg(fileInfo.absoluteFilePath()), fileInfo.absoluteFilePath());
         return false;
     }
 
     if (fileInfo.isDir()) {
-        qDebug() << "Checking directory contents:" << path;
+        qCDebug(appLog) << "Checking directory contents:" << path;
         QDir dir(path);
         // 遍历文件夹下的子文件夹
         QFileInfoList listInfo = dir.entryInfoList(QDir::AllEntries | QDir::System
@@ -721,7 +722,7 @@ bool CompressSettingPage::checkFile(const QString &path)
 
 int CompressSettingPage::showWarningDialog(const QString &msg, const QString &strToolTip)
 {
-    qWarning() << "Showing warning dialog:" << msg;
+    qCWarning(appLog) << "Showing warning dialog:" << msg;
     // 使用封装好的提示对话框
     TipDialog dialog(this);
     return dialog.showDialog(msg, tr("OK", "button"), DDialog::ButtonNormal, strToolTip);
@@ -729,7 +730,7 @@ int CompressSettingPage::showWarningDialog(const QString &msg, const QString &st
 
 void CompressSettingPage::setDefaultName(const QString &strName)
 {
-    qDebug() << "Setting default archive name to:" << strName;
+    qCDebug(appLog) << "Setting default archive name to:" << strName;
     m_pFileNameEdt->setText(strName);
     QLineEdit *qfilename = m_pFileNameEdt->lineEdit();
     qfilename->selectAll();
@@ -738,7 +739,7 @@ void CompressSettingPage::setDefaultName(const QString &strName)
 
 void CompressSettingPage::initConfig()
 {
-    qDebug() << "Initializing config";
+    qCDebug(appLog) << "Initializing config";
 #ifdef DTKCORE_CLASS_DConfigFile
     m_dconfig = DConfig::create("org.deepin.compressor","org.deepin.compressor.method");
     DConfig *dconfig = static_cast<DConfig *>(m_dconfig);
@@ -750,7 +751,7 @@ void CompressSettingPage::initConfig()
 
 void CompressSettingPage::slotShowRightMenu(QMouseEvent *e)
 {
-    qDebug() << "Showing context menu";
+    qCDebug(appLog) << "Showing context menu";
     Q_UNUSED(e)
 
     // 设置菜单弹出位置
@@ -760,12 +761,12 @@ void CompressSettingPage::slotShowRightMenu(QMouseEvent *e)
 void CompressSettingPage::slotTypeChanged(QAction *action)
 {
     if (nullptr == action) {
-        qWarning() << "Null action in slotTypeChanged";
+        qCWarning(appLog) << "Null action in slotTypeChanged";
         return;
     }
 
     m_strMimeType = action->data().toString();
-    qInfo() << "Compression type changed to:" << action->text() << "mime type:" << m_strMimeType;
+    qCInfo(appLog) << "Compression type changed to:" << action->text() << "mime type:" << m_strMimeType;
 
     QString selectType = action->text();
     setTypeImage(selectType);
@@ -776,32 +777,32 @@ void CompressSettingPage::slotTypeChanged(QAction *action)
     m_pCpuCmb->setCurrentIndex(0);
 
     if (0 == selectType.compare("tar.7z")) {       // tar.7z支持普通/列表加密，不支持分卷
-        qDebug() << "Type changed to tar.7z";
+        qCDebug(appLog) << "Type changed to tar.7z";
         setEncryptedEnabled(true);
         setListEncryptionEnabled(true);
         setSplitEnabled(false);
         setCommentEnabled(false);
     } else if (0 == selectType.compare("7z")) {     // 7z支持普通/列表加密。支持分卷
-        qDebug() << "Type changed to 7z";
+        qCDebug(appLog) << "Type changed to 7z";
         setEncryptedEnabled(true);
         setListEncryptionEnabled(true);
         setSplitEnabled(true);
         setCommentEnabled(false);
     } else if (0 == selectType.compare("zip")) {    // zip支持普通加密，不支持列表加密，支持分卷，支持注释，但不同时支持分卷和注释
-        qDebug() << "Type changed to zip";
+        qCDebug(appLog) << "Type changed to zip";
         setEncryptedEnabled(true);
         setListEncryptionEnabled(false);
         setSplitEnabled(true);
         setCommentEnabled(!m_pSplitCkb->isChecked()); // 不同时支持分卷和注释
     } else {                                // 其余格式不支持加密，不支持分卷
-        qDebug() << "Type changed to other format:" << selectType;
+        qCDebug(appLog) << "Type changed to other format:" << selectType;
         setEncryptedEnabled(false);
         setListEncryptionEnabled(false);
         setSplitEnabled(false);
         setCommentEnabled(false);
 
         if (0 == selectType.compare("tar.gz")) {
-            qDebug() << "Enabling CPU thread selection for tar.gz";
+            qCDebug(appLog) << "Enabling CPU thread selection for tar.gz";
             m_pCpuLbl->setEnabled(true);
             m_pCpuCmb->setEnabled(true);
             m_pCpuCmb->setCurrentIndex(m_pCpuCmb->count() - 1);
@@ -813,7 +814,7 @@ void CompressSettingPage::slotTypeChanged(QAction *action)
 
 void CompressSettingPage::slotRefreshFileNameEdit()
 {
-    qDebug() << "Refreshing file name edit style";
+    qCDebug(appLog) << "Refreshing file name edit style";
     DPalette plt = DPaletteHelper::instance()->palette(m_pFileNameEdt);
 
     if (!m_pFileNameEdt->text().isEmpty()) {
@@ -832,7 +833,7 @@ void CompressSettingPage::slotRefreshFileNameEdit()
 
 void CompressSettingPage::slotAdvancedEnabled(bool bEnabled)
 {
-    qDebug() << "Advanced options enabled:" << bEnabled;
+    qCDebug(appLog) << "Advanced options enabled:" << bEnabled;
     // bug103712  滚动区域内widget高度发生变化导致页面闪动   页面变化前先设置widget大小
     if (bEnabled) {
         m_pRightScroll->widget()->setFixedHeight(SCROLL_MAX);
@@ -853,7 +854,7 @@ void CompressSettingPage::slotAdvancedEnabled(bool bEnabled)
 
     // 不启用高级选项时清空界面数据
     if (!bEnabled) {
-        qDebug() << "Clearing advanced options";
+        qCDebug(appLog) << "Clearing advanced options";
         m_pPasswordEdt->clear();
         m_pListEncryptionBtn->setChecked(false);
         m_pSplitCkb->setChecked(false);
@@ -870,7 +871,7 @@ void CompressSettingPage::slotAdvancedEnabled(bool bEnabled)
             if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialCpuTarGzCompressor")){
                 int nCpu = dconfig->value("specialCpuTarGzCompressor").toInt();
                 m_pCpuCmb->setCurrentIndex(nCpu);
-                 qDebug() << "Setting CPU threads for tar.gz from config:" << nCpu;
+                 qCDebug(appLog) << "Setting CPU threads for tar.gz from config:" << nCpu;
             }
         }
 #endif
@@ -879,7 +880,7 @@ void CompressSettingPage::slotAdvancedEnabled(bool bEnabled)
 
 void CompressSettingPage::slotSplitEdtEnabled()
 {
-    qDebug() << "Split checkbox state changed, isChecked:" << m_pSplitCkb->isChecked();
+    qCDebug(appLog) << "Split checkbox state changed, isChecked:" << m_pSplitCkb->isChecked();
     if(m_pSplitValueEdt->hasFocus() || m_pCommentEdt->hasFocus()) {
         parentWidget()->setFocus();
     }
@@ -904,11 +905,11 @@ void CompressSettingPage::slotCompressClicked()
     QString strTmpCompresstype = m_pCompressTypeLbl->text();        // 压缩格式
     QString strName = m_pFileNameEdt->text() + "." + strTmpCompresstype;   // 压缩包名称
     PERF_PRINT_BEGIN("POINT-03", "压缩包名：" + strName + " 大小：" + QString::number(m_qFileSize));
-    qInfo() << "Compress button clicked, archive:" << strName << "size:" << m_qFileSize << "type:" << strTmpCompresstype;
+    qCInfo(appLog) << "Compress button clicked, archive:" << strName << "size:" << m_qFileSize << "type:" << strTmpCompresstype;
 
     // 检查源文件中是否包含即将生成的压缩包
     if (m_listFiles.contains(m_pSavePathEdt->text() + QDir::separator() + strName)) {
-        qWarning() << "Archive name conflicts with source file:" << strName;
+        qCWarning(appLog) << "Archive name conflicts with source file:" << strName;
         showWarningDialog(tr("The name is the same as that of the compressed archive, please use another one"));
         return;
     }
@@ -918,9 +919,9 @@ void CompressSettingPage::slotCompressClicked()
         QString strPassword = m_pPasswordEdt->lineEdit()->text();
         QRegularExpression chineseRegex("[\\x{4e00}-\\x{9fa5}]+");
         if (!strPassword.isEmpty() && chineseRegex.match(strPassword).hasMatch()) {
-            qWarning() << "Chinese password not allowed for ZIP volumes";
+            qCWarning(appLog) << "Chinese password not allowed for ZIP volumes";
             m_pPasswordEdt->showAlertMessage(tr("The password for ZIP volumes cannot be in Chinese"));
-            qWarning() << "Compress options validation failed";
+            qCWarning(appLog) << "Compress options validation failed";
             return;
         }
     }
@@ -984,15 +985,15 @@ void CompressSettingPage::slotCompressClicked()
     // 检测此压缩包名称是否存在
     QFileInfo fileInfo(compressInfo.strTargetPath + QDir::separator() + compressInfo.strArchiveName);
     if (fileInfo.exists()) {
-        qInfo() << "Archive file already exists:" << fileInfo.filePath();
+        qCInfo(appLog) << "Archive file already exists:" << fileInfo.filePath();
         SimpleQueryDialog dialog(this);
         int iResult = dialog.showDialog(tr("Another file with the same name already exists, replace it?"), tr("Cancel", "button"), DDialog::ButtonNormal, tr("Replace", "button"), DDialog::ButtonWarning);
         if (1 == iResult) {     // 如果点击替换，先移除本地压缩包
-            qInfo() << "Replacing existing archive file";
+            qCInfo(appLog) << "Replacing existing archive file";
             QFile file(fileInfo.filePath());
             file.remove();
         } else {    // 点击关闭或者取消，不操作
-            qInfo() << "User canceled replacing existing file";
+            qCInfo(appLog) << "User canceled replacing existing file";
             return;
         }
     }
@@ -1002,10 +1003,10 @@ void CompressSettingPage::slotCompressClicked()
 
 void CompressSettingPage::slotCommentTextChanged()
 {
-    qDebug() << "Comment text changed";
+    qCDebug(appLog) << "Comment text changed";
     QString savetext = m_pCommentEdt->toPlainText();
     if (savetext.size() > MAXCOMMENTLEN) { //限制最多注释MAXCOMMENTLEN个字
-        qDebug() << "Comment exceeds max length, truncating";
+        qCDebug(appLog) << "Comment exceeds max length, truncating";
         // 保留前MAXCOMMENTLEN个注释字符
         m_pCommentEdt->setText(savetext.left(MAXCOMMENTLEN));
 
@@ -1018,13 +1019,13 @@ void CompressSettingPage::slotCommentTextChanged()
 
 void CompressSettingPage::slotPasswordChanged()
 {
-    qDebug() << "Password text changed";
+    qCDebug(appLog) << "Password text changed";
     QRegularExpression reg("^[\\x00-\\x80\\x{4e00}-\\x{9fa5}]+$");
     QString pwdin = m_pPasswordEdt->lineEdit()->text();
     QString pwdout;
 
     if (!pwdin.isEmpty() && !reg.match(pwdin).hasMatch()) {
-        qDebug() << "Password contains invalid characters, filtering";
+        qCDebug(appLog) << "Password contains invalid characters, filtering";
         for (int i = 0; i < pwdin.length(); ++i) {
             if (reg.match(pwdin.at(i)).hasMatch()) {
                 pwdout.append(pwdin.at(i));
@@ -1039,13 +1040,13 @@ void CompressSettingPage::slotPasswordChanged()
 
 CustomPushButton *CompressSettingPage::getCompressBtn() const
 {
-    // qDebug() << "getCompressBtn called";
+    // qCDebug(appLog) << "getCompressBtn called";
     return m_pCompressBtn;
 }
 
 QString CompressSettingPage::getComment() const
 {
-    qDebug() << "getComment called";
+    qCDebug(appLog) << "getComment called";
     // m_pCommentEdt不可用时就返回空字符串，表示该压缩格式(除zip格式外)不支持添加注释
     if (nullptr != m_pCommentEdt) {
         return m_pCommentEdt->isEnabled() ? m_pCommentEdt->toPlainText() : QString("");
@@ -1060,7 +1061,7 @@ bool CompressSettingPage::eventFilter(QObject *watched, QEvent *event)
         if (QEvent::KeyPress == event->type()) {
             QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(event);
             if (Qt::Key_Enter == keyEvent->key() || Qt::Key_Return == keyEvent->key()) { //响应"回车键"
-                // qDebug() << "Enter key pressed on type label, showing menu";
+                // qCDebug(appLog) << "Enter key pressed on type label, showing menu";
                 m_pTypeMenu->popup(m_pCompressTypeLbl->mapToGlobal(m_pCompressTypeLbl->pos())); // 设置菜单弹出位置
                 m_pTypeMenu->setFocus(); // 切换焦点
                 return true;
@@ -1078,13 +1079,13 @@ bool CompressSettingPage::eventFilter(QObject *watched, QEvent *event)
 
 bool CompressSettingPage::isOrderMode()
 {
-    // qDebug() << "isOrderMode called, returning:" << m_isOrderMode;
+    // qCDebug(appLog) << "isOrderMode called, returning:" << m_isOrderMode;
     return m_isOrderMode;
 }
 
 TypeLabel *CompressSettingPage::getClickLbl() const
 {
-    // qDebug() << "getClickLbl called";
+    // qCDebug(appLog) << "getClickLbl called";
     return m_pClickLbl;
 }
 
@@ -1092,23 +1093,23 @@ void CompressSettingPage::mousePressEvent(QMouseEvent *event)
 {
     // 点击空白区域时，清除输入框焦点
     if (m_pFileNameEdt && m_pFileNameEdt->lineEdit()->hasFocus()) {
-        qDebug() << "Clearing focus from file name edit";
+        qCDebug(appLog) << "Clearing focus from file name edit";
         m_pFileNameEdt->lineEdit()->clearFocus();
     }
     if (m_pSavePathEdt && m_pSavePathEdt->lineEdit()->hasFocus()) {
-        qDebug() << "Clearing focus from save path edit";
+        qCDebug(appLog) << "Clearing focus from save path edit";
         m_pSavePathEdt->lineEdit()->clearFocus();
     }
     if (m_pPasswordEdt && m_pPasswordEdt->lineEdit()->hasFocus()) {
-        qDebug() << "Clearing focus from password edit";
+        qCDebug(appLog) << "Clearing focus from password edit";
         m_pPasswordEdt->lineEdit()->clearFocus();
     }
     if (m_pSplitValueEdt && m_pSplitValueEdt->hasFocus()) {
-        qDebug() << "Clearing focus from split value edit";
+        qCDebug(appLog) << "Clearing focus from split value edit";
         m_pSplitValueEdt->clearFocus();
     }
     if (m_pCommentEdt && m_pCommentEdt->hasFocus()) {
-        qDebug() << "Clearing focus from comment edit";
+        qCDebug(appLog) << "Clearing focus from comment edit";
         m_pCommentEdt->clearFocus();
     }
     
