@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "queries.h"
+#include "ddlog.h"
 
 #include <DMainWindow>
 #include <DDialog>
@@ -614,7 +615,7 @@ LoadCorruptQuery::~LoadCorruptQuery()
 
 void LoadCorruptQuery::execute()
 {
-    qInfo() << "Executing prompt";
+    qCInfo(ifaceLog) << "Executing prompt";
 
     if (m_pParent == nullptr) {
         m_pParent = getMainWindow();

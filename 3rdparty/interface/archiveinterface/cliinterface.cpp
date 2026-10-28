@@ -30,6 +30,7 @@
 #include "cliinterface.h"
 #include "queries.h"
 #include "datamanager.h"
+#include "ddlog.h"
 
 #include <QStandardPaths>
 #include <QFileInfo>
@@ -158,7 +159,7 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
     destPath = options.strTargetPath;
     if (destPath.endsWith("/")) {
         destPath.chop(1);
-        qInfo() << "解压目标路径 --- " << destPath;
+        qCInfo(ifaceLog) << "解压目标路径 --- " << destPath;
     }
     bool bHandleLongName = false;
     QDir::setCurrent(destPath);
@@ -203,9 +204,9 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
         }
 
         if (bHandleLongName && !checkMoveCapability()) {
-            qWarning() << "Long filename detected, but moveProgram (" << m_cliProps->property("moveProgram").toString() << ") is not available.";
-            qWarning() << "Archive format:" << m_mimetype.name() << "Skipping long name handling.";
-            qWarning() << "The extraction tool will report errors for files with names exceeding system limit (255 bytes).";
+            qCWarning(ifaceLog) << "Long filename detected, but moveProgram (" << m_cliProps->property("moveProgram").toString() << ") is not available.";
+            qCWarning(ifaceLog) << "Archive format:" << m_mimetype.name() << "Skipping long name handling.";
+            qCWarning(ifaceLog) << "The extraction tool will report errors for files with names exceeding system limit (255 bytes).";
             bHandleLongName = false;
         }
 
@@ -217,13 +218,13 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
             // 设置临时目录
             m_extractTempDir.reset(new QTemporaryDir(QStringLiteral(".%1-").arg(QCoreApplication::applicationName())));
             if (!m_extractTempDir->isValid()) {
-                qInfo() << "Creation of temporary directory failed.";
+                qCInfo(ifaceLog) << "Creation of temporary directory failed.";
                 emit signalFinished(PFT_Error);
                 return PFT_Error;
             }
 
             destPath = m_extractTempDir->path();
-            qInfo() << "extract temp path--- " << destPath;
+            qCInfo(ifaceLog) << "extract temp path--- " << destPath;
         }
         if (bHandleLongName) {
             if (!handleLongNameExtract(m_files)) {
@@ -264,9 +265,9 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
         }
 
         if (bHandleLongName && !checkMoveCapability()) {
-            qWarning() << "Long filename detected, but moveProgram (" << m_cliProps->property("moveProgram").toString() << ") is not available.";
-            qWarning() << "Archive format:" << m_mimetype.name() << "Skipping long name handling.";
-            qWarning() << "The extraction tool will report errors for files with names exceeding system limit (255 bytes).";
+            qCWarning(ifaceLog) << "Long filename detected, but moveProgram (" << m_cliProps->property("moveProgram").toString() << ") is not available.";
+            qCWarning(ifaceLog) << "Archive format:" << m_mimetype.name() << "Skipping long name handling.";
+            qCWarning(ifaceLog) << "The extraction tool will report errors for files with names exceeding system limit (255 bytes).";
             bHandleLongName = false;
         }
 
@@ -368,7 +369,7 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
 
     // 压缩目标路径
     const QString destinationPath = (options.strDestination == QString()) ? QString() : options.strDestination;
-    qInfo() << "Adding" << files.count() << "file(s) to destination:" << destinationPath;
+    qCInfo(ifaceLog) << "Adding" << files.count() << "file(s) to destination:" << destinationPath;
     bool isLink = true;
 
     if (!destinationPath.isEmpty()) {   // 向压缩包非第一层文件里面追加压缩
@@ -388,15 +389,15 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
             isLink = (isLink && QFileInfo(filePath).isSymLink());
             // 在临时路径创建待压缩文件的链接
             if (QFile::link(filePath, newFilePath)) {
-                qInfo() << "Symlink's created:" << filePath << newFilePath;
+                qCInfo(ifaceLog) << "Symlink's created:" << filePath << newFilePath;
             } else {   // 创建链接失败
-                qInfo() << "Can't create symlink" << filePath << newFilePath;
+                qCInfo(ifaceLog) << "Can't create symlink" << filePath << newFilePath;
                 emit signalFinished(PFT_Error);
                 return PFT_Error;
             }
         }
 
-        qInfo() << "Changing working dir again to " << m_extractTempDir->path();
+        qCInfo(ifaceLog) << "Changing working dir again to " << m_extractTempDir->path();
         QDir::setCurrent(m_extractTempDir->path());
 
         // 添加临时路径中的第一层文件（夹）
@@ -430,10 +431,10 @@ fileList.append(destinationPath.split(QLatin1Char('/'),
 
             if (!options.bTar_7z) {
                 if (QFile::link(file.strFullPath, linkpath)) {
-                    qInfo() << "process Symlink's created:" << file.strFullPath << linkpath;
+                    qCInfo(ifaceLog) << "process Symlink's created:" << file.strFullPath << linkpath;
                     mapdata.insert(file.strFullPath, linkpath);
                 } else {   // 创建链接失败
-                    qInfo() << "process Can't create symlink" << file.strFullPath << linkpath;
+                    qCInfo(ifaceLog) << "process Can't create symlink" << file.strFullPath << linkpath;
                     emit signalFinished(PFT_Error);
                     return PFT_Error;
                 }
@@ -460,7 +461,7 @@ fileList.append(destinationPath.split(QLatin1Char('/'),
     if (IsMtpFileOrDirectory(m_strArchiveName)) {
         temp_dir.reset(new QTemporaryDir);
         temp_dir->setAutoRemove(true);
-        qInfo() << "mtp 挂载压缩，建立临时文件夹：" << temp_dir->path();
+        qCInfo(ifaceLog) << "mtp 挂载压缩，建立临时文件夹：" << temp_dir->path();
         temp_archiveName = temp_dir->path() + QDir::separator() + QFileInfo(m_strArchiveName).fileName();
         //如果文件已经存在了，则为追加操作，move过去
         if (QFileInfo(m_strArchiveName).exists()) {
@@ -471,7 +472,7 @@ fileList.append(destinationPath.split(QLatin1Char('/'),
             mover.waitForFinished();
             ret = mover.exitCode() == QProcess::NormalExit;
             if (!ret) {
-                qInfo() << "建立临时文件失败!";
+                qCInfo(ifaceLog) << "建立临时文件失败!";
                 return PFT_Error;
             }
         }
@@ -504,7 +505,7 @@ fileList.append(destinationPath.split(QLatin1Char('/'),
             QProcess::execute("chmod", { "+x", m_scriptPath });
             ret = runProcess(m_scriptPath, QStringList());
         } else {
-            qWarning() << "Failed to create temporary script file.";
+            qCWarning(ifaceLog) << "Failed to create temporary script file.";
             ret = false;
         }
     } else {
@@ -523,14 +524,14 @@ fileList.append(destinationPath.split(QLatin1Char('/'),
     }
 
     if (ret && !temp_archiveName.isEmpty()) {
-        qInfo() << "mtp 压缩完成,现在开始移动";
+        qCInfo(ifaceLog) << "mtp 压缩完成,现在开始移动";
         QStringList args_list;
         args_list << temp_archiveName << m_strArchiveName;
         m_process->waitForFinished();
         QProcess mover;
         ret = 0 == mover.execute("mv", args_list);
         ret = mover.exitCode() == QProcess::NormalExit;
-        qInfo() << "mtp 移动成功? " << ret;
+        qCInfo(ifaceLog) << "mtp 移动成功? " << ret;
     }
     //删除临时目录
     for (QTemporaryDir *tmdDir : lstTmpDir) {
@@ -1081,12 +1082,12 @@ bool CliInterface::moveExtractTempFilesToDest(const QList<FileEntry> &files, con
         if (etractEntryTemp.isDir()) {
             // 提取文件夹，创建目标文件夹路径
             if (!finalDestDir.mkpath(extractEntry.filePath())) {
-                qInfo() << "Failed to create directory" << extractEntry.filePath() << "in final destination.";
+                qCInfo(ifaceLog) << "Failed to create directory" << extractEntry.filePath() << "in final destination.";
             }
         } else {
             // 目标路径下文件已经存在
             if (extractEntryDest.exists()) {
-                qInfo() << "File" << extractEntryDest.absoluteFilePath() << "exists.";
+                qCInfo(ifaceLog) << "File" << extractEntryDest.absoluteFilePath() << "exists.";
                 if (!skipAll && !overwriteAll) {
                     OverwriteQuery query(extractEntryDest.absoluteFilePath());
                     emit signalQuery(&query);
@@ -1098,7 +1099,7 @@ bool CliInterface::moveExtractTempFilesToDest(const QList<FileEntry> &files, con
                         }
 
                         if (!QFile::remove(extractEntryDest.absoluteFilePath())) {
-                            qInfo() << "Failed to remove" << extractEntryDest.absoluteFilePath();
+                            qCInfo(ifaceLog) << "Failed to remove" << extractEntryDest.absoluteFilePath();
                         }
                     } else if (query.responseSkip() || query.responseSkipAll()) {
                         if (query.responseSkipAll()) {   // 全部跳过
@@ -1115,19 +1116,19 @@ bool CliInterface::moveExtractTempFilesToDest(const QList<FileEntry> &files, con
                     return true;
                 } else if (overwriteAll) {   // 全部替换
                     if (!QFile::remove(extractEntryDest.absoluteFilePath())) {
-                        qInfo() << "Failed to remove" << extractEntryDest.absoluteFilePath();
+                        qCInfo(ifaceLog) << "Failed to remove" << extractEntryDest.absoluteFilePath();
                     }
                 }
             }
 
             // 创建文件夹路径
             if (!finalDestDir.mkpath(extractEntry.path())) {
-                qInfo() << "Failed to create parent directory for file:" << extractEntryDest.filePath();
+                qCInfo(ifaceLog) << "Failed to create parent directory for file:" << extractEntryDest.filePath();
             }
 
             // 对临时文件夹内的文件进行rename操作，移到目标路径下
             if (!QFile(etractEntryTemp.absoluteFilePath()).rename(extractEntryDest.absoluteFilePath())) {
-                qInfo() << "Failed to move file" << etractEntryTemp.filePath() << "to final destination.";
+                qCInfo(ifaceLog) << "Failed to move file" << etractEntryTemp.filePath() << "to final destination.";
                 //                emit signalFinished(PFT_Error);
                 moveSuccess = false;
                 //                return false;
@@ -1223,7 +1224,7 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
     QList<FileEntry> renameEntries;
     QStringList normalFileList;
     QScopedPointer<KPtyProcess> pProcess(new KPtyProcess);
-    qInfo() << "handleLongNameExtract: total files:" << files.count();
+    qCInfo(ifaceLog) << "handleLongNameExtract: total files:" << files.count();
 
     for (const FileEntry &entry : files) {
         QFileInfo info(entry.strFullPath);
@@ -1292,9 +1293,9 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
     }
 
     // 第二步：对需要重命名的文件逐个执行 7z rn
-    qInfo() << "handleLongNameExtract: rename entries:" << renameEntries.count() << ", normal files:" << normalFileList.count();
+    qCInfo(ifaceLog) << "handleLongNameExtract: rename entries:" << renameEntries.count() << ", normal files:" << normalFileList.count();
     for (const FileEntry &entry : renameEntries) {
-        qInfo() << "handleLongNameExtract: rename" << entry.strFullPath << "->" << entry.strAlias;
+        qCInfo(ifaceLog) << "handleLongNameExtract: rename" << entry.strFullPath << "->" << entry.strAlias;
         QList<FileEntry> lstFile;
         lstFile.append(entry);
         pProcess->setPtyChannels(KPtyProcess::StdinChannel);
@@ -1316,7 +1317,7 @@ bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
         }
     }
     allFileList.append(normalFileList);
-    qInfo() << "handleLongNameExtract: batch extract files:" << allFileList.count();
+    qCInfo(ifaceLog) << "handleLongNameExtract: batch extract files:" << allFileList.count();
 
     if (!allFileList.isEmpty()) {
         QDir::setCurrent(options.strTargetPath);
@@ -1403,7 +1404,7 @@ void CliInterface::readStdout(bool handleAll)
     QList<QByteArray> lines = m_stdOutData.split('\n');
     //    if (m_workStatus == WT_Add || m_workStatus == WT_Extract) {
     //        foreach (auto line, lines) {
-    //            qInfo() << line;
+    //            qCInfo(ifaceLog) << line;
     //        }
     //    }
     bool isWrongPwd = isWrongPasswordMsg(lines.last());
@@ -1462,7 +1463,7 @@ void CliInterface::readStdout(bool handleAll)
 
 void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    qInfo() << "Process finished, exitcode:" << exitCode << "exitstatus:" << exitStatus;
+    qCInfo(ifaceLog) << "Process finished, exitcode:" << exitCode << "exitstatus:" << exitStatus;
 
     deleteProcess();
 
@@ -1489,7 +1490,7 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
 
 void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    qInfo() << "Extraction process finished, exitcode:" << exitCode << "   exitstatus:" << exitStatus;
+    qCInfo(ifaceLog) << "Extraction process finished, exitcode:" << exitCode << "   exitstatus:" << exitStatus;
 
     deleteProcess();
 
