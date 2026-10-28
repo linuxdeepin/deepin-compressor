@@ -30,6 +30,7 @@
 #include "../../interface/queries.h"
 #include "datamanager.h"
 #include "common.h"
+#include "../../interface/ddlog.h"
 
 #include <QFileInfo>
 #include <QStandardPaths>
@@ -57,7 +58,7 @@ LibarchivePlugin::~LibarchivePlugin()
 
 PluginFinishType LibarchivePlugin::list()
 {
-    qInfo() << "LibarchivePlugin插件加载压缩包数据";
+    qCInfo(ifaceLog) << "LibarchivePlugin插件加载压缩包数据";
     PluginFinishType eType;
     DataManager::get_instance().archiveData().reset();
     m_setHasHandlesDirs.clear();
@@ -146,7 +147,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
 
     QString targetPath = options.strTargetPath;
     QFileInfo targetInfo(targetPath);
-    qWarning() << "DC_EXTRACT_TRACE target before mkpath"
+    qCWarning(ifaceLog) << "DC_EXTRACT_TRACE target before mkpath"
                << "archive" << m_strArchiveName
                << "target" << targetPath
                << "exists" << targetInfo.exists()
@@ -180,7 +181,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
             targetInfo = QFileInfo(targetPath);
         } else {
             m_eErrorType = ET_FileWriteError;
-            qWarning() << "DC_EXTRACT_TRACE target is not directory"
+            qCWarning(ifaceLog) << "DC_EXTRACT_TRACE target is not directory"
                        << "target" << targetPath
                        << "cwd" << QDir::currentPath();
             return PFT_Error;
@@ -189,7 +190,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
 
     if (targetInfo.exists() && !targetInfo.isDir()) {
         m_eErrorType = ET_FileWriteError;
-        qWarning() << "DC_EXTRACT_TRACE target is not directory"
+        qCWarning(ifaceLog) << "DC_EXTRACT_TRACE target is not directory"
                    << "target" << targetPath
                    << "cwd" << QDir::currentPath();
         return PFT_Error;
@@ -197,7 +198,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
 
     // 判断解压路径是否存在，不存在则创建文件夹
     if (!targetInfo.exists()) {
-        qWarning() << "DC_EXTRACT_TRACE mkpath start"
+        qCWarning(ifaceLog) << "DC_EXTRACT_TRACE mkpath start"
                    << "target" << targetPath
                    << "cwd" << QDir::currentPath();
         if (!QDir().mkpath(targetPath)) {
@@ -207,19 +208,19 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
                 m_eErrorType = ET_FileWriteError;
             }
 
-            qWarning() << "DC_EXTRACT_TRACE mkpath failed"
+            qCWarning(ifaceLog) << "DC_EXTRACT_TRACE mkpath failed"
                        << "target" << targetPath
                        << "cwd" << QDir::currentPath()
                        << "error" << m_eErrorType;
             return PFT_Error;
         }
-        qWarning() << "DC_EXTRACT_TRACE mkpath success"
+        qCWarning(ifaceLog) << "DC_EXTRACT_TRACE mkpath success"
                    << "target" << targetPath
                    << "cwd" << QDir::currentPath();
         targetInfo.refresh();
         if (!targetInfo.isDir()) {
             m_eErrorType = ET_FileWriteError;
-            qWarning() << "DC_EXTRACT_TRACE target not directory after mkpath"
+            qCWarning(ifaceLog) << "DC_EXTRACT_TRACE target not directory after mkpath"
                        << "target" << targetPath
                        << "cwd" << QDir::currentPath();
             return PFT_Error;
@@ -228,14 +229,14 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
 
     // 更改应用工作目录，结束时自动恢复原来路径
     HandleWorkingDir handleWorkingDir(&m_oldWorkingDir);
-    qWarning() << "DC_EXTRACT_TRACE before change cwd"
+    qCWarning(ifaceLog) << "DC_EXTRACT_TRACE before change cwd"
                << "target" << targetPath
                << "cwd" << QDir::currentPath();
     if (!handleWorkingDir.change(targetPath)) {
         m_eErrorType = ET_FileWriteError;
         return PFT_Error;
     }
-    qWarning() << "DC_EXTRACT_TRACE after change cwd"
+    qCWarning(ifaceLog) << "DC_EXTRACT_TRACE after change cwd"
                << "target" << targetPath
                << "cwd" << QDir::currentPath();
     m_extractDestDir = targetPath;
@@ -408,7 +409,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
             archive_entry_copy_pathname(entry, entryName.toUtf8().constData());
         }
 
-        qWarning() << "DC_EXTRACT_TRACE entry resolved"
+        qCWarning(ifaceLog) << "DC_EXTRACT_TRACE entry resolved"
                    << "archive" << m_strArchiveName
                    << "target" << targetPath
                    << "cwd" << QDir::currentPath()
@@ -429,7 +430,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
 
         // Check if the file about to be written already exists.
         if (!entryIsDir && entryFI.exists() && !m_setLongName.contains(entryName)) {
-            qWarning() << "DC_EXTRACT_TRACE overwrite query"
+            qCWarning(ifaceLog) << "DC_EXTRACT_TRACE overwrite query"
                        << "entry" << entryName
                        << "absolute" << entryFI.absoluteFilePath()
                        << "cwd" << QDir::currentPath()
@@ -781,7 +782,7 @@ void LibarchivePlugin::copyDataFromSource(struct archive *source, struct archive
     while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
         if (m_bPause) { //解压暂停
             sleep(1);
-//            qInfo() << "pause";
+//            qCInfo(ifaceLog) << "pause";
             continue;
         }
 
@@ -959,7 +960,7 @@ bool HandleWorkingDir::change(const QString &newWorkingDir)
 {
     *m_oldWorkingDir = QDir::currentPath();
     const bool changed = QDir::setCurrent(newWorkingDir);
-    qWarning() << "DC_EXTRACT_TRACE setCurrent"
+    qCWarning(ifaceLog) << "DC_EXTRACT_TRACE setCurrent"
                << "target" << newWorkingDir
                << "old" << *m_oldWorkingDir
                << "ok" << changed
@@ -970,7 +971,7 @@ bool HandleWorkingDir::change(const QString &newWorkingDir)
 HandleWorkingDir::~HandleWorkingDir()
 {
     if (!m_oldWorkingDir->isEmpty() && QDir::setCurrent(*m_oldWorkingDir)) {
-        qWarning() << "DC_EXTRACT_TRACE restore cwd"
+        qCWarning(ifaceLog) << "DC_EXTRACT_TRACE restore cwd"
                    << "restored" << *m_oldWorkingDir
                    << "current" << QDir::currentPath();
         m_oldWorkingDir->clear();

@@ -23,6 +23,7 @@
 */
 
 #include "kpty_p.h"
+#include "ddlog.h"
 
 #include <QtDebug>
 
@@ -233,7 +234,7 @@ bool KPty::open()
     if (::openpty( &d->masterFd, &d->slaveFd, ptsn, 0, 0)) {
         d->masterFd = -1;
         d->slaveFd = -1;
-        qWarning() << "Can't open a pseudo teletype";
+        qCWarning(ifaceLog) << "Can't open a pseudo teletype";
         return false;
     }
     d->ttyName = ptsn;
@@ -323,7 +324,7 @@ bool KPty::open()
         }
     }
 
-    qWarning() << "Can't open a pseudo teletype";
+    qCWarning(ifaceLog) << "Can't open a pseudo teletype";
     return false;
 
 gotpty:
@@ -336,7 +337,7 @@ gotpty:
     if (((st.st_uid != getuid()) ||
             (st.st_mode & (S_IRGRP|S_IXGRP|S_IROTH|S_IWOTH|S_IXOTH))) &&
             !d->chownpty(true)) {
-        qWarning()
+        qCWarning(ifaceLog)
         << "chownpty failed for device " << ptyName << "::" << d->ttyName
         << "\nThis means the communication can be eavesdropped.";
     }
@@ -358,7 +359,7 @@ grantedpt:
 
     d->slaveFd = ::open(d->ttyName.data(), O_RDWR | O_NOCTTY);
     if (d->slaveFd < 0) {
-        qWarning() << "Can't open slave pseudo teletype";
+        qCWarning(ifaceLog) << "Can't open slave pseudo teletype";
         ::close(d->masterFd);
         d->masterFd = -1;
         return false;
@@ -381,13 +382,13 @@ grantedpt:
 bool KPty::open(int fd)
 {
 #if !defined(HAVE_PTSNAME) && !defined(TIOCGPTN)
-     qWarning() << "Unsupported attempt to open pty with fd" << fd;
+     qCWarning(ifaceLog) << "Unsupported attempt to open pty with fd" << fd;
      return false;
 #else
     Q_D(KPty);
 
     if (d->masterFd >= 0) {
-        qWarning() << "Attempting to open an already open pty";
+        qCWarning(ifaceLog) << "Attempting to open an already open pty";
          return false;
     }
 
@@ -404,12 +405,12 @@ bool KPty::open(int fd)
         char buf[sz];
         const size_t r = snprintf(buf, sz, "/dev/pts/%d", ptyno);
         if (sz <= r) {
-            qWarning("KPty::open: Buffer too small\n");
+            qCWarning(ifaceLog, "KPty::open: Buffer too small\n");
         }
         d->ttyName = buf;
 # endif
     } else {
-        qWarning() << "Failed to determine pty slave device for fd" << fd;
+        qCWarning(ifaceLog) << "Failed to determine pty slave device for fd" << fd;
         return false;
     }
 
@@ -442,13 +443,13 @@ bool KPty::openSlave()
     if (d->slaveFd >= 0)
 	return true;
     if (d->masterFd < 0) {
-	qInfo() << "Attempting to open pty slave while master is closed";
+	qCInfo(ifaceLog) << "Attempting to open pty slave while master is closed";
 	return false;
     }
     //d->slaveFd = KDE_open(d->ttyName.data(), O_RDWR | O_NOCTTY);
     d->slaveFd = ::open(d->ttyName.data(), O_RDWR | O_NOCTTY);
     if (d->slaveFd < 0) {
-	qInfo() << "Can't open slave pseudo teletype";
+	qCInfo(ifaceLog) << "Can't open slave pseudo teletype";
 	return false;
     }
     fcntl(d->slaveFd, F_SETFD, FD_CLOEXEC);
