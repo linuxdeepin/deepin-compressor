@@ -1,3 +1,18 @@
+deepin-compressor (6.5.37) unstable; urgency=medium
+
+  * docs(archive-manager): add Portuguese help manual
+  * refactor: categorize logging in remaining pages and tree views
+  * refactor: categorize logging in dialogs, mainwindow and compress pages
+  * refactor: categorize logging in archivemanager and open-with dialog
+  * refactor: categorize logging in app common modules
+  * refactor: categorize logging in compressor-interface library
+  * feat: add logging categories and MLogger for debug config
+  * Translate deepin-compressor.ts in ru
+  * fix: strip fractional seconds from 7z time field
+  * fix: make zip archive comment edits take effect
+
+ -- re2zero <yangwu@uniontech.com>  Fri, 30 Oct 2026 15:32:08 +0800
+
 deepin-compressor (6.5.36) unstable; urgency=medium
 
   * fix: switch to progress page before creating archive
