@@ -176,23 +176,40 @@ bool UiTools::isArchiveFile(const QString &strFileName)
 bool UiTools::isExistMimeType(const QString &strMimeType, bool &bArchive)
 {
     qCDebug(appLog) << "Checking if MIME type exists:" << strMimeType;
+
+    // 配置里可能登记的是旧别名（x-bzip*），而 QMimeDatabase 返回规范名（x-bzip2*），
+    // 因此把原始值、规范名和别名都作为候选，再与配置项匹配。
+    QString raw = strMimeType;
+    raw.remove(QStringLiteral("application/"));
+
+    QStringList names{raw};
+    QMimeDatabase db;
+    const QMimeType mime = db.mimeTypeForName(QStringLiteral("application/") + raw);
+    if (mime.isValid()) {
+        names << mime.name();
+        for (const QString &alias : mime.aliases())
+            names << alias;
+    }
+
     QString conf = readConf();
     QStringList confList = conf.split("\n", SKIP_EMPTY_PARTS);
-
     bool exist = false;
-    for (int i = 0; i < confList.count(); i++) {
-        if (confList.at(i).contains("." + strMimeType + ":")) {
-            bArchive = true;
-            if (confList.at(i).contains("true")) {
-                qCDebug(appLog) << "MIME type found and enabled:" << strMimeType;
-                exist = true;
+    for (const QString &line : confList) {
+        bool matched = false;
+        for (QString name : names) {
+            name.remove(QStringLiteral("application/"));
+            if (line.contains("." + name + ":")) {
+                matched = true;
                 break;
-            } else {
-                qCDebug(appLog) << "MIME type found but disabled:" << strMimeType;
-                exist = false;
-                continue;
             }
         }
+        if (!matched)
+            continue;
+
+        bArchive = true;
+        exist = line.contains("true");
+        if (exist)
+            break;
     }
 
     qCDebug(appLog) << "MIME type check result:" << exist;

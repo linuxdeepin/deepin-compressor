@@ -245,21 +245,35 @@ QStringList PluginManager::supportedWriteMimeTypes(MimeSortingMode mode) const
 QVector<Plugin *> PluginManager::filterBy(const QVector<Plugin *> &plugins, const CustomMimeType &mimeType) const
 {
     qCDebug(appLog) << "Filtering plugins for mime type:" << mimeType.name();
-    const bool supportedMime = supportedMimeTypes().contains(mimeType.name());
+
+    // 同一类型可能同时存在别名和规范名（如 x-bzip 与 x-bzip2），统一成规范名再比较，
+    // 避免单文件压缩插件通过继承父类型抢走压缩 tar。
+    QMimeDatabase db;
+    auto canonicalName = [&db](const QString &name) {
+        const QMimeType resolved = db.mimeTypeForName(name);
+        return resolved.isValid() ? resolved.name() : name;
+    };
+    const QString targetMime = canonicalName(mimeType.name());
+    const QStringList supportedList = supportedMimeTypes();
+    const bool supportedMime = std::any_of(supportedList.cbegin(), supportedList.cend(),
+                                           [&](const QString &mime) { return canonicalName(mime) == targetMime; });
+
     QVector<Plugin *> filteredPlugins;
     for (Plugin *plugin : plugins) {
+        const QStringList mimeTypes = plugin->metaData().mimeTypes();
+
         if (!supportedMime) {
             // Check whether the mimetype inherits from a supported mimetype.
-            const QStringList mimeTypes = plugin->metaData().mimeTypes();
             for (const QString &mime : mimeTypes) {
                 if (mimeType.inherits(mime)/* && (mime != "application/octet-stream")*/) {
                     qCDebug(appLog) << "Found plugin" << plugin->metaData().pluginId() << "supporting parent mime type:" << mime;
                     filteredPlugins << plugin;
                 }
             }
-        } else if (plugin->metaData().mimeTypes().contains(mimeType.name())) {
+        } else if (std::any_of(mimeTypes.cbegin(), mimeTypes.cend(),
+                               [&](const QString &mime) { return canonicalName(mime) == targetMime; })) {
             qCDebug(appLog) << "Found plugin" << plugin->metaData().pluginId() << "directly supporting mime type:" << mimeType.name();
-            
+
             if (mimeType.name() == QString("application/x-tzo") && plugin->metaData().pluginId() == QString("kerfuffle_cli7z")) {
                 qCDebug(appLog) << "Adding special case for x-tzo mime type";
                 filteredPlugins << plugin;
