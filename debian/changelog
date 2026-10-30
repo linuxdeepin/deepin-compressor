@@ -1,3 +1,9 @@
+deepin-compressor (6.5.38) unstable; urgency=medium
+
+  * fix: support bzip2 MIME aliases and correct tar.bz2 plugin
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Fri, 30 Oct 2026 17:22:21 +0800
+
 deepin-compressor (6.5.37) unstable; urgency=medium
 
   * docs(archive-manager): add Portuguese help manual
