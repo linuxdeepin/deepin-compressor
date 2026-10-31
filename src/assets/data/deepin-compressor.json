@@ -25,7 +25,7 @@
                             "name": " ",
                             "type": "checkbox",
                             "text": "Show extracted files when completed",
-                            "default": false
+                            "default": true
                         },
                         {
                             "key": "auto_quit_after_open_folder",
