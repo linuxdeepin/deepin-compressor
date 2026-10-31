@@ -45,6 +45,14 @@ public:
     bool isAutoOpen();
 
     /**
+     * @brief isAutoQuitAfterOpen   打开对应文件夹后是否自动退出归档管理器
+     * @return  true表示打开文件夹后自动退出归档管理器；false表示不退出
+     * @note    该选项是"当解压完成后自动打开对应的文件夹"的二级选项，
+     *          上级选项未勾选时本项即使有配置值也视为 false
+     */
+    bool isAutoQuitAfterOpen();
+
+    /**
      * @brief isAutoDeleteFile 压缩成功是否自动删除文件
      * @return true表示自动删除 false表示不自动删除
      */
@@ -88,6 +96,13 @@ private:
      * @brief createDeleteBox   创建删除选项
      */
     void createDeleteBox();
+
+    /**
+     * @brief createDependentCheckBox  创建"打开对应文件夹后自动退出"联动复选框
+     * @note  该复选框作为"当解压完成后自动打开对应的文件夹"的二级选项，界面缩进显示，
+     *        上级选项未勾选时置灰不可操作
+     */
+    void createDependentCheckBox();
 
     void writeConfbf();
 

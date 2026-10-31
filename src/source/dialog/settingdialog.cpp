@@ -18,9 +18,21 @@
 #include <QDebug>
 #include <QLayout>
 #include <QFileInfo>
+#include <QCheckBox>
+#include <QHBoxLayout>
+#include <QWidget>
+#include <QCoreApplication>
 #include <qsettingbackend.h>
 
 DGUI_USE_NAMESPACE
+
+// "打开对应文件夹后自动退出"作为"当解压完成后自动打开对应的文件夹"的二级选项，
+// 在设置界面中向右缩进的像素数，用于体现两者的从属关系
+static const int DEPENDENT_CHECKBOX_INDENT = 24;
+
+// 二级复选框与上级选项的关联键
+static const char *OPEN_FOLDER_OPTION_KEY = "base.decompress.open_folder";
+static const char *AUTO_QUIT_OPTION_KEY = "base.decompress.auto_quit_after_open_folder";
 
 SettingDialog::SettingDialog(QWidget *parent):
     DSettingsDialog(parent)
@@ -60,6 +72,16 @@ bool SettingDialog::isAutoOpen()
     return autoOpen;
 }
 
+bool SettingDialog::isAutoQuitAfterOpen()
+{
+    // 读取配置文件信息 打开对应文件夹后是否自动退出归档管理器
+    // 该选项依赖"当解压完成后自动打开对应的文件夹"：上级未开启时，即使残留下级配置也不生效
+    bool autoQuit = m_settings->value(OPEN_FOLDER_OPTION_KEY).toBool()
+                    && m_settings->value(AUTO_QUIT_OPTION_KEY).toBool();
+    qCDebug(appLog) << "Auto quit after open folder setting:" << autoQuit;
+    return autoQuit;
+}
+
 bool SettingDialog::isAutoDeleteFile()
 {
     // 读取配置文件信息 压缩后是否删除源文件
@@ -91,6 +113,7 @@ void SettingDialog::initUI()
     createSettingButton(); // 创建选择按钮
     createPathBox(); // 创建默认解压路径
     createDeleteBox(); // 创建删除选项
+    createDependentCheckBox(); // 创建"打开对应文件夹后自动退出"联动复选框
 
     // 通过json文件创建DSettings对象
     m_settings = DSettings::fromJsonFile(":assets/data/deepin-compressor.json");
@@ -118,6 +141,18 @@ void SettingDialog::initConnections()
     qCDebug(appLog) << "Initializing SettingDialog connections";
     //m_setting需要setBackend,该信号才会有效
     connect(m_settings, &DSettings::valueChanged, this, &SettingDialog::slotSettingsChanged);
+
+    // 联动保护：取消勾选"当解压完成后自动打开对应的文件夹"时，同步取消"打开对应文件夹后自动退出"，
+    // 避免残留下级配置（下级复选框的置灰状态由自定义控件联动处理）
+    connect(m_settings, &DSettings::valueChanged, this, [this](const QString &strKey, const QVariant &value) {
+        if (strKey == QLatin1String(OPEN_FOLDER_OPTION_KEY) && !value.toBool()) {
+            DSettingsOption *pAutoQuitOption = m_settings->option(AUTO_QUIT_OPTION_KEY).data();
+            if (nullptr != pAutoQuitOption && pAutoQuitOption->value().toBool()) {
+                pAutoQuitOption->setValue(false);
+                qCDebug(appLog) << "Auto quit disabled because auto open folder was unchecked";
+            }
+        }
+    });
 }
 
 void SettingDialog::createSettingButton()
@@ -330,6 +365,67 @@ void SettingDialog::createDeleteBox()
         }
 
         return nullptr;
+    });
+}
+
+void SettingDialog::createDependentCheckBox()
+{
+    qCDebug(appLog) << "Creating dependent checkbox";
+    // 自定义设置控件类型：用于"打开对应文件夹后自动退出"
+    // 1. 作为"当解压完成后自动打开对应的文件夹"的二级选项，界面整体向右缩进；
+    // 2. 上级选项未勾选时置灰不可操作。
+    this->widgetFactory()->registerWidget("checkbox-dependent", [this](QObject * obj) -> QWidget* {
+        DSettingsOption *pOption = qobject_cast<DSettingsOption *>(obj);
+        if (nullptr == pOption) {
+            return nullptr;
+        }
+
+        // 翻译处理与内建 checkbox 保持一致：translateContext 为空时使用 QObject 上下文
+        // （settings_translation.cpp 中的设置项文案均在 QObject 上下文中）
+        const QByteArray translateContext = obj->property("_d_DSettingsWidgetFactory_translateContext").toByteArray();
+        const QString strSourceText = pOption->data("text").toString();
+        const QString strTrText = translateContext.isEmpty()
+                                  ? QObject::tr(strSourceText.toUtf8().constData())
+                                  : QCoreApplication::translate(translateContext.constData(), strSourceText.toUtf8().constData());
+
+        // 使用容器承载复选框，以便通过左边距实现二级选项的缩进效果
+        QWidget *pContainer = new QWidget();
+        QHBoxLayout *pLayout = new QHBoxLayout(pContainer);
+        pLayout->setContentsMargins(DEPENDENT_CHECKBOX_INDENT, 0, 0, 0);
+        pLayout->setSpacing(0);
+
+        QCheckBox *pCheckBox = new QCheckBox(strTrText, pContainer);
+        pCheckBox->setObjectName("OptionCheckbox");
+        pCheckBox->setAccessibleName("OptionCheckbox");
+        pCheckBox->setChecked(pOption->value().toBool());
+
+        pLayout->addWidget(pCheckBox, 0, Qt::AlignLeft);
+        pLayout->addStretch(1);
+
+        // 与上级选项联动：上级未勾选时置灰
+        DSettingsOption *pParentOption = m_settings->option(OPEN_FOLDER_OPTION_KEY).data();
+        auto updateEnabledState = [pCheckBox, pParentOption]() {
+            pCheckBox->setEnabled(nullptr != pParentOption && pParentOption->value().toBool());
+        };
+        updateEnabledState();
+
+        if (nullptr != pParentOption) {
+            connect(pParentOption, &DSettingsOption::valueChanged, pCheckBox, [updateEnabledState](const QVariant &) {
+                updateEnabledState();
+            });
+        }
+
+        // 复选框与设置项双向同步
+        connect(pCheckBox, &QCheckBox::toggled, pOption, [pOption](bool bChecked) {
+            pOption->setValue(bChecked);
+        });
+        connect(pOption, &DSettingsOption::valueChanged, pCheckBox, [pCheckBox](const QVariant &value) {
+            if (pCheckBox->isChecked() != value.toBool()) {
+                pCheckBox->setChecked(value.toBool());
+            }
+        });
+
+        return pContainer;
     });
 }
 
