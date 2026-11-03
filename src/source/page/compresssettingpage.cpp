@@ -409,10 +409,28 @@ void CompressSettingPage::initConnections()
 void CompressSettingPage::setTypeImage(const QString &strType)
 {
     qCDebug(appLog) << "setTypeImage: " << strType;
+    const QFileInfo fileInfo("temp." + strType);
     QFileIconProvider provider;
-    QIcon icon = provider.icon(QFileInfo("temp." + strType));
+    QPixmap pixmap = provider.icon(fileInfo).pixmap(128, 128);
 
-    m_pTypePixmapLbl->setPixmap(icon.pixmap(128, 128));
+    if (pixmap.isNull()) {
+        const QMimeType mime = QMimeDatabase().mimeTypeForFile(fileInfo, QMimeDatabase::MatchExtension);
+        // MIME 规范名可能已更新，而图标主题仍使用旧别名（如 jar、tar.bz2）。
+        for (QString alias : mime.aliases()) {
+            alias.replace('/', '-');
+            pixmap = QIcon::fromTheme(alias).pixmap(128, 128);
+            if (!pixmap.isNull())
+                break;
+        }
+        if (pixmap.isNull())
+            pixmap = QIcon::fromTheme(mime.genericIconName()).pixmap(128, 128);
+    }
+
+    // 主题缺少对应图标时使用内置资源，避免格式图标区域留白。
+    if (pixmap.isNull())
+        pixmap = QIcon(":/assets/icons/deepin/builtin/icons/compress_folder_128px.svg").pixmap(128, 128);
+
+    m_pTypePixmapLbl->setPixmap(pixmap);
 }
 
 bool CompressSettingPage::checkFileNameVaild(const QString &strText)
