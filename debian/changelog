@@ -1,3 +1,9 @@
+deepin-compressor (6.5.39) unstable; urgency=medium
+
+  * fix: restore missing compression format icons
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Tue, 03 Nov 2026 19:49:58 +0800
+
 deepin-compressor (6.5.38) unstable; urgency=medium
 
   * fix: support bzip2 MIME aliases and correct tar.bz2 plugin
