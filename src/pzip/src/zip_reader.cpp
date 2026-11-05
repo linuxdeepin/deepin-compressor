@@ -284,46 +284,5 @@ Error ZipReader::readDecompressed(const ZipEntry& entry, std::vector<uint8_t>& b
     return Error();
 }
 
-Error ZipReader::extractTo(const ZipEntry& entry, const fs::path& outputPath) {
-    std::error_code ec;
-    
-    if (entry.isDirectory()) {
-        fs::create_directories(outputPath, ec);
-        if (ec) {
-            return Error(ErrorCode::FILE_WRITE_ERROR, "Cannot create directory: " + outputPath.string());
-        }
-        return Error();
-    }
-    
-    // 确保父目录存在
-    fs::create_directories(outputPath.parent_path(), ec);
-    
-    // 解压数据
-    std::vector<uint8_t> data;
-    Error err = readDecompressed(entry, data);
-    if (err) return err;
-    
-    // 写入文件
-    std::ofstream outFile(outputPath, std::ios::binary | std::ios::trunc);
-    if (!outFile.is_open()) {
-        return Error(ErrorCode::FILE_WRITE_ERROR, "Cannot create file: " + outputPath.string());
-    }
-    
-    outFile.write(reinterpret_cast<const char*>(data.data()), data.size());
-    outFile.close();
-    
-    // 设置权限
-    mode_t mode = utils::zipAttrToMode(entry.header.externalAttr);
-    if (mode != 0) {
-        chmod(outputPath.c_str(), mode);
-    }
-    
-    // 设置修改时间
-    time_t modTime = dosToTime(entry.header.modDate, entry.header.modTime);
-    utils::setModTime(outputPath, modTime);
-    
-    return Error();
-}
-
 } // namespace pzip
 

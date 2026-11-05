@@ -26,7 +26,7 @@ struct ExtractorOptions {
  */
 struct ExtractTask {
     const ZipEntry* entry;
-    fs::path outputPath;
+    fs::path relativePath;
     bool success = false;
 };
 
@@ -87,19 +87,20 @@ private:
     Error extractFile(ExtractTask* task);
     
     // 写入目录
-    Error writeDirectory(const fs::path& path, const ZipEntry& entry);
+    Error writeDirectory(const fs::path& relativePath, const ZipEntry& entry);
     
     // 写入文件
-    Error writeFile(const fs::path& path, const ZipEntry& entry);
+    Error writeFile(const fs::path& relativePath, const ZipEntry& entry);
     
     // 设置文件权限
-    Error setPermissions(const fs::path& path, const ZipEntry& entry);
+    Error setPermissions(int fileDescriptor, const ZipEntry& entry);
     
-    // 计算输出路径
+    // 校验并规范化 ZIP 条目路径
     fs::path outputPath(const std::string& name) const;
 
     fs::path outputDir_;
     fs::path absoluteOutputDir_;
+    fs::path canonicalOutputDir_;
     ExtractorOptions options_;
     
     std::unique_ptr<ZipReader> reader_;
@@ -108,6 +109,7 @@ private:
     std::atomic<size_t> processedFiles_{0};
     std::atomic<size_t> totalFiles_{0};
     std::atomic<bool> cancelled_{false};
+    int outputRootFd_ = -1;
 };
 
 } // namespace pzip
