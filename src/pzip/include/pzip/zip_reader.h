@@ -69,14 +69,6 @@ public:
     Error readDecompressed(const ZipEntry& entry, std::vector<uint8_t>& buffer);
 
     /**
-     * @brief 解压条目到文件
-     * @param entry 条目
-     * @param outputPath 输出路径
-     * @return 错误信息
-     */
-    Error extractTo(const ZipEntry& entry, const fs::path& outputPath);
-
-    /**
      * @brief 获取注释
      */
     const std::string& comment() const { return comment_; }
@@ -86,14 +78,14 @@ public:
      */
     bool isOpen() const { return file_.is_open(); }
 
+    // DOS 时间转换
+    static time_t dosToTime(uint16_t date, uint16_t time);
+
 private:
     Error readEndOfCentralDirectory();
     Error readCentralDirectory();
     Error readLocalFileHeader(ZipEntry& entry);
     
-    // DOS 时间转换
-    static time_t dosToTime(uint16_t date, uint16_t time);
-
     fs::path path_;
     std::ifstream file_;
     std::vector<ZipEntry> entries_;
