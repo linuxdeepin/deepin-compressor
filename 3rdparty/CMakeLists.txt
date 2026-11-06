@@ -16,6 +16,9 @@ add_subdirectory(libzipplugin)
 
 add_subdirectory(libminizipplugin)
 
+# 玲珑 layer/uab 包只读插件（依赖系统 fsck.erofs 命令）
+add_subdirectory(clilllayerplugin)
+
 # clipzipplugin（仅 x86/ARM + Qt6 环境启用，依赖 src/pzip）
 if((CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm|x86_64|amd64") AND (QT_VERSION_MAJOR EQUAL 6))
     message(STATUS "x86/ARM + Qt6 环境，启用 pzip 高性能压缩插件")
