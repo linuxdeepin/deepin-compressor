@@ -1,3 +1,9 @@
+deepin-compressor (6.5.40) unstable; urgency=medium
+
+  * fix: harden pzip extraction against symlink races
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Fri, 06 Nov 2026 10:01:14 +0800
+
 deepin-compressor (6.5.39) unstable; urgency=medium
 
   * fix: restore missing compression format icons
