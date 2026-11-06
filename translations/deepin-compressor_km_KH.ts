@@ -1243,14 +1243,19 @@
         <translation>ការស្រង់ចេញ</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="14"/>
-        <source>Auto create a folder for multiple extracted files</source>
-        <translation>បង្កើតថតឯកសារដោយស្វ័យប្រវត្តិសម្រាប់ឯកសារដកស្រង់ច្រើន</translation>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="15"/>
+        <source>Intelligently create a folder for extracted files</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="15"/>
         <source>Show extracted files when completed</source>
         <translation>បង្ហាញឯកសារដែលបានស្រង់ចេញនៅពេលបញ្ចប់</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="17"/>
+        <source>Quit after opening the extracted folder</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="16"/>

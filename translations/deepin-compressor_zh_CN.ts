@@ -1243,14 +1243,19 @@
         <translation>解压</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="14"/>
-        <source>Auto create a folder for multiple extracted files</source>
-        <translation>自动创建文件夹</translation>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="15"/>
+        <source>Intelligently create a folder for extracted files</source>
+        <translation>智能新增文件夹</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="15"/>
         <source>Show extracted files when completed</source>
         <translation>当解压完成后自动打开对应的文件夹</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="17"/>
+        <source>Quit after opening the extracted folder</source>
+        <translation>打开对应文件夹后自动退出</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="16"/>

@@ -17,7 +17,7 @@
                             "key": "create_folder",
                             "name": " ",
                             "type": "checkbox",
-                            "text": "Auto create a folder for multiple extracted files",
+                            "text": "Intelligently create a folder for extracted files",
                             "default": true
                         },
                         {
@@ -25,7 +25,14 @@
                             "name": " ",
                             "type": "checkbox",
                             "text": "Show extracted files when completed",
-                            "default": false
+                            "default": true
+                        },
+                        {
+                            "key": "auto_quit_after_open_folder",
+                            "name": " ",
+                            "type": "checkbox-dependent",
+                            "text": "Quit after opening the extracted folder",
+                            "default": true
                         }
                     ]
                 },

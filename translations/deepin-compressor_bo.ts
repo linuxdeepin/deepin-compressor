@@ -1243,14 +1243,19 @@
         <translation>བསྡུས་འགྲོལ།</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="14"/>
-        <source>Auto create a folder for multiple extracted files</source>
-        <translation>རང་འགུལ་ངང་ཡིག་ཁུག་གསར་བཟོ་བྱེད་པ།</translation>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="15"/>
+        <source>Intelligently create a folder for extracted files</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="15"/>
         <source>Show extracted files when completed</source>
         <translation>བསྡུས་འགྲོལ་ཚར་རྗེས་རང་འགུལ་ངང་དོ་ཟླའི་ཡིག་ཁུག་ཁ་ཕྱེ་བ།</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="17"/>
+        <source>Quit after opening the extracted folder</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="16"/>

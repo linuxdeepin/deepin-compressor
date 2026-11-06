@@ -1243,14 +1243,19 @@
         <translation>Çıxarılmaq</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="14"/>
-        <source>Auto create a folder for multiple extracted files</source>
-        <translation>Çıxarılan çoxsaylı fayllar üçün avtomatik qovluq yaratmaq</translation>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="15"/>
+        <source>Intelligently create a folder for extracted files</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="15"/>
         <source>Show extracted files when completed</source>
         <translation>Başa çatdıqda çıxarılan faylları göstərmək</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="17"/>
+        <source>Quit after opening the extracted folder</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="16"/>

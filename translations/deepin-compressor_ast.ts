@@ -1132,14 +1132,19 @@
         <translation>Estraición</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="28"/>
-        <source>Auto create a folder for multiple extracted files</source>
-        <translation>Crear automáticamennte una carpeta al estrayer múltiples ficheros</translation>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="15"/>
+        <source>Intelligently create a folder for extracted files</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="29"/>
         <source>Show extracted files when completed</source>
         <translation>Amosar los ficheros estrayíos al estrayelos</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="17"/>
+        <source>Quit after opening the extracted folder</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="30"/>
