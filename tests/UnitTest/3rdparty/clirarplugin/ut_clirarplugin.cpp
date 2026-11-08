@@ -179,6 +179,9 @@ TEST_F(UT_CliRarPlugin, test_isFileExistsFileName)
 TEST_F(UT_CliRarPlugin, test_isMultiPasswordPrompt)
 {
     EXPECT_EQ(m_tester->isMultiPasswordPrompt("use current password ? [Y]es, [N]o, [A]ll"), true);
+    // unrar 7.x wording (no space before '?')
+    EXPECT_EQ(m_tester->isMultiPasswordPrompt("dir/b.dll - use current password? [Y]es, [N]o, [A]ll "), true);
+    EXPECT_EQ(m_tester->isMultiPasswordPrompt("Extracting  dir/a.dll  OK "), false);
 }
 
 TEST_F(UT_CliRarPlugin, test_isOpenFileFailed)
@@ -315,6 +318,7 @@ TEST_F(UT_CliRarPlugin, test_handleLine_006)
     Stub stub;
     stub.set(ADDR(CliInterface, writeToProcess), cliInterface_writeToProcess_stub);
     EXPECT_EQ(m_tester->handleLine("use current password ? [Y]es, [N]o, [A]ll", WT_Extract), true);
+    EXPECT_EQ(m_tester->handleLine("dir/b.dll - use current password? [Y]es, [N]o, [A]ll ", WT_Extract), true);
 }
 
 TEST_F(UT_CliRarPlugin, test_handleLine_007)
