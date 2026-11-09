@@ -150,6 +150,12 @@ protected:
     virtual void killProcess(bool emitFinished = true) = 0;
 
     /**
+     * @brief errorTypeForExitCode  the error of an extraction that exited with this code (2 or more)
+     * although its output showed no error the plugin recognises
+     */
+    virtual ErrorType errorTypeForExitCode(int exitCode) const;
+
+    /**
      * @brief handleProgress  解析进度并发送进度信号
      * @param line
      */

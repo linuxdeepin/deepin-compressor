@@ -69,6 +69,11 @@ private:
 
     void killProcess(bool emitFinished) override;
 
+    /**
+     * @brief errorTypeForExitCode  unrar: 5 write error, 9 cannot create a file, 11 wrong password
+     */
+    ErrorType errorTypeForExitCode(int exitCode) const override;
+
 private:
     ParseState m_parseState = ParseStateTitle;
     FileEntry m_fileEntry;
