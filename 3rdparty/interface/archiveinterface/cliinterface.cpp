@@ -66,6 +66,12 @@ CliInterface::~CliInterface()
     deleteProcess();
 }
 
+void CliInterface::resetResult()
+{
+    ReadOnlyArchiveInterface::resetResult();
+    m_finishType = PFT_Nomral;
+}
+
 PluginFinishType CliInterface::list()
 {
     setPassword(QString());

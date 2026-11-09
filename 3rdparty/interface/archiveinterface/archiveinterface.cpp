@@ -76,6 +76,11 @@ ErrorType ReadOnlyArchiveInterface::errorType()
     return m_eErrorType;
 }
 
+void ReadOnlyArchiveInterface::resetResult()
+{
+    m_eErrorType = ET_NoError;
+}
+
 bool ReadOnlyArchiveInterface::doKill()
 {
     return false;   // 修改默认为未取消
