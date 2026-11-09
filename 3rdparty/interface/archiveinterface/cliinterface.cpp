@@ -66,6 +66,12 @@ CliInterface::~CliInterface()
     deleteProcess();
 }
 
+void CliInterface::resetResult()
+{
+    ReadOnlyArchiveInterface::resetResult();
+    m_finishType = PFT_Nomral;
+}
+
 PluginFinishType CliInterface::list()
 {
     setPassword(QString());
@@ -1488,6 +1494,12 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
     emit signalFinished(m_finishType);
 }
 
+ErrorType CliInterface::errorTypeForExitCode(int exitCode) const
+{
+    Q_UNUSED(exitCode);
+    return ET_ArchiveDamaged;
+}
+
 void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     qCInfo(ifaceLog) << "Extraction process finished, exitcode:" << exitCode << "   exitstatus:" << exitStatus;
@@ -1497,6 +1509,16 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
     // Keep stdout-detected errors (e.g. long name) even if exitCode is 0.
     if (0 == exitCode && m_finishType != PFT_Error && m_finishType != PFT_Cancel) {
         m_finishType = PFT_Nomral;
+    }
+
+    // A failure the output parsing did not recognise is still a failure: unrar exits 3 after a
+    // checksum error and 5 when it cannot write, 7z exits 2 after any fatal error. Exit code 1 is
+    // "warnings" for both (the files were extracted), so it stays a success.
+    if (QProcess::NormalExit == exitStatus && exitCode >= 2 && PFT_Nomral == m_finishType) {
+        m_finishType = PFT_Error;
+        if (ET_NoError == m_eErrorType) {
+            m_eErrorType = errorTypeForExitCode(exitCode);
+        }
     }
 
     m_indexOfListRootEntry = 0;
