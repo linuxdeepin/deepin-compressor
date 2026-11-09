@@ -66,6 +66,12 @@ CliInterface::~CliInterface()
     deleteProcess();
 }
 
+void CliInterface::resetResult()
+{
+    ReadOnlyArchiveInterface::resetResult();
+    m_finishType = PFT_Nomral;
+}
+
 PluginFinishType CliInterface::list()
 {
     setPassword(QString());
@@ -784,6 +790,9 @@ bool CliInterface::runProcess(const QString &programName, const QStringList &arg
                 [=](int exitCode, QProcess::ExitStatus) {
                     if (m_process) {
                         if (exitCode != 0) {
+                            // Release the failed listing process: the interface is used again (e.g. to
+                            // extract after asking for the password again), and runProcess() needs none
+                            deleteProcess();
                             emit signalprogress(100);
                             emit signalFinished(PFT_Error);
                             return;

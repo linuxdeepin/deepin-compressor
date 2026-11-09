@@ -186,6 +186,13 @@ private:
     void handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType eErrorType);
 
     /**
+     * @brief retryAfterWrongPassword   after a wrong password, restart the same load or extraction so the
+     * password dialog asks again (with a "Wrong password" hint) instead of showing the failure page
+     * @return false when it does not apply (batch extraction, no dialog was shown since the last retry, ...)
+     */
+    bool retryAfterWrongPassword(ArchiveJob::JobType eJobType);
+
+    /**
      * @brief addFiles2Archive  向压缩包中添加文件
      * @param listFiles         需要添加的文件
      * @param strPassword       密码
@@ -579,6 +586,8 @@ private:
     DFileWatcher *m_pFileWatcher = nullptr;                 // 文件监控
     QString m_strFinalConvertFile;     // 格式转换最终的文件全路径
     QString m_fileWriteErrorName;     // 创建失败的文件名
+    bool m_bWrongPasswordUnanswered = false; // a retry after a wrong password ended before any password dialog
+    QString m_strUncompressBasePath;   // the destination chosen on the file list page (before any folder is added)
 
     StartupType m_eStartupType = StartupType::ST_Normal;      // 操作方式
     CalculateSizeThread *m_mywork = nullptr; // 计算文件(夹)大小线程
