@@ -13,6 +13,7 @@
 #include <DPasswordEdit>
 
 #include <QApplication>
+#include <QCoreApplication>
 #include <QImageReader>
 #include <QLayout>
 #include <QUrl>
@@ -459,6 +460,18 @@ void ExtractToQuery::setWidgetType(QWidget *pWgt, DPalette::ColorType ct, double
 
 
 
+bool PasswordNeededQuery::s_bPreviousPasswordWrong = false;
+
+void PasswordNeededQuery::setPreviousPasswordWrong(bool bWrong)
+{
+    s_bPreviousPasswordWrong = bWrong;
+}
+
+bool PasswordNeededQuery::previousPasswordWrong()
+{
+    return s_bPreviousPasswordWrong;
+}
+
 PasswordNeededQuery::PasswordNeededQuery(const QString &strFileName, QObject *parent)
     : Query(parent)
 {
@@ -513,6 +526,17 @@ void PasswordNeededQuery::execute()
     passwordedit->setFocusPolicy(Qt::StrongFocus);
     passwordedit->setMinimumHeight(36);
     passwordedit->setFixedWidth(280);
+
+    // The previous password was wrong: say so and mark the field until the user types
+    if (s_bPreviousPasswordWrong) {
+        s_bPreviousPasswordWrong = false;
+        m_strDesText = QCoreApplication::translate("MainWindow", "Wrong password");
+        pTipLbl->setText(m_strDesText);
+        passwordedit->setAlert(true);
+        connect(passwordedit, &DPasswordEdit::textChanged, passwordedit, [passwordedit]() {
+            passwordedit->setAlert(false);
+        });
+    }
 
     dialog->addButton(QObject::tr("Cancel", "button"), true, DDialog::ButtonNormal);
     dialog->addButton(QObject::tr("OK", "button"), true, DDialog::ButtonRecommend);

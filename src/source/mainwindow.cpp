@@ -1323,6 +1323,11 @@ void MainWindow::slotJobFinished(ArchiveJob::JobType eJobType, PluginFinishType 
 {
     qCInfo(appLog) << "操作类型：" << eJobType << "****结束类型：" << eFinishType << "****错误类型" << eErrorType;
 
+    // A retry after a wrong password asks for the password again; if the job ended without showing the
+    // dialog, the hint is still pending: do not retry again, and do not leave the hint for a later dialog.
+    m_bWrongPasswordUnanswered = PasswordNeededQuery::previousPasswordWrong();
+    PasswordNeededQuery::setPreviousPasswordWrong(false);
+
     switch (eFinishType) {
     case PFT_Nomral:
         handleJobNormalFinished(eJobType, eErrorType); // 处理job正常结束
@@ -1362,8 +1367,54 @@ void MainWindow::slotJobFinished(ArchiveJob::JobType eJobType, PluginFinishType 
     PERF_PRINT_END("POINT-05");
 }
 
+bool MainWindow::retryAfterWrongPassword(ArchiveJob::JobType eJobType)
+{
+    if (m_bWrongPasswordUnanswered || m_stUnCompressParameter.bBatch) {
+        return false;
+    }
+
+    const QString strArchive = m_stUnCompressParameter.strFullPath;
+    if (strArchive.isEmpty()) {
+        return false;
+    }
+
+    if (ArchiveJob::JT_Load == eJobType) {
+        PasswordNeededQuery::setPreviousPasswordWrong(true);
+        QTimer::singleShot(0, this, [this, strArchive]() {
+            loadArchive(strArchive);
+            refreshPage();
+        });
+        return true;
+    }
+
+    if (StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_Extractto == m_eStartupType) {
+        // Started from the file manager: extract the same archive the same way again
+        PasswordNeededQuery::setPreviousPasswordWrong(true);
+        const StartupType eType = m_eStartupType;
+        QTimer::singleShot(0, this, [this, eType, strArchive]() {
+            rightExtract2Path(eType, QStringList() << strArchive);
+            refreshPage();
+        });
+        return true;
+    }
+
+    // Opened in the window: extract again to the destination the user chose (strExtractPath may already
+    // include the folder named after the archive, which would be added a second time)
+    const QString strPath = m_strUncompressBasePath;
+    if (strPath.isEmpty() || m_pUnCompressPage->archiveFullPath().isEmpty()) {
+        return false;
+    }
+    PasswordNeededQuery::setPreviousPasswordWrong(true);
+    m_ePageID = PI_UnCompress;
+    QTimer::singleShot(0, this, [this, strPath]() {
+        slotUncompressClicked(strPath);
+    });
+    return true;
+}
+
 void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
 {
+    m_strUncompressBasePath = strUncompressPath;
     qCDebug(appLog) << "Starting extraction to path:" << strUncompressPath;
     m_operationtype = Operation_Extract; //解压操作
 
@@ -1934,8 +1985,11 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
         case ET_ArchiveDamaged:
             showErrorMessage(FI_Load, EI_ArchiveDamaged);
             break;
-        // 密码错误
+        // 密码错误：重新询问密码，不显示失败界面
         case ET_WrongPassword:
+            if (retryAfterWrongPassword(eJobType)) {
+                break;
+            }
             showErrorMessage(FI_Load, EI_WrongPassword, true);
             break;
         // ftp目录不支持seek操作
@@ -2004,8 +2058,11 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
                 showErrorMessage(FI_Uncompress, EI_ArchiveDamaged,
                                  !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_Extractto == m_eStartupType));
                 break;
-            // 密码错误
+            // 密码错误：重新询问密码，不显示失败界面
             case ET_WrongPassword:
+                if (retryAfterWrongPassword(eJobType)) {
+                    break;
+                }
                 showErrorMessage(FI_Uncompress, EI_WrongPassword,
                                  !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_Extractto == m_eStartupType));
                 break;
@@ -3549,6 +3606,13 @@ void MainWindow::slotFailureReturn()
     }
     break;
     case FI_Uncompress: {
+        // An archive opened in the window: go back to its file list instead of an empty home page
+        if (!(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_Extractto == m_eStartupType)
+                && !m_stUnCompressParameter.bBatch && !m_pUnCompressPage->archiveFullPath().isEmpty()) {
+            m_ePageID = PI_UnCompress;
+            refreshPage();
+            return;
+        }
         m_pUnCompressPage->clear(); // 清空解压界面
     }
     break;
