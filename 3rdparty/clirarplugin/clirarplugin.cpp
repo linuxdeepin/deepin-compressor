@@ -26,6 +26,7 @@
 #include "datamanager.h"
 
 #include <QRegularExpression>
+#include <QDateTime>
 #include <QFileInfo>
 #include <QDir>
 #include <QDebug>
@@ -175,17 +176,35 @@ void CliRarPlugin::killProcess(bool emitFinished)
     m_isProcessKilled = true;
 }
 
+// The "yyyy-MM-dd hh:mm:ss" local time of a listing line. Same result as
+// QDateTime::fromString(text, "yyyy-MM-dd hh:mm:ss"), whose format parser costs tens of microseconds
+// per call (seconds for an archive with thousands of entries); anything else still goes through it.
+static QDateTime listTimeFromString(const QString &text)
+{
+    if (text.size() == 19 && text.at(4) == QLatin1Char('-') && text.at(7) == QLatin1Char('-')
+            && text.at(10) == QLatin1Char(' ') && text.at(13) == QLatin1Char(':') && text.at(16) == QLatin1Char(':')) {
+        bool ok[6] = {};
+        const QDate date(text.mid(0, 4).toInt(&ok[0]), text.mid(5, 2).toInt(&ok[1]), text.mid(8, 2).toInt(&ok[2]));
+        const QTime time(text.mid(11, 2).toInt(&ok[3]), text.mid(14, 2).toInt(&ok[4]), text.mid(17, 2).toInt(&ok[5]));
+        if (ok[0] && ok[1] && ok[2] && ok[3] && ok[4] && ok[5] && date.isValid() && time.isValid()) {
+            return QDateTime(date, time);
+        }
+    }
+    return QDateTime::fromString(text, QStringLiteral("yyyy-MM-dd hh:mm:ss"));
+}
+
 bool CliRarPlugin::readListLine(const QString &line)
 {
     ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();
 
-    QRegularExpression rxVersionLine(QStringLiteral("^UNRAR (\\d+\\.\\d+)( beta \\d)? .*$"));
-    QRegularExpressionMatch matchVersion = rxVersionLine.match(line);
+    // Compiled once and only matched before the version line: building and JIT-compiling it for every
+    // line of the listing took about as long as the rest of the parsing
+    static const QRegularExpression rxVersionLine(QStringLiteral("^UNRAR (\\d+\\.\\d+)( beta \\d)? .*$"));
 
     switch (m_parseState) {
     case ParseStateHeader:
     case ParseStateTitle:
-        if (matchVersion.hasMatch()) {  // unrar信息读取完，开始读压缩包相关信息
+        if (rxVersionLine.match(line).hasMatch()) {  // unrar信息读取完，开始读压缩包相关信息
             m_parseState = ParseStateArchiveInformation;
         }
         break;
@@ -246,8 +265,7 @@ bool CliRarPlugin::readListLine(const QString &line)
         } else if (parseLineLeft == QLatin1String("mtime")) {
             QString time = line.left((line.length() - 10));
             // 文件最后修改时间
-            m_fileEntry.uLastModifiedTime = QDateTime::fromString(time.right(time.length() - 14),
-                                                                  QStringLiteral("yyyy-MM-dd hh:mm:ss"))
+            m_fileEntry.uLastModifiedTime = listTimeFromString(time.right(time.length() - 14))
                                                                   #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
                                                                   .toTime_t();
                                                                   #else
