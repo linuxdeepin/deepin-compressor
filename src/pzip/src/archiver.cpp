@@ -1,0 +1,459 @@
+// Copyright (C) 2025 ~ 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2026 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+#include "pzip/archiver.h"
+#include "pzip/fast_deflate.h"
+#include "pzip/utils.h"
+#include "pzip/crypto/aes_encryptor.h"
+#include <algorithm>
+#include <fstream>
+#include <cstring>
+#include <sys/stat.h>
+#include <zlib.h>
+
+#ifdef USE_LIBDEFLATE
+#include <libdeflate.h>
+#endif
+
+namespace pzip {
+
+// ============================================================================
+// Archiver 实现
+// ============================================================================
+
+Archiver::Archiver(const fs::path& archive, const ArchiverOptions& options)
+    : archivePath_(archive)
+    , options_(options)
+{
+    std::error_code ec;
+    absoluteArchivePath_ = fs::absolute(archive, ec);
+    if (ec) {
+        absoluteArchivePath_ = archive;
+    }
+    
+    // 创建 ZIP 写入器
+    writer_ = std::make_unique<ZipWriter>(archivePath_);
+    
+    // 确定并发数
+    size_t concurrency = options_.concurrency;
+    if (concurrency == 0) {
+        concurrency = std::thread::hardware_concurrency();
+    }
+    
+    // 创建文件处理线程池（并行压缩）
+    auto processExecutor = [this](FileTask* task) -> Error {
+        return compressFile(task);
+    };
+    fileProcessPool_ = std::make_unique<WorkerPool<FileTask>>(
+        processExecutor, concurrency, concurrency * 2
+    );
+    
+    // 创建文件写入线程池（顺序写入，concurrency = 1）
+    auto writeExecutor = [this](FileTask* task) -> Error {
+        return archiveFile(task);
+    };
+    fileWriterPool_ = std::make_unique<WorkerPool<FileTask>>(
+        writeExecutor, 1, concurrency * 2
+    );
+}
+
+Archiver::~Archiver() {
+    // 资源由智能指针自动管理
+}
+
+Error Archiver::archive(const std::vector<fs::path>& paths) {
+    // 打开 ZIP 文件
+    Error err = writer_->open();
+    if (err) return err;
+    
+    // 启动线程池
+    fileProcessPool_->start();
+    fileWriterPool_->start();
+    
+    // 遍历所有路径
+    for (const auto& path : paths) {
+        if (cancelled_) break;
+        
+        std::error_code ec;
+        auto status = fs::status(path, ec);
+        if (ec) {
+            return Error(ErrorCode::FILE_NOT_FOUND, "Cannot stat: " + path.string());
+        }
+        
+        if (fs::is_directory(status)) {
+            err = walkDirectory(path);
+            if (err) return err;
+        } else {
+            // 单个文件
+            chroot_.clear();
+            
+            auto task = FileTaskPool::instance().acquire();
+            err = task->reset(path);
+            if (err) {
+                FileTaskPool::instance().release(std::move(task));
+                return err;
+            }
+            
+            // 跳过输出文件本身
+            if (fs::equivalent(task->path, absoluteArchivePath_, ec)) {
+                FileTaskPool::instance().release(std::move(task));
+                continue;
+            }
+            
+            totalFiles_++;
+            fileProcessPool_->enqueue(task.release());
+        }
+    }
+    
+    // 等待处理完成
+    err = fileProcessPool_->close();
+    if (err) return err;
+    
+    err = fileWriterPool_->close();
+    if (err) return err;
+    
+    return Error();
+}
+
+Error Archiver::walkDirectory(const fs::path& root) {
+    std::error_code ec;
+    chroot_ = fs::absolute(root, ec);
+    if (ec) {
+        return Error(ErrorCode::FILE_NOT_FOUND, "Cannot get absolute path: " + root.string());
+    }
+    
+    for (auto it = fs::recursive_directory_iterator(chroot_, ec);
+         it != fs::recursive_directory_iterator();
+         ++it) {
+        if (cancelled_) break;
+        if (ec) {
+            return Error(ErrorCode::FILE_READ_ERROR, "Directory iteration error: " + ec.message());
+        }
+        
+        const auto& entry = *it;
+        
+        // 跳过输出文件本身
+        if (fs::equivalent(entry.path(), absoluteArchivePath_, ec)) {
+            continue;
+        }
+        
+        auto task = FileTaskPool::instance().acquire();
+        Error err = task->reset(entry.path(), chroot_.parent_path());
+        if (err) {
+            FileTaskPool::instance().release(std::move(task));
+            continue;  // 跳过无法处理的文件
+        }
+        
+        totalFiles_++;
+        fileProcessPool_->enqueue(task.release());
+    }
+    
+    // 也要添加根目录本身
+    auto task = FileTaskPool::instance().acquire();
+    Error err = task->reset(chroot_, chroot_.parent_path());
+    if (!err) {
+        totalFiles_++;
+        fileProcessPool_->enqueue(task.release());
+    } else {
+        FileTaskPool::instance().release(std::move(task));
+    }
+    
+    return Error();
+}
+
+Error Archiver::compressFile(FileTask* task) {
+    if (cancelled_) {
+        return Error(ErrorCode::CANCELLED, "Operation cancelled");
+    }
+
+    if (options_.onEntryStart) {
+        options_.onEntryStart(task->header.name);
+    }
+
+    // 先按与无加密相同的路径做 Deflate/Store，再对压缩流做 WinZip AES（与 libzip 语义一致）
+    Error err = compress(task);
+    if (err) return err;
+
+    if (options_.isEncrypted() && !fs::is_directory(task->status)) {
+        err = encryptFile(task);
+        if (err) return err;
+    }
+
+    populateHeader(task);
+
+    fileWriterPool_->enqueue(task);
+
+    return Error();
+}
+
+
+Error Archiver::encryptFile(FileTask* task) {
+    // 创建加密器
+    AESEncryptor encryptor(options_.password, options_.encryptionMethod);
+    if (!encryptor.isValid()) {
+        return Error(ErrorCode::ENCRYPTION_ERROR, "Failed to initialize encryptor: " + encryptor.lastError());
+    }
+
+    // 保存盐值和密码验证值
+    task->salt = encryptor.salt();
+    task->passwordVerification = encryptor.passwordVerification();
+
+    // 收集压缩后的数据
+    std::vector<uint8_t> compressedData;
+    task->readCompressedData([&compressedData](const uint8_t* data, size_t size) {
+        compressedData.insert(compressedData.end(), data, data + size);
+    });
+
+    // 加密压缩后的数据
+    if (!compressedData.empty()) {
+        task->encryptedData = encryptor.encrypt(compressedData);
+        if (task->encryptedData.empty() && !compressedData.empty()) {
+            return Error(ErrorCode::ENCRYPTION_ERROR, "Encryption failed: " + encryptor.lastError());
+        }
+    }
+
+    // 获取认证码
+    task->authCode = encryptor.authenticationCode();
+
+    // 内层压缩方式须与加密前数据一致（Store / Deflate）
+    uint16_t innerMethod = ZIP_METHOD_STORE;
+    if (!task->isSymlink && !task->streamFromSource) {
+        innerMethod = ZIP_METHOD_DEFLATE;
+    }
+    task->header.method = innerMethod;
+    task->header.encryptionMethod = ZIP_ENCRYPTION_WINZIP_AES;
+    task->header.aesStrength = encryptionStrength(options_.encryptionMethod);
+    task->header.actualCompressionMethod = innerMethod;
+
+    // 计算加密后的大小：salt + pv + encrypted data + authCode
+    size_t saltSize = task->salt.size();
+    size_t encryptedDataSize = task->encryptedData.size();
+    task->header.compressedSize = saltSize + WINZIP_AES_PV_SIZE + encryptedDataSize + WINZIP_AES_AUTH_CODE_SIZE;
+
+    return Error();
+}
+
+Error Archiver::compress(FileTask* task) {
+    if (fs::is_directory(task->status)) {
+        return Error();
+    }
+    
+    if (task->isSymlink) {
+        const auto& target = task->symlinkTarget;
+        task->write(reinterpret_cast<const uint8_t*>(target.data()), target.size());
+        task->header.crc32 = ::crc32(0, reinterpret_cast<const Bytef*>(target.data()), target.size());
+        return Error();
+    }
+    
+    std::ifstream file(task->path, std::ios::binary);
+    if (!file.is_open()) {
+        return Error(ErrorCode::FILE_OPEN_ERROR, "Cannot open file: " + task->path.string());
+    }
+    
+    const bool useStore = (options_.compressionLevel == 0);
+    
+    constexpr size_t BUFFER_SIZE = 32 * 1024;
+    std::vector<uint8_t> buf(BUFFER_SIZE);
+    uint32_t crc = 0;
+    uint64_t totalBytesRead = 0;
+    uint64_t reportedBytesRead = 0;
+    constexpr uint64_t REPORT_GRANULARITY = 512 * 1024; // 限制回调频率，避免拖慢压缩线程
+    
+    if (useStore) {
+        // Store 模式：跳过读文件，写入 ZIP 时直接从源文件流式读取并计算 CRC
+        file.close();
+        task->streamFromSource = true;
+        return Error();
+    }
+    
+    // Deflate 模式：使用 FlateWriter 按指定等级压缩
+    auto level = static_cast<CompressionLevel>(
+        std::clamp(options_.compressionLevel, 1, 9));
+    
+    FlateWriter writer([task](const uint8_t* data, size_t size) {
+        task->write(data, size);
+    }, level);
+    
+    while (file.good() && !file.eof()) {
+        file.read(reinterpret_cast<char*>(buf.data()), buf.size());
+        auto bytesRead = file.gcount();
+        if (bytesRead > 0) {
+            crc = ::crc32(crc, buf.data(), bytesRead);
+            writer.write(buf.data(), bytesRead);
+            totalBytesRead += bytesRead;
+
+            if (options_.onBytesRead) {
+                const uint64_t deltaSinceLast = totalBytesRead - reportedBytesRead;
+                if (deltaSinceLast >= REPORT_GRANULARITY) {
+                    options_.onBytesRead(deltaSinceLast);
+                    reportedBytesRead = totalBytesRead;
+                }
+            }
+        }
+    }
+    
+    writer.close();
+    
+    if (file.bad()) {
+        file.close();
+        return Error(ErrorCode::FILE_READ_ERROR, "I/O error reading file: " + task->path.string());
+    }
+    
+    if (totalBytesRead != task->fileSize) {
+        file.close();
+        return Error(ErrorCode::FILE_READ_ERROR, 
+            "Short read: expected " + std::to_string(task->fileSize) + 
+            " bytes, got " + std::to_string(totalBytesRead) + " for: " + task->path.string());
+    }
+
+    if (options_.onBytesRead) {
+        const uint64_t tail = totalBytesRead - reportedBytesRead;
+        if (tail > 0) {
+            options_.onBytesRead(tail);
+        }
+    }
+    
+    file.close();
+    
+    task->header.crc32 = crc;
+    
+    return Error();
+}
+
+void Archiver::populateHeader(FileTask* task) {
+    auto& h = task->header;
+
+    // UTF-8 检测
+    auto [validUtf8, requireUtf8] = utils::detectUTF8(h.name);
+    if (requireUtf8 && validUtf8) {
+        h.flags |= ZIP_FLAG_UTF8;
+    }
+
+    // 版本信息
+    h.versionMadeBy = (3 << 8) | ZIP_VERSION_20;  // Unix + ZIP 2.0
+    h.versionNeeded = ZIP_VERSION_20;
+
+    // 修改时间
+    time_t modTime = utils::getModTime(task->path);
+    ExtendedTimestamp ext;
+    ext.modTime = modTime;
+    auto extData = ext.encode();
+    h.extra.insert(h.extra.end(), extData.begin(), extData.end());
+
+    // DOS 时间
+    struct tm* tm = localtime(&modTime);
+    if (tm) {
+        h.modTime = ((tm->tm_hour & 0x1F) << 11) |
+                    ((tm->tm_min & 0x3F) << 5) |
+                    ((tm->tm_sec / 2) & 0x1F);
+        h.modDate = (((tm->tm_year - 80) & 0x7F) << 9) |
+                    (((tm->tm_mon + 1) & 0x0F) << 5) |
+                    (tm->tm_mday & 0x1F);
+    }
+
+    // 目录处理
+    if (fs::is_directory(task->status)) {
+        if (!h.name.empty() && h.name.back() != '/') {
+            h.name += '/';
+        }
+        h.method = ZIP_METHOD_STORE;
+        h.flags &= ~ZIP_FLAG_DATA_DESCRIPTOR;
+        h.uncompressedSize = 0;
+        h.compressedSize = 0;
+        h.crc32 = 0;
+        // 目录不加密
+        h.encryptionMethod = ZIP_ENCRYPTION_NONE;
+        h.aesStrength = 0;
+    } else if (task->isSymlink) {
+        // 符号链接：存储链接目标
+        h.method = ZIP_METHOD_STORE;
+        h.flags &= ~ZIP_FLAG_DATA_DESCRIPTOR;
+        h.uncompressedSize = task->symlinkTarget.size();
+        h.compressedSize = task->symlinkTarget.size();
+        // 设置 Unix 符号链接属性
+        h.externalAttr = static_cast<uint32_t>(S_IFLNK | 0777) << 16;
+    } else if (h.isEncrypted()) {
+        // 加密文件：不使用数据描述符，直接写入实际大小
+        // 注意：DATA_DESCRIPTOR 与 WinZip AES 加密不兼容
+        h.flags |= ZIP_FLAG_ENCRYPTED;
+        h.flags &= ~ZIP_FLAG_DATA_DESCRIPTOR;  
+        // CRC32 在 AE-2 格式中为 0
+        h.crc32 = 0;
+        // 设置未压缩大小（原始文件大小）
+        h.uncompressedSize = task->fileSize;
+        // compressedSize 已经在 encryptFile 中设置
+    } else if (options_.compressionLevel == 0) {
+        // Store 模式：不压缩，CRC 在写入阶段边读边算，用 DATA_DESCRIPTOR 后置
+        h.method = ZIP_METHOD_STORE;
+        h.flags |= ZIP_FLAG_DATA_DESCRIPTOR;
+        h.uncompressedSize = task->fileSize;
+        h.compressedSize = task->fileSize;
+    } else {
+        h.method = ZIP_METHOD_DEFLATE;
+        h.flags |= ZIP_FLAG_DATA_DESCRIPTOR;
+        h.uncompressedSize = task->fileSize;
+        h.compressedSize = task->written();
+    }
+}
+
+Error Archiver::archiveFile(FileTask* task) {
+    if (cancelled_) {
+        FileTaskPool::instance().release(std::unique_ptr<FileTask>(task));
+        return Error(ErrorCode::CANCELLED, "Operation cancelled");
+    }
+
+    Error err;
+
+    // 如果是加密文件，使用加密写入方式
+    if (task->header.isEncrypted()) {
+        err = writer_->createEncrypted(
+            task->header,
+            task->salt,
+            task->passwordVerification,
+            task->encryptedData,
+            task->authCode
+        );
+    } else {
+        // 普通写入
+        err = writer_->createRaw(task->header,
+            [task](std::function<void(const uint8_t*, size_t)> writer) {
+                task->readCompressedData(writer);
+            });
+    }
+
+    // 更新进度
+    processedFiles_++;
+    if (options_.progress) {
+        options_.progress(processedFiles_, totalFiles_);
+    }
+
+    // 释放任务
+    FileTaskPool::instance().release(std::unique_ptr<FileTask>(task));
+
+    return err;
+}
+
+void Archiver::cancel() {
+    cancelled_ = true;
+    if (fileProcessPool_) {
+        fileProcessPool_->cancel();
+    }
+    if (fileWriterPool_) {
+        fileWriterPool_->cancel();
+    }
+}
+
+Error Archiver::close() {
+    if (writer_ && writer_->isOpen()) {
+        return writer_->close();
+    }
+    return Error();
+}
+
+void Archiver::setProgressCallback(ProgressCallback callback) {
+    options_.progress = std::move(callback);
+}
+
+} // namespace pzip
