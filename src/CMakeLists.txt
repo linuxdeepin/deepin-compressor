@@ -116,3 +116,9 @@ install(DIRECTORY assets/deepin-compressor DESTINATION ${CMAKE_INSTALL_DATADIR}/
 
 # 支持压缩的格式
 #install(FILES conf/compressor-singlecompress.conf DESTINATION ${CMAKE_INSTALL_DATADIR}/deepin-compressor/compressedformat/)
+
+# pzip 高性能并行压缩工具（仅 x86/ARM 环境启用）
+# pzip 仅用于压缩（write-only），不构建 punzip 解压工具（安全原因：symlink race）
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm|x86_64|amd64")
+    add_subdirectory(pzip)
+endif()
