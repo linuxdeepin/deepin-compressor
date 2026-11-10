@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -1085,9 +1085,12 @@ void MainWindow::slotCompress(const QVariant &val)
     options.iCPUTheadNum = m_stCompressParameter.iCPUTheadNum;
 
     bool bUseLibarchive = false;
-#ifdef __aarch64__ // 华为arm平台 zip压缩 性能提升. 在多线程场景下使用7z,单线程场景下使用libarchive
-    double maxFileSizeProportion = static_cast<double>(maxFileSize_) / static_cast<double>(m_stCompressParameter.qSize);
-    bUseLibarchive = maxFileSizeProportion > 0.6;
+#ifdef __aarch64__ // 华为arm平台 zip压缩 性能提升
+    // pzip 高性能并行压缩插件已移植到 release/eagle（Qt5/KF5），
+    // ARM64 平台 ZIP 压缩默认走 pzip（APT_Auto 自动选择，pzip 优先级最高），
+    // 不再根据大文件占比强制使用 libarchive。
+    // 分卷 ZIP 不支持 pzip，由下方 bSplit 分支走 cli7z。
+    bUseLibarchive = false;
 #else
     bUseLibarchive = false;
 #endif
@@ -1104,6 +1107,9 @@ void MainWindow::slotCompress(const QVariant &val)
     if (true == zipPasswordIsChinese) {
         // 对zip的中文加密使用libzip插件
         eType = UiTools::APT_Libzip;
+    } else if (options.bSplit && "application/zip" == m_stCompressParameter.strMimeType) {
+        // 分卷 ZIP 不支持 pzip，使用 cli7z
+        eType = UiTools::APT_Cli7z;
     } else if ((false == options.bSplit) && true == bUseLibarchive && "application/zip" == m_stCompressParameter.strMimeType) {
         // 考虑到华为arm平台 zip压缩 性能提升，只针对zip类型的压缩才会考虑到是否特殊处理arm平台，分卷情况不做此处理
         eType = UiTools::APT_Libarchive;
