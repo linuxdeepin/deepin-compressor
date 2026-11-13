@@ -13,8 +13,6 @@
 #include "xzplugin.h"
 #include "cli7zplugin.h"
 #include "clirarplugin.h"
-#include "libpigzplugin.h"
-
 #include "queries.h"
 #include "gtest/src/stub.h"
 
@@ -73,6 +71,11 @@ static ReadOnlyArchiveInterface *makeReadOnlyLibarchivePlugin(const QString &pat
     return new ReadOnlyLibarchivePlugin(nullptr, makePluginArgs(path));
 }
 
+static ReadOnlyArchiveInterface *makeReadWriteLibarchiveReadPlugin(const QString &path)
+{
+    return new ReadWriteLibarchivePlugin(nullptr, makePluginArgs(path));
+}
+
 static ReadOnlyArchiveInterface *makeGzPlugin(const QString &path)
 {
     return new LibGzipInterface(nullptr, makePluginArgs(path));
@@ -125,6 +128,11 @@ INSTANTIATE_TEST_SUITE_P(
             "ReadOnlyLibarchivePlugin", makeReadOnlyLibarchivePlugin,
             "tar", "readonly/tar/test.tar",
             false, true, true, true, true, false, false
+        },
+        ReadOnlyBackendCase{
+            "ReadWriteLibarchivePlugin", makeReadWriteLibarchiveReadPlugin,
+            "tar", "readonly/rw-libarchive/test.tar",
+            false, true, true, true, false, false, false
         },
         ReadOnlyBackendCase{
             "LibGzipInterface", makeGzPlugin,
@@ -255,10 +263,9 @@ TEST_P(ReadOnlyContractTest, ListCorruptArchiveReturnsError)
 
     // testArchive() is a no-op stub in current backends, so verify corruption
     // detection through list() which actually opens the archive.
-    PluginFinishType result = corruptIface->list();
-    if (GetParam().isAsync) {
-        waitForFinishedSignal(corruptIface.get());
-    }
+    PluginFinishType result = runInterfaceOp(
+        corruptIface.get(), GetParam().isAsync,
+        [&corruptIface]() { return corruptIface->list(); });
     EXPECT_NE(result, PFT_Nomral);
 }
 
@@ -467,6 +474,7 @@ TEST_P(ReadOnlyContractTest, ExtractPartialFiles)
         found = true;
     }
     ASSERT_TRUE(found);
+    ASSERT_FALSE(target.isDirectory);
 
     QString extractDir = globalFixture().tempPath() + "/extract_partial_" +
                          QString::fromStdString(GetParam().name);
@@ -489,6 +497,55 @@ TEST_P(ReadOnlyContractTest, ExtractPartialFiles)
         return m_iface->extractFiles(files, options);
     });
     EXPECT_EQ(result, PFT_Nomral);
+
+    // The selected entry must actually be written with its archive content.
+    const QString targetName = target.strFileName.isEmpty()
+        ? QFileInfo(target.strFullPath).fileName()
+        : target.strFileName;
+    bool foundTarget = false;
+    QString actualContent;
+    QDirIterator it(extractDir, QDir::Files, QDirIterator::Subdirectories);
+    while (it.hasNext()) {
+        const QString filePath = it.next();
+        if (it.fileName() != targetName)
+            continue;
+
+        QFile extracted(filePath);
+        if (extracted.open(QIODevice::ReadOnly)) {
+            actualContent = QString::fromUtf8(extracted.readAll());
+            foundTarget = true;
+            extracted.close();
+        }
+    }
+
+    EXPECT_TRUE(foundTarget);
+    if (GetParam().fixtureKind == "zip") {
+        if (targetName == "file1.txt")
+            EXPECT_EQ(actualContent, "file1 content");
+        else if (targetName == "file2.txt" || targetName == "deep.txt")
+            EXPECT_FALSE(actualContent.isEmpty());
+        else
+            EXPECT_FALSE(actualContent.isEmpty());
+    } else if (GetParam().fixtureKind == "7z") {
+        if (targetName == "file1.txt")
+            EXPECT_EQ(actualContent, "7z file1 content");
+        else if (targetName == "file2.txt")
+            EXPECT_EQ(actualContent, "7z file2 content");
+        else
+            EXPECT_FALSE(actualContent.isEmpty());
+    } else if (GetParam().fixtureKind == "tar") {
+        if (targetName == "test.txt")
+            EXPECT_EQ(actualContent, "test content");
+        else if (targetName == "test1.txt")
+            EXPECT_EQ(actualContent, "test1 content");
+        else
+            EXPECT_FALSE(actualContent.isEmpty());
+    } else {
+        // Single-file fixtures are prebuilt binaries; their decoded file
+        // names/content are not stable across tools, but extraction must
+        // still produce a non-empty selected file.
+        EXPECT_FALSE(actualContent.isEmpty());
+    }
 
     QDir(extractDir).removeRecursively();
 }

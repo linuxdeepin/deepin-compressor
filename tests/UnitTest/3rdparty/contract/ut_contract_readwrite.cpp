@@ -357,7 +357,7 @@ TEST_P(ReadWriteContractTest, AddCommentOnSupportingBackend)
 
     const auto &param = GetParam();
     QString workArchive = rw_globalFixture().tempPath() + "/rw_comment_" +
-                          QString::fromStdString(param.name) + ".zip";
+                          QString::fromStdString(param.name) + archiveExtension(param);
 
     QFile::copy(m_archivePath, workArchive);
     ASSERT_TRUE(QFileInfo::exists(workArchive));

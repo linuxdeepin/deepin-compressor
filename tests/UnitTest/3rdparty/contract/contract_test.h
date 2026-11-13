@@ -227,10 +227,19 @@ public:
     QString makeFile(const QString &relativePath, const QString &content = "hello world")
     {
         QString fullPath = m_tempDir->filePath(relativePath);
-        QDir().mkpath(QFileInfo(fullPath).absolutePath());
+        if (!QDir().mkpath(QFileInfo(fullPath).absolutePath())) {
+            ADD_FAILURE() << "Failed to create directory for: " << fullPath.toStdString();
+            return {};
+        }
         QFile f(fullPath);
-        f.open(QIODevice::WriteOnly);
-        f.write(content.toUtf8());
+        if (!f.open(QIODevice::WriteOnly)) {
+            ADD_FAILURE() << "Failed to open file for writing: " << fullPath.toStdString();
+            return {};
+        }
+        if (f.write(content.toUtf8()) != content.toUtf8().size()) {
+            ADD_FAILURE() << "Failed to write fixture file: " << fullPath.toStdString();
+            return {};
+        }
         f.close();
         return fullPath;
     }
@@ -239,10 +248,20 @@ public:
     QString makeNestedDir(const QString &relativeBase)
     {
         QString base = m_tempDir->filePath(relativeBase);
-        QDir().mkpath(base + "/sub");
+        if (!QDir().mkpath(base + "/sub")) {
+            ADD_FAILURE() << "Failed to create nested fixture directory: "
+                          << base.toStdString();
+            return {};
+        }
         QFile f(base + "/sub/deep.txt");
-        f.open(QIODevice::WriteOnly);
-        f.write("nested content");
+        if (!f.open(QIODevice::WriteOnly)) {
+            ADD_FAILURE() << "Failed to open nested fixture file";
+            return {};
+        }
+        if (f.write("nested content") != 14) {
+            ADD_FAILURE() << "Failed to write nested fixture file";
+            return {};
+        }
         f.close();
         return base;
     }
@@ -282,14 +301,17 @@ public:
         QDir().mkpath(QFileInfo(fullPath).absolutePath());
 
         // Create source files
-        makeFile("zip_src/file1.txt", "file1 content");
-        makeNestedDir("zip_src/dir");
+        if (makeFile("zip_src/file1.txt", "file1 content").isEmpty())
+            return {};
+        if (makeNestedDir("zip_src/dir").isEmpty())
+            return {};
         // makeNestedDir creates zip_src/dir/sub/deep.txt, we need dir/file2.txt
-        makeFile("zip_src/dir/file2.txt", "file2 content");
+        if (makeFile("zip_src/dir/file2.txt", "file2 content").isEmpty())
+            return {};
 
         if (!runChecked("zip", QStringList() << "-r" << fullPath << "file1.txt" << "dir",
                         m_tempDir->filePath("zip_src"))) {
-            return fullPath; // failure already recorded
+            return {};
         }
         return fullPath;
     }
@@ -300,12 +322,14 @@ public:
         QString fullPath = m_tempDir->filePath(relativePath);
         QDir().mkpath(QFileInfo(fullPath).absolutePath());
 
-        makeFile("tar_src/test.txt", "test content");
-        makeFile("tar_src/test1.txt", "test1 content");
+        if (makeFile("tar_src/test.txt", "test content").isEmpty()
+            || makeFile("tar_src/test1.txt", "test1 content").isEmpty()) {
+            return {};
+        }
 
         if (!runChecked("tar", QStringList() << "cf" << fullPath << "test.txt" << "test1.txt",
                         m_tempDir->filePath("tar_src"))) {
-            return fullPath;
+            return {};
         }
         return fullPath;
     }
@@ -323,6 +347,7 @@ public:
         if (!QFile::copy(source, dest)) {
             ADD_FAILURE() << "Failed to copy fixture: " << source.toStdString()
                           << " -> " << dest.toStdString();
+            return {};
         }
         return dest;
     }
@@ -361,13 +386,15 @@ public:
         QString fullPath = m_tempDir->filePath(relativePath);
         QDir().mkpath(QFileInfo(fullPath).absolutePath());
 
-        makeFile("7z_src/file1.txt", "7z file1 content");
-        makeFile("7z_src/file2.txt", "7z file2 content");
+        if (makeFile("7z_src/file1.txt", "7z file1 content").isEmpty()
+            || makeFile("7z_src/file2.txt", "7z file2 content").isEmpty()) {
+            return {};
+        }
 
         if (!runChecked("7z", QStringList() << "a" << fullPath
                          << "file1.txt" << "file2.txt",
                         m_tempDir->filePath("7z_src"))) {
-            return fullPath;
+            return {};
         }
         return fullPath;
     }
@@ -378,12 +405,13 @@ public:
         QString fullPath = m_tempDir->filePath(relativePath);
         QDir().mkpath(QFileInfo(fullPath).absolutePath());
 
-        makeFile("pw_src/file1.txt", "password protected content");
+        if (makeFile("pw_src/file1.txt", "password protected content").isEmpty())
+            return {};
 
         if (!runChecked("7z", QStringList() << "a" << ("-p" + password)
                          << fullPath << "file1.txt",
                         m_tempDir->filePath("pw_src"))) {
-            return fullPath;
+            return {};
         }
         return fullPath;
     }
@@ -397,16 +425,28 @@ public:
     {
         QString fullPath = m_tempDir->filePath(relativePath);
         QDir().mkpath(QFileInfo(fullPath).absolutePath());
-        QFile::copy(sourceArchive, fullPath);
-        QFile file(fullPath);
-        if (file.open(QIODevice::ReadWrite)) {
-            qint64 garbageSize = qMin(file.size(), qint64(256));
-            QByteArray garbage(garbageSize, char(0xFF));
-            file.write(garbage);
-            file.close();
+        if (!QFile::copy(sourceArchive, fullPath)) {
+            ADD_FAILURE() << "Failed to copy corrupt fixture source: "
+                          << sourceArchive.toStdString();
+            return {};
         }
+        QFile file(fullPath);
+        if (!file.open(QIODevice::ReadWrite)) {
+            ADD_FAILURE() << "Failed to open corrupt fixture: " << fullPath.toStdString();
+            return {};
+        }
+        qint64 garbageSize = qMin(file.size(), qint64(256));
+        QByteArray garbage(garbageSize, char(0xFF));
+        if (file.write(garbage) != garbageSize) {
+            ADD_FAILURE() << "Failed to corrupt fixture: " << fullPath.toStdString();
+            return {};
+        }
+        file.close();
         qint64 halfSize = QFileInfo(fullPath).size() / 2;
-        QFile::resize(fullPath, halfSize);
+        if (!QFile::resize(fullPath, halfSize)) {
+            ADD_FAILURE() << "Failed to truncate corrupt fixture: " << fullPath.toStdString();
+            return {};
+        }
         return fullPath;
     }
 
@@ -415,7 +455,11 @@ public:
     {
         QString dest = m_tempDir->filePath(relativeDest);
         QDir().mkpath(QFileInfo(dest).absolutePath());
-        QFile::copy(source, dest);
+        if (!QFile::copy(source, dest)) {
+            ADD_FAILURE() << "Failed to copy file: " << source.toStdString()
+                          << " -> " << dest.toStdString();
+            return {};
+        }
         return dest;
     }
 
