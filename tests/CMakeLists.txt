@@ -24,10 +24,26 @@ add_custom_target(test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/readonlylibarchiveplugin_test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/readwritelibarchiveplugin_test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/xzplugin_test
+    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/contract_test
     COMMAND echo " =================== TEST END ==================== "
+)
+
+add_dependencies(test
+    bz2plugin_test
+    cli7zplugin_test
+    clirarplugin_test
+    deepin-compressor_test
+    gzplugin_test
+    interface_test
+    libminizipplugin_test
+    libpigzplugin_test
+    libzipplugin_test
+    readonlylibarchiveplugin_test
+    readwritelibarchiveplugin_test
+    xzplugin_test
+    contract_test
 )
 
 # debian 会自动执行 make test
 #'make test'命令依赖与我们的测试程序
-#add_dependencies(test ${PROJECT_NAME_TEST})
 

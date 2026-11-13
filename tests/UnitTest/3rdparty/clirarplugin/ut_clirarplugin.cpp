@@ -126,7 +126,7 @@ TEST_F(UT_CliRarPlugin, test_setupCliProperties)
     EXPECT_EQ(m_tester->m_cliProps->property("moveSwitch"), QStringLiteral("rn"));
 
     EXPECT_EQ(m_tester->m_cliProps->property("testProgram"), QStringLiteral("unrar"));
-    EXPECT_EQ(m_tester->m_cliProps->property("testSwitch"), QStringLiteral("t"));
+    EXPECT_EQ(m_tester->m_cliProps->property("testSwitch"), QStringList{QStringLiteral("t")});
 
     EXPECT_EQ(m_tester->m_cliProps->property("commentSwitch"), QStringList({QStringLiteral("c"), QStringLiteral("-z$CommentFile")}));
 
@@ -294,7 +294,7 @@ TEST_F(UT_CliRarPlugin, test_handleLine_002)
 
 TEST_F(UT_CliRarPlugin, test_handleLine_003)
 {
-    EXPECT_EQ(m_tester->handleLine("The specified password is incorrect", WT_Extract), true);
+    EXPECT_EQ(m_tester->handleLine("The specified password is incorrect", WT_Extract), false);
     EXPECT_EQ(m_tester->m_eErrorType, ET_WrongPassword);
 }
 

@@ -33,3 +33,5 @@ add_subdirectory(libminizipplugin)
 ##add_subdirectory(cliunarchiverplugin) #不可用
 
 ##add_subdirectory(clizipplugin) #不可用
+
+add_subdirectory(contract)
