@@ -48,6 +48,7 @@
 #include <QScreen>
 #include <QFormLayout>
 #include <QShortcut>
+#include <QTimer>
 #include <QJsonObject>
 #ifdef DTKCORE_CLASS_DConfigFile
 #include <DConfig>
@@ -2949,10 +2950,17 @@ void MainWindow::slotOpenFileChanged(const QString &strPath)
         SimpleQueryDialog dialog(this);
         int iResult = dialog.showDialog(strDesText, tr("Cancel", "button"), DDialog::ButtonNormal, tr("Update", "button"), DDialog::ButtonRecommend);
         if (1 == iResult) {
-            // 对重命名或删除导致的文件不存在的情况，不给出任何提示，且从文件监控中去掉此文件
+            // 文件不存在可能是编辑器"先删除再创建"的保存方式，延迟重检而非直接移除监控
             if (!QFile::exists(strPath)) {
-                mapStatus.remove(strPath);
-                mapPassword.remove(strPath);
+                mapStatus[strPath] = false;
+                QTimer::singleShot(2000, this, [this, strPath]() {
+                    if (QFile::exists(strPath)) {
+                        m_pOpenFileWatcher->addWatchFile(strPath);
+                    } else {
+                        QMap<QString, bool> &status = m_pOpenFileWatcher->getFileHasModified();
+                        status.remove(strPath);
+                    }
+                });
                 return;
             }
 
