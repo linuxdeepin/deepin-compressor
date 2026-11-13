@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -350,8 +350,10 @@ QStringList ConvertDialog::showDialog()
 
     DRadioButton *zipBtn = new DRadioButton("ZIP");
     zipBtn->setChecked(true);
+    zipBtn->setAccessibleName("ZipRadioButton");
     DRadioButton *_7zBtn = new DRadioButton("7Z");
     _7zBtn->setChecked(false);
+    _7zBtn->setAccessibleName("SevenZRadioButton");
 
     QHBoxLayout *labelLayout = new QHBoxLayout;
     labelLayout->addStretch();
@@ -481,10 +483,12 @@ int AppendDialog::showDialog(bool bMultiplePassword)
 
     // 勾选密码
     DCheckBox *pSelCkb = new DCheckBox(tr("Use password"), this);
+    pSelCkb->setAccessibleName("UsePasswordCheckBox");
     DFontSizeManager::instance()->bind(pSelCkb, DFontSizeManager::T6, QFont::Medium);
 
     // 密码输入框
     DPasswordEdit *pPasswordEdit = new DPasswordEdit(this);
+    pPasswordEdit->setAccessibleName("PasswordEdit");
     pPasswordEdit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false); //隐藏密码时不能输入中文
     pPasswordEdit->setFocusPolicy(Qt::StrongFocus);
     pPasswordEdit->setMinimumHeight(36);
@@ -605,6 +609,7 @@ int RenameDialog::showDialog(const QString &strReName, const QString &strAlias, 
     qCDebug(appLog) << "Showing RenameDialog for:" << strReName << "isDirectory:" << isDirectory << "isRepeat:" << isRepeat;
     if(m_lineEdit == NULL) {//创建DLineEdit,设定显示规则。
         m_lineEdit = new DLineEdit(this);
+        m_lineEdit->setAccessibleName("RenameEdit");
         //使用 QValidator 在输入时直接拒绝非法字符，避免在 textChanged 中 setText 导致光标跳动
         //第一位不允许空格和特殊字符，后续位不允许特殊字符（中间空格允许）
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)

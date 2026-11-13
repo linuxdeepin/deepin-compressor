@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -300,6 +300,19 @@ void CompressSettingPage::initUI()
     m_pCommentEdt->setTabChangesFocus(true); // DTextEdit中Tab键切换焦点
 
     m_pCompressBtn->setMinimumWidth(340);    // 设置压缩按钮最小尺寸
+
+    // 设置无障碍名称
+    m_pFileNameEdt->setAccessibleName("FileNameEdit");
+    m_pSavePathEdt->setAccessibleName("SavePathEdit");
+    m_pCompressLevelCmb->setAccessibleName("CompressLevelComboBox");
+    m_pAdvancedBtn->setAccessibleName("AdvancedOptionsSwitch");
+    m_pPasswordEdt->setAccessibleName("PasswordEdit");
+    m_pCpuCmb->setAccessibleName("CpuThreadComboBox");
+    m_pListEncryptionBtn->setAccessibleName("ListEncryptionSwitch");
+    m_pSplitCkb->setAccessibleName("SplitCheckBox");
+    m_pSplitValueEdt->setAccessibleName("SplitValueEdit");
+    m_pCommentEdt->setAccessibleName("CommentEdit");
+    m_pCompressBtn->setAccessibleName("CompressButton");
 
     // 左侧布局
     QHBoxLayout *pTypeLayout = new QHBoxLayout; // 类型布局

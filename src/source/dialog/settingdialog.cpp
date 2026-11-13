@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -130,8 +130,11 @@ void SettingDialog::createSettingButton()
             QWidget *buttonwidget = new QWidget();
             QHBoxLayout *layout = new QHBoxLayout();
             CustomPushButton *selectAllButton = new CustomPushButton(tr("Select All", "button"));
+            selectAllButton->setAccessibleName("SelectAllButton");
             CustomPushButton *cancelSelectButton = new CustomPushButton(tr("Clear All"));
+            cancelSelectButton->setAccessibleName("ClearAllButton");
             CustomSuggestButton *recommendedButton = new CustomSuggestButton(tr("Recommended"));
+            recommendedButton->setAccessibleName("RecommendedButton");
             selectAllButton->setMinimumWidth(153);
             cancelSelectButton->setMinimumWidth(153);
             recommendedButton->setMinimumWidth(153);
