@@ -44,8 +44,8 @@ void OpenFileWatcher::addWatchFile(const QString &strFile)
     m_pOpenFileWatcher->addPath(strFile);
 
     // 第一次默认文件未修改
-    if (m_mapFileHasModified.find(strFile) != m_mapFileHasModified.end()) {
-        m_mapFileHasModified[m_strOpenFile] = false;
+    if (m_mapFileHasModified.find(strFile) == m_mapFileHasModified.end()) {
+        m_mapFileHasModified[strFile] = false;
     }
 }
 

@@ -140,6 +140,13 @@ public:
     static bool isLocalDeviceFile(const QString &strFileName);
 
     /**
+     * @brief truncateLongFileName 对超过 NAME_MAX 长度的文件名进行截断处理
+     * @param strFileName 原始文件名
+     * @return 截断后的文件名（未超长则原样返回）
+     */
+    static QString truncateLongFileName(const QString &strFileName);
+
+    /**
      * @brief hasSameFileName   是否存在同名文件（不考虑路径）
      * @param listFiles
      * @return

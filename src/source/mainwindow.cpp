@@ -48,6 +48,7 @@
 #include <QScreen>
 #include <QFormLayout>
 #include <QShortcut>
+#include <QTimer>
 #include <QJsonObject>
 #ifdef DTKCORE_CLASS_DConfigFile
 #include <DConfig>
@@ -2913,7 +2914,7 @@ void MainWindow::slotOpenFile(const FileEntry &entry, const QString &strProgram)
     // 设置解压临时路径
     QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();
     QString strTempExtractPath = TEMPPATH + QDir::separator() + m_strProcessID + createTempPath();  // 拼接临时路径
-    QString strOpenFile =  strTempExtractPath + QDir::separator() + entry.strFileName;     // 临时解压文件全路径
+    QString strOpenFile =  strTempExtractPath + QDir::separator() + UiTools::truncateLongFileName(entry.strFileName);     // 临时解压文件全路径（长文件名截断后实际落盘名）
     m_pOpenFileWatcher->setCurOpenFile(strOpenFile);
     if (ArchiveManager::get_instance()->openFile(strArchiveFullPath, entry, strTempExtractPath, strProgram)) {
         // 进入打开加载界面
@@ -2949,10 +2950,17 @@ void MainWindow::slotOpenFileChanged(const QString &strPath)
         SimpleQueryDialog dialog(this);
         int iResult = dialog.showDialog(strDesText, tr("Cancel", "button"), DDialog::ButtonNormal, tr("Update", "button"), DDialog::ButtonRecommend);
         if (1 == iResult) {
-            // 对重命名或删除导致的文件不存在的情况，不给出任何提示，且从文件监控中去掉此文件
+            // 文件不存在可能是编辑器"先删除再创建"的保存方式，延迟重检而非直接移除监控
             if (!QFile::exists(strPath)) {
-                mapStatus.remove(strPath);
-                mapPassword.remove(strPath);
+                mapStatus[strPath] = false;
+                QTimer::singleShot(2000, this, [this, strPath]() {
+                    if (QFile::exists(strPath)) {
+                        m_pOpenFileWatcher->addWatchFile(strPath);
+                    } else {
+                        QMap<QString, bool> &status = m_pOpenFileWatcher->getFileHasModified();
+                        status.remove(strPath);
+                    }
+                });
                 return;
             }
 

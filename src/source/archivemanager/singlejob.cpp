@@ -394,14 +394,9 @@ void OpenJob::doWork()
 void OpenJob::slotFinished(PluginFinishType eType)
 {
     if (PFT_Nomral == eType) {
-        QString name = m_stEntry.strFileName;
-
-        //对于超长文件打开失败问题处理
-        QString strTempFileName = m_stEntry.strFileName;
-        if (NAME_MAX < QString(strTempFileName).toLocal8Bit().length() && !strTempFileName.endsWith(QDir::separator())) {
-            QString strTemp = strTempFileName.left(60);
-            name = strTemp + QString("(%1)").arg(1, 3, 10, QChar('0'))+"." + QFileInfo(strTempFileName).completeSuffix();
-        }
+        // 对于超长文件名（超过 NAME_MAX），OpenJob 落盘时使用截断后的文件名，
+        // 文件监控也需使用截断后的名称才能正确监听
+        QString name = UiTools::truncateLongFileName(m_stEntry.strFileName);
 
         if (name.contains("%")) { // 文件名含有%的时候无法直接双击打开, 创建一个该文件的链接，文件名不含有%，通过打开链接打开源文件
             name = m_strTempExtractPath + QDir::separator() + name.replace("%", "1"); // 将文件名中的%替换为1;

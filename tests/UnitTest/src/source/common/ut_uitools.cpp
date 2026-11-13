@@ -250,3 +250,19 @@ TEST_F(UT_UiTools, test_createInterface_004)
     EXPECT_NE(pInterface, nullptr);
     SAFE_DELETE_ELE(pInterface);
 }
+
+TEST_F(UT_UiTools, test_truncateLongFileName_short)
+{
+    QString shortName = "test.txt";
+    QString result = UiTools::truncateLongFileName(shortName);
+    EXPECT_EQ(result, shortName);
+}
+
+TEST_F(UT_UiTools, test_truncateLongFileName_long)
+{
+    QString longName = QString(260, 'a') + ".txt";
+    QString result = UiTools::truncateLongFileName(longName);
+    QString expected = QString(60, 'a') + QString("(001).") + "txt";
+    EXPECT_EQ(result, expected);
+    EXPECT_NE(result, longName);
+}
