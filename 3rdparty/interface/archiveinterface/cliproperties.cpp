@@ -27,6 +27,7 @@
 
 #include "cliproperties.h"
 #include "archiveformat.h"
+#include "ddlog.h"
 //#include "datamanager.h"
 #include <QFileInfo>
 #include <QDir>
@@ -119,7 +120,7 @@ QStringList CliProperties::addArgs(const QString &archive, const QStringList &fi
 
         tmp += tmparchive;
         args << tmp;
-        //        qInfo() << tmp;
+        //        qCInfo(ifaceLog) << tmp;
         return args;
     } else {
         QStringList args;

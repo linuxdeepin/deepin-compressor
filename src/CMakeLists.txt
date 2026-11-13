@@ -100,6 +100,8 @@ target_link_libraries(${EXE_NAME}
 #hw机型增加DConfig配置
 set(APPID org.deepin.compressor)
 set(configFile ${PROJECT_SOURCE_DIR}/assets/org.deepin.compressor.method.json)
+# 调试模式动态日志规则配置（debug-config 适配）
+list(APPEND configFile ${PROJECT_SOURCE_DIR}/assets/configs/org.deepin.compressor.json)
 if (DEFINED DSG_DATA_DIR)
     message("-- DConfig is supported by DTK")
     if (DTK_VERSION_MAJOR EQUAL "6")
@@ -107,6 +109,9 @@ if (DEFINED DSG_DATA_DIR)
     else()
         dconfig_meta_files(APPID ${APPID} FILES ${configFile})
     endif()
+else()
+    install(FILES ${configFile}
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/dsg/configs/${APPID})
 endif()
 
 install(TARGETS deepin-compressor DESTINATION ${CMAKE_INSTALL_BINDIR})

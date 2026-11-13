@@ -1,3 +1,62 @@
+deepin-compressor (6.5.40) unstable; urgency=medium
+
+  * fix: harden pzip extraction against symlink races
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Fri, 06 Nov 2026 10:01:14 +0800
+
+deepin-compressor (6.5.39) unstable; urgency=medium
+
+  * fix: restore missing compression format icons
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Tue, 03 Nov 2026 19:49:58 +0800
+
+deepin-compressor (6.5.38) unstable; urgency=medium
+
+  * fix: support bzip2 MIME aliases and correct tar.bz2 plugin
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Fri, 30 Oct 2026 17:22:21 +0800
+
+deepin-compressor (6.5.37) unstable; urgency=medium
+
+  * docs(archive-manager): add Portuguese help manual
+  * refactor: categorize logging in remaining pages and tree views
+  * refactor: categorize logging in dialogs, mainwindow and compress pages
+  * refactor: categorize logging in archivemanager and open-with dialog
+  * refactor: categorize logging in app common modules
+  * refactor: categorize logging in compressor-interface library
+  * feat: add logging categories and MLogger for debug config
+  * Translate deepin-compressor.ts in ru
+  * fix: strip fractional seconds from 7z time field
+  * fix: make zip archive comment edits take effect
+
+ -- re2zero <yangwu@uniontech.com>  Fri, 30 Oct 2026 15:32:08 +0800
+
+deepin-compressor (6.5.36) unstable; urgency=medium
+
+  * fix: switch to progress page before creating archive
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Mon, 12 Oct 2026 17:30:51 +0800
+
+deepin-compressor (6.5.35) unstable; urgency=medium
+
+  * fix: 修复取消追加/移除文件操作时应用崩溃的问题
+  * [skip CI] Translate deepin-compressor.ts in ms
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Sat, 10 Oct 2026 14:18:07 +0800
+
+deepin-compressor (6.5.34) unstable; urgency=medium
+
+  * fix: update Arabic (ar) translations
+  * fix: update Arabic (ar) translations
+  * [skip CI] Translate desktop.ts in sv
+  * [skip CI] Translate desktop.ts in ar
+  * [skip CI] Translate deepin-compressor.ts in ar
+  * [skip CI] Translate deepin-compressor.ts in sv
+  * [skip CI] Translate deepin-compressor.ts in sv
+  * [skip CI] Translate deepin-compressor.ts in sv
+
+ -- Liu Zhangjian <liuzhangjian@uniontech.com>  Mon, 07 Sep 2026 11:44:35 +0800
+
 deepin-compressor (6.5.33) unstable; urgency=medium
 
   * [skip CI] Translate desktop.ts in pt_BR

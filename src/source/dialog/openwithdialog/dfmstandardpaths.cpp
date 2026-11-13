@@ -5,6 +5,7 @@
 
 #include "openwithdialog/dfmstandardpaths.h"
 #include "openwithdialog/durl.h"
+#include "common/ddlog.h"
 
 #include <QDir>
 #include <QCoreApplication>
@@ -16,7 +17,7 @@
 
 QString DFMStandardPaths::location(DFMStandardPaths::StandardLocation type)
 {
-    qDebug() << "Getting standard path for type:" << type;
+    qCDebug(appLog) << "Getting standard path for type:" << type;
     switch (type) {
     case TrashPath:
         return QDir::homePath() + "/.local/share/Trash";
@@ -114,40 +115,40 @@ QString DFMStandardPaths::location(DFMStandardPaths::StandardLocation type)
 }
 bool DFMStandardPaths::pathControl(const QString &sPath)
 {
-    qDebug() << "Checking path control for:" << sPath;
+    qCDebug(appLog) << "Checking path control for:" << sPath;
     QString docPath = DFMStandardPaths::location(DFMStandardPaths::DocumentsPath);
     QString picPath = DFMStandardPaths::location(DFMStandardPaths::PicturesPath);
-    qDebug() << "Documents path:" << docPath << "Pictures path:" << picPath;
+    qCDebug(appLog) << "Documents path:" << docPath << "Pictures path:" << picPath;
     
     QDBusMessage reply;
     QDBusInterface iface("com.deepin.FileArmor1", "/com/deepin/FileArmor1", "com.deepin.FileArmor1",QDBusConnection::systemBus());
     
     if (iface.isValid()) {
-        qDebug() << "DBus interface is valid";
+        qCDebug(appLog) << "DBus interface is valid";
         if(sPath.startsWith(docPath)) {
-            qDebug() << "Checking document path control";
+            qCDebug(appLog) << "Checking document path control";
             reply = iface.call("GetApps", docPath);
         } else if(sPath.startsWith(picPath)) {
-            qDebug() << "Checking picture path control";
+            qCDebug(appLog) << "Checking picture path control";
             reply = iface.call("GetApps", picPath);
         }
     } else {
-        qWarning() << "DBus interface is invalid";
+        qCWarning(appLog) << "DBus interface is invalid";
     }
     
     if(reply.type() == QDBusMessage::ReplyMessage) {
-        qDebug() << "Got valid DBus reply";
+        qCDebug(appLog) << "Got valid DBus reply";
         QList<QString> lValue = reply.arguments().takeFirst().toStringList();
         QString strApp = QStandardPaths::findExecutable("deepin-compressor");
-        qDebug() << "Found executable:" << strApp;
+        qCDebug(appLog) << "Found executable:" << strApp;
         
         if(lValue.contains(strApp)) {
-            qInfo() << "Path control check passed";
+            qCInfo(appLog) << "Path control check passed";
             return true;
         }
     }
 
-    qDebug() << "Path control final result false!";
+    qCDebug(appLog) << "Path control final result false!";
     return false;
 }
 //QString DFMStandardPaths::fromStandardUrl(const DUrl &standardUrl)
@@ -215,19 +216,19 @@ bool DFMStandardPaths::pathControl(const QString &sPath)
 #ifdef QMAKE_TARGET
 QString DFMStandardPaths::getConfigPath()
 {
-    qDebug() << "Getting config path";
+    qCDebug(appLog) << "Getting config path";
     QString projectName = QMAKE_TARGET;
-    qDebug() << "Project name:" << projectName;
+    qCDebug(appLog) << "Project name:" << projectName;
     
     bool mkdirSuccess = QDir::home().mkpath(".config");
-    qDebug() << "Created .config directory:" << mkdirSuccess;
+    qCDebug(appLog) << "Created .config directory:" << mkdirSuccess;
     
     QString deepinPath = QString("%1/deepin/%2/").arg(".config", projectName);
     mkdirSuccess = QDir::home().mkpath(deepinPath);
-    qDebug() << "Created deepin config directory:" << mkdirSuccess;
+    qCDebug(appLog) << "Created deepin config directory:" << mkdirSuccess;
     
     QString defaultPath = QString("%1/%2/deepin/%3").arg(QDir::homePath(), ".config", projectName);
-    qDebug() << "Config path:" << defaultPath;
+    qCDebug(appLog) << "Config path:" << defaultPath;
     
     return defaultPath;
 }
@@ -235,17 +236,17 @@ QString DFMStandardPaths::getConfigPath()
 
 QString DFMStandardPaths::getCachePath()
 {
-    qDebug() << "Getting cache path";
+    qCDebug(appLog) << "Getting cache path";
     QString projectName = qApp->applicationName();
     QDir::home().mkpath(".cache");
     QDir::home().mkpath(QString("%1/deepin/%2/").arg(".cache", projectName));
     QString defaultPath = QString("%1/%2/deepin/%3").arg(QDir::homePath(), ".cache", projectName);
-    qDebug() << "Cache path:" << defaultPath;
+    qCDebug(appLog) << "Cache path:" << defaultPath;
 
     return defaultPath;
 }
 
 DFMStandardPaths::DFMStandardPaths()
 {
-    qDebug() << "DFMStandardPaths constructor";
+    qCDebug(appLog) << "DFMStandardPaths constructor";
 }

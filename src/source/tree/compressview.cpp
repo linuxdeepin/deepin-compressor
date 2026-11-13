@@ -13,6 +13,7 @@
 #include "openwithdialog.h"
 #include "uitools.h"
 #include "processopenthread.h"
+#include "common/ddlog.h"
 
 #include <DMenu>
 
@@ -27,21 +28,21 @@
 CompressView::CompressView(QWidget *parent)
     : DataTreeView(parent)
 {
-    qDebug() << "CompressView constructor called";
+    qCDebug(appLog) << "CompressView constructor called";
     initUI();           // 初始化参数等
     initConnections();  // 初始化信号槽
-    qDebug() << "CompressView initialized";
+    qCDebug(appLog) << "CompressView initialized";
 }
 
 CompressView::~CompressView()
 {
-    qDebug() << "CompressView destructor called";
+    qCDebug(appLog) << "CompressView destructor called";
 
 }
 
 void CompressView::addCompressFiles(const QStringList &listFiles)
 {
-    qDebug() << "Adding compress files:" << listFiles;
+    qCDebug(appLog) << "Adding compress files:" << listFiles;
     Overwrite_Result mode = OR_Cancel;
     bool applyAll = false;
 
@@ -78,24 +79,24 @@ void CompressView::addCompressFiles(const QStringList &listFiles)
 
 QStringList CompressView::getCompressFiles()
 {
-    qDebug() << "Getting compress files, count:" << m_listCompressFiles.size();
+    qCDebug(appLog) << "Getting compress files, count:" << m_listCompressFiles.size();
     return m_listCompressFiles;
 }
 
 QList<FileEntry> CompressView::getEntrys()
 {
-    qDebug() << "Getting entry list";
+    qCDebug(appLog) << "Getting entry list";
     return m_listEntry;
 }
 
 void CompressView::refreshCompressedFiles(bool bChanged, const QString &strFileName)
 {
-    qDebug() << "Refreshing compressed files, changed:" << bChanged << "file:" << strFileName;
+    qCDebug(appLog) << "Refreshing compressed files, changed:" << bChanged << "file:" << strFileName;
     m_listEntry.clear();
 
     // 对变化的文件进行监控
     if (bChanged && !QFile::exists(strFileName)) {
-        qDebug() << "File does not exist, removing from compress list";
+        qCDebug(appLog) << "File does not exist, removing from compress list";
         m_listCompressFiles.removeOne(strFileName);
     }
 
@@ -131,7 +132,7 @@ void CompressView::refreshCompressedFiles(bool bChanged, const QString &strFileN
 
 void CompressView::clear()
 {
-    qDebug() << "Clearing compress view data";
+    qCDebug(appLog) << "Clearing compress view data";
     // 重置数据
     m_pFileWatcher->removePath(m_strCurrentPath);       // 删除目录监听
     m_listCompressFiles.clear();
@@ -141,9 +142,9 @@ void CompressView::clear()
 
 void CompressView::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    qDebug() << "Mouse double click event";
+    qCDebug(appLog) << "Mouse double click event";
     if (event->button() == Qt::MouseButton::LeftButton) {
-        qDebug() << "Left button double clicked";
+        qCDebug(appLog) << "Left button double clicked";
         handleDoubleClick(indexAt(event->pos()));   // 双击处理
     }
 
@@ -152,13 +153,13 @@ void CompressView::mouseDoubleClickEvent(QMouseEvent *event)
 
 void CompressView::initUI()
 {
-    qDebug() << "Initializing UI";
+    qCDebug(appLog) << "Initializing UI";
     m_pFileWatcher = new QFileSystemWatcher(this);
 }
 
 void CompressView::initConnections()
 {
-    qDebug() << "Initializing connections";
+    qCDebug(appLog) << "Initializing connections";
     connect(this, &CompressView::signalDragFiles, this, &CompressView::slotDragFiles, Qt::QueuedConnection);
     connect(this, &CompressView::customContextMenuRequested, this, &CompressView::slotShowRightMenu);
     connect(m_pFileWatcher, &QFileSystemWatcher::directoryChanged, this, &CompressView::slotDirChanged); // 文件目录变化
@@ -166,7 +167,7 @@ void CompressView::initConnections()
 
 FileEntry CompressView::fileInfo2Entry(const QFileInfo &fileInfo)
 {
-    qDebug() << "Converting QFileInfo to FileEntry for" << fileInfo.filePath();
+    qCDebug(appLog) << "Converting QFileInfo to FileEntry for" << fileInfo.filePath();
     FileEntry entry;
 
     entry.strFullPath = fileInfo.filePath();    // 文件全路径
@@ -174,11 +175,11 @@ FileEntry CompressView::fileInfo2Entry(const QFileInfo &fileInfo)
     entry.isDirectory = fileInfo.isDir();   // 是否是文件夹
 
     if (entry.isDirectory) {
-        qDebug() << "File is a directory";
+        qCDebug(appLog) << "File is a directory";
         // 文件夹显示子文件数目
         entry.qSize = QDir(fileInfo.filePath()).entryList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::Hidden).count(); //目录下文件数
     } else {
-        qDebug() << "File is not a directory";
+        qCDebug(appLog) << "File is not a directory";
         // 文件直接显示大小
         entry.qSize = fileInfo.size();
     }
@@ -194,15 +195,15 @@ FileEntry CompressView::fileInfo2Entry(const QFileInfo &fileInfo)
 
 void CompressView::handleDoubleClick(const QModelIndex &index)
 {
-    qDebug() << "Handling double click";
+    qCDebug(appLog) << "Handling double click";
     m_pFileWatcher->removePath(m_strCurrentPath);       // 删除目录监听
-    qInfo() << "gaoxiang:index.isValid()" << index.isValid();
+    qCInfo(appLog) << "gaoxiang:index.isValid()" << index.isValid();
     if (index.isValid()) {
-        qInfo() << "index is valid";
+        qCInfo(appLog) << "index is valid";
         FileEntry entry = index.data(Qt::UserRole).value<FileEntry>();
-        qInfo() << "gaoxiang:entry.isDirectory" << entry.isDirectory;
+        qCInfo(appLog) << "gaoxiang:entry.isDirectory" << entry.isDirectory;
         if (entry.isDirectory) {     // 如果是文件夹，进入下一层
-            qInfo() << "entry is directory";
+            qCInfo(appLog) << "entry is directory";
             m_pFileWatcher->removePath(m_strCurrentPath);       // 删除目录监听
             m_iLevel++;
             m_strCurrentPath = entry.strFullPath;
@@ -226,7 +227,7 @@ void CompressView::handleDoubleClick(const QModelIndex &index)
             }
 
         } else {    // 如果是文件，选择默认方式打开
-            qInfo() << "entry is file";
+            qCInfo(appLog) << "entry is file";
             OpenWithDialog::openWithProgram(entry.strFullPath);
         }
     }
@@ -234,7 +235,7 @@ void CompressView::handleDoubleClick(const QModelIndex &index)
 
 QList<FileEntry> CompressView::getCurrentDirFiles()
 {
-    qInfo() << "Getting current directory files, path:" << m_strCurrentPath;
+    qCInfo(appLog) << "Getting current directory files, path:" << m_strCurrentPath;
     // 获取当前目录下所有文件信息
     QFileInfoList lisfInfo = QDir(m_strCurrentPath).entryInfoList(QDir::AllEntries | QDir::System
                                                                   | QDir::NoDotAndDotDot | QDir::Hidden);     // 获取当前目录下所有子文件
@@ -250,7 +251,7 @@ QList<FileEntry> CompressView::getCurrentDirFiles()
 
 void CompressView::handleLevelChanged()
 {
-    qDebug() << "Handling level changed, current level:" << m_iLevel;
+    qCDebug(appLog) << "Handling level changed, current level:" << m_iLevel;
     // 发送层级变化信号，通知mainwindow是否是根目录
     bool bRoot = (0 == m_iLevel ? true : false);
     setAcceptDrops(bRoot);
@@ -261,7 +262,7 @@ QString CompressView::getPrePathByLevel(const QString &strPath)
 {
     // 若层级为0,即根目录，返回空
     if (0 == m_iLevel) {
-        qDebug() << "Already at root level, returning empty string";
+        qCDebug(appLog) << "Already at root level, returning empty string";
         return "";
     }
 
@@ -280,13 +281,13 @@ QString CompressView::getPrePathByLevel(const QString &strPath)
 
 void CompressView::refreshDataByCurrentPath()
 {
-    qInfo() << "Refreshing data by current path, current level:" << m_iLevel;
+    qCInfo(appLog) << "Refreshing data by current path, current level:" << m_iLevel;
     if (0 == m_iLevel) {
-        qDebug() << "Refreshing data at root level";
+        qCDebug(appLog) << "Refreshing data at root level";
         setPreLblVisible(false);
         m_pModel->refreshFileEntry(m_listEntry);    // 数据模型刷新
     } else {
-        qDebug() << "Refreshing data at sub level, path:" << m_strCurrentPath;
+        qCDebug(appLog) << "Refreshing data at sub level, path:" << m_strCurrentPath;
         m_pFileWatcher->addPath(m_strCurrentPath);      // 添加目录监听
         setPreLblVisible(true, getPrePathByLevel(m_strCurrentPath));
         m_pModel->refreshFileEntry(getCurrentDirFiles());  // 刷新数据显示
@@ -296,11 +297,11 @@ void CompressView::refreshDataByCurrentPath()
 
 void CompressView::slotShowRightMenu(const QPoint &pos)
 {
-    qInfo() << "Showing right-click menu, position:" << pos;
+    qCInfo(appLog) << "Showing right-click menu, position:" << pos;
     QModelIndex index = indexAt(pos);
 
     if (index.isValid()) {
-        qDebug() << "Showing right-click menu for a valid item";
+        qCDebug(appLog) << "Showing right-click menu for a valid item";
 
         m_stRightEntry = index.data(Qt::UserRole).value<FileEntry>();  // 获取文件数据
 
@@ -337,10 +338,10 @@ void CompressView::slotShowRightMenu(const QPoint &pos)
         openMenu.addAction(tr("Select default program"), this, SLOT(slotOpenStyleClicked()));
 
         if (m_stRightEntry.isDirectory) {
-            qInfo() << "entry is directory";
+            qCInfo(appLog) << "entry is directory";
             openMenu.setEnabled(false);
         } else {
-            qInfo() << "entry is file";
+            qCInfo(appLog) << "entry is file";
             // 右键-打开方式选项
             QAction *pAction = nullptr;
             // 获取支持的打开方式列表
@@ -358,11 +359,11 @@ void CompressView::slotShowRightMenu(const QPoint &pos)
 
 void CompressView::slotDeleteFile()
 {
-    qDebug() << "Deleting selected files";
+    qCDebug(appLog) << "Deleting selected files";
     QModelIndexList selectedIndex = selectionModel()->selectedRows(0);    // 获取所有待删除的第一行index
 
     if (0 == m_iLevel) { // 如果是根目录，删除缓存文件名
-        qInfo() << "Deleting selected files at root level";
+        qCInfo(appLog) << "Deleting selected files at root level";
         // 从内存中删除选中的文件
         foreach (QModelIndex index, selectedIndex) {
             if (index.isValid()) {
@@ -378,11 +379,11 @@ void CompressView::slotDeleteFile()
         m_pModel->refreshFileEntry(m_listEntry);   // 刷新列表数据
 
     } else { // 提示是否删除本地文件
-        qInfo() << "Deleting selected files at sub level";
+        qCInfo(appLog) << "Deleting selected files at sub level";
         SimpleQueryDialog dialog(this);
         int iResult = dialog.showDialog(tr("It will permanently delete the file(s). Are you sure you want to continue?"), tr("Cancel", "button"), DDialog::ButtonNormal, tr("Confirm", "button"), DDialog::ButtonWarning);
         if (1 == iResult) {     // 如果点击确定，移动本地文件至回收站中
-            qInfo() << "Deleting selected files at sub level, user clicked confirm";
+            qCInfo(appLog) << "Deleting selected files at sub level, user clicked confirm";
             // 从本地文件中将需要删除的文件移动到回收站中
             foreach (QModelIndex index, selectedIndex) {
                 if (index.isValid()) {
@@ -397,7 +398,7 @@ void CompressView::slotDeleteFile()
                 }
             }
         } else {    // 点击关闭或者取消，不操作
-            qInfo() << "Deleting selected files at sub level, user clicked cancel";
+            qCInfo(appLog) << "Deleting selected files at sub level, user clicked cancel";
             return;
         }
     }
@@ -405,7 +406,7 @@ void CompressView::slotDeleteFile()
 
 void CompressView::slotRenameFile()
 {
-    qDebug() << "Renaming selected file";
+    qCDebug(appLog) << "Renaming selected file";
     QList<FileEntry> listSelEntry;
 
     QModelIndexList listModelIndex = selectionModel()->selectedRows();
@@ -436,7 +437,7 @@ void CompressView::slotRenameFile()
             FileEntry tmp = m_listEntry.at(iRemoveIndex);
             QString strAlias = QFileInfo(dialog.getNewNameText()).fileName();
             if(strAlias == entry.strFileName || strAlias == entry.strAlias) { //名字与原来相同不做处理
-                qInfo() << entry.strAlias <<" | The name already exists. Level" << m_iLevel;
+                qCInfo(appLog) << entry.strAlias <<" | The name already exists. Level" << m_iLevel;
                 if(!sender()) return;
                 sender()->setProperty("repeat", "true");
                 slotRenameFile();
@@ -445,7 +446,7 @@ void CompressView::slotRenameFile()
             QString strAliasEndPath = QDir::separator() + strAlias;
             for(FileEntry tmpentry: m_listEntry) {
                 if(tmpentry.isDirectory == entry.isDirectory && tmpentry.strFullPath.endsWith(strAliasEndPath)) {
-                    qInfo() << entry.strFullPath << " | The name already exists。 Level" << m_iLevel;
+                    qCInfo(appLog) << entry.strFullPath << " | The name already exists。 Level" << m_iLevel;
                     if(!sender()) return;
                     sender()->setProperty("repeat", "true");
                     slotRenameFile();
@@ -466,7 +467,7 @@ void CompressView::slotRenameFile()
                 QDir dir(entry.strFullPath);
                 bool bRename = dir.rename(entry.strFullPath, dialog.getNewNameText());
                 if(!bRename) {
-                    qInfo() << entry.strFullPath <<" | The name already exists. Level" << m_iLevel;
+                    qCInfo(appLog) << entry.strFullPath <<" | The name already exists. Level" << m_iLevel;
                     if(!sender()) return;
                     sender()->setProperty("repeat", "true");
                     slotRenameFile();
@@ -475,7 +476,7 @@ void CompressView::slotRenameFile()
                 QFile file(entry.strFullPath);
                 bool bRename = file.rename(dialog.getNewNameText());
                 if(!bRename) {
-                    qInfo() << entry.strFullPath <<" | The name already exists. Level" << m_iLevel;
+                    qCInfo(appLog) << entry.strFullPath <<" | The name already exists. Level" << m_iLevel;
                     if(!sender()) return;
                     sender()->setProperty("repeat", "true");
                     slotRenameFile();
@@ -489,17 +490,17 @@ void CompressView::slotRenameFile()
 
 void CompressView::slotDirChanged()
 {
-    qDebug() << "Directory changed, refreshing view";
+    qCDebug(appLog) << "Directory changed, refreshing view";
     // 刷新显示数据
     m_pModel->refreshFileEntry(getCurrentDirFiles());
 }
 
 void CompressView::slotDragFiles(const QStringList &listFiles)
 {
-    qDebug() << "Handling drag files:" << listFiles;
+    qCDebug(appLog) << "Handling drag files:" << listFiles;
     // 在压缩列表添加一个压缩文件
     if (listFiles.count() == 1 && UiTools::isArchiveFile(listFiles.at(0)) && m_listCompressFiles.count() > 0) {
-        qInfo() << "Dragging archive file to compress list";
+        qCInfo(appLog) << "Dragging archive file to compress list";
         SimpleQueryDialog dialog;  // 询问添加压缩文件到压缩目录或者在新窗口打开压缩文件
         int ret = dialog.showDialog(tr("Do you want to add the archive to the list or open it in new window?"),
                                     tr("Cancel", "button"),  DDialog::ButtonNormal,
@@ -507,27 +508,27 @@ void CompressView::slotDragFiles(const QStringList &listFiles)
                                     tr("Open in new window"), DDialog::ButtonRecommend);
 
         if (1 == ret) { // 添加压缩文件到目录
-            qInfo() << "user clicked confirm";
+            qCInfo(appLog) << "user clicked confirm";
             addCompressFiles(listFiles);
         } else if (ret == 2) { // 在新窗口打开压缩文件
-            qInfo() << "user clicked open in new window";
+            qCInfo(appLog) << "user clicked open in new window";
             ProcessOpenThread *p = new ProcessOpenThread;
             p->setProgramPath(OpenWithDialog::getProgramPathByExec("deepin-compressor"));
             p->setArguments(QStringList() << listFiles.at(0));
             p->start();
         }
     } else {
-        qInfo() << "user clicked cancel";
+        qCInfo(appLog) << "user clicked cancel";
         addCompressFiles(listFiles);
     }
 }
 
 void CompressView::slotOpenStyleClicked()
 {
-    qInfo() << "user clicked open style";
+    qCInfo(appLog) << "user clicked open style";
     QAction *pAction = qobject_cast<QAction *>(sender());
     if (nullptr == pAction) {
-        qWarning() << "Action is null, returning";
+        qCWarning(appLog) << "Action is null, returning";
         return;
     }
 
@@ -535,29 +536,29 @@ void CompressView::slotOpenStyleClicked()
 
     if (tr("Select default program") == strText) {
         // 选择默认应用程序（弹出窗口）
-        qInfo() << "选择默认应用程序打开";
+        qCInfo(appLog) << "选择默认应用程序打开";
         OpenWithDialog dialog(m_stRightEntry.strFullPath);
         dialog.showOpenWithDialog(OpenWithDialog::OpenType);
     } else {
         // 用选择的应用程序打开
-        qInfo() << "选择打开方式：" << strText;
+        qCInfo(appLog) << "选择打开方式：" << strText;
         OpenWithDialog::openWithProgram(m_stRightEntry.strFullPath, pAction->data().toString());
     }
 }
 
 void CompressView::slotPreClicked()
 {
-    qInfo() << "user clicked pre";
+    qCInfo(appLog) << "user clicked pre";
     m_pFileWatcher->removePath(m_strCurrentPath);       // 删除目录监听
     m_iLevel--;     // 目录层级减1
 
     if (0 == m_iLevel) {    // 如果返回到根目录，显示待压缩文件
-        qInfo() << "user clicked pre, return to root directory";
+        qCInfo(appLog) << "user clicked pre, return to root directory";
         resetLevel();
     } else {        // 否则传递上级目录
         int iIndex = m_strCurrentPath.lastIndexOf(QDir::separator());
         m_strCurrentPath = m_strCurrentPath.left(iIndex);   // 当前路径截掉最后一级目录
-        qInfo() << "user clicked pre, return to parent directory";
+        qCInfo(appLog) << "user clicked pre, return to parent directory";
     }
 
     refreshDataByCurrentPath();     // 刷新数据
@@ -574,7 +575,7 @@ void CompressView::slotPreClicked()
     QModelIndex tmpindex = m_pModel->getListEntryIndex(m_vPre.back()); // 获取上层文件夹对应的QModelIndex
     m_vPre.pop_back();
     if (tmpindex.isValid()) {
-        qInfo() << "user clicked pre, return to parent directory, select first row";
+        qCInfo(appLog) << "user clicked pre, return to parent directory, select first row";
         setCurrentIndex(tmpindex);
         setFocus(); //焦点丢失，需手动设置焦点
     }

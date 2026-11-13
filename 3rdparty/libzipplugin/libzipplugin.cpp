@@ -520,6 +520,8 @@ PluginFinishType LibzipPlugin::addComment(const QString &comment)
     zip_t *archive = zip_open(QFile::encodeName(m_strArchiveName).constData(), ZIP_CREATE, &errcode); //filename()压缩包名
     zip_error_init_with_code(&err, errcode);
     if (!archive) {
+        qWarning() << "addComment: zip_open failed, error code:" << errcode
+                    << "msg:" << zip_error_strerror(&err);
         return PFT_Error;
     }
 
@@ -538,6 +540,8 @@ PluginFinishType LibzipPlugin::addComment(const QString &comment)
 
     // 结果判断
     if (ZIP_ER_OK != errcode) {
+        qWarning() << "addComment: zip_set_archive_comment failed, error code:" << errcode;
+        zip_close(archive);
         return PFT_Error;
     }
 
@@ -547,8 +551,12 @@ PluginFinishType LibzipPlugin::addComment(const QString &comment)
     // 关闭保存
     if (zip_close(archive)) {
         m_eErrorType = ET_FileWriteError;
+        qWarning() << "addComment: zip_close failed, error type:" << m_eErrorType;
         return PFT_Error;
     }
+
+    m_strComment = comment;
+    DataManager::get_instance().archiveData().strComment = comment;
 
     return PFT_Nomral;
 }

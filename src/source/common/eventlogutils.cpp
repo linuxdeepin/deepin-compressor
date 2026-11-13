@@ -8,6 +8,7 @@
 #include <QLibraryInfo>
 #include <QJsonDocument>
 #include <QDebug>
+#include "common/ddlog.h"
 
 #include "eventlogutils.h"
 
@@ -16,24 +17,24 @@ EventLogUtils *EventLogUtils::mInstance(nullptr);
 EventLogUtils &EventLogUtils::get()
 {
     if (mInstance == nullptr) {
-        qDebug() << "Creating new EventLogUtils instance";
+        qCDebug(appLog) << "Creating new EventLogUtils instance";
         mInstance = new EventLogUtils;
     } else {
-        qDebug() << "Returning existing EventLogUtils instance";
+        qCDebug(appLog) << "Returning existing EventLogUtils instance";
     }
     return *mInstance;
 }
 
 EventLogUtils::EventLogUtils()
 {
-    qDebug() << "Initializing EventLogUtils";
+    qCDebug(appLog) << "Initializing EventLogUtils";
     QLibrary library("libdeepin-event-log.so");
 
     init =reinterpret_cast<bool (*)(const std::string &, bool)>(library.resolve("Initialize"));
     writeEventLog = reinterpret_cast<void (*)(const std::string &)>(library.resolve("SendEventLog"));
 
     if (init == nullptr) {
-        qWarning() << "Failed to resolve Initialize function";
+        qCWarning(appLog) << "Failed to resolve Initialize function";
         return;
     }
 
@@ -42,9 +43,9 @@ EventLogUtils::EventLogUtils()
 
 void EventLogUtils::writeLogs(QJsonObject &data)
 {
-    qDebug() << "Writing event log";
+    qCDebug(appLog) << "Writing event log";
     if (writeEventLog == nullptr) {
-        qWarning() << "writeEventLog function not initialized";
+        qCWarning(appLog) << "writeEventLog function not initialized";
         return;
     }
 

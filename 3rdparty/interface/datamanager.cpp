@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "datamanager.h"
+#include "ddlog.h"
 
 #include <QAtomicPointer>
 #include <QDebug>
@@ -39,7 +40,7 @@ DataManager &DataManager::get_instance(void)
 
 #ifndef Q_ATOMIC_POINTER_TEST_AND_SET_IS_SOMETIMES_NATIVE
     if (!QAtomicPointer<DataManager>::isTestAndSetNative()) //运行时检测
-        qInfo() << "Error: TestAndSetNative not supported!";
+        qCInfo(ifaceLog) << "Error: TestAndSetNative not supported!";
 #endif
 
     //使用双重检测。

@@ -31,6 +31,7 @@
 #include "kptyprocess.h"
 #include "kprocess.h"
 #include "kptydevice.h"
+#include "ddlog.h"
 
 #include <cstdlib>
 #include <unistd.h>
@@ -86,11 +87,11 @@ KPtyProcess::~KPtyProcess()
     waitForFinished(300); // give it some time to finish
     if (state() != QProcess::NotRunning)
     {
-        qWarning() << Q_FUNC_INFO << "the terminal process is still running, trying to stop it by SIGHUP";
+        qCWarning(ifaceLog) << Q_FUNC_INFO << "the terminal process is still running, trying to stop it by SIGHUP";
         ::kill(pid(), SIGHUP);
         waitForFinished(300);
         if (state() != QProcess::NotRunning)
-            qCritical() << Q_FUNC_INFO << "process didn't stop upon SIGHUP and will be SIGKILL-ed";
+            qCCritical(ifaceLog) << Q_FUNC_INFO << "process didn't stop upon SIGHUP and will be SIGKILL-ed";
     }
 }
 

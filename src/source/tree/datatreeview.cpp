@@ -8,6 +8,7 @@
 #include "datamodel.h"
 #include "itemviewrowhoverproxystyle.h"
 #include "uitools.h"
+#include "common/ddlog.h"
 
 #include <DApplication>
 #include <DStyle>
@@ -29,26 +30,26 @@
 StyleTreeViewDelegate::StyleTreeViewDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
 {
-    qDebug() << "StyleTreeViewDelegate destructor";
+    qCDebug(appLog) << "StyleTreeViewDelegate destructor";
 }
 
 StyleTreeViewDelegate::~StyleTreeViewDelegate()
 {
-    qDebug() << "StyleTreeViewDelegate constructor";
+    qCDebug(appLog) << "StyleTreeViewDelegate constructor";
 }
 
 QSize StyleTreeViewDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    // qDebug() << "StyleTreeViewDelegate sizeHint";
+    // qCDebug(appLog) << "StyleTreeViewDelegate sizeHint";
     Q_UNUSED(index);
 
 
 #ifdef DTKWIDGET_CLASS_DSizeMode
     if (DGuiApplicationHelper::instance()->isCompactMode()) {
-        qDebug() << "Compact mode, returning compact size hint";
+        qCDebug(appLog) << "Compact mode, returning compact size hint";
         return QSize(option.rect.width(), TABLE_HEIGHT_CompactMode);
     } else {
-        qDebug() << "Normal mode, returning normal size hint";
+        qCDebug(appLog) << "Normal mode, returning normal size hint";
         return QSize(option.rect.width(), TABLE_HEIGHT_NormalMode);
     }
 #else
@@ -58,9 +59,9 @@ QSize StyleTreeViewDelegate::sizeHint(const QStyleOptionViewItem &option, const 
 
 void StyleTreeViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    // qDebug() << "StyleTreeViewDelegate paint";
+    // qCDebug(appLog) << "StyleTreeViewDelegate paint";
     if (!index.isValid()) {
-        // qDebug() << "Invalid index, not painting";
+        // qCDebug(appLog) << "Invalid index, not painting";
         QStyledItemDelegate::paint(painter, option, index);
         return;
     }
@@ -155,21 +156,21 @@ void StyleTreeViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
 DataTreeView::DataTreeView(QWidget *parent)
     : DTreeView(parent)
 {
-    qDebug() << "DataTreeView constructor called";
+    qCDebug(appLog) << "DataTreeView constructor called";
     initUI();
     initConnections();
-    qDebug() << "DataTreeView initialized";
+    qCDebug(appLog) << "DataTreeView initialized";
 }
 
 DataTreeView::~DataTreeView()
 {
-    qDebug() << "DataTreeView destructor called";
+    qCDebug(appLog) << "DataTreeView destructor called";
 
 }
 
 void DataTreeView::resetLevel()
 {
-    qDebug() << "Resetting level and path";
+    qCDebug(appLog) << "Resetting level and path";
     m_iLevel = 0;
     m_strCurrentPath = QDir::separator();
     setPreLblVisible(false);
@@ -177,7 +178,7 @@ void DataTreeView::resetLevel()
 
 void DataTreeView::initUI()
 {
-    qDebug() << "Initializing DataTreeView UI";
+    qCDebug(appLog) << "Initializing DataTreeView UI";
     setAttribute(Qt::WA_AcceptTouchEvents); // 设置接收触摸屏事件
     setObjectName("TableViewFile");
     setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -214,13 +215,13 @@ void DataTreeView::initUI()
 
 void DataTreeView::initConnections()
 {
-    qDebug() << "Initializing DataTreeView connections";
+    qCDebug(appLog) << "Initializing DataTreeView connections";
     connect(m_pHeaderView->getpreLbl(), &PreviousLabel::doubleClickedSignal, this, &DataTreeView::slotPreClicked);
 }
 
 void DataTreeView::resizeColumnWidth()
 {
-    qDebug() << "Resizing columns to width:" << width();
+    qCDebug(appLog) << "Resizing columns to width:" << width();
     setColumnWidth(0, width() * 25 / 58);
     setColumnWidth(1, width() * 17 / 58);
     setColumnWidth(2, width() * 8 / 58);
@@ -229,32 +230,32 @@ void DataTreeView::resizeColumnWidth()
 
 TreeHeaderView *DataTreeView::getHeaderView() const
 {
-    // qDebug() << "Getting header view";
+    // qCDebug(appLog) << "Getting header view";
     return m_pHeaderView;
 }
 
 
 void DataTreeView::setMapOrderJson(const QString &sJson)
 {
-    qDebug() << "Setting order JSON";
+    qCDebug(appLog) << "Setting order JSON";
     QJsonParseError error;
     QJsonObject metaData = QJsonDocument::fromJson(sJson.toLower().toLocal8Bit().data(), &error).object();
     QVariantMap mapdata = metaData.toVariantMap();
     if(mapdata.contains("permission")) {
-        qDebug() << "Setting order JSON permission";
+        qCDebug(appLog) << "Setting order JSON permission";
         m_mapOrderJson = mapdata.value("permission").toMap();
     }
 }
 
 QVariantMap DataTreeView::mapOrderJson()
 {
-    // qDebug() << "Getting order JSON map";
+    // qCDebug(appLog) << "Getting order JSON map";
     return m_mapOrderJson;
 }
 
 void DataTreeView::drawRow(QPainter *painter, const QStyleOptionViewItem &options, const QModelIndex &index) const
 {
-    // qDebug() << "Drawing row";
+    // qCDebug(appLog) << "Drawing row";
     Q_ASSERT(m_selectionModel);
     if (!m_selectionModel) {
         QTreeView::drawRow(painter, options, index);
@@ -357,17 +358,17 @@ void DataTreeView::drawRow(QPainter *painter, const QStyleOptionViewItem &option
 
 void DataTreeView::focusInEvent(QFocusEvent *event)
 {
-    // qDebug() << "Focus in event";
+    // qCDebug(appLog) << "Focus in event";
     m_reson = event->reason();
-    // qInfo() << m_reson << model()->rowCount() << currentIndex();
+    // qCInfo(appLog) << m_reson << model()->rowCount() << currentIndex();
     if (Qt::BacktabFocusReason == m_reson || Qt::TabFocusReason == m_reson) { // 修复不能多选删除
-        // qDebug() << "Focus in with tab or backtab";
+        // qCDebug(appLog) << "Focus in with tab or backtab";
         if (model()->rowCount() > 0) {
             if (currentIndex().isValid()) {
-                // qDebug() << "Selecting current index";
+                // qCDebug(appLog) << "Selecting current index";
                 m_selectionModel->select(currentIndex(), QItemSelectionModel::Select | QItemSelectionModel::Rows);
             } else {
-                // qDebug() << "Selecting first index";
+                // qCDebug(appLog) << "Selecting first index";
                 QModelIndex firstModelIndex = model()->index(0, 0);
                 m_selectionModel->select(firstModelIndex, QItemSelectionModel::Select | QItemSelectionModel::Rows);
             }
@@ -379,15 +380,15 @@ void DataTreeView::focusInEvent(QFocusEvent *event)
 
 void DataTreeView::dragEnterEvent(QDragEnterEvent *e)
 {
-    qDebug() << "Drag enter event with mime data:" << e->mimeData()->formats();
+    qCDebug(appLog) << "Drag enter event with mime data:" << e->mimeData()->formats();
     const auto *mime = e->mimeData();
 
     // 判断是否有url
     if (!mime->hasUrls()) {
-        qDebug() << "Drag enter event without urls";
+        qCDebug(appLog) << "Drag enter event without urls";
         e->ignore();
     } else {
-        qDebug() << "Drag enter event with urls";
+        qCDebug(appLog) << "Drag enter event with urls";
         // 判断是否是本地设备文件，过滤 手机 网络 ftp smb 等
         for (const auto &url : mime->urls()) {
             if (!UiTools::isLocalDeviceFile(url.toLocalFile())) {
@@ -410,7 +411,7 @@ void DataTreeView::dragEnterEvent(QDragEnterEvent *e)
 
 void DataTreeView::dragMoveEvent(QDragMoveEvent *e)
 {
-    qDebug() << "Drag move event with mime data:" << e->mimeData()->formats();
+    qCDebug(appLog) << "Drag move event with mime data:" << e->mimeData()->formats();
     if(m_mapOrderJson.contains(ORDER_EDIT)) {
         if (m_mapOrderJson.value(ORDER_EDIT).toBool()) {
             e->accept();
@@ -424,7 +425,7 @@ void DataTreeView::dragMoveEvent(QDragMoveEvent *e)
 
 void DataTreeView::dropEvent(QDropEvent *e)
 {
-    qDebug() << "Drop event with mime data:" << e->mimeData()->formats();
+    qCDebug(appLog) << "Drop event with mime data:" << e->mimeData()->formats();
     auto *const mime = e->mimeData();
 
     if (false == mime->hasUrls()) {
@@ -459,7 +460,7 @@ void DataTreeView::dropEvent(QDropEvent *e)
 
 void DataTreeView::resizeEvent(QResizeEvent *event)
 {
-    qDebug() << "Resize event, old size:" << event->oldSize()
+    qCDebug(appLog) << "Resize event, old size:" << event->oldSize()
              << "new size:" << event->size();
     Q_UNUSED(event)
     resizeColumnWidth();
@@ -467,10 +468,10 @@ void DataTreeView::resizeEvent(QResizeEvent *event)
 
 bool DataTreeView::event(QEvent *event)
 {
-    // qDebug() << "Event type:" << event->type();
+    // qCDebug(appLog) << "Event type:" << event->type();
     switch (event->type()) {
     case QEvent::TouchBegin: {
-        // qDebug() << "Touch begin event";
+        // qCDebug(appLog) << "Touch begin event";
         QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -505,7 +506,7 @@ bool DataTreeView::event(QEvent *event)
 
 void DataTreeView::mouseReleaseEvent(QMouseEvent *event)
 {
-    // qDebug() << "Mouse release event";
+    // qCDebug(appLog) << "Mouse release event";
     m_isPressed = false;
     DTreeView::mouseReleaseEvent(event);
 }
@@ -522,7 +523,7 @@ void DataTreeView::updateHoverRowFromPosition(const QPoint &pos)
 
 void DataTreeView::mouseMoveEvent(QMouseEvent *event)
 {
-    // qDebug() << "Mouse move at position:" << event->pos();
+    // qCDebug(appLog) << "Mouse move at position:" << event->pos();
     if (!m_isPressed) {
         updateHoverRowFromPosition(event->pos());
     }
@@ -535,7 +536,7 @@ void DataTreeView::mouseMoveEvent(QMouseEvent *event)
         event->accept();
         double horiDelta = event->pos().x() - m_lastTouchBeginPos.x();
         double vertDelta = event->pos().y() - m_lastTouchBeginPos.y();
-        qInfo() << "event->pos()" << event->pos() << "m_pHeaderView->height()" << m_pHeaderView->height();
+        qCInfo(appLog) << "event->pos()" << event->pos() << "m_pHeaderView->height()" << m_pHeaderView->height();
         if (qAbs(horiDelta) > touchmindistance && qAbs(horiDelta) < touchMaxDistance) {
             horizontalScrollBar()->setValue(static_cast<int>(horizontalScrollBar()->value() - horiDelta));
         }
@@ -569,13 +570,13 @@ void DataTreeView::leaveEvent(QEvent *event)
 
 void DataTreeView::keyPressEvent(QKeyEvent *event)
 {
-    // qDebug() << "Key pressed:" << event->key() << "modifiers:" << event->modifiers();
+    // qCDebug(appLog) << "Key pressed:" << event->key() << "modifiers:" << event->modifiers();
     // 当前选中表格第一行，再点击Key_Up,选中返回上一层目录
     if (Qt::Key_Up == event->key()) {
-        qDebug() << "Up key pressed";
+        qCDebug(appLog) << "Up key pressed";
         // 当前行为0或为空文件夹时，焦点放在返回上一层目录上
         if (this->currentIndex().row() == 0 || model()->rowCount() == 0) {
-            qDebug() << "Current row is 0 or model is empty, focusing on header";
+            qCDebug(appLog) << "Current row is 0 or model is empty, focusing on header";
             if (m_pHeaderView->isVisiable()) {
                 m_pHeaderView->setLabelFocus(true);
                 m_selectionModel->clearSelection();
@@ -585,7 +586,7 @@ void DataTreeView::keyPressEvent(QKeyEvent *event)
 
     // 当前选中返回上一层目录，再点击Key_Down,选中表格第一行
     if (Qt::Key_Down == event->key()) {
-        qDebug() << "Down key pressed";
+        qCDebug(appLog) << "Down key pressed";
         if (m_pHeaderView->isVisiable() && m_pHeaderView->isLabelFocus() && model()->rowCount() > 0) {
             m_pHeaderView->setLabelFocus(false);
             m_selectionModel->setCurrentIndex(m_pModel->index(-1, -1), QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
@@ -593,18 +594,18 @@ void DataTreeView::keyPressEvent(QKeyEvent *event)
     }
 
     if (Qt::Key_Delete == event->key() && m_selectionModel->selectedRows().count() > 0) { //删除键
-        qDebug() << "Delete key pressed";
+        qCDebug(appLog) << "Delete key pressed";
         slotDeleteFile();
     } else if (Qt::Key_M == event->key() && Qt::AltModifier == event->modifiers()
                && m_selectionModel->selectedRows().count() > 0) { //Alt+M组合键调用右键菜单
-        qDebug() << "Alt+M key pressed";
+        qCDebug(appLog) << "Alt+M key pressed";
         int y =   36 * currentIndex().row() + 36 / 2; //获取选中行y坐标+行高/2,列表行高36
         int x = static_cast<int>(width() * 0.618); //比较合适的x坐标
 
         slotShowRightMenu(QPoint(x, y));
     } else if ((Qt::Key_Enter == event->key() || Qt::Key_Return == event->key())
                && m_selectionModel->selectedRows().count() > 0) { //回车键以默认方式打开文件(夹)
-        qDebug() << "Enter key pressed";
+        qCDebug(appLog) << "Enter key pressed";
         handleDoubleClick(currentIndex());
     } else {
         DTreeView::keyPressEvent(event);
@@ -613,7 +614,7 @@ void DataTreeView::keyPressEvent(QKeyEvent *event)
 
 void DataTreeView::setPreLblVisible(bool bVisible, const QString &strPath)
 {
-    qDebug() << "setPreLblVisible" << bVisible << strPath;
+    qCDebug(appLog) << "setPreLblVisible" << bVisible << strPath;
     m_pHeaderView->getpreLbl()->setPrePath(strPath);
     m_pHeaderView->setPreLblVisible(bVisible);
 }

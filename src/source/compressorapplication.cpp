@@ -6,6 +6,7 @@
 #include "compressorapplication.h"
 #include "mainwindow.h"
 #include "common/dbusadpator.h"
+#include "common/ddlog.h"
 
 #include <QDBusConnection>
 #include <QDBusError>
@@ -19,36 +20,36 @@
 CompressorApplication::CompressorApplication(int &argc, char **argv)
     : DApplication(argc, argv)
 {
-    qDebug() << "CompressorApplication constructor";
+    qCDebug(appLog) << "CompressorApplication constructor";
     
     // Register DBus service
     QDBusConnection connection = QDBusConnection::sessionBus();
     if (!connection.registerService("com.deepin.Compressor")) {
-        qWarning() << "Failed to register DBus service:" << connection.lastError().message();
+        qCWarning(appLog) << "Failed to register DBus service:" << connection.lastError().message();
     } else {
-        qDebug() << "DBus service registered successfully";
+        qCDebug(appLog) << "DBus service registered successfully";
     }
 }
 
 CompressorApplication::~CompressorApplication()
 {
-    qDebug() << "CompressorApplication destructor";
+    qCDebug(appLog) << "CompressorApplication destructor";
 }
 
 bool CompressorApplication::notify(QObject *watched, QEvent *event)
 {
-    // qDebug() << "Processing application event notification";
+    // qCDebug(appLog) << "Processing application event notification";
     
     if (QEvent::KeyPress == event->type()) {
         QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(event);
         int keyOfEvent = keyEvent->key();
         
         if (Qt::Key_Enter == keyOfEvent || Qt::Key_Return == keyOfEvent) {
-            qDebug() << "Handling Enter/Return key press";
+            qCDebug(appLog) << "Handling Enter/Return key press";
             
             const QMetaObject *pObj = watched->metaObject();
             if (pObj && pObj->className() == QStringLiteral("QCheckBox")) {
-                qDebug() << "Converting Enter key to Space for checkbox";
+                qCDebug(appLog) << "Converting Enter key to Space for checkbox";
                 DCheckBox *checkBox = qobject_cast<DCheckBox *>(watched);
                 // 模拟空格键按下事件
                 QKeyEvent pressSpace(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier, " ");
@@ -64,35 +65,35 @@ bool CompressorApplication::notify(QObject *watched, QEvent *event)
             }
         } else if (Qt::Key_Tab == keyOfEvent || Qt::Key_Backtab == keyOfEvent
                    || Qt::Key_Left == keyOfEvent || Qt::Key_Up == keyOfEvent) {
-            // qDebug() << "Handling navigation key press";
+            // qCDebug(appLog) << "Handling navigation key press";
             QWidget *pWgt = activeWindow();
             MainWindow *pWindow = qobject_cast<MainWindow *>(pWgt); //在对应的MainWindow操作
             if (pWindow) {
-                qDebug() << "Forwarding navigation event to MainWindow";
+                qCDebug(appLog) << "Forwarding navigation event to MainWindow";
                 bool rs = pWindow->handleApplicationTabEventNotify(watched, keyEvent);
                 if (rs) {
-                    qDebug() << "MainWindow handled navigation event";
+                    qCDebug(appLog) << "MainWindow handled navigation event";
                     return rs;
                 }
             }
         }
     }
 
-    // qDebug() << "Default event notification handling";
+    // qCDebug(appLog) << "Default event notification handling";
     return DApplication::notify(watched, event);
 }
 
 void CompressorApplication::handleQuitAction()
 {
-    qDebug() << "Handling application quit action";
+    qCDebug(appLog) << "Handling application quit action";
     QWidget *pWgt = activeWindow();
     MainWindow *pWindow = qobject_cast<MainWindow *>(pWgt); //在对应的MainWindow操作
 
     // 处理点击退出事件
     if (pWindow) {
-        qInfo() << "Forwarding quit action to MainWindow";
+        qCInfo(appLog) << "Forwarding quit action to MainWindow";
         pWindow->handleQuit();
     } else {
-        qWarning() << "No active MainWindow found for quit action";
+        qCWarning(appLog) << "No active MainWindow found for quit action";
     }
 }

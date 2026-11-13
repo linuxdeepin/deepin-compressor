@@ -28,6 +28,7 @@
 
 #include "archiveinterface.h"
 #include "datamanager.h"
+#include "ddlog.h"
 
 #include <QDebug>
 #include <sys/stat.h>
@@ -189,7 +190,7 @@ void ReadOnlyArchiveInterface::handleEntry(const FileEntry &entry)
 bool ReadOnlyArchiveInterface::isInsufficientDiskSpace(QString diskPath, qint64 standard)
 {
     QStorageInfo storage(QFileInfo(diskPath).absolutePath());
-    qInfo() << "Available DiskSpace:" << diskPath << storage << storage.bytesAvailable();
+    qCInfo(ifaceLog) << "Available DiskSpace:" << diskPath << storage << storage.bytesAvailable();
     if (storage.isValid() && storage.bytesAvailable() < standard) {
         return true;
     } else {

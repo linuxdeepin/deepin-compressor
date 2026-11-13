@@ -16,6 +16,7 @@
 #include "kpluginloader.h"
 #include "kpluginfactory.h"
 #include "kpluginmetadata.h"
+#include "ddlog.h"
 
 #include <QLibrary>
 #include <QDir>
@@ -181,7 +182,7 @@ bool KPluginLoader::load()
 
     if (!d->loader->load()) {
         QString error = d->loader->errorString();
-        qInfo() << error;
+        qCInfo(ifaceLog) << error;
         return false;
     }
 
@@ -241,7 +242,7 @@ bool KPluginLoader::unload()
 void KPluginLoader::forEachPlugin(const QString &directory, std::function<void(const QString &)> callback)
 {
     QStringList dirsToCheck;
-    qInfo() << QCoreApplication::libraryPaths();
+    qCInfo(ifaceLog) << QCoreApplication::libraryPaths();
     if (QDir::isAbsolutePath(directory)) {
         dirsToCheck << directory;
     } else {
@@ -256,7 +257,7 @@ void KPluginLoader::forEachPlugin(const QString &directory, std::function<void(c
             it.next();
             if (QLibrary::isLibrary(it.fileName())) {
                 callback(it.fileInfo().absoluteFilePath());
-                qInfo() << it.fileInfo().absoluteFilePath();
+                qCInfo(ifaceLog) << it.fileInfo().absoluteFilePath();
             }
         }
     }

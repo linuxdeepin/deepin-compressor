@@ -5,6 +5,7 @@
 
 #include "openwithdialog/durl.h"
 #include "openwithdialog/dfmstandardpaths.h"
+#include "common/ddlog.h"
 
 #include <QFileInfo>
 #include <QSet>
@@ -42,16 +43,16 @@ QSet<QString> schemeList = QSet<QString>() << QString(TRASH_SCHEME)
 DUrl::DUrl()
     : QUrl()
 {
-    qDebug() << "Creating empty DUrl";
-    qDebug() << "DUrl default constructor";
+    qCDebug(appLog) << "Creating empty DUrl";
+    qCDebug(appLog) << "DUrl default constructor";
 }
 
 DUrl::DUrl(const QUrl &copy)
     : QUrl(copy)
 {
-    qDebug() << "Creating DUrl from QUrl:" << copy.toString();
+    qCDebug(appLog) << "Creating DUrl from QUrl:" << copy.toString();
     updateVirtualPath();
-    qDebug() << "DUrl constructed from QUrl";
+    qCDebug(appLog) << "DUrl constructed from QUrl";
 }
 
 DUrl::DUrl(const DUrl &other)
@@ -108,9 +109,9 @@ QDataStream &DUrl::operator>>(QDataStream &in)
 DUrl::DUrl(const QString &url, QUrl::ParsingMode mode)
     : QUrl(url, mode)
 {
-    qDebug() << "Creating DUrl from string:" << url << "with mode:" << mode;
+    qCDebug(appLog) << "Creating DUrl from string:" << url << "with mode:" << mode;
     updateVirtualPath();
-    qDebug() << "DUrl constructed from string";
+    qCDebug(appLog) << "DUrl constructed from string";
 }
 
 void DUrl::setPath(const QString &path, QUrl::ParsingMode mode, bool makeAbsolute)
@@ -149,9 +150,9 @@ void DUrl::setUrl(const QString &url, QUrl::ParsingMode parsingMode, bool makeAb
 bool DUrl::isTrashFile() const
 {
     bool result = scheme() == TRASH_SCHEME;
-    qDebug() << "Checking if is trash file:" << result;
+    qCDebug(appLog) << "Checking if is trash file:" << result;
     if (result) {
-        qDebug() << "Trash file path:" << path();
+        qCDebug(appLog) << "Trash file path:" << path();
     }
     return result;
 }
@@ -411,13 +412,13 @@ void DUrl::setBookmarkName(const QString &name)
 
 DUrl DUrl::fromLocalFile(const QString &filePath)
 {
-    qDebug() << "Creating DUrl from local file:" << filePath;
+    qCDebug(appLog) << "Creating DUrl from local file:" << filePath;
     return QUrl::fromLocalFile(filePath);
 }
 
 DUrl DUrl::fromTrashFile(const QString &filePath)
 {
-    qDebug() << "Creating DUrl from trash file:" << filePath;
+    qCDebug(appLog) << "Creating DUrl from trash file:" << filePath;
     DUrl url;
 
     url.setScheme(TRASH_SCHEME, false);
@@ -765,40 +766,40 @@ DUrl DUrl::toAbsolutePathUrl() const
 
 QString DUrl::toLocalFile() const
 {
-    qDebug() << "Converting DUrl to local file path";
+    qCDebug(appLog) << "Converting DUrl to local file path";
     if (isTrashFile()) {
         QString path = DFMStandardPaths::location(DFMStandardPaths::TrashFilesPath) + path();
-        qDebug() << "Trash file path:" << path;
+        qCDebug(appLog) << "Trash file path:" << path;
         return path;
     } else if (isSearchFile()) {
-        qDebug() << "Handling search file URL";
+        qCDebug(appLog) << "Handling search file URL";
         return searchedFileUrl().toLocalFile();
     } else if (isAVFSFile()) {
-        qDebug() << "Handling AVFS file URL";
+        qCDebug(appLog) << "Handling AVFS file URL";
         return path();
     } else if (isTaggedFile()) {
-        qDebug() << "Handling tagged file URL";
+        qCDebug(appLog) << "Handling tagged file URL";
         return taggedLocalFilePath();
     } else if (isUserShareFile()) {
-        qDebug() << "Handling user share file URL";
+        qCDebug(appLog) << "Handling user share file URL";
         return QString(path()).remove(USERSHARE_ROOT);
     } else {
-        qDebug() << "Handling regular file URL";
+        qCDebug(appLog) << "Handling regular file URL";
         return QUrl::toLocalFile();
     }
 }
 
 void DUrl::updateVirtualPath()
 {
-    qDebug() << "Updating virtual path";
+    qCDebug(appLog) << "Updating virtual path";
     m_virtualPath = toAbsolutePathUrl().path();
-    qDebug() << "Initial virtual path:" << m_virtualPath;
+    qCDebug(appLog) << "Initial virtual path:" << m_virtualPath;
 
     if (m_virtualPath.endsWith('/') && m_virtualPath.count() != 1) {
-        qDebug() << "Removing trailing slash";
+        qCDebug(appLog) << "Removing trailing slash";
         m_virtualPath.remove(m_virtualPath.count() - 1, 1);
     }
-    qDebug() << "Final virtual path:" << m_virtualPath;
+    qCDebug(appLog) << "Final virtual path:" << m_virtualPath;
 }
 
 QT_BEGIN_NAMESPACE

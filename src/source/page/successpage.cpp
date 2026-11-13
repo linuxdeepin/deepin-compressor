@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -6,6 +6,7 @@
 #include "successpage.h"
 #include "uitools.h"
 #include "customwidget.h"
+#include "common/ddlog.h"
 
 #include <DFontSizeManager>
 
@@ -15,32 +16,32 @@
 SuccessPage::SuccessPage(QWidget *parent)
     : DWidget(parent)
 {
-    qDebug() << "SuccessPage constructor called";
+    qCDebug(appLog) << "SuccessPage constructor called";
     initUI();
     initConnections();
-    qDebug() << "SuccessPage initialization completed";
+    qCDebug(appLog) << "SuccessPage initialization completed";
 }
 
 SuccessPage::~SuccessPage()
 {
-    qDebug() << "SuccessPage destructor called";
+    qCDebug(appLog) << "SuccessPage destructor called";
 }
 
 void SuccessPage::setCompressFullPath(const QString &strFullPath)
 {
-    qInfo() << "Setting compress full path:" << strFullPath;
+    qCInfo(appLog) << "Setting compress full path:" << strFullPath;
     m_strFullPath = strFullPath;
 }
 
 void SuccessPage::setSuccessDes(const QString &strDes)
 {
-    qInfo() << "Setting success description:" << strDes;
+    qCInfo(appLog) << "Setting success description:" << strDes;
     m_pSuccessLbl->setText(strDes);
 }
 
 void SuccessPage::setSuccessType(const SuccessInfo &successInfo)
 {
-    qInfo() << "Setting success type:" << successInfo;
+    qCInfo(appLog) << "Setting success type:" << successInfo;
     m_successInfoType = successInfo;
 }
 
@@ -51,13 +52,13 @@ SuccessInfo SuccessPage::getSuccessType()
 
 void SuccessPage::setDetail(const QString &strDetail)
 {
-    qInfo() << "Setting success detail:" << strDetail;
+    qCInfo(appLog) << "Setting success detail:" << strDetail;
     m_pDetailLbl->setText(strDetail);
 }
 
 void SuccessPage::initUI()
 {
-    qDebug() << "Initializing success page UI";
+    qCDebug(appLog) << "Initializing success page UI";
     //成功图标
     m_pSuccessPixmapLbl = new DLabel(this);
     QPixmap m_pSuccessPixmap = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_128px.svg", QSize(128, 128));
@@ -81,6 +82,9 @@ void SuccessPage::initUI()
 
     //返回按钮
     m_pReturnBtn = new CustomCommandLinkButton(tr("Back"), this);
+
+    m_pShowFileBtn->setAccessibleName("ViewFileButton");
+    m_pReturnBtn->setAccessibleName("BackButton");
 
     //界面布局
     QVBoxLayout *mainlayout = new QVBoxLayout(this);
@@ -110,15 +114,15 @@ void SuccessPage::initUI()
 
 void SuccessPage::initConnections()
 {
-    qDebug() << "Setting up success page connections";
+    qCDebug(appLog) << "Setting up success page connections";
     connect(m_pShowFileBtn, &DPushButton::clicked, this, [this]() {
-        qInfo() << "View file button clicked";
+        qCInfo(appLog) << "View file button clicked";
         emit signalViewFile();
     });
     connect(m_pReturnBtn, &DCommandLinkButton::clicked, this, [this]() {
-        qInfo() << "Back button clicked on success page";
+        qCInfo(appLog) << "Back button clicked on success page";
         emit sigBackButtonClicked();
     });
-    qDebug() << "Success page connections initialized";
+    qCDebug(appLog) << "Success page connections initialized";
 }
 

@@ -5,6 +5,7 @@
 
 #include "calculatesizethread.h"
 #include <QDebug>
+#include "common/ddlog.h"
 
 #include <QElapsedTimer>
 #include <QFileInfo>
@@ -21,25 +22,25 @@ CalculateSizeThread::CalculateSizeThread(const QStringList &listfiles, const QSt
     , m_listAddEntry(listAddEntry)
     , m_stOptions(stOptions)
 {
-    qDebug() << "CalculateSizeThread initialized with" << listfiles.size() << "files to process";
+    qCDebug(appLog) << "CalculateSizeThread initialized with" << listfiles.size() << "files to process";
     qRegisterMetaType<QList<FileEntry>>("QList<FileEntry>");
     qRegisterMetaType<CompressOptions>("CompressOptions");
 }
 
 void CalculateSizeThread::set_thread_stop(bool thread_stop)
 {
-    qInfo() << "set_thread_stop:" << thread_stop;
+    qCInfo(appLog) << "set_thread_stop:" << thread_stop;
     m_thread_stop = thread_stop;
 }
 
 void CalculateSizeThread::run()
 {
-    qDebug() << "CalculateSizeThread::run() started";
+    qCDebug(appLog) << "CalculateSizeThread::run() started";
     QElapsedTimer time1;
     time1.start();
     foreach (QString file, m_files) {
         if (m_thread_stop) {
-            qDebug() << "CalculateSizeThread stopped by request";
+            qCDebug(appLog) << "CalculateSizeThread stopped by request";
             return;
         }
 
@@ -58,7 +59,7 @@ void CalculateSizeThread::run()
 
         // 待压缩文件已经不存在
         if (!fileInfo.exists()) {
-            qWarning() << "File not exists:" << fileInfo.absoluteFilePath();
+            qCWarning(appLog) << "File not exists:" << fileInfo.absoluteFilePath();
             if (fileInfo.isSymLink()) {
                 emit signalError(tr("The original file of %1 does not exist, please check and try again").arg(fileInfo.absoluteFilePath()), fileInfo.absoluteFilePath());
             } else {
@@ -71,7 +72,7 @@ void CalculateSizeThread::run()
 
         // 待压缩文件不可读
         if (!fileInfo.isReadable()) {
-            qWarning() << "File not readable:" << fileInfo.absoluteFilePath();
+            qCWarning(appLog) << "File not readable:" << fileInfo.absoluteFilePath();
             emit signalError(tr("You do not have permission to compress %1").arg(fileInfo.absoluteFilePath()), fileInfo.absoluteFilePath());
 
             set_thread_stop(true);
@@ -101,21 +102,21 @@ void CalculateSizeThread::run()
     // 等待线程池结束
     QThreadPool::globalInstance()->waitForDone();
     if (m_thread_stop) {
-        qDebug() << "CalculateSizeThread stopped before completion";
+        qCDebug(appLog) << "CalculateSizeThread stopped before completion";
         return;
     }
 
     m_stOptions.qTotalSize = m_qTotalSize;
     emit signalFinishCalculateSize(m_qTotalSize, m_strArchiveFullPath, m_listAddEntry, m_stOptions, m_listAllEntry);
-    qInfo() << QString("计算大小线程结束，耗时:%1ms，文件总大小:%2B").arg(time1.elapsed()).arg(m_qTotalSize);
+    qCInfo(appLog) << QString("计算大小线程结束，耗时:%1ms，文件总大小:%2B").arg(time1.elapsed()).arg(m_qTotalSize);
 }
 
 void CalculateSizeThread::ConstructAddOptionsByThread(const QString &path)
 {
-    qDebug() << "Processing directory:" << path;
+    qCDebug(appLog) << "Processing directory:" << path;
     QDir dir(path);
     if (!dir.exists()) {
-        qWarning() << "Directory not exists:" << path;
+        qCWarning(appLog) << "Directory not exists:" << path;
         return;
     }
     // 获得文件夹中的文件列表
@@ -142,9 +143,9 @@ void CalculateSizeThread::ConstructAddOptionsByThread(const QString &path)
 
         // 待压缩文件已经不存在
         if (!fileInfo.exists()) {
-            qWarning() << "File not exists in directory:" << fileInfo.absoluteFilePath();
+            qCWarning(appLog) << "File not exists in directory:" << fileInfo.absoluteFilePath();
             if (fileInfo.isSymLink()) {
-                qInfo() << "*********" << fileInfo.filePath();
+                qCInfo(appLog) << "*********" << fileInfo.filePath();
                 emit signalError(tr("The original file of %1 does not exist, please check and try again").arg(fileInfo.absoluteFilePath()), fileInfo.absoluteFilePath());
             } else {
                 emit signalError(tr("%1 does not exist on the disk, please check and try again").arg(fileInfo.absoluteFilePath()), fileInfo.absoluteFilePath());
@@ -156,7 +157,7 @@ void CalculateSizeThread::ConstructAddOptionsByThread(const QString &path)
 
         // 待压缩文件不可读
         if (!fileInfo.isReadable()) {
-            qWarning() << "File not readable in directory:" << fileInfo.absoluteFilePath();
+            qCWarning(appLog) << "File not readable in directory:" << fileInfo.absoluteFilePath();
             emit signalError(tr("You do not have permission to compress %1").arg(fileInfo.absoluteFilePath()), fileInfo.absoluteFilePath());
 
             set_thread_stop(true);

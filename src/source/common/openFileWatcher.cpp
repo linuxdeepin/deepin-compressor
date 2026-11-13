@@ -5,6 +5,7 @@
 
 #include "openFileWatcher.h"
 #include <QDebug>
+#include "common/ddlog.h"
 
 #include <QFileSystemWatcher>
 
@@ -12,65 +13,65 @@
 OpenFileWatcher::OpenFileWatcher(QObject *parent)
     : QObject(parent)
 {
-    qDebug() << "Initializing OpenFileWatcher";
+    qCDebug(appLog) << "Initializing OpenFileWatcher";
     m_pOpenFileWatcher = new QFileSystemWatcher(this);
     connect(m_pOpenFileWatcher, &QFileSystemWatcher::fileChanged, this, &OpenFileWatcher::fileChanged);
 }
 
 OpenFileWatcher::~OpenFileWatcher()
 {
-    qDebug() << "Destroying OpenFileWatcher";
+    qCDebug(appLog) << "Destroying OpenFileWatcher";
 }
 
 void OpenFileWatcher::reset()
 {
-    qDebug() << "Resetting OpenFileWatcher, removing" << m_pOpenFileWatcher->files().size() << "watched files";
+    qCDebug(appLog) << "Resetting OpenFileWatcher, removing" << m_pOpenFileWatcher->files().size() << "watched files";
     m_pOpenFileWatcher->removePaths(m_pOpenFileWatcher->files());       // 清空所有监控的文件
     m_strOpenFile.clear();
     m_mapFileHasModified.clear();
     m_mapFilePassword.clear();
-    qDebug() << "OpenFileWatcher reset completed";
+    qCDebug(appLog) << "OpenFileWatcher reset completed";
 }
 
 void OpenFileWatcher::setCurOpenFile(const QString &strCurOpenFile)
 {
-    // qDebug() << "Setting current open file:" << strCurOpenFile;
+    // qCDebug(appLog) << "Setting current open file:" << strCurOpenFile;
     m_strOpenFile = strCurOpenFile;
 }
 
 void OpenFileWatcher::addCurOpenWatchFile()
 {
-    qDebug() << "Adding file to watch:" << m_strOpenFile;
+    qCDebug(appLog) << "Adding file to watch:" << m_strOpenFile;
     m_pOpenFileWatcher->addPath(m_strOpenFile); // 添加监控
     m_mapFileHasModified[m_strOpenFile] = false;    // 初始监控状态
 }
 
 void OpenFileWatcher::addWatchFile(const QString &strFile)
 {
-    qDebug() << "Adding watch file:" << strFile;
+    qCDebug(appLog) << "Adding watch file:" << strFile;
     m_pOpenFileWatcher->addPath(strFile);
 
     // 第一次默认文件未修改
     if (m_mapFileHasModified.find(strFile) != m_mapFileHasModified.end()) {
-        qDebug() << "File already in watch list, resetting modified flag";
+        qCDebug(appLog) << "File already in watch list, resetting modified flag";
         m_mapFileHasModified[m_strOpenFile] = false;
     }
 }
 
 QMap<QString, bool> &OpenFileWatcher::getFileHasModified()
 {
-    // qDebug() << "Getting file has modified map";
+    // qCDebug(appLog) << "Getting file has modified map";
     return m_mapFileHasModified;
 }
 
 void OpenFileWatcher::setCurFilePassword(const QString &strPassword)
 {
-    qDebug() << "Setting password for file:" << m_strOpenFile;
+    qCDebug(appLog) << "Setting password for file:" << m_strOpenFile;
     m_mapFilePassword[m_strOpenFile] = strPassword;
 }
 
 QMap<QString, QString> OpenFileWatcher::getFilePassword()
 {
-    // qDebug() << "Getting file password map";
+    // qCDebug(appLog) << "Getting file password map";
     return m_mapFilePassword;
 }

@@ -9,6 +9,7 @@
 #include "openwithdialog/desktopfile.h"
 #include "openwithdialog/dfmstandardpaths.h"
 #include "openwithdialog/durl.h"
+#include "common/ddlog.h"
 
 #include <QDir>
 #include <QSettings>
@@ -44,40 +45,40 @@ QMap<QString, DesktopFile> MimesAppsManager::DesktopObjs = {};
 
 MimeAppsWorker::MimeAppsWorker(QObject *parent): QObject(parent)
 {
-    qDebug() << "Initializing MimeAppsWorker";
+    qCDebug(appLog) << "Initializing MimeAppsWorker";
     m_fileSystemWatcher = new QFileSystemWatcher(this);
     m_updateCacheTimer = new QTimer(this);
     m_updateCacheTimer->setInterval(2000);
     m_updateCacheTimer->setSingleShot(true);
     startWatch();
     initConnect();
-    qDebug() << "MimeAppsWorker initialized";
+    qCDebug(appLog) << "MimeAppsWorker initialized";
 }
 
 MimeAppsWorker::~MimeAppsWorker()
 {
-    qDebug() << "Destroying MimeAppsWorker";
+    qCDebug(appLog) << "Destroying MimeAppsWorker";
 }
 
 void MimeAppsWorker::initConnect()
 {
-    qDebug() << "Initializing MimeAppsWorker connections";
+    qCDebug(appLog) << "Initializing MimeAppsWorker connections";
     connect(m_fileSystemWatcher, &QFileSystemWatcher::directoryChanged, this, &MimeAppsWorker::handleDirectoryChanged);
     connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &MimeAppsWorker::handleFileChanged);
     connect(m_updateCacheTimer, &QTimer::timeout, this, &MimeAppsWorker::updateCache);
-    qDebug() << "MimeAppsWorker connections established";
+    qCDebug(appLog) << "MimeAppsWorker connections established";
 }
 
 void MimeAppsWorker::startWatch()
 {
-    qDebug() << "Starting file system watcher";
+    qCDebug(appLog) << "Starting file system watcher";
     m_fileSystemWatcher->addPaths(MimesAppsManager::getDesktopFiles());
     m_fileSystemWatcher->addPaths(MimesAppsManager::getApplicationsFolders());
 }
 
 void MimeAppsWorker::handleDirectoryChanged(const QString &filePath)
 {
-    qDebug() << "Directory changed:" << filePath;
+    qCDebug(appLog) << "Directory changed:" << filePath;
     Q_UNUSED(filePath)
 
     //for 1.4
@@ -135,13 +136,13 @@ void MimeAppsWorker::handleDirectoryChanged(const QString &filePath)
 //        MimesAppsManager::DesktopObjs.remove(filePath);
 //    }
 //    updateCache();
-    qDebug() << "Starting cache update timer due to directory change";
+    qCDebug(appLog) << "Starting cache update timer due to directory change";
     m_updateCacheTimer->start();
 }
 
 void MimeAppsWorker::handleFileChanged(const QString &filePath)
 {
-    qDebug() << "File changed:" << filePath;
+    qCDebug(appLog) << "File changed:" << filePath;
     Q_UNUSED(filePath)
 //    updateCache();
     m_updateCacheTimer->start();
@@ -195,23 +196,23 @@ void MimeAppsWorker::handleFileChanged(const QString &filePath)
 
 void MimeAppsWorker::updateCache()
 {
-    qDebug() << "Updating MIME type apps cache";
+    qCDebug(appLog) << "Updating MIME type apps cache";
     MimesAppsManager::initMimeTypeApps();
-    qDebug() << "MIME type apps cache updated";
+    qCDebug(appLog) << "MIME type apps cache updated";
 }
 
 bool MimeAppsWorker::writeData(const QString &path, const QByteArray &content)
 {
-    qDebug() << "Writing data to path:" << path << "size:" << content.size();
+    qCDebug(appLog) << "Writing data to path:" << path << "size:" << content.size();
     bool bResult = false;
-    qInfo() << path;
+    qCInfo(appLog) << path;
     QFile file(path);
     if (file.open(QFile::WriteOnly)) {
         file.write(content);
         bResult = true;
-        qDebug() << "Successfully wrote data to file";
+        qCDebug(appLog) << "Successfully wrote data to file";
     } else {
-        qWarning() << "Failed to open file for writing:" << file.errorString();
+        qCWarning(appLog) << "Failed to open file for writing:" << file.errorString();
     }
 
     file.close();
@@ -220,81 +221,81 @@ bool MimeAppsWorker::writeData(const QString &path, const QByteArray &content)
 
 QByteArray MimeAppsWorker::readData(const QString &path)
 {
-    qDebug() << "Reading data from path:" << path;
+    qCDebug(appLog) << "Reading data from path:" << path;
     QFile file(path);
     if (!file.open(QFile::ReadOnly)) {
-        qInfo() << path << "isn't exists!";
+        qCInfo(appLog) << path << "isn't exists!";
         return QByteArray();
     }
 
     QByteArray content = file.readAll();
     file.close();
-    qDebug() << "Read" << content.size() << "bytes from file";
+    qCDebug(appLog) << "Read" << content.size() << "bytes from file";
     return content;
 }
 
 MimesAppsManager::MimesAppsManager(QObject *parent): QObject(parent)
 {
-    qDebug() << "Creating MimesAppsManager";
+    qCDebug(appLog) << "Creating MimesAppsManager";
     m_mimeAppsWorker = new MimeAppsWorker(this);
     connect(this, &MimesAppsManager::requestUpdateCache, m_mimeAppsWorker, &MimeAppsWorker::updateCache);
     QThread *mimeAppsThread = new QThread;
     m_mimeAppsWorker->moveToThread(mimeAppsThread);
     mimeAppsThread->start();
-    qDebug() << "MimesAppsManager initialized with worker thread";
+    qCDebug(appLog) << "MimesAppsManager initialized with worker thread";
 }
 
 MimesAppsManager::~MimesAppsManager()
 {
-    qDebug() << "Destroying MimesAppsManager";
+    qCDebug(appLog) << "Destroying MimesAppsManager";
 }
 
 QMimeType MimesAppsManager::getMimeType(const QString &fileName)
 {
-    qDebug() << "Getting MIME type for file:" << fileName;
+    qCDebug(appLog) << "Getting MIME type for file:" << fileName;
     DMimeDatabase db;
     QMimeType mimeType = db.mimeTypeForFile(fileName);
-    qDebug() << "MIME type:" << mimeType.name();
+    qCDebug(appLog) << "MIME type:" << mimeType.name();
     return mimeType;
 }
 
 QString MimesAppsManager::getMimeTypeByFileName(const QString &fileName)
 {
-    qDebug() << "Getting MIME type by filename:" << fileName;
+    qCDebug(appLog) << "Getting MIME type by filename:" << fileName;
     DMimeDatabase db;
     QMimeType mimeType = db.mimeTypeForFile(fileName);
-    qDebug() << "MIME type result:" << mimeType.name();
+    qCDebug(appLog) << "MIME type result:" << mimeType.name();
     return mimeType.name();
 }
 
 QString MimesAppsManager::getDefaultAppByFileName(const QString &fileName)
 {
-    qDebug() << "Getting default app by filename:" << fileName;
+    qCDebug(appLog) << "Getting default app by filename:" << fileName;
     DMimeDatabase db;
     QMimeType mimeType = db.mimeTypeForFile(fileName);
     QString result = getDefaultAppByMimeType(mimeType);
-    qDebug() << "Default app result:" << result;
+    qCDebug(appLog) << "Default app result:" << result;
     return result;
 }
 
 QString MimesAppsManager::getDefaultAppByMimeType(const QMimeType &mimeType)
 {
-    qDebug() << "Getting default app by QMimeType:" << mimeType.name();
+    qCDebug(appLog) << "Getting default app by QMimeType:" << mimeType.name();
     QString result = getDefaultAppByMimeType(mimeType.name());
-    qDebug() << "Default app result:" << result;
+    qCDebug(appLog) << "Default app result:" << result;
     return result;
 }
 
 QString MimesAppsManager::getDefaultAppByMimeType(const QString &mimeType)
 {
-    qDebug() << "Getting default app for MIME type:" << mimeType;
+    qCDebug(appLog) << "Getting default app for MIME type:" << mimeType;
     GAppInfo *defaultApp = g_app_info_get_default_for_type(mimeType.toLocal8Bit().constData(), FALSE);
     QString url = "";
     if (defaultApp) {
         url = g_app_info_get_id(defaultApp);
-        qDebug() << "Default app:" << url;
+        qCDebug(appLog) << "Default app:" << url;
     } else {
-        qWarning() << "No default app found for MIME type:" << mimeType;
+        qCWarning(appLog) << "No default app found for MIME type:" << mimeType;
     }
 
     return url;
@@ -302,15 +303,15 @@ QString MimesAppsManager::getDefaultAppByMimeType(const QString &mimeType)
 
 QString MimesAppsManager::getDefaultAppDisplayNameByMimeType(const QMimeType &mimeType)
 {
-    qDebug() << "Getting default app display name by QMimeType:" << mimeType.name();
+    qCDebug(appLog) << "Getting default app display name by QMimeType:" << mimeType.name();
     QString result = getDefaultAppDisplayNameByGio(mimeType.name());
-    qDebug() << "Display name result:" << result;
+    qCDebug(appLog) << "Display name result:" << result;
     return result;
 }
 
 QString MimesAppsManager::getDefaultAppDisplayNameByGio(const QString &mimeType)
 {
-    qDebug() << "Getting default app display name by GIO for MIME type:" << mimeType;
+    qCDebug(appLog) << "Getting default app display name by GIO for MIME type:" << mimeType;
     /*
         *
         * We have the appsForMimeList. Now we need to filter some applications out as per user's choice and get the default value
@@ -325,9 +326,9 @@ QString MimesAppsManager::getDefaultAppDisplayNameByGio(const QString &mimeType)
     QString appDisplayName = "";
     if (defaultApp) {
         appDisplayName = g_app_info_get_name(defaultApp);
-        qDebug() << "Found default app display name:" << appDisplayName;
+        qCDebug(appLog) << "Found default app display name:" << appDisplayName;
     } else {
-        qWarning() << "No default app found for MIME type:" << mimeType;
+        qCWarning(appLog) << "No default app found for MIME type:" << mimeType;
     }
 
     g_object_unref(defaultApp);
@@ -336,22 +337,22 @@ QString MimesAppsManager::getDefaultAppDisplayNameByGio(const QString &mimeType)
 
 QString MimesAppsManager::getDefaultAppDesktopFileByMimeType(const QString &mimeType)
 {
-    qDebug() << "Getting default app desktop file by MIME type:" << mimeType;
+    qCDebug(appLog) << "Getting default app desktop file by MIME type:" << mimeType;
     GAppInfo *defaultApp = g_app_info_get_default_for_type(mimeType.toLocal8Bit().constData(), FALSE);
     if (!defaultApp) {
-        qWarning() << "No default app found for MIME type:" << mimeType;
+        qCWarning(appLog) << "No default app found for MIME type:" << mimeType;
         return "";
     }
 
     const char *desktop_id = g_app_info_get_id(defaultApp);
     GDesktopAppInfo *desktopAppInfo = g_desktop_app_info_new(desktop_id);
     if (!desktopAppInfo) {
-        qWarning() << "Failed to create desktop app info for:" << desktop_id;
+        qCWarning(appLog) << "Failed to create desktop app info for:" << desktop_id;
         g_object_unref(defaultApp);
         return "";
     }
     QString desktopFile = g_desktop_app_info_get_filename(desktopAppInfo);
-    qDebug() << "Default app desktop file:" << desktopFile;
+    qCDebug(appLog) << "Default app desktop file:" << desktopFile;
 
     g_object_unref(defaultApp);
     g_object_unref(desktopAppInfo);
@@ -361,11 +362,11 @@ QString MimesAppsManager::getDefaultAppDesktopFileByMimeType(const QString &mime
 
 bool MimesAppsManager::setDefautlAppForTypeByGio(const QString &mimeType, const QString &appPath)
 {
-    qDebug() << "Setting default app for MIME type:" << mimeType << "app:" << appPath;
+    qCDebug(appLog) << "Setting default app for MIME type:" << mimeType << "app:" << appPath;
     GAppInfo *app = NULL;
     GList *apps = NULL;
     apps = g_app_info_get_all();
-    qDebug() << "Found" << g_list_length(apps) << "available apps";
+    qCDebug(appLog) << "Found" << g_list_length(apps) << "available apps";
 
     GList *iterator = apps;
     int checkedApps = 0;
@@ -377,12 +378,12 @@ bool MimesAppsManager::setDefautlAppForTypeByGio(const QString &mimeType, const 
 
         if (desktopAppInfo) {
             QString filename = g_desktop_app_info_get_filename(desktopAppInfo);
-            qDebug() << "Checking app" << checkedApps << ":" << filename;
+            qCDebug(appLog) << "Checking app" << checkedApps << ":" << filename;
             
             if (appPath == filename) {
                 app = (GAppInfo *)iterator->data;
                 g_object_unref(desktopAppInfo);
-                qDebug() << "Found matching app:" << filename;
+                qCDebug(appLog) << "Found matching app:" << filename;
                 break;
             }
 
@@ -391,7 +392,7 @@ bool MimesAppsManager::setDefautlAppForTypeByGio(const QString &mimeType, const 
 
         if (appPath.endsWith("/" + QString::fromLocal8Bit(desktop_id))) {
             app = (GAppInfo *)iterator->data;
-            qDebug() << "Found matching app by ID:" << desktop_id;
+            qCDebug(appLog) << "Found matching app by ID:" << desktop_id;
             break;
         }
 
@@ -401,28 +402,28 @@ bool MimesAppsManager::setDefautlAppForTypeByGio(const QString &mimeType, const 
     g_list_free(apps);
 
     if (!app) {
-        qWarning() << "No app found matching:" << appPath;
+        qCWarning(appLog) << "No app found matching:" << appPath;
         return false;
     }
 
     GError *error = NULL;
-    qDebug() << "Setting default app for MIME type";
+    qCDebug(appLog) << "Setting default app for MIME type";
     g_app_info_set_as_default_for_type(app,
                                        mimeType.toLocal8Bit().constData(),
                                        &error);
     if (error) {
-        qCritical() << "Failed to set default app:" << error->message;
+        qCCritical(appLog) << "Failed to set default app:" << error->message;
         g_free(error);
         return false;
     }
 
-    qInfo() << "Successfully set default app for" << mimeType;
+    qCInfo(appLog) << "Successfully set default app for" << mimeType;
     return true;
 }
 
 QStringList MimesAppsManager::getRecommendedAppsByQio(const QMimeType &mimeType)
 {
-    qDebug() << "Getting recommended apps for MIME type:" << mimeType.name();
+    qCDebug(appLog) << "Getting recommended apps for MIME type:" << mimeType.name();
     QStringList recommendApps;
     QList<QMimeType> mimeTypeList;
     QMimeDatabase mimeDatabase;
@@ -452,7 +453,7 @@ QStringList MimesAppsManager::getRecommendedAppsByQio(const QMimeType &mimeType)
 
                     // if desktop file was not existed do not recommend!!
                     if (!QFileInfo::exists(app)) {
-                        qWarning() << app << "not exist anymore";
+                        qCWarning(appLog) << app << "not exist anymore";
                         continue;
                     }
 
@@ -483,21 +484,21 @@ QStringList MimesAppsManager::getRecommendedAppsByQio(const QMimeType &mimeType)
 
 QStringList MimesAppsManager::getRecommendedAppsByGio(const QString &mimeType)
 {
-    qDebug() << "Getting recommended apps by GIO for MIME type:" << mimeType;
+    qCDebug(appLog) << "Getting recommended apps by GIO for MIME type:" << mimeType;
     QStringList recommendApps;
     GList *recomendAppInfoList = g_app_info_get_recommended_for_type(mimeType.toLocal8Bit().constData());
     GList *iterator = recomendAppInfoList;
-    qDebug() << "Found" << g_list_length(recomendAppInfoList) << "recommended apps";
+    qCDebug(appLog) << "Found" << g_list_length(recomendAppInfoList) << "recommended apps";
 
     while (iterator) {
         GAppInfo *appInfo = (GAppInfo *)iterator->data;
         if (appInfo) {
             const char *desktopId = g_app_info_get_id(appInfo);
-            qDebug() << "Processing recommended app:" << desktopId;
+            qCDebug(appLog) << "Processing recommended app:" << desktopId;
 
             GDesktopAppInfo *dekstopAppInfo = g_desktop_app_info_new(desktopId);
             QString app = g_desktop_app_info_get_filename(dekstopAppInfo);
-            qDebug() << "App filename:" << app;
+            qCDebug(appLog) << "App filename:" << app;
 
             recommendApps << app;
             g_object_unref(dekstopAppInfo);
@@ -507,13 +508,13 @@ QStringList MimesAppsManager::getRecommendedAppsByGio(const QString &mimeType)
     }
 
     g_list_free(recomendAppInfoList);
-    qDebug() << "Returning" << recommendApps.size() << "recommended apps";
+    qCDebug(appLog) << "Returning" << recommendApps.size() << "recommended apps";
     return recommendApps;
 }
 
 QStringList MimesAppsManager::getApplicationsFolders()
 {
-    qDebug() << "Getting application folders";
+    qCDebug(appLog) << "Getting application folders";
     QStringList desktopFolders;
     desktopFolders << QString("/usr/share/applications/")
                    << QString("/usr/local/share/applications/")
@@ -521,50 +522,50 @@ QStringList MimesAppsManager::getApplicationsFolders()
                    << QString("/var/lib/flatpak/exports/share/applications")
                    << QDir::homePath() + QString("/.local/share/flatpak/exports/share/applications")
                    << QDir::homePath() + QString("/.local/share/applications");
-    qDebug() << "Application folders:" << desktopFolders;
+    qCDebug(appLog) << "Application folders:" << desktopFolders;
     return desktopFolders;
 }
 
 QString MimesAppsManager::getMimeAppsCacheFile()
 {
     QString path = QString("%1/%2").arg(DFMStandardPaths::location(DFMStandardPaths::CachePath), "MimeApps.json");
-    qDebug() << "MIME apps cache file path:" << path;
+    qCDebug(appLog) << "MIME apps cache file path:" << path;
     return path;
 }
 
 QString MimesAppsManager::getMimeInfoCacheFilePath()
 {
-    qDebug() << "MIME info cache file path: /usr/share/applications/mimeinfo.cache";
+    qCDebug(appLog) << "MIME info cache file path: /usr/share/applications/mimeinfo.cache";
     return "/usr/share/applications/mimeinfo.cache";
 }
 
 QString MimesAppsManager::getMimeInfoCacheFileRootPath()
 {
-    qDebug() << "MIME info cache file root path: /usr/share/applications";
+    qCDebug(appLog) << "MIME info cache file root path: /usr/share/applications";
     return "/usr/share/applications";
 }
 
 QString MimesAppsManager::getDesktopFilesCacheFile()
 {
     QString path = QString("%1/%2").arg(DFMStandardPaths::location(DFMStandardPaths::CachePath), "DesktopFiles.json");
-    qDebug() << "Desktop files cache file path:" << path;
+    qCDebug(appLog) << "Desktop files cache file path:" << path;
     return path;
 }
 
 QString MimesAppsManager::getDesktopIconsCacheFile()
 {
     QString path = QString("%1/%2").arg(DFMStandardPaths::location(DFMStandardPaths::CachePath), "DesktopIcons.json");
-    qDebug() << "Desktop icons cache file path:" << path;
+    qCDebug(appLog) << "Desktop icons cache file path:" << path;
     return path;
 }
 
 QStringList MimesAppsManager::getDesktopFiles()
 {
-    qDebug() << "Getting desktop files from application folders";
+    qCDebug(appLog) << "Getting desktop files from application folders";
     QStringList desktopFiles;
 
     foreach (QString desktopFolder, getApplicationsFolders()) {
-        qDebug() << "Scanning folder:" << desktopFolder;
+        qCDebug(appLog) << "Scanning folder:" << desktopFolder;
         QDirIterator it(desktopFolder, QStringList("*.desktop"),
                         QDir::Files | QDir::NoDotAndDotDot,
                         QDirIterator::Subdirectories);
@@ -574,36 +575,36 @@ QStringList MimesAppsManager::getDesktopFiles()
             desktopFiles.append(it.filePath());
             fileCount++;
         }
-        qDebug() << "Found" << fileCount << "desktop files in" << desktopFolder;
+        qCDebug(appLog) << "Found" << fileCount << "desktop files in" << desktopFolder;
     }
 
-    qDebug() << "Total desktop files found:" << desktopFiles.size();
+    qCDebug(appLog) << "Total desktop files found:" << desktopFiles.size();
     return desktopFiles;
 }
 
 QString MimesAppsManager::getDDEMimeTypeFile()
 {
     QString path = QString("%1/%2/%3").arg(getMimeInfoCacheFileRootPath(), "deepin", "dde-mimetype.list");
-    qDebug() << "DDE MIME type file path:" << path;
+    qCDebug(appLog) << "DDE MIME type file path:" << path;
     return path;
 }
 
 QMap<QString, DesktopFile> MimesAppsManager::getDesktopObjs()
 {
-    qDebug() << "Creating desktop objects map";
+    qCDebug(appLog) << "Creating desktop objects map";
     QMap<QString, DesktopFile> desktopObjs;
     QStringList appFolders = getApplicationsFolders();
     foreach (QString f, appFolders) {
-        // qDebug() << "Creating desktop object for:" << f;
+        // qCDebug(appLog) << "Creating desktop object for:" << f;
         desktopObjs.insert(f, DesktopFile(f));
     }
-    qDebug() << "Created" << desktopObjs.size() << "desktop objects";
+    qCDebug(appLog) << "Created" << desktopObjs.size() << "desktop objects";
     return desktopObjs;
 }
 
 void MimesAppsManager::initMimeTypeApps()
 {
-    qDebug() << "Initializing MIME type apps";
+    qCDebug(appLog) << "Initializing MIME type apps";
     DesktopFiles.clear();
     DesktopObjs.clear();
     DDE_MimeTypes.clear();
@@ -641,12 +642,12 @@ void MimesAppsManager::initMimeTypeApps()
         }
     }
 
-    qDebug() << "Processing MIME type apps from cache";
+    qCDebug(appLog) << "Processing MIME type apps from cache";
     foreach (QString key, mimeAppsSet.keys()) {
         QSet<QString> apps = mimeAppsSet.value(key);
         QStringList orderApps;
         if (apps.count() > 1) {
-            // qDebug() << "Sorting" << apps.count() << "apps for MIME type:" << key;
+            // qCDebug(appLog) << "Sorting" << apps.count() << "apps for MIME type:" << key;
             QFileInfoList fileInfos;
             foreach (QString app, apps) {
                 QFileInfo info(app);
@@ -666,10 +667,10 @@ void MimesAppsManager::initMimeTypeApps()
     }
 
     //check mime apps from cache
-    qDebug() << "Reading MIME info cache file:" << getMimeInfoCacheFilePath();
+    qCDebug(appLog) << "Reading MIME info cache file:" << getMimeInfoCacheFilePath();
     QFile f(getMimeInfoCacheFilePath());
     if (!f.open(QIODevice::ReadOnly)) {
-        qInfo() << "failed to read mime info cache file:" << f.errorString();
+        qCInfo(appLog) << "failed to read mime info cache file:" << f.errorString();
         return;
     }
 
@@ -705,73 +706,73 @@ void MimesAppsManager::initMimeTypeApps()
             }
         }
     }
-    qDebug() << "Processed" << lineCount << "lines from MIME info cache";
-    qDebug() << "Found audio apps:" << audioDesktopList.size() << "image apps:" << imageDeksopList.size() 
+    qCDebug(appLog) << "Processed" << lineCount << "lines from MIME info cache";
+    qCDebug(appLog) << "Found audio apps:" << audioDesktopList.size() << "image apps:" << imageDeksopList.size() 
              << "text apps:" << textDekstopList.size() << "video apps:" << videoDesktopList.size();
 
     f.close();
 
     const QString mimeInfoCacheRootPath = getMimeInfoCacheFileRootPath();
-    qDebug() << "Loading audio MIME apps";
+    qCDebug(appLog) << "Loading audio MIME apps";
     foreach (QString desktop, audioDesktopList) {
         const QString path = QString("%1/%2").arg(mimeInfoCacheRootPath, desktop);
         if (!QFile::exists(path)) {
-            qDebug() << "Audio desktop file not found:" << path;
+            qCDebug(appLog) << "Audio desktop file not found:" << path;
             continue;
         }
         DesktopFile df(path);
         AudioMimeApps.insert(path, df);
     }
-    qDebug() << "Loaded" << AudioMimeApps.size() << "audio MIME apps";
+    qCDebug(appLog) << "Loaded" << AudioMimeApps.size() << "audio MIME apps";
 
-    qDebug() << "Loading image MIME apps";
+    qCDebug(appLog) << "Loading image MIME apps";
     foreach (QString desktop, imageDeksopList) {
         const QString path = QString("%1/%2").arg(mimeInfoCacheRootPath, desktop);
         if (!QFile::exists(path)) {
-            qDebug() << "Image desktop file not found:" << path;
+            qCDebug(appLog) << "Image desktop file not found:" << path;
             continue;
         }
         DesktopFile df(path);
         ImageMimeApps.insert(path, df);
     }
-    qDebug() << "Loaded" << ImageMimeApps.size() << "image MIME apps";
+    qCDebug(appLog) << "Loaded" << ImageMimeApps.size() << "image MIME apps";
 
-    qDebug() << "Loading text MIME apps";
+    qCDebug(appLog) << "Loading text MIME apps";
     foreach (QString desktop, textDekstopList) {
         const QString path = QString("%1/%2").arg(mimeInfoCacheRootPath, desktop);
         if (!QFile::exists(path)) {
-            qDebug() << "Text desktop file not found:" << path;
+            qCDebug(appLog) << "Text desktop file not found:" << path;
             continue;
         }
         DesktopFile df(path);
         TextMimeApps.insert(path, df);
     }
-    qDebug() << "Loaded" << TextMimeApps.size() << "text MIME apps";
+    qCDebug(appLog) << "Loaded" << TextMimeApps.size() << "text MIME apps";
 
-    qDebug() << "Loading video MIME apps";
+    qCDebug(appLog) << "Loading video MIME apps";
     foreach (QString desktop, videoDesktopList) {
         const QString path = QString("%1/%2").arg(mimeInfoCacheRootPath, desktop);
         if (!QFile::exists(path)) {
-            qDebug() << "Video desktop file not found:" << path;
+            qCDebug(appLog) << "Video desktop file not found:" << path;
             continue;
         }
         DesktopFile df(path);
         VideoMimeApps.insert(path, df);
     }
-    qDebug() << "Loaded" << VideoMimeApps.size() << "video MIME apps";
+    qCDebug(appLog) << "Loaded" << VideoMimeApps.size() << "video MIME apps";
 
-    qDebug() << "MIME type apps initialization completed";
+    qCDebug(appLog) << "MIME type apps initialization completed";
     return;
 }
 
 void MimesAppsManager::loadDDEMimeTypes()
 {
-    qDebug() << "Loading DDE MIME types from:" << getDDEMimeTypeFile();
+    qCDebug(appLog) << "Loading DDE MIME types from:" << getDDEMimeTypeFile();
     QSettings settings(getDDEMimeTypeFile(), QSettings::IniFormat);
 
     QFile file(getDDEMimeTypeFile());
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qWarning() << "Failed to open DDE MIME types file:" << file.errorString();
+        qCWarning(appLog) << "Failed to open DDE MIME types file:" << file.errorString();
         return;
     }
 
@@ -794,7 +795,7 @@ void MimesAppsManager::loadDDEMimeTypes()
         if (line.trimmed().startsWith("[") && line.trimmed().endsWith("]")) {
             QString tmp = line.trimmed().replace("[", "").replace("]", "");
             desktopKey = tmp;
-            qDebug() << "Found desktop key:" << desktopKey;
+            qCDebug(appLog) << "Found desktop key:" << desktopKey;
             continue;
         }
 
@@ -815,37 +816,37 @@ bool MimesAppsManager::lessByDateTime(const QFileInfo &f1, const QFileInfo &f2)
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     bool result = f1.created() < f2.created();
-    qDebug() << "Comparing files by creation time:" << f1.fileName() << f1.created() << "<" << f2.fileName() << f2.created() << "=" << result;
+    qCDebug(appLog) << "Comparing files by creation time:" << f1.fileName() << f1.created() << "<" << f2.fileName() << f2.created() << "=" << result;
     return result;
 #else
     bool result = f1.birthTime() < f2.birthTime();
-    qDebug() << "Comparing files by birth time:" << f1.fileName() << f1.birthTime() << "<" << f2.fileName() << f2.birthTime() << "=" << result;
+    qCDebug(appLog) << "Comparing files by birth time:" << f1.fileName() << f1.birthTime() << "<" << f2.fileName() << f2.birthTime() << "=" << result;
     return result;
 #endif
 }
 
 bool MimesAppsManager::removeOneDupFromList(QStringList &list, const QString desktopFilePath)
 {
-    qDebug() << "Removing duplicate from list for desktop file:" << desktopFilePath;
+    qCDebug(appLog) << "Removing duplicate from list for desktop file:" << desktopFilePath;
     if (list.removeOne(desktopFilePath)) {
-        qDebug() << "Removed exact match from list";
+        qCDebug(appLog) << "Removed exact match from list";
         return true;
     }
 
     const DesktopFile target(desktopFilePath);
-    qDebug() << "Searching for duplicate by exec and name matching";
+    qCDebug(appLog) << "Searching for duplicate by exec and name matching";
 
     QMutableStringListIterator iter(list);
     while (iter.hasNext()) {
         const DesktopFile source(iter.next());
 
         if (source.getExec() == target.getExec() && source.getLocalName() == target.getLocalName()) {
-            qDebug() << "Found and removed duplicate based on exec and name";
+            qCDebug(appLog) << "Found and removed duplicate based on exec and name";
             iter.remove();
             return true;
         }
     }
 
-    qDebug() << "No duplicate found to remove";
+    qCDebug(appLog) << "No duplicate found to remove";
     return false;
 }

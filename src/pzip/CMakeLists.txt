@@ -52,11 +52,7 @@ add_executable(pzip-bin cmd/pzip_main.cpp)
 target_link_libraries(pzip-bin pzip_core_lib)
 set_target_properties(pzip-bin PROPERTIES OUTPUT_NAME "pzip")
 
-add_executable(punzip-bin cmd/punzip_main.cpp)
-target_link_libraries(punzip-bin pzip_core_lib)
-set_target_properties(punzip-bin PROPERTIES OUTPUT_NAME "punzip")
-
-install(TARGETS pzip-bin punzip-bin
+install(TARGETS pzip-bin
     RUNTIME DESTINATION lib/deepin-compressor
 )
 

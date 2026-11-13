@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "common.h"
+#include "ddlog.h"
 
 #include <QTextCodec>
 #include <QMimeDatabase>
@@ -160,7 +161,7 @@ QByteArray Common::detectEncode(const QByteArray &data, const QString &fileName)
     } else {
         ChartDet_DetectingTextCoding(data, detectedResult, chardetconfidence);
     }
-    //qInfo() << "chardet编码：" << detectedResult;
+    //qCInfo(ifaceLog) << "chardet编码：" << detectedResult;
     m_codecStr = detectedResult.toLatin1();
     if (detectedResult.contains("UTF-8", Qt::CaseInsensitive) || detectedResult.contains("ASCII", Qt::CaseInsensitive)) {
         m_codecStr = "UTF-8";
@@ -183,7 +184,7 @@ int Common::ChartDet_DetectingTextCoding(const char *str, QString &encoding, flo
     DetectObj *obj = detect_obj_init();
 
     if (obj == nullptr) {
-        //qInfo() << "Memory Allocation failed\n";
+        //qCInfo(ifaceLog) << "Memory Allocation failed\n";
         return CHARDET_MEM_ALLOCATED_FAIL;
     }
 
@@ -196,19 +197,19 @@ int Common::ChartDet_DetectingTextCoding(const char *str, QString &encoding, flo
 #endif
     {
     case CHARDET_OUT_OF_MEMORY :
-        qInfo() << "On handle processing, occured out of memory\n";
+        qCInfo(ifaceLog) << "On handle processing, occured out of memory\n";
         detect_obj_free(&obj);
         return CHARDET_OUT_OF_MEMORY;
     case CHARDET_NULL_OBJECT :
-        qInfo() << "2st argument of chardet() is must memory allocation with detect_obj_init API\n";
+        qCInfo(ifaceLog) << "2st argument of chardet() is must memory allocation with detect_obj_init API\n";
         return CHARDET_NULL_OBJECT;
     }
 
 #ifndef CHARDET_BOM_CHECK
-    //qInfo() << "encoding:" << obj->encoding << "; confidence: " << obj->confidence;
+    //qCInfo(ifaceLog) << "encoding:" << obj->encoding << "; confidence: " << obj->confidence;
 #else
     // from 1.0.6 support return whether exists BOM
-    qInfo() << "encoding:" << obj->encoding << "; confidence: " << obj->confidence << "; bom: " << obj->bom;
+    qCInfo(ifaceLog) << "encoding:" << obj->encoding << "; confidence: " << obj->confidence << "; bom: " << obj->bom;
 #endif
 
     encoding = obj->encoding;
@@ -384,7 +385,7 @@ QByteArray Common::textCodecDetect(const QByteArray &data, const QString &fileNa
         return def_codec->name();
     }
 
-    qInfo() << "QCodecs编码：" << encoding;
+    qCInfo(ifaceLog) << "QCodecs编码：" << encoding;
     return encoding;
 }
 
@@ -496,7 +497,7 @@ bool Common::findLnfsPath(const QString &target, Compare func)
 
     int ret = mnt_table_parse_mtab(tab, nullptr);
     if (ret != 0) {
-        qWarning() << "device: cannot parse mtab" << ret;
+        qCWarning(ifaceLog) << "device: cannot parse mtab" << ret;
         if (tab) mnt_free_table(tab);
         if (iter) mnt_free_iter(iter);
         return false;
@@ -515,7 +516,7 @@ bool Common::findLnfsPath(const QString &target, Compare func)
         QString fsTypeStr = fsType ? QString(fsType) : "";
         QString mountPointStr = unifyPath(mountPoint);
 
-        qInfo() << "Checking filesystem - Type:" << fsTypeStr
+        qCInfo(ifaceLog) << "Checking filesystem - Type:" << fsTypeStr
                 << "Mount:" << mountPointStr;
 
         // 检查是否是支持长文件名的文件系统类型

@@ -57,7 +57,7 @@
         <location filename="../src/source/page/compresspage.cpp" line="120"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>ОК</translation>
+        <translation>Хорошо</translation>
     </message>
 </context>
 <context>
@@ -162,12 +162,12 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="283"/>
         <source>Support zip, 7z type only</source>
-        <translation>Поддерживаются только zip, 7z форматы</translation>
+        <translation>Поддерживаются только форматы zip, 7z</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="286"/>
         <source>Support 7z type only</source>
-        <translation>Поддерживается только 7z формат</translation>
+        <translation>Поддерживается только формат 7z</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="298"/>
@@ -230,7 +230,7 @@
         <location filename="../src/source/page/compresssettingpage.cpp" line="727"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>ОК</translation>
+        <translation>Хорошо</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="989"/>
@@ -740,7 +740,7 @@
         <location filename="../src/source/mainwindow.cpp" line="3234"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>ОК</translation>
+        <translation>Хорошо</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="784"/>
@@ -1246,7 +1246,7 @@
         <location filename="../3rdparty/interface/queries.cpp" line="518"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>ОК</translation>
+        <translation>Хорошо</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="216"/>
@@ -1347,7 +1347,7 @@
         <location filename="../src/source/dialog/popupdialog.cpp" line="683"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>ОК</translation>
+        <translation>Хорошо</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="693"/>
@@ -1486,7 +1486,7 @@
         <location filename="../src/source/page/uncompresspage.cpp" line="209"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>ОК</translation>
+        <translation>Хорошо</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="225"/>
@@ -1505,7 +1505,7 @@
         <location filename="../src/source/tree/uncompressview.cpp" line="426"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>ОК</translation>
+        <translation>Хорошо</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="666"/>
