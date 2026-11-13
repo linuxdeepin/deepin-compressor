@@ -14,6 +14,12 @@ elements:
   SelectFileButton:
     name: SelectFileButton
     role: push button
+  NextButton:
+    name: NextButton
+    role: push button
+  SplitValueEdit:
+    name: SplitValueEdit
+    role: text
   CompressButton:
     name: CompressButton
     role: push button
@@ -23,15 +29,63 @@ elements:
   BackButton:
     name: BackButton
     role: push button
-  NextButton:
-    name: NextButton
-    role: push button
+  ZipRadioButton:
+    name: ZipRadioButton
+    role: radio button
+  SevenZRadioButton:
+    name: SevenZRadioButton
+    role: radio button
   RenameEdit:
     name: RenameEdit
     role: text
   PasswordEdit:
     name: PasswordEdit
     role: text
+  AdvancedOptionsSwitch:
+    name: AdvancedOptionsSwitch
+    role: push button
+  ListEncryptionSwitch:
+    name: ListEncryptionSwitch
+    role: push button
+  UsePasswordCheckBox:
+    name: UsePasswordCheckBox
+    role: check box
+  Applyall_btn:
+    name: Applyall_btn
+    role: check box
+  FileNameEdit:
+    name: FileNameEdit
+    role: text
+  SavePathEdit:
+    name: SavePathEdit
+    role: text
+  RetryButton:
+    name: RetryButton
+    role: push button
+  ExtractPathButton:
+    name: ExtractPathButton
+    role: push button
   RecommendedButton:
     name: RecommendedButton
     role: radio button
+  CompressLevelComboBox:
+    name: CompressLevelComboBox
+    role: combo box
+  CpuThreadComboBox:
+    name: CpuThreadComboBox
+    role: combo box
+  CommentEdit:
+    name: CommentEdit
+    role: text
+  SelectAllButton:
+    name: SelectAllButton
+    role: push button
+  ClearAllButton:
+    name: ClearAllButton
+    role: push button
+  ProgressBar:
+    name: ProgressBar
+    role: progress bar
+  ProgressDialogBar:
+    name: ProgressDialogBar
+    role: progress bar

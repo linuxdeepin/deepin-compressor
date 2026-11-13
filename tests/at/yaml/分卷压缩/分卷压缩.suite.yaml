@@ -46,5 +46,42 @@ suites:
     selector:
       name: SelectFileButton
       role: push button
+- id: suite_分卷压缩_002_s1
+  name: 分卷大小设置
+  description: ''
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SplitCheckBox
+      role: check box
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SplitValueEdit
+      role: text
+    do: click
+  - step_type: action
+    action: keyboard_type
+    text: '100'
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: SplitValueEdit
+      role: text
 teardown:
 - action: session_stop

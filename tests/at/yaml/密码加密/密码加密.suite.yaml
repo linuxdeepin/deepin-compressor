@@ -540,5 +540,83 @@ suites:
     selector:
       name: SelectFileButton
       role: push button
+- id: suite_密码加密_004_s1
+  name: 列表加密与格式转换
+  description: ''
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: AdvancedOptionsSwitch
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ListEncryptionSwitch
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: UsePasswordCheckBox
+      role: check box
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: Applyall_btn
+      role: check box
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ZipRadioButton
+      role: radio button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SevenZRadioButton
+      role: radio button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: ListEncryptionSwitch
+      role: push button
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: UsePasswordCheckBox
+      role: check box
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: Applyall_btn
+      role: check box
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: ZipRadioButton
+      role: radio button
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: SevenZRadioButton
+      role: radio button
 teardown:
 - action: session_stop

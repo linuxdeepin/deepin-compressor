@@ -278,5 +278,50 @@ suites:
     selector:
       name: SelectFileButton
       role: push button
+- id: suite_进度控制_003_s1
+  name: 进度条验证
+  description: ''
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: ProgressBar
+      role: progress bar
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: ProgressDialogBar
+      role: progress bar
 teardown:
 - action: session_stop

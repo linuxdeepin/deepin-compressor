@@ -39,6 +39,42 @@ cases:
     selector:
       name: SelectFileButton
       role: push button
+- id: suite_分卷压缩_002_s1
+  name: 分卷大小设置
+  module: 分卷压缩
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SplitCheckBox
+      role: check box
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SplitValueEdit
+      role: text
+    do: click
+  - step_type: action
+    action: keyboard_type
+    text: '100'
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: SplitValueEdit
+      role: text
 - id: suite_压缩_001_s1
   name: 压缩快捷键
   module: 压缩
@@ -336,6 +372,38 @@ cases:
     selector:
       name: ExtractButton
       role: push button
+- id: suite_压缩解压_004_s1
+  name: 格式转换选择
+  module: 压缩解压
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ZipRadioButton
+      role: radio button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SevenZRadioButton
+      role: radio button
+    do: click
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: ZipRadioButton
+      role: radio button
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: SevenZRadioButton
+      role: radio button
 - id: suite_右键压缩_002_s1
   name: 压缩包重命名
   module: 右键压缩
@@ -1212,6 +1280,83 @@ cases:
     selector:
       name: SelectFileButton
       role: push button
+- id: suite_密码加密_004_s1
+  name: 列表加密与格式转换
+  module: 密码加密
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: AdvancedOptionsSwitch
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ListEncryptionSwitch
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: UsePasswordCheckBox
+      role: check box
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: Applyall_btn
+      role: check box
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ZipRadioButton
+      role: radio button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SevenZRadioButton
+      role: radio button
+    do: click
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: ListEncryptionSwitch
+      role: push button
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: UsePasswordCheckBox
+      role: check box
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: Applyall_btn
+      role: check box
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: ZipRadioButton
+      role: radio button
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: SevenZRadioButton
+      role: radio button
 - id: suite_帮助关于_001_s1
   name: 帮助手册
   module: 帮助关于
@@ -1317,6 +1462,50 @@ cases:
     selector:
       name: CompressButton
       role: push button
+- id: suite_文件名设置_002_s1
+  name: 文件名与保存路径设置
+  module: 文件名设置
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: FileNameEdit
+      role: text
+    do: click
+  - step_type: action
+    action: keyboard_type
+    text: 测试压缩包
+  - step_type: action
+    action: element_action
+    selector:
+      name: SavePathEdit
+      role: text
+    do: click
+  - step_type: action
+    action: keyboard_type
+    text: /tmp
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: FileNameEdit
+      role: text
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: SavePathEdit
+      role: text
 - id: suite_文件添加_002_s1
   name: 根目录添加文件
   module: 文件添加
@@ -2154,6 +2343,39 @@ cases:
     selector:
       name: ExtractButton
       role: push button
+- id: suite_结果界面_003_s1
+  name: 失败重试
+  module: 结果界面
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: RetryButton
+      role: push button
+    do: click
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: RetryButton
+      role: push button
 - id: suite_解压_001_s1
   name: 授权提示02
   module: 解压
@@ -2168,6 +2390,27 @@ cases:
     action: assert_element
     selector:
       name: SelectFileButton
+      role: push button
+- id: suite_解压_002_s1
+  name: 解压路径设置
+  module: 解压
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractPathButton
+      role: push button
+    do: click
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: ExtractPathButton
       role: push button
 - id: suite_设置_002_s1
   name: 设置压缩文件位置3
@@ -2655,6 +2898,108 @@ cases:
     selector:
       name: SelectFileButton
       role: push button
+- id: suite_设置_006_s1
+  name: 压缩级别与高级选项设置
+  module: 设置
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressLevelComboBox
+      role: combo box
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressLevelComboBox
+      role: combo box
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: AdvancedOptionsSwitch
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CpuThreadComboBox
+      role: combo box
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CpuThreadComboBox
+      role: combo box
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CommentEdit
+      role: text
+    do: click
+  - step_type: action
+    action: keyboard_type
+    text: 测试注释
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: CompressLevelComboBox
+      role: combo box
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: CpuThreadComboBox
+      role: combo box
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: CommentEdit
+      role: text
+- id: suite_设置_007_s1
+  name: 全选与清除按钮
+  module: 设置
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectAllButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ClearAllButton
+      role: push button
+    do: click
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: SelectAllButton
+      role: push button
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: ClearAllButton
+      role: push button
 - id: suite_进度控制_001_s1
   name: 压缩过程
   module: 进度控制
@@ -2925,6 +3270,50 @@ cases:
     selector:
       name: SelectFileButton
       role: push button
+- id: suite_进度控制_003_s1
+  name: 进度条验证
+  module: 进度控制
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: ProgressBar
+      role: progress bar
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: ProgressDialogBar
+      role: progress bar
 - id: suite_追加压缩_001_s1
   name: 添加过程中出错情况
   module: 追加压缩

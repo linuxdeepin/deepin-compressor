@@ -1,6 +1,6 @@
 version: '1.0'
 source: at-case-authoring:element-map.yaml
-scan_total: 12
+scan_total: 30
 elements:
   RenameEdit:
     role: text
@@ -57,10 +57,100 @@ elements:
     ui_name: 显示文件按钮
     desc: 成功页查看文件按钮 successpage.cpp m_pShowFileBtn
     locator: name
+  SevenZRadioButton:
+    role: radio button
+    ui_name: 提示框上转换按钮
+    desc: 压缩格式7z单选按钮 popupdialog.cpp _7zBtn（源码新增setAccessibleName）
+    locator: name
+  ZipRadioButton:
+    role: radio button
+    ui_name: 转换按钮
+    desc: 压缩格式zip单选按钮 popupdialog.cpp zipBtn（源码新增setAccessibleName）
+    locator: name
   PauseContinueButton:
     role: push button
     ui_name: 界面上暂停按钮
     desc: 暂停/继续按钮 progresspage.cpp m_pPauseContinueButton
+    locator: name
+  SelectAllButton:
+    role: push button
+    ui_name: 全选按钮
+    desc: 设置对话框全选按钮 settingdialog.cpp selectAllButton（源码新增setAccessibleName）
+    locator: name
+  ClearAllButton:
+    role: push button
+    ui_name: 清除按钮
+    desc: 设置对话框清除按钮 settingdialog.cpp cancelSelectButton（源码新增setAccessibleName）
+    locator: name
+  Applyall_btn:
+    role: check box
+    ui_name: 全部应用复选框
+    desc: 弹窗全部应用复选框 popupdialog.cpp checkbox（源码已有setAccessibleName）
+    locator: name
+  UsePasswordCheckBox:
+    role: check box
+    ui_name: 使用密码复选框
+    desc: 使用密码复选框 popupdialog.cpp pSelCkb（源码新增setAccessibleName）
+    locator: name
+  ProgressDialogBar:
+    role: progress bar
+    ui_name: 进度对话框进度条
+    desc: 进度对话框进度条 progressdialog.cpp m_circleprogress（源码新增setAccessibleName）
+    locator: name
+  ExtractPathButton:
+    role: push button
+    ui_name: 解压路径按钮
+    desc: 解压路径按钮 uncompresspage.cpp m_pUncompressPathBtn（源码新增setAccessibleName）
+    locator: name
+  RetryButton:
+    role: push button
+    ui_name: 重试按钮
+    desc: 失败页重试按钮 failurepage.cpp m_pRetrybutton（源码新增setAccessibleName）
+    locator: name
+  FileNameEdit:
+    role: text
+    ui_name: 文件名输入框
+    desc: 文件名输入框 compresssettingpage.cpp m_pFileNameEdt（源码新增setAccessibleName）
+    locator: name
+  SavePathEdit:
+    role: text
+    ui_name: 保存路径输入框
+    desc: 保存路径输入框 compresssettingpage.cpp m_pSavePathEdt（源码新增setAccessibleName）
+    locator: name
+  CompressLevelComboBox:
+    role: combo box
+    ui_name: 压缩级别下拉框
+    desc: 压缩级别下拉框 compresssettingpage.cpp m_pCompressLevelCmb（源码新增setAccessibleName）
+    locator: name
+  AdvancedOptionsSwitch:
+    role: push button
+    ui_name: 高级选项开关
+    desc: 高级选项开关 compresssettingpage.cpp m_pAdvancedBtn（源码新增setAccessibleName）
+    locator: name
+  CpuThreadComboBox:
+    role: combo box
+    ui_name: CPU线程下拉框
+    desc: CPU线程下拉框 compresssettingpage.cpp m_pCpuCmb（源码新增setAccessibleName）
+    locator: name
+  ListEncryptionSwitch:
+    role: push button
+    ui_name: 列表加密开关
+    desc: 列表加密开关 compresssettingpage.cpp m_pListEncryptionBtn（源码新增setAccessibleName）
+    locator: name
+  SplitValueEdit:
+    role: text
+    ui_name: 分卷大小输入框
+    desc: 分卷大小输入框 compresssettingpage.cpp m_pSplitValueEdt（源码新增setAccessibleName）
+    locator: name
+  CommentEdit:
+    role: text
+    ui_name: 注释输入框
+    desc: 注释输入框 compresssettingpage.cpp m_pCommentEdt（源码新增setAccessibleName）
+    locator: name
+  ProgressBar:
+    role: progress bar
+    ui_name: 进度条
+    desc: 进度条 progresspage.cpp m_pProgressBar（源码新增setAccessibleName）
     locator: name
 transient_items: []
 unresolved:
@@ -158,16 +248,6 @@ unresolved:
   role: TBD
   ui_name: 压缩后删除原来的文件
   desc: 设置选项-压缩后删除，无accessible name
-  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
-- name: 提示框上转换按钮
-  role: TBD
-  ui_name: 提示框上转换按钮
-  desc: 提示框转换按钮，无accessible name
-  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
-- name: 转换按钮
-  role: TBD
-  ui_name: 转换按钮
-  desc: 转换按钮，无accessible name
   reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
 - name: 提示框上取消按钮
   role: TBD

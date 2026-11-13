@@ -496,5 +496,109 @@ suites:
     selector:
       name: SelectFileButton
       role: push button
+- id: suite_设置_006_s1
+  name: 压缩级别与高级选项设置
+  description: ''
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressLevelComboBox
+      role: combo box
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressLevelComboBox
+      role: combo box
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: AdvancedOptionsSwitch
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CpuThreadComboBox
+      role: combo box
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CpuThreadComboBox
+      role: combo box
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CommentEdit
+      role: text
+    do: click
+  - step_type: action
+    action: keyboard_type
+    text: 测试注释
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: CompressLevelComboBox
+      role: combo box
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: CpuThreadComboBox
+      role: combo box
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: CommentEdit
+      role: text
+- id: suite_设置_007_s1
+  name: 全选与清除按钮
+  description: ''
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectAllButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ClearAllButton
+      role: push button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: SelectAllButton
+      role: push button
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: ClearAllButton
+      role: push button
 teardown:
 - action: session_stop

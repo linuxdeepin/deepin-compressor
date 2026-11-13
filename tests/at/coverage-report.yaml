@@ -1,8 +1,8 @@
-scan_total: 12
+scan_total: 30
 transient_items: []
 unreachable: 0
-denominator: 12
-covered: 12
+denominator: 30
+covered: 30
 uncovered: 0
 coverage: 100.0
 passed: true

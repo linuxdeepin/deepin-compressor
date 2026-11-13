@@ -122,5 +122,38 @@ suites:
     selector:
       name: ExtractButton
       role: push button
+- id: suite_压缩解压_004_s1
+  name: 格式转换选择
+  description: ''
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ZipRadioButton
+      role: radio button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SevenZRadioButton
+      role: radio button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: ZipRadioButton
+      role: radio button
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: SevenZRadioButton
+      role: radio button
 teardown:
 - action: session_stop
