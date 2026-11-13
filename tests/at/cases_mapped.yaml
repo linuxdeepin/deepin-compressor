@@ -1,0 +1,132 @@
+version: '1.0'
+cases:
+- id: suite_yasuoshezhi_001_s1
+  name: 压缩设置-压缩类型标签显示当前压缩类型
+  module: 压缩设置
+  steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: ClickTypeLabel
+      role: label
+  - step_type: assert
+    action: assert_process_running
+    app: deepin-compressor
+- id: suite_duihuakuang_001_s1
+  name: 对话框-应用到所有复选框勾选应用到所有
+  module: 对话框
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: Applyall_btn
+      role: check box
+    do: click
+    wait: 1.0
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: Applyall_btn
+      role: check box
+  - step_type: assert
+    action: assert_process_running
+    app: deepin-compressor
+- id: suite_duihuakuang_002_s1
+  name: 对话框-对话框内容标签显示提示信息
+  module: 对话框
+  steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: ContentLabel
+      role: label
+  - step_type: assert
+    action: assert_process_running
+    app: deepin-compressor
+- id: suite_wenjianliebiao_001_s1
+  name: 文件列表-返回上一级标签点击返回上级目录
+  module: 文件列表
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: gotoPreviousLabel
+      role: label
+    do: click
+    wait: 1.0
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: gotoPreviousLabel
+      role: label
+  - step_type: assert
+    action: assert_process_running
+    app: deepin-compressor
+- id: suite_wenjianliebiao_002_s1
+  name: 文件列表-文件列表树视图显示压缩包内文件
+  module: 文件列表
+  steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: TableViewFile
+      role: tree
+  - step_type: assert
+    action: assert_process_running
+    app: deepin-compressor
+- id: suite_biaotilan_001_s1
+  name: 标题栏-添加按钮点击打开新建菜单
+  module: 标题栏
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: TitleButton
+      role: push button
+    do: click
+    wait: 1.0
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: TitleButton
+      role: push button
+  - step_type: assert
+    action: assert_process_running
+    app: deepin-compressor
+- id: suite_biaotilan_002_s1
+  name: 标题栏-注释按钮点击打开注释编辑
+  module: 标题栏
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: CommentButton
+      role: push button
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: CommentButton
+      role: push button
+    do: click
+    wait: 1.0
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: CommentButton
+      role: push button
+  - step_type: assert
+    action: assert_process_running
+    app: deepin-compressor
+- id: suite_chongmingming_001_s1
+  name: 重命名-重命名对话框名称标签显示重命名标题
+  module: 重命名
+  steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: NameLabel
+      role: label
+  - step_type: assert
+    action: assert_process_running
+    app: deepin-compressor

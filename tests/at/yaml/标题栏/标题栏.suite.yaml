@@ -1,0 +1,56 @@
+name: 标题栏_suite
+app: deepin-compressor
+module: 标题栏
+setup:
+- action: session_start
+  command: deepin-compressor
+  wait: 3.0
+suites:
+- id: suite_biaotilan_001_s1
+  name: 标题栏-添加按钮点击打开新建菜单
+  description: ''
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: TitleButton
+      role: push button
+    do: click
+    wait: 1.0
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: TitleButton
+      role: push button
+  - step_type: assert
+    action: assert_process_running
+    app: deepin-compressor
+- id: suite_biaotilan_002_s1
+  name: 标题栏-注释按钮点击打开注释编辑
+  description: ''
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: CommentButton
+      role: push button
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: CommentButton
+      role: push button
+    do: click
+    wait: 1.0
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: CommentButton
+      role: push button
+  - step_type: assert
+    action: assert_process_running
+    app: deepin-compressor
+teardown:
+- action: session_stop

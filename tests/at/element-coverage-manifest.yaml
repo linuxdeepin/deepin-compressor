@@ -1,0 +1,216 @@
+version: '1.0'
+source: at-case-authoring:element-map.yaml
+scan_total: 8
+elements:
+  TitleButton:
+    role: push button
+    ui_name: 添加按钮
+    desc: 标题栏添加按钮（新建压缩/解压入口）
+    locator: accessible_id
+  CommentButton:
+    role: push button
+    ui_name: 注释按钮
+    desc: 标题栏注释按钮
+    locator: accessible_id
+  ClickTypeLabel:
+    role: label
+    ui_name: 压缩类型标签
+    desc: 压缩设置页面压缩类型标签（ClickTypeLabel）
+    locator: accessible_id
+  gotoPreviousLabel:
+    role: label
+    ui_name: 返回上一级标签
+    desc: 树视图头部返回上一级标签（gotoPreviousLabel）
+    locator: accessible_id
+  Applyall_btn:
+    role: check box
+    ui_name: 应用到所有复选框
+    desc: 覆盖/跳过对话框"应用到所有"复选框
+    locator: name
+  TableViewFile:
+    role: tree
+    ui_name: 文件列表树视图
+    desc: 数据树视图（TableViewFile）
+    locator: accessible_id
+  NameLabel:
+    role: label
+    ui_name: 重命名对话框名称标签
+    desc: 重命名对话框名称标签（NameLabel）
+    locator: accessible_id
+  ContentLabel:
+    role: label
+    ui_name: 对话框内容标签
+    desc: 对话框内容标签（ContentLabel）
+    locator: accessible_id
+transient_items: []
+unresolved:
+- name: 选择文件按钮
+  role: push button
+  ui_name: 选择文件按钮
+  desc: 主页"选择文件"按钮
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 下一步按钮
+  role: push button
+  ui_name: 下一步按钮
+  desc: 压缩页面"下一步"按钮
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 文件名输入框
+  role: text
+  ui_name: 文件名输入框
+  desc: 压缩设置文件名输入框
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 保存路径选择框
+  role: ''
+  ui_name: 保存路径选择框
+  desc: 压缩设置保存路径选择框
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 高级选项开关
+  role: ''
+  ui_name: 高级选项开关
+  desc: 压缩设置高级选项开关
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 密码输入框
+  role: ''
+  ui_name: 密码输入框
+  desc: 压缩设置密码输入框
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 加密文件列表复选框
+  role: ''
+  ui_name: 加密文件列表复选框
+  desc: 压缩设置加密文件列表复选框
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 分卷复选框
+  role: check box
+  ui_name: 分卷复选框
+  desc: 压缩设置分卷复选框
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 分卷大小输入框
+  role: ''
+  ui_name: 分卷大小输入框
+  desc: 压缩设置分卷大小输入框
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 压缩级别下拉框
+  role: combo box
+  ui_name: 压缩级别下拉框
+  desc: 压缩设置压缩级别下拉框
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 注释输入框
+  role: ''
+  ui_name: 注释输入框
+  desc: 压缩设置注释输入框
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: CPU线程下拉框
+  role: combo box
+  ui_name: CPU线程下拉框
+  desc: 压缩设置CPU线程下拉框
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 压缩按钮
+  role: push button
+  ui_name: 压缩按钮
+  desc: 压缩设置"压缩"按钮
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 类型菜单
+  role: menu
+  ui_name: 类型菜单
+  desc: 压缩设置类型菜单
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 解压路径按钮
+  role: ''
+  ui_name: 解压路径按钮
+  desc: 解压页面解压路径按钮
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 解压按钮
+  role: push button
+  ui_name: 解压按钮
+  desc: 解压页面"解压"按钮
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 取消按钮
+  role: push button
+  ui_name: 取消按钮
+  desc: 进度页面"取消"按钮
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 暂停继续按钮
+  role: ''
+  ui_name: 暂停继续按钮
+  desc: 进度页面"暂停/继续"按钮
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 查看按钮
+  role: push button
+  ui_name: 查看按钮
+  desc: 成功页面"查看"按钮
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 返回按钮
+  role: ''
+  ui_name: 返回按钮
+  desc: 成功页面"返回"按钮
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 重试按钮
+  role: push button
+  ui_name: 重试按钮
+  desc: 失败页面"重试"按钮
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 返回按钮
+  role: ''
+  ui_name: 返回按钮
+  desc: 失败页面"返回"按钮
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 打开方式选择按钮
+  role: ''
+  ui_name: 打开方式选择按钮
+  desc: 打开方式对话框选择按钮
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 打开方式取消按钮
+  role: push button
+  ui_name: 打开方式取消按钮
+  desc: 打开方式对话框取消按钮
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 打开方式确定按钮
+  role: push button
+  ui_name: 打开方式确定按钮
+  desc: 打开方式对话框确定按钮
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 设为默认复选框
+  role: check box
+  ui_name: 设为默认复选框
+  desc: 打开方式对话框设为默认复选框
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 打开方式文件选择按钮
+  role: ''
+  ui_name: 打开方式文件选择按钮
+  desc: 打开方式对话框文件选择按钮
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 重命名输入框
+  role: text
+  ui_name: 重命名输入框
+  desc: 重命名对话框输入框
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 设置全选按钮
+  role: push button
+  ui_name: 设置全选按钮
+  desc: 设置对话框全选按钮
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 设置清除按钮
+  role: push button
+  ui_name: 设置清除按钮
+  desc: 设置对话框清除按钮
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 设置推荐按钮
+  role: ''
+  ui_name: 设置推荐按钮
+  desc: 设置对话框推荐按钮
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 解压路径设置下拉框
+  role: combo box
+  ui_name: 解压路径设置下拉框
+  desc: 设置对话框解压路径下拉框
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 删除归档设置下拉框
+  role: combo box
+  ui_name: 删除归档设置下拉框
+  desc: 设置对话框删除归档下拉框
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
+- name: 树视图头部
+  role: ''
+  ui_name: 树视图头部
+  desc: 树视图头部视图
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位

@@ -1,0 +1,18 @@
+elements:
+  ClickTypeLabel:
+    accessible_id: ClickTypeLabel
+  Applyall_btn:
+    name: Applyall_btn
+    role: check box
+  ContentLabel:
+    accessible_id: ContentLabel
+  gotoPreviousLabel:
+    accessible_id: gotoPreviousLabel
+  TableViewFile:
+    accessible_id: TableViewFile
+  TitleButton:
+    accessible_id: TitleButton
+  CommentButton:
+    accessible_id: CommentButton
+  NameLabel:
+    accessible_id: NameLabel

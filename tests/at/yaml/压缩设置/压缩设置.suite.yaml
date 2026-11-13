@@ -1,0 +1,23 @@
+name: 压缩设置_suite
+app: deepin-compressor
+module: 压缩设置
+setup:
+- action: session_start
+  command: deepin-compressor
+  wait: 3.0
+suites:
+- id: suite_yasuoshezhi_001_s1
+  name: 压缩设置-压缩类型标签显示当前压缩类型
+  description: ''
+  steps: []
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: ClickTypeLabel
+      role: label
+  - step_type: assert
+    action: assert_process_running
+    app: deepin-compressor
+teardown:
+- action: session_stop

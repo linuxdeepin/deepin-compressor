@@ -1,0 +1,43 @@
+name: 对话框_suite
+app: deepin-compressor
+module: 对话框
+setup:
+- action: session_start
+  command: deepin-compressor
+  wait: 3.0
+suites:
+- id: suite_duihuakuang_001_s1
+  name: 对话框-应用到所有复选框勾选应用到所有
+  description: ''
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: Applyall_btn
+      role: check box
+    do: click
+    wait: 1.0
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: Applyall_btn
+      role: check box
+  - step_type: assert
+    action: assert_process_running
+    app: deepin-compressor
+- id: suite_duihuakuang_002_s1
+  name: 对话框-对话框内容标签显示提示信息
+  description: ''
+  steps: []
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: ContentLabel
+      role: label
+  - step_type: assert
+    action: assert_process_running
+    app: deepin-compressor
+teardown:
+- action: session_stop

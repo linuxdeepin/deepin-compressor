@@ -1,0 +1,43 @@
+name: 文件列表_suite
+app: deepin-compressor
+module: 文件列表
+setup:
+- action: session_start
+  command: deepin-compressor
+  wait: 3.0
+suites:
+- id: suite_wenjianliebiao_001_s1
+  name: 文件列表-返回上一级标签点击返回上级目录
+  description: ''
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: gotoPreviousLabel
+      role: label
+    do: click
+    wait: 1.0
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: gotoPreviousLabel
+      role: label
+  - step_type: assert
+    action: assert_process_running
+    app: deepin-compressor
+- id: suite_wenjianliebiao_002_s1
+  name: 文件列表-文件列表树视图显示压缩包内文件
+  description: ''
+  steps: []
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: TableViewFile
+      role: tree
+  - step_type: assert
+    action: assert_process_running
+    app: deepin-compressor
+teardown:
+- action: session_stop
