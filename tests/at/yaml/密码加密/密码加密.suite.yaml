@@ -1,0 +1,544 @@
+name: 密码加密_suite
+app: deepin-compressor
+module: 密码加密
+setup:
+- action: session_start
+  command: deepin-compressor
+  wait: 3.0
+suites:
+- id: suite_密码加密_001_s1
+  name: 汉字密码加密包02
+  description: ''
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: CompressButton
+      role: push button
+- id: suite_密码加密_002_s1
+  name: 右键菜单解压加密压缩包
+  description: ''
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ViewFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ViewFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ViewFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ViewFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: SelectFileButton
+      role: push button
+- id: suite_密码加密_003_s1
+  name: 启动2
+  description: ''
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: SplitCheckBox
+      role: check box
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: BackButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: SplitCheckBox
+      role: check box
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: BackButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: CancelButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: CancelButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: CancelButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: PasswordEdit
+      role: text
+    do: focus
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: SelectFileButton
+      role: push button
+teardown:
+- action: session_stop

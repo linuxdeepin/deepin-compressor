@@ -1,0 +1,74 @@
+name: 文件名设置_suite
+app: deepin-compressor
+module: 文件名设置
+setup:
+- action: session_start
+  command: deepin-compressor
+  wait: 3.0
+suites:
+- id: suite_文件名设置_001_s1
+  name: 特殊符号命名压缩包
+  description: ''
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ViewFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ViewFileButton
+      role: push button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: CompressButton
+      role: push button
+teardown:
+- action: session_stop

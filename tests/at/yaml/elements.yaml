@@ -1,18 +1,37 @@
 elements:
-  ClickTypeLabel:
-    accessible_id: ClickTypeLabel
-  Applyall_btn:
-    name: Applyall_btn
+  SplitCheckBox:
+    name: SplitCheckBox
     role: check box
-  ContentLabel:
-    accessible_id: ContentLabel
-  gotoPreviousLabel:
-    accessible_id: gotoPreviousLabel
-  TableViewFile:
-    accessible_id: TableViewFile
-  TitleButton:
-    accessible_id: TitleButton
-  CommentButton:
-    accessible_id: CommentButton
-  NameLabel:
-    accessible_id: NameLabel
+  ExtractButton:
+    name: ExtractButton
+    role: push button
+  CancelButton:
+    name: CancelButton
+    role: push button
+  ViewFileButton:
+    name: ViewFileButton
+    role: push button
+  SelectFileButton:
+    name: SelectFileButton
+    role: push button
+  CompressButton:
+    name: CompressButton
+    role: push button
+  PauseContinueButton:
+    name: PauseContinueButton
+    role: push button
+  BackButton:
+    name: BackButton
+    role: push button
+  NextButton:
+    name: NextButton
+    role: push button
+  RenameEdit:
+    name: RenameEdit
+    role: text
+  PasswordEdit:
+    name: PasswordEdit
+    role: text
+  RecommendedButton:
+    name: RecommendedButton
+    role: radio button

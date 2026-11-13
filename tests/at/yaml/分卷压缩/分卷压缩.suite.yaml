@@ -1,0 +1,50 @@
+name: 分卷压缩_suite
+app: deepin-compressor
+module: 分卷压缩
+setup:
+- action: session_start
+  command: deepin-compressor
+  wait: 3.0
+suites:
+- id: suite_分卷压缩_001_s1
+  name: 解压分卷压缩包
+  description: ''
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: SplitCheckBox
+      role: check box
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SplitCheckBox
+      role: check box
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CancelButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ViewFileButton
+      role: push button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: SelectFileButton
+      role: push button
+teardown:
+- action: session_stop

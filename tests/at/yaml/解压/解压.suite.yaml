@@ -1,0 +1,26 @@
+name: 解压_suite
+app: deepin-compressor
+module: 解压
+setup:
+- action: session_start
+  command: deepin-compressor
+  wait: 3.0
+suites:
+- id: suite_解压_001_s1
+  name: 授权提示02
+  description: ''
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: SelectFileButton
+      role: push button
+teardown:
+- action: session_stop

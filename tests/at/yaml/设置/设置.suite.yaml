@@ -1,0 +1,500 @@
+name: 设置_suite
+app: deepin-compressor
+module: 设置
+setup:
+- action: session_start
+  command: deepin-compressor
+  wait: 3.0
+suites:
+- id: suite_设置_002_s1
+  name: 设置压缩文件位置3
+  description: ''
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SplitCheckBox
+      role: check box
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: RecommendedButton
+      role: radio button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: SelectFileButton
+      role: push button
+- id: suite_设置_003_s1
+  name: 设置压缩文件名5
+  description: ''
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CancelButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: SelectFileButton
+      role: push button
+- id: suite_设置_004_s1
+  name: 设置-压缩后删除原来的文件1
+  description: ''
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: ExtractButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: CompressButton
+      role: push button
+- id: suite_设置_005_s1
+  name: 并行压缩支持的格式
+  description: ''
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: SelectFileButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: NextButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: SelectFileButton
+      role: push button
+teardown:
+- action: session_stop
