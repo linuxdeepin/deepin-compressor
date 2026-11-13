@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -77,6 +77,7 @@ void CompressPage::initUI()
     m_pCompressView = new CompressView(this);
     m_pNextBtn = new CustomPushButton(tr("Next"), this);
     m_pNextBtn->setMinimumWidth(340);
+    m_pNextBtn->setAccessibleName("NextButton");
 
     // 按钮布局
     QHBoxLayout *pBtnLayout = new QHBoxLayout;

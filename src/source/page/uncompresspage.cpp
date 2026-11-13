@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -116,6 +116,9 @@ void UnCompressPage::initUI()
     m_pUnCompressView = new UnCompressView(this);
     m_pUncompressPathBtn = new CustomCommandLinkButton(tr("Extract to:") + " ~/Desktop", this);
     m_pUnCompressBtn = new CustomPushButton(tr("Extract", "button"), this);
+
+    m_pUncompressPathBtn->setAccessibleName("ExtractPathButton");
+    m_pUnCompressBtn->setAccessibleName("ExtractButton");
 
     m_pUncompressPathBtn->setToolTip(m_strUnCompressPath);
 

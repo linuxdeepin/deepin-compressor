@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -82,6 +82,9 @@ void SuccessPage::initUI()
 
     //返回按钮
     m_pReturnBtn = new CustomCommandLinkButton(tr("Back"), this);
+
+    m_pShowFileBtn->setAccessibleName("ViewFileButton");
+    m_pReturnBtn->setAccessibleName("BackButton");
 
     //界面布局
     QVBoxLayout *mainlayout = new QVBoxLayout(this);
