@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 
 <!--
-SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
@@ -11,6 +11,14 @@ SPDX-License-Identifier: GPL-3.0-or-later
 		<comment>Compressed 7z</comment>
 		<generic-icon name="deepin-compressor"/>
 		<glob pattern="*.7z.*" weight="80"/>
+	</mime-type>
+	<mime-type type="application/vnd.linglong.layer">
+		<comment>Linglong layer package</comment>
+		<comment xml:lang="zh_CN">如意玲珑 layer 软件包</comment>
+		<glob pattern="*.layer" weight="80"/>
+		<magic priority="90">
+			<match value="&lt;&lt;&lt; deepin linglong layer archive &gt;&gt;&gt;" type="string" offset="0"/>
+		</magic>
 	</mime-type>
 </mime-info>
 
