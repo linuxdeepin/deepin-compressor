@@ -1391,8 +1391,9 @@ void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
         }
     }
 
-    // 如果自动创建文件夹,解压时增加一层以压缩包名称命名的目录
+    // 如果开启了智能新增文件夹，且压缩包内容散在，解压时增加一层以压缩包名称命名的目录
     QString strAutoPath = getExtractPath(strArchiveFullPath);
+    m_bExtractCreateFolder = !strAutoPath.isEmpty();    // 记录本次解压是否新增了文件夹
     if (!strAutoPath.isEmpty()) {
         options.strTargetPath += QDir::separator() + strAutoPath;
     }
@@ -1478,6 +1479,9 @@ void MainWindow::Extract2PathFinish(const QString &msg)
         // 打开选中第一个提取的文件/文件夹
         if (m_stUnCompressParameter.listExractFiles.count() > 0)
             m_pDDesktopServicesThread->setOpenFiles(QStringList() << m_stUnCompressParameter.listExractFiles[0]);
+
+        // 设置了"打开对应文件夹后自动退出"：先建立退出连接再启动线程，避免线程瞬间结束漏接 finished 信号
+        quitAfterOpenFolderIfNeeded();
         m_pDDesktopServicesThread->start();
     }
 }
@@ -1493,18 +1497,45 @@ QString MainWindow::createTempPath()
     return strTempPath;
 }
 
+bool MainWindow::isArchiveContentWrappedInFolder()
+{
+    // 压缩包第一层只有一个目录时，说明内容本来就被包在文件夹里，解压时无需再新增一层同名文件夹；
+    // 其余情况（多个顶层条目、只有一个顶层文件、数据尚未加载）都按"散在"处理，需要新增同名文件夹，
+    // 避免解压后文件直接散落在目标目录下
+    const ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
+    bool bWrapped = (1 == stArchiveData.listRootEntry.count() && stArchiveData.listRootEntry.first().isDirectory);
+    qCDebug(appLog) << "Archive content wrapped in single folder:" << bWrapped;
+    return bWrapped;
+}
+
 QString MainWindow::getExtractPath(const QString &strArchiveFullPath)
 {
     qCDebug(appLog) << "Getting extract path for:" << strArchiveFullPath;
     QString strpath = "";
-    // 根据是否自动创建文件夹获取解压最后一层路径
-    if (m_pSettingDlg->isAutoCreatDir()) {
+    // 智能新增文件夹：开启该选项后，仅当压缩包内容散在时新增一层以压缩包名称命名的文件夹；
+    // 若内容本来就在文件夹里，则不再新增，既避免多出一层无意义的文件夹，又避免文件散落
+    if (m_pSettingDlg->isAutoCreatDir() && !isArchiveContentWrappedInFolder()) {
         QFileInfo info(strArchiveFullPath);
         strpath = UiTools::handleFileName(info.filePath());
-        qCDebug(appLog) << "Auto-created extract path:" << strpath;
+        qCDebug(appLog) << "Intelligently-created extract path:" << strpath;
     }
 
     return strpath;
+}
+
+void MainWindow::quitAfterOpenFolderIfNeeded()
+{
+    // "打开对应文件夹后自动退出"是"当解压完成后自动打开对应的文件夹"的二级选项
+    if (nullptr == m_pDDesktopServicesThread || !m_pSettingDlg->isAutoQuitAfterOpen()) {
+        return;
+    }
+
+    // 操作已结束，先置空当前操作，避免退出时弹出"有任务正在进行"的确认提示
+    m_operationtype = Operation_NULL;
+    // 待文件管理器打开对应文件夹（线程结束）后再退出归档管理器；
+    // 使用 UniqueConnection 防止重复解压时同一线程对象被重复连接
+    connect(m_pDDesktopServicesThread, &QThread::finished, this, &MainWindow::delayQuitApp, Qt::UniqueConnection);
+    qCInfo(appLog) << "Will quit after opening the extracted folder";
 }
 
 void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eErrorType)
@@ -1649,8 +1680,9 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
                 } else {
                     // 单压缩包解压
                     QString strFile = m_stUnCompressParameter.strExtractPath;
-                    // 未自动创建文件夹且有解压出数据的情况
-                    if (!m_pSettingDlg->isAutoCreatDir() && stArchiveData.listRootEntry.count() > 0)
+                    // 智能新增文件夹：本次未新增一层文件夹（未开启智能新增，或压缩包内容本来就在单个文件夹内）时，
+                    // 解压出的内容直接落在解压路径下，需要打开解压出的第一个顶层条目
+                    if (!m_bExtractCreateFolder && stArchiveData.listRootEntry.count() > 0)
                         strFile += QDir::separator() + stArchiveData.listRootEntry[0].strFullPath;
                     // 设置最终需要打开的文件
                     qCInfo(appLog) << "单压缩包解压 设置最终需要打开的文件*********************" << strFile;
@@ -1659,6 +1691,8 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
 
                 // 设置了自动打开文件夹
                 if (m_pSettingDlg->isAutoOpen()) {
+                    // 设置了"打开对应文件夹后自动退出"：先建立退出连接再启动线程，避免漏接 finished 信号
+                    quitAfterOpenFolderIfNeeded();
                     m_pDDesktopServicesThread->start();
                 }
 

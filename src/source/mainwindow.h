@@ -160,11 +160,24 @@ private:
     QString createTempPath();
 
     /**
-     * @brief getExtractPath   根据设置选项是否自动创建文件夹获取解压路径
+     * @brief getExtractPath   根据设置选项是否智能新增文件夹获取解压路径
      * @param strArchiveFullPath
-     * @return
+     * @return  需要新增的同名文件夹名称；为空表示本次解压不新增文件夹
      */
     QString getExtractPath(const QString &strArchiveFullPath);
+
+    /**
+     * @brief isArchiveContentWrappedInFolder   压缩包内容是否已包含在单个顶层文件夹内
+     * @return  true表示压缩包第一层只有一个目录（内容本来就在文件夹里），
+     *          此时"智能新增文件夹"不再重复新增一层；false表示内容散在，需要新增同名文件夹
+     */
+    bool isArchiveContentWrappedInFolder();
+
+    /**
+     * @brief quitAfterOpenFolderIfNeeded   "打开对应文件夹后自动退出"处理
+     * @note  仅在"打开对应文件夹后自动退出"生效时调用：待文件管理器打开对应文件夹后退出归档管理器
+     */
+    void quitAfterOpenFolderIfNeeded();
 
     /**
      * @brief handleJobNormalFinished   处理job正常结束
@@ -569,6 +582,8 @@ private:
 
     CompressParameter m_stCompressParameter;        // 压缩参数（压缩、追加压缩等）
     UnCompressParameter m_stUnCompressParameter;    // 解压参数（加载、解压等）
+
+    bool m_bExtractCreateFolder = false;    // 本次解压是否新增了以压缩包名称命名的文件夹
 
     UpdateOptions m_stUpdateOptions;        // 更新压缩包时选项
 
