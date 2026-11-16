@@ -37,6 +37,11 @@ endif()
 find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS ${qt_required_components})
 find_package(Dtk${DTK_VERSION_MAJOR} REQUIRED COMPONENTS Widget)
 find_package(KF${KF_VERSION_MAJOR}Codecs REQUIRED)
+find_package(ZLIB REQUIRED)
+
+# forkpty() resides in libutil on older glibc (< 2.34)
+include(CheckLibraryExists)
+check_library_exists(util forkpty "" HAVE_UTIL_FORKPTY)
 
 set(LINK_LIBS
     Qt${QT_DESIRED_VERSION}::Core
@@ -54,6 +59,8 @@ endif()
 
 
 pkg_search_module(GOBJECT REQUIRED gobject-2.0)
+pkg_search_module(GLIB REQUIRED glib-2.0)
+include_directories(${GLIB_INCLUDE_DIRS})
 include_directories(${GOBJECT_INCLUDE_DIRS})
 
 pkg_search_module(GIO REQUIRED gio-unix-2.0)
@@ -69,10 +76,13 @@ include_directories(${PROJECT_SOURCE_DIR}/source/dialog/openwithdialog)
 include_directories(${PROJECT_SOURCE_DIR}/source/page)
 include_directories(${PROJECT_SOURCE_DIR}/source/tree)
 include_directories(${HFILES_OUTPUT_PATH})
+include_directories(${PROJECT_SOURCE_DIR}/archive/core)
+include_directories(${PROJECT_SOURCE_DIR}/archive/process)
+include_directories(${PROJECT_SOURCE_DIR}/archive/backends/legacy)
 
 #源文件、头文件和资源文件
-file(GLOB_RECURSE c_files RELATIVE ${PROJECT_SOURCE_DIR} source/*.cpp source/*.c main.cpp)
-file(GLOB_RECURSE h_files RELATIVE ${PROJECT_SOURCE_DIR} source/*.h *.h)
+file(GLOB_RECURSE c_files RELATIVE ${PROJECT_SOURCE_DIR} source/*.cpp source/*.c main.cpp archive/*.cpp archive/*.c)
+file(GLOB_RECURSE h_files RELATIVE ${PROJECT_SOURCE_DIR} source/*.h *.h archive/*.h)
 file(GLOB_RECURSE res_files RELATIVE ${PROJECT_SOURCE_DIR} *.qrc)
 
 # 根据Qt版本选择合适的命令
@@ -92,10 +102,16 @@ add_executable(${EXE_NAME}  ${c_files} ${h_files} ${QRC_FILES})
 #链接动静态库
 target_link_libraries(${EXE_NAME}
     ${LINK_LIBS}
-    ${GOBJECT_LIBRARIES}
     ${GIO_LIBRARIES}
+    ${GOBJECT_LIBRARIES}
+    ${GLIB_LIBRARIES}
     compressor-interface
+    ZLIB::ZLIB
 )
+
+if(HAVE_UTIL_FORKPTY)
+    target_link_libraries(${EXE_NAME} util)
+endif()
 
 #hw机型增加DConfig配置
 set(APPID org.deepin.compressor)

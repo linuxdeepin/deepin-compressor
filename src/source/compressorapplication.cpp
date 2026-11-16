@@ -7,6 +7,7 @@
 #include "mainwindow.h"
 #include "common/dbusadpator.h"
 #include "common/ddlog.h"
+#include "legacy_backend_registry.h"
 
 #include <QDBusConnection>
 #include <QDBusError>
@@ -21,6 +22,7 @@ CompressorApplication::CompressorApplication(int &argc, char **argv)
     : DApplication(argc, argv)
 {
     qCDebug(appLog) << "CompressorApplication constructor";
+    archive::registerLegacyBackends();
     
     // Register DBus service
     QDBusConnection connection = QDBusConnection::sessionBus();

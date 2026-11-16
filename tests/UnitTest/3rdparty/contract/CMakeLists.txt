@@ -7,6 +7,9 @@ cmake_minimum_required(VERSION 3.9.5)
 set(EXE_NAME contract)
 project(${EXE_NAME}_test)
 
+# Access private members in existing UT code
+add_compile_options(-fno-access-control)
+
 find_package(PkgConfig REQUIRED)
 find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS Widgets)
 find_package(KF${KF_VERSION_MAJOR}Codecs REQUIRED)
@@ -58,7 +61,31 @@ endif()
 file(GLOB c_files ./*.cpp)
 file(GLOB h_files ./*.h)
 
+find_library(LIBZSTD zstd)
+find_library(LIBLZMA lzma)
+find_library(LIBLZ4 lz4)
+find_library(LIBBZ2 bz2)
+find_library(LIBNETTLE nettle)
+find_library(LIBHOGWEED hogweed)
+find_library(LIBACL acl)
+find_library(LIBB2 b2 HINTS /usr/lib /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu)
+find_library(LIBBSD bsd HINTS /usr/lib /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu)
+find_library(LIBCRYPTO crypto)
+find_library(LIBXML2 xml2)
+
+# Collect only successfully-found transitive dependencies to avoid
+# linking against *-NOTFOUND which breaks the build in clean environments.
+set(LIBARCHIVE_TRANSITIVE_DEPS "")
+foreach(_dep LIBZSTD LIBLZMA LIBLZ4 LIBBZ2 LIBNETTLE LIBHOGWEED LIBACL LIBB2 LIBBSD LIBCRYPTO LIBXML2)
+    if(${_dep})
+        list(APPEND LIBARCHIVE_TRANSITIVE_DEPS ${${_dep}})
+    endif()
+endforeach()
+
 add_executable(${EXE_NAME}_test ${c_files} ${h_files})
+
+target_link_options(${EXE_NAME}_test PRIVATE "-Wl,--no-as-needed")
+add_test(NAME ${EXE_NAME}_test COMMAND ${EXE_NAME}_test)
 
 target_link_libraries(${EXE_NAME}_test
     Qt${QT_DESIRED_VERSION}::Widgets
@@ -78,9 +105,8 @@ target_link_libraries(${EXE_NAME}_test
     gzplugin
     bz2plugin
     xzplugin
-    # libarchive transitive dependencies
-    acl
-    xml2
+    # libarchive transitive dependencies (only those found in the environment)
+    ${LIBARCHIVE_TRANSITIVE_DEPS}
     # Base libraries
     compressor-interface
     ZLIB::ZLIB

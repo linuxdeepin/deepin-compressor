@@ -9,6 +9,9 @@ cmake_minimum_required(VERSION 3.9.5)
 set(EXE_NAME cli7zplugin)
 project(${EXE_NAME}_test)
 
+# Access private members in existing UT code
+add_compile_options(-fno-access-control)
+
 #查找依赖关系的包信息
 find_package(PkgConfig REQUIRED)
 find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS Widgets)
@@ -27,6 +30,7 @@ pkg_search_module(MOUNT REQUIRED mount)
 
 #指定头文件路径
 include_directories(${HFILES_OUTPUT_PATH})
+include_directories(${MOUNT_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/${3RDPARTYRELATIVEPATH}/cli7zplugin)
 include_directories(${PROJECT_SOURCE_DIR}/${3RDPARTYRELATIVEPATH}/interface)
@@ -63,6 +67,8 @@ link_directories(${LIBRARY_OUTPUT_PATH})
 
 #生成可执行文件
 add_executable(${EXE_NAME}_test ${h_files} ${c_files} ${json_files})
+
+add_test(NAME ${EXE_NAME}_test COMMAND ${EXE_NAME}_test)
 
 #链接动静态库
 target_link_libraries(${EXE_NAME}_test
