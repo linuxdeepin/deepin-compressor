@@ -28,6 +28,7 @@
 #include <QUuid>
 #include <QStorageInfo>
 #include <QProcessEnvironment>
+#include <linux/limits.h>
 
 #include <KEncodingProber>
 
@@ -416,6 +417,16 @@ bool UiTools::isLocalDeviceFile(const QString &strFileName)
     QStorageInfo info(strFileName);
     QString sDevice = info.device();
     return sDevice.startsWith("/dev/") || sDevice.startsWith("dlnfs"); //长文件名开启后以dlnfs方式挂载
+}
+
+QString UiTools::truncateLongFileName(const QString &strFileName)
+{
+    QString strName = strFileName;
+    if (NAME_MAX < strFileName.toLocal8Bit().length() && !strFileName.endsWith(QDir::separator())) {
+        QString strTemp = strFileName.left(60);
+        strName = strTemp + QString("(%1)").arg(1, 3, 10, QChar('0')) + "." + QFileInfo(strFileName).completeSuffix();
+    }
+    return strName;
 }
 
 QStringList UiTools::removeSameFileName(const QStringList &listFiles)
