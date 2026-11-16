@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -50,6 +50,7 @@ public:
 
     enum AssignPluginType {
         APT_Auto,           // 自动识别
+        APT_AutoWithoutPzip,// 自动识别，但排除 pzip 插件
         APT_Cli7z,          // cli7zplugin
         APT_Libarchive,     // libarchive
         APT_Libzip,         // libzipplugin

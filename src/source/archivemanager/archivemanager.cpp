@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -130,7 +130,13 @@ bool ArchiveManager::addFiles(const QString &strArchiveFullPath, const QList<Fil
         {"describe", QString("Add File to package: ") + strArchiveFullPath}
     };
     EventLogUtils::get().writeLogs(obj);
-    m_pTempInterface = UiTools::createInterface(strArchiveFullPath, true);
+    // pzip 仅支持新建压缩，ZIP 追加时排除 pzip 后保持自动选择
+    UiTools::AssignPluginType eType = UiTools::APT_Auto;
+    CustomMimeType mimeType = determineMimeType(strArchiveFullPath);
+    if (mimeType.name() == QLatin1String("application/zip")) {
+        eType = UiTools::APT_AutoWithoutPzip;
+    }
+    m_pTempInterface = UiTools::createInterface(strArchiveFullPath, true, eType);
 
     if (m_pTempInterface) {
         AddJob *pAddJob = new AddJob(listAddEntry, m_pTempInterface, stOptions);
