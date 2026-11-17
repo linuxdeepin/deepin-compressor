@@ -10,24 +10,30 @@ project(${EXE_NAME})
 
 add_subdirectory(UnitTest)
 
-add_custom_target(test
-    COMMAND echo " =================== TEST BEGIN ==================== "
-    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/bz2plugin_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/cli7zplugin_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/clirarplugin_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/deepin-compressor_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/gzplugin_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/interface_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/libminizipplugin_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/libpigzplugin_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/libzipplugin_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/readonlylibarchiveplugin_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/readwritelibarchiveplugin_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/xzplugin_test
-    COMMAND echo " =================== TEST END ==================== "
+# enable_testing() is called in the top-level CMakeLists.txt, which
+# provides the standard CMake 'test' target (runs ctest).  We create an
+# ALL build target so 'make' (or 'make all') builds all test executables,
+# and 'make test' (ctest) finds them ready to run.  This preserves the
+# Debian and existing development workflow where 'make test' works
+# without a separate build step.
+
+add_custom_target(build_tests ALL
+    DEPENDS
+        bz2plugin_test
+        cli7zplugin_test
+        clirarplugin_test
+        deepin-compressor_test
+        gzplugin_test
+        interface_test
+        libminizipplugin_test
+        libpigzplugin_test
+        libzipplugin_test
+        readonlylibarchiveplugin_test
+        readwritelibarchiveplugin_test
+        xzplugin_test
+        contract_test
+        archive_test
 )
 
 # debian 会自动执行 make test
 #'make test'命令依赖与我们的测试程序
-#add_dependencies(test ${PROJECT_NAME_TEST})
-

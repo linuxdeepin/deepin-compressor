@@ -33,6 +33,11 @@
 
 #include <KEncodingProber>
 
+#include <mutex>
+
+#include "registry_integration.h"
+#include "legacy_backend_registry.h"
+
 DCORE_USE_NAMESPACE
 Q_DECLARE_METATYPE(KPluginMetaData)
 
@@ -271,6 +276,29 @@ QString UiTools::toShortString(QString strSrc, int limitCounts, int left)
 ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool bWrite, AssignPluginType eType/*, bool bUseLibArchive*/)
 {
     qCDebug(appLog) << "Creating interface for file:" << fileName << "write mode:" << bWrite << "plugin type:" << eType;
+
+    // Feature-flagged Registry-based backend selection.
+    // When DEEPIN_COMPRESSOR_USE_REGISTRY is set to "1" or "true", try
+    // the new ArchiveRegistry selection path before falling back to the
+    // legacy PluginManager path.  The env-var check and recursion guard
+    // live in archive::tryRegistryBackend(); legacy backends are
+    // registered once here so the Registry is populated before the
+    // first call.
+    if (archive::isRegistryFeatureEnabled()) {
+        static std::once_flag onceFlag;
+        std::call_once(onceFlag, [] {
+            archive::registerLegacyBackends();
+        });
+
+        ReadOnlyArchiveInterface *iface =
+            archive::tryRegistryBackend(fileName, bWrite);
+        if (iface) {
+            qCInfo(appLog) << "Registry selected backend for" << fileName;
+            return iface;
+        }
+        // Fall through to legacy PluginManager path.
+    }
+
     const CustomMimeType mimeType = determineMimeType(fileName);
     qCDebug(appLog) << "Determined MIME type:" << mimeType.name();
 

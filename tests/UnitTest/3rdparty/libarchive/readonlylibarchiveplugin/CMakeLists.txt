@@ -9,12 +9,16 @@ cmake_minimum_required(VERSION 3.9.5)
 set(EXE_NAME readonlylibarchiveplugin)
 project(${EXE_NAME}_test)
 
+# Access private members in existing UT code
+add_compile_options(-fno-access-control)
+
 #查找依赖关系的包信息
 find_package(PkgConfig REQUIRED)
 find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS Widgets)
 find_package(KF${KF_VERSION_MAJOR}Codecs REQUIRED)
 find_package(KF${KF_VERSION_MAJOR}Archive REQUIRED)
 find_package(LibArchive)
+find_package(ZLIB REQUIRED)
 include(FindPkgConfig)
 
 
@@ -46,14 +50,39 @@ file(GLOB_RECURSE json_files
 )
 
 #生成可执行文件
+find_library(LIBZSTD zstd)
+find_library(LIBLZMA lzma)
+find_library(LIBLZ4 lz4)
+find_library(LIBBZ2 bz2)
+find_library(LIBNETTLE nettle HINTS /usr/lib /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu)
+find_library(LIBHOGWEED hogweed HINTS /usr/lib /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu)
+find_library(LIBACL acl)
+find_library(LIBB2 b2 HINTS /usr/lib /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu)
+find_library(LIBBSD bsd HINTS /usr/lib /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu)
+find_library(LIBCRYPTO crypto)
+find_library(LIBXML2 xml2)
+
 add_executable(${EXE_NAME}_test ${h_files} ${c_files} ${json_files})
 
+add_test(NAME ${EXE_NAME}_test COMMAND ${EXE_NAME}_test)
+
 #链接动静态库
+# Collect only successfully-found transitive dependencies to avoid
+# linking against *-NOTFOUND which breaks the build in clean environments.
+set(LIBARCHIVE_TRANSITIVE_DEPS "")
+foreach(_dep LIBZSTD LIBLZMA LIBLZ4 LIBBZ2 LIBNETTLE LIBHOGWEED LIBACL LIBB2 LIBBSD LIBCRYPTO LIBXML2)
+    if(${_dep})
+        list(APPEND LIBARCHIVE_TRANSITIVE_DEPS ${${_dep}})
+    endif()
+endforeach()
+
 target_link_libraries(${EXE_NAME}_test
     Qt${QT_DESIRED_VERSION}::Widgets
     KF${KF_VERSION_MAJOR}::Codecs
     KF${KF_VERSION_MAJOR}::Archive
-    archive
+    ${LibArchive_LIBRARIES}
+    ZLIB::ZLIB
+    ${LIBARCHIVE_TRANSITIVE_DEPS}
     compressor-interface
 #    compressor-archive
     ${GTEST_LIBRARIES}

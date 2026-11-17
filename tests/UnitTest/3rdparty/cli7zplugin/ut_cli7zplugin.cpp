@@ -234,12 +234,12 @@ TEST_F(UT_Cli7zPlugin, test_setupCliProperties)
     EXPECT_EQ(m_tester->m_cliProps->property("captureProgress"), false);
     EXPECT_EQ(m_tester->m_cliProps->property("addProgram"), QStringLiteral("7z"));
 
-    EXPECT_EQ(m_tester->m_cliProps->property("addSwitch"), QStringList({QStringLiteral("a"), QStringLiteral("-l")}));
+    EXPECT_EQ(m_tester->m_cliProps->property("addSwitch"), QStringList({QStringLiteral("a"), QStringLiteral("-snl")}));
     EXPECT_EQ(m_tester->m_cliProps->property("deleteProgram"), QStringLiteral("7z"));
     EXPECT_EQ(m_tester->m_cliProps->property("deleteSwitch"), QStringLiteral("d"));
 
     EXPECT_EQ(m_tester->m_cliProps->property("extractProgram"), QStringLiteral("7z"));
-    EXPECT_EQ(m_tester->m_cliProps->property("extractSwitch"), QStringLiteral("x"));
+    EXPECT_EQ(m_tester->m_cliProps->property("extractSwitch"), QStringList{QStringLiteral("x")});
     EXPECT_EQ(m_tester->m_cliProps->property("progressarg"), QStringLiteral("-bsp1"));
     EXPECT_EQ(m_tester->m_cliProps->property("extractSwitchNoPreserve"), QStringList{QStringLiteral("e")});
 
@@ -250,9 +250,9 @@ TEST_F(UT_Cli7zPlugin, test_setupCliProperties)
     EXPECT_EQ(m_tester->m_cliProps->property("moveSwitch"), QStringLiteral("rn"));
 
     EXPECT_EQ(m_tester->m_cliProps->property("testProgram"), QStringLiteral("7z")) ;
-    EXPECT_EQ(m_tester->m_cliProps->property("testSwitch"), QStringLiteral("t")) ;
+    EXPECT_EQ(m_tester->m_cliProps->property("testSwitch"), QStringList{QStringLiteral("t")});
 
-    EXPECT_EQ(m_tester->m_cliProps->property("passwordSwitch"), QStringLiteral("-p$Password")) ;
+    EXPECT_EQ(m_tester->m_cliProps->property("passwordSwitch"), QStringList{QStringLiteral("-p$Password")});
     EXPECT_EQ(m_tester->m_cliProps->property("passwordSwitchHeaderEnc"), QStringList({QStringLiteral("-p$Password"), QStringLiteral("-mhe=on")})) ;
 
     EXPECT_EQ(m_tester->m_cliProps->property("compressionLevelSwitch"), QStringLiteral("-mx=$CompressionLevel")) ;
@@ -589,6 +589,11 @@ TEST_F(UT_Cli7zPlugin, test_extractFiles_001)
     Stub stub;
     stub.set(ADDR(CliInterface, runProcess), cliInterface_runProcess_stub);
 
+    FileEntry rootEntry;
+    rootEntry.strFullPath = "1.txt";
+    rootEntry.strFileName = "1.txt";
+    DataManager::get_instance().archiveData().listRootEntry << rootEntry;
+
     ExtractionOptions options;
     options.strTargetPath = _UTSOURCEDIR;
     options.strTargetPath += "/test_sources/7z/extract";
@@ -596,6 +601,7 @@ TEST_F(UT_Cli7zPlugin, test_extractFiles_001)
     EXPECT_EQ(m_tester->extractFiles(QList<FileEntry>(), options), PFT_Nomral);
     EXPECT_EQ(m_tester->m_strPassword.isEmpty(), true);
     EXPECT_EQ(m_tester->m_workStatus, WT_Extract);
+    DataManager::get_instance().resetArchiveData();
 }
 
 TEST_F(UT_Cli7zPlugin, test_extractFiles_002)
@@ -606,6 +612,7 @@ TEST_F(UT_Cli7zPlugin, test_extractFiles_002)
     FileEntry entry;
     entry.strFullPath = "1.txt";
     entry.strFileName = "1.txt";
+    DataManager::get_instance().archiveData().listRootEntry << entry;
     ExtractionOptions options;
     options.strTargetPath = _UTSOURCEDIR;
     options.strTargetPath += "/test_sources/7z/extract";
@@ -613,6 +620,7 @@ TEST_F(UT_Cli7zPlugin, test_extractFiles_002)
     EXPECT_EQ(m_tester->extractFiles(QList<FileEntry>() << entry, options), PFT_Nomral);
     EXPECT_EQ(m_tester->m_strPassword.isEmpty(), true);
     EXPECT_EQ(m_tester->m_workStatus, WT_Extract);
+    DataManager::get_instance().resetArchiveData();
 }
 
 TEST_F(UT_Cli7zPlugin, test_pauseOperation)
@@ -622,6 +630,7 @@ TEST_F(UT_Cli7zPlugin, test_pauseOperation)
     m_tester->m_childProcessId << 123456 << 234567;
     m_tester->m_processId = 012345;
     m_tester->pauseOperation();
+    EXPECT_EQ(m_tester->status(), true);
 }
 
 TEST_F(UT_Cli7zPlugin, test_continueOperation)
@@ -630,7 +639,10 @@ TEST_F(UT_Cli7zPlugin, test_continueOperation)
     stub.set(kill, kill_stub);
     m_tester->m_childProcessId << 123456 << 234567;
     m_tester->m_processId = 012345;
+    m_tester->pauseOperation();
+    EXPECT_EQ(m_tester->status(), true);
     m_tester->continueOperation();
+    EXPECT_EQ(m_tester->status(), false);
 }
 
 TEST_F(UT_Cli7zPlugin, test_doKill_001)
@@ -1052,16 +1064,6 @@ TEST_F(UT_Cli7zPlugin, test_writeToProcess)
     EXPECT_NE(m_tester->m_process->pty(), nullptr);
 }
 
-TEST_F(UT_Cli7zPlugin, test_moveExtractTempFilesToDest)
-{
-
-}
-
-TEST_F(UT_Cli7zPlugin, test_readStdout)
-{
-
-}
-
 TEST_F(UT_Cli7zPlugin, test_processFinished)
 {
     Stub stub;
@@ -1075,7 +1077,7 @@ TEST_F(UT_Cli7zPlugin, test_processFinished)
     m_tester->m_workStatus = WT_List;
     m_tester->processFinished(0, QProcess::NormalExit);
     EXPECT_EQ(m_tester->m_eErrorType, ET_MissingVolume);
-    EXPECT_EQ(m_tester->m_finishType, PFT_Nomral);
+    EXPECT_EQ(m_tester->m_finishType, PFT_Cancel);
     EXPECT_EQ(m_tester->m_isCorruptArchive, false);
 }
 
@@ -1107,11 +1109,6 @@ TEST_F(UT_Cli7zPlugin, test_extractProcessFinished_002)
     EXPECT_EQ(m_tester->m_indexOfListRootEntry, 0);
     EXPECT_EQ(m_tester->m_isEmptyArchive, false);
     EXPECT_EQ(m_tester->m_rootNode.isEmpty(), true);
-}
-
-TEST_F(UT_Cli7zPlugin, test_getChildProcessId)
-{
-
 }
 
 TEST_F(UT_Cli7zPlugin, test_getTargetPath)

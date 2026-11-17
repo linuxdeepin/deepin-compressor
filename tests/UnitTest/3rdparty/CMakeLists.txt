@@ -14,6 +14,11 @@ project(${EXE_NAME}_test)
 
 set(3RDPARTYRELATIVEPATH ../../../../3rdparty) #相对于源码路径
 
+# libmount include path needed by common.h — propagate to all subdirectories
+include(FindPkgConfig)
+pkg_search_module(MOUNT REQUIRED mount)
+include_directories(${MOUNT_INCLUDE_DIRS})
+
 add_subdirectory(interface)
 
 add_subdirectory(cli7zplugin)
@@ -33,3 +38,7 @@ add_subdirectory(libminizipplugin)
 ##add_subdirectory(cliunarchiverplugin) #不可用
 
 ##add_subdirectory(clizipplugin) #不可用
+
+add_subdirectory(contract)
+
+add_subdirectory(archive)

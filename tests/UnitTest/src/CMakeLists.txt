@@ -8,6 +8,9 @@ cmake_minimum_required(VERSION 3.9.5)
 #设置项目名称
 set(PROJECT_NAME_TEST deepin-compressor_test)
 project(${PROJECT_NAME_TEST})
+
+# Access private members in existing UT code
+add_compile_options(-fno-access-control)
 #配置版本号
 #configure_file(environments.h.in environments.h @ONLY)
 
@@ -49,6 +52,8 @@ if (QT_DESIRED_VERSION MATCHES 6)
 endif()
 
 pkg_search_module(GOBJECT REQUIRED gobject-2.0)
+pkg_search_module(GLIB REQUIRED glib-2.0)
+include_directories(${GLIB_INCLUDE_DIRS})
 include_directories(${GOBJECT_INCLUDE_DIRS})
 
 pkg_search_module(GIO REQUIRED gio-unix-2.0)
@@ -69,6 +74,9 @@ include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/source/dialog/openw
 include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/source/page)
 include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/source/tree)
 include_directories(${PROJECT_SOURCE_DIR}/${LIBZIPPLUGINPATH})
+include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/archive/core)
+include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/archive/process)
+include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/archive/backends/legacy)
 
 #源文件、头文件和资源文件
 include_directories(${PROJECT_SOURCE_DIR}/source/common)
@@ -81,6 +89,9 @@ file(GLOB_RECURSE c_files
     ${SRCRELATIVEPATH}/source/page/*.cpp
     ${SRCRELATIVEPATH}/source/tree/*.cpp
     ${LIBZIPPLUGINPATH}/*.cpp
+    ${SRCRELATIVEPATH}/archive/core/*.cpp
+    ${SRCRELATIVEPATH}/archive/process/*.cpp
+    ${SRCRELATIVEPATH}/archive/backends/legacy/*.cpp
 
     ./source/*.cpp
     ./source/archivemanager/*.cpp
@@ -101,6 +112,9 @@ file(GLOB_RECURSE h_files
     ${SRCRELATIVEPATH}/source/page/*.h
     ${SRCRELATIVEPATH}/source/tree/*.h
     ${LIBZIPPLUGINPATH}/*.h
+    ${SRCRELATIVEPATH}/archive/core/*.h
+    ${SRCRELATIVEPATH}/archive/process/*.h
+    ${SRCRELATIVEPATH}/archive/backends/legacy/*.h
 
     ./source/*.h
     ./source/archivemanager/*.h
@@ -132,6 +146,8 @@ FILE (GLOB allTestSource
 #10.生成可执行程序
 add_executable(${PROJECT_NAME_TEST}  ${c_files} ${h_files} ${QRC_MOC} ${APP_TS_FILES} ${APP_QM_FILES})
 
+add_test(NAME ${PROJECT_NAME_TEST} COMMAND ${PROJECT_NAME_TEST})
+
 # 生成测试可执行程序的依赖库
 #target_link_libraries(${PROJECT_NAME_TEST} gmock gmock_main gtest gtest_main)
 
@@ -140,8 +156,9 @@ set_target_properties(${PROJECT_NAME_TEST} PROPERTIES AUTOMOC TRUE)
 #链接动静态库
 target_link_libraries(${PROJECT_NAME_TEST}
     ${LINK_LIBS}
-    ${GOBJECT_LIBRARIES}
     ${GIO_LIBRARIES}
+    ${GOBJECT_LIBRARIES}
+    ${GLIB_LIBRARIES}
     compressor-interface
     ${GTEST_LIBRARIES}
     ${GTEST_MAIN_LIBRARIES}

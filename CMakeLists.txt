@@ -106,6 +106,8 @@ endif()
 add_subdirectory(3rdparty)
 add_subdirectory(src)
 
+enable_testing()
+
 #单元测试开关
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
     option(USE_TEST "UT" ON)
