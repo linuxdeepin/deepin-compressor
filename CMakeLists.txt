@@ -103,8 +103,20 @@ endif()
 
 
 
-add_subdirectory(3rdparty)
+option(USE_OWN_ARCHIVE "build contract + backends from src/archive" OFF)
+if(USE_OWN_ARCHIVE)
+    add_subdirectory(src/archive)
+else()
+    add_subdirectory(3rdparty)
+endif()
+
 add_subdirectory(src)
+
+# 归档后端一致性观测器（默认关闭）：cmake -DBUILD_CONFORMANCE=ON
+option(BUILD_CONFORMANCE "build archive backend conformance observer" OFF)
+if (BUILD_CONFORMANCE)
+    add_subdirectory(tools/conformance)
+endif()
 
 #单元测试开关
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
