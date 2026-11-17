@@ -26,7 +26,7 @@
 #include <linux/limits.h>
 
 #include <KEncodingProber>
-#include "chardet.h"
+#include "encoding/encoding_detector.h"
 
 #include <cstring>
 
@@ -253,30 +253,11 @@ QByteArray Common::detectEncode(const QByteArray &data, const QString &fileName)
 
 int Common::ChartDet_DetectingTextCoding(const char *str, QString &encoding, float &confidence)
 {
-    DetectObj *obj = detect_obj_init();
-
-    if (obj == nullptr) {
-        return CHARDET_MEM_ALLOCATED_FAIL;
-    }
-
-#ifndef CHARDET_BINARY_SAFE
-    switch (detect(str, &obj))
-#else
-    switch (detect_r(str, strlen(str), &obj))
-#endif
-    {
-    case CHARDET_OUT_OF_MEMORY :
-        detect_obj_free(&obj);
-        return CHARDET_OUT_OF_MEMORY;
-    case CHARDET_NULL_OBJECT :
-        return CHARDET_NULL_OBJECT;
-    }
-
-    encoding = obj->encoding;
-    confidence = obj->confidence;
-    detect_obj_free(&obj);
-
-    return CHARDET_SUCCESS ;
+    // 自有编码探测器：输入按 C 字符串语义处理（与原实现 detect() 一致）
+    const encdet::Result result = encdet::detect(str, str ? strlen(str) : 0);
+    encoding = QString::fromLatin1(result.encoding.c_str());
+    confidence = result.confidence;
+    return 0;
 }
 
 QByteArray Common::textCodecDetect(const QByteArray &data, const QString &fileName)

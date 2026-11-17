@@ -27,6 +27,7 @@ set(API_SOURCES
     ${API_DIR}/common.cpp
     ${API_DIR}/datamanager.cpp
     ${API_DIR}/queries.cpp
+    ${API_DIR}/encoding/encoding_detector.cpp
     ${API_DIR}/plugin/kpluginfactory.cpp
     ${API_DIR}/plugin/kpluginloader.cpp
     ${API_DIR}/plugin/kpluginmetadata.cpp
