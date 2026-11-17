@@ -148,7 +148,9 @@ bool CliRarPlugin::isFileExistsFileName(const QString &line)
 
 bool CliRarPlugin::isMultiPasswordPrompt(const QString &line)
 {
-    return line.contains("use current password ? [Y]es, [N]o, [A]ll");
+    // unrar 5/6 print "use current password ? [Y]es, [N]o, [A]ll"; unrar 7 dropped the space before '?'
+    return line.contains(QLatin1String("use current password ? [Y]es, [N]o, [A]ll"))
+           || line.contains(QLatin1String("use current password? [Y]es, [N]o, [A]ll"));
 }
 
 bool CliRarPlugin::isOpenFileFailed(const QString &line)
