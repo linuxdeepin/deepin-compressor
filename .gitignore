@@ -122,3 +122,6 @@ debian/files
 .npm-cache/
 .trellis/
 
+
+# python cache
+__pycache__/

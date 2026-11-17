@@ -150,6 +150,11 @@ Files: docs/*
 Copyright: UnionTech Software Technology Co., Ltd.
 License: GPL-3.0-or-later
 
+# tools
+Files: tools/*
+Copyright: UnionTech Software Technology Co., Ltd.
+License: GPL-3.0-or-later
+
 # FuzzyTest
 Files: FuzzyTest/*
 Copyright: UnionTech Software Technology Co., Ltd.

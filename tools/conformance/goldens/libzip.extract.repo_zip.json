@@ -1,0 +1,60 @@
+{
+  "archiveData": {
+    "comment": "",
+    "compressedSize": 0,
+    "entries": [],
+    "entryCount": 0,
+    "isListEncrypted": false,
+    "qSize": 0,
+    "rootEntries": []
+  },
+  "case": {
+    "backend": "libzip",
+    "level": 6,
+    "op": "extract",
+    "respond": "overwrite"
+  },
+  "fs": [
+    {
+      "mode": "63104",
+      "mtime": 1609211752,
+      "path": "test.txt",
+      "sha256": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+      "size": 4,
+      "type": "file"
+    },
+    {
+      "mode": "63104",
+      "mtime": 1609211752,
+      "path": "test1.txt",
+      "sha256": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+      "size": 4,
+      "type": "file"
+    }
+  ],
+  "mimeType": "application/zip",
+  "pluginId": "kerfuffle_libzip",
+  "pluginName": "Libzip 插件",
+  "result": {
+    "async": false,
+    "errorType": 0,
+    "finish": 0,
+    "returned": 0,
+    "waitTimedOut": false
+  },
+  "schema": 1,
+  "signals": {
+    "cancelSignals": 0,
+    "curFileCount": 2,
+    "curFiles": [
+      "test.txt",
+      "test1.txt"
+    ],
+    "finishedSignals": 0,
+    "progressCount": 2,
+    "progressFirst": 1.3651877133105803,
+    "progressLast": 2.7303754266211606,
+    "progressMonotonic": true,
+    "queries": []
+  }
+}

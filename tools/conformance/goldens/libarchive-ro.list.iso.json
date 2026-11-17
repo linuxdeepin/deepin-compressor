@@ -1,0 +1,69 @@
+{
+  "archiveData": {
+    "comment": "",
+    "compressedSize": 372736,
+    "entries": [
+      {
+        "alias": "",
+        "fullPath": "./",
+        "index": -1,
+        "isDir": true,
+        "mtime": 1794886276,
+        "name": "./",
+        "size": 0
+      },
+      {
+        "alias": "",
+        "fullPath": "hello.txt",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1767225600,
+        "name": "hello.txt",
+        "size": 12
+      }
+    ],
+    "entryCount": 2,
+    "isListEncrypted": false,
+    "qSize": 12,
+    "rootEntries": [
+      {
+        "fullPath": "./",
+        "isDir": true,
+        "size": 0
+      },
+      {
+        "fullPath": "hello.txt",
+        "isDir": false,
+        "size": 12
+      }
+    ]
+  },
+  "case": {
+    "backend": "libarchive-ro",
+    "level": 6,
+    "op": "list",
+    "respond": "overwrite"
+  },
+  "mimeType": "application/x-iso9660-image",
+  "pluginId": "kerfuffle_libarchive_readonly",
+  "pluginName": "Libarchive 插件 (只读格式)",
+  "result": {
+    "async": false,
+    "errorType": 0,
+    "finish": 0,
+    "returned": 0,
+    "waitTimedOut": false
+  },
+  "schema": 1,
+  "signals": {
+    "cancelSignals": 0,
+    "curFileCount": 0,
+    "curFiles": [],
+    "finishedSignals": 0,
+    "progressCount": 0,
+    "progressFirst": -1,
+    "progressLast": -1,
+    "progressMonotonic": true,
+    "queries": []
+  }
+}

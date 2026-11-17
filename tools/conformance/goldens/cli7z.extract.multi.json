@@ -1,0 +1,65 @@
+{
+  "archiveData": {
+    "comment": "",
+    "compressedSize": 0,
+    "entries": [
+      {
+        "alias": "",
+        "fullPath": "payload.bin",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1767225600,
+        "name": "payload.bin",
+        "size": 20000
+      }
+    ],
+    "entryCount": 1,
+    "isListEncrypted": false,
+    "qSize": 20000,
+    "rootEntries": [
+      {
+        "fullPath": "payload.bin",
+        "isDir": false,
+        "size": 20000
+      }
+    ]
+  },
+  "case": {
+    "backend": "cli7z",
+    "level": 6,
+    "op": "extract",
+    "respond": "overwrite"
+  },
+  "fs": [
+    {
+      "mode": "63144",
+      "mtime": 1767225600,
+      "path": "payload.bin",
+      "sha256": "850e5e58317b97bf9425fbab2a7a2b27d55c8f579b8091042b99ec9a6e83f22e",
+      "size": 20000,
+      "type": "file"
+    }
+  ],
+  "mimeType": "application/x-7z-compressed",
+  "pluginId": "kerfuffle_cli7z",
+  "pluginName": "P7zip 插件",
+  "result": {
+    "async": true,
+    "errorType": 0,
+    "finish": 0,
+    "returned": 0,
+    "waitTimedOut": false
+  },
+  "schema": 1,
+  "signals": {
+    "cancelSignals": 0,
+    "curFileCount": 0,
+    "curFiles": [],
+    "finishedSignals": 1,
+    "progressCount": 2,
+    "progressFirst": 1,
+    "progressLast": 100,
+    "progressMonotonic": true,
+    "queries": []
+  }
+}

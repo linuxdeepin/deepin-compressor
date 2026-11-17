@@ -1,0 +1,49 @@
+{
+  "archiveData": {
+    "comment": "",
+    "compressedSize": 0,
+    "entries": [],
+    "entryCount": 0,
+    "isListEncrypted": false,
+    "qSize": 0,
+    "rootEntries": []
+  },
+  "case": {
+    "backend": "libzip",
+    "level": 6,
+    "op": "extract",
+    "respond": "cancel"
+  },
+  "fs": [],
+  "mimeType": "application/zip",
+  "pluginId": "kerfuffle_libzip",
+  "pluginName": "Libzip 插件",
+  "result": {
+    "async": false,
+    "errorType": 6,
+    "finish": 2,
+    "returned": 2,
+    "waitTimedOut": false
+  },
+  "schema": 1,
+  "signals": {
+    "cancelSignals": 0,
+    "curFileCount": 2,
+    "curFiles": [
+      "a.txt",
+      "a.txt"
+    ],
+    "finishedSignals": 0,
+    "progressCount": 0,
+    "progressFirst": -1,
+    "progressLast": -1,
+    "progressMonotonic": true,
+    "queries": [
+      {
+        "file": "",
+        "response": true,
+        "type": "PasswordNeeded"
+      }
+    ]
+  }
+}

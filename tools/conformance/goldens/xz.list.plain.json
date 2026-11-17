@@ -1,0 +1,55 @@
+{
+  "archiveData": {
+    "comment": "",
+    "compressedSize": 76,
+    "entries": [
+      {
+        "alias": "",
+        "fullPath": "plain.txt",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1767225600,
+        "name": "plain.txt",
+        "size": 76
+      }
+    ],
+    "entryCount": 1,
+    "isListEncrypted": false,
+    "qSize": 76,
+    "rootEntries": [
+      {
+        "fullPath": "plain.txt",
+        "isDir": false,
+        "size": 76
+      }
+    ]
+  },
+  "case": {
+    "backend": "xz",
+    "level": 6,
+    "op": "list",
+    "respond": "overwrite"
+  },
+  "mimeType": "application/x-xz",
+  "pluginId": "kerfuffle_libxz",
+  "pluginName": "LZMA 插件",
+  "result": {
+    "async": false,
+    "errorType": 0,
+    "finish": 0,
+    "returned": 0,
+    "waitTimedOut": false
+  },
+  "schema": 1,
+  "signals": {
+    "cancelSignals": 0,
+    "curFileCount": 0,
+    "curFiles": [],
+    "finishedSignals": 0,
+    "progressCount": 0,
+    "progressFirst": -1,
+    "progressLast": -1,
+    "progressMonotonic": true,
+    "queries": []
+  }
+}

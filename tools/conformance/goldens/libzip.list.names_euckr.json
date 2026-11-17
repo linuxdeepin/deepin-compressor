@@ -1,0 +1,125 @@
+{
+  "archiveData": {
+    "comment": "",
+    "compressedSize": 48,
+    "entries": [
+      {
+        "alias": "",
+        "fullPath": "백업자료.tar",
+        "index": 5,
+        "isDir": false,
+        "mtime": 315504000,
+        "name": "백업자료.tar",
+        "size": 8
+      },
+      {
+        "alias": "",
+        "fullPath": "보고서.pdf",
+        "index": 1,
+        "isDir": false,
+        "mtime": 315504000,
+        "name": "보고서.pdf",
+        "size": 8
+      },
+      {
+        "alias": "",
+        "fullPath": "자료목록.zip",
+        "index": 2,
+        "isDir": false,
+        "mtime": 315504000,
+        "name": "자료목록.zip",
+        "size": 8
+      },
+      {
+        "alias": "",
+        "fullPath": "통계표.xls",
+        "index": 4,
+        "isDir": false,
+        "mtime": 315504000,
+        "name": "통계표.xls",
+        "size": 8
+      },
+      {
+        "alias": "",
+        "fullPath": "한국어.txt",
+        "index": 0,
+        "isDir": false,
+        "mtime": 315504000,
+        "name": "한국어.txt",
+        "size": 8
+      },
+      {
+        "alias": "",
+        "fullPath": "회의록.doc",
+        "index": 3,
+        "isDir": false,
+        "mtime": 315504000,
+        "name": "회의록.doc",
+        "size": 8
+      }
+    ],
+    "entryCount": 6,
+    "isListEncrypted": false,
+    "qSize": 48,
+    "rootEntries": [
+      {
+        "fullPath": "한국어.txt",
+        "isDir": false,
+        "size": 8
+      },
+      {
+        "fullPath": "보고서.pdf",
+        "isDir": false,
+        "size": 8
+      },
+      {
+        "fullPath": "자료목록.zip",
+        "isDir": false,
+        "size": 8
+      },
+      {
+        "fullPath": "회의록.doc",
+        "isDir": false,
+        "size": 8
+      },
+      {
+        "fullPath": "통계표.xls",
+        "isDir": false,
+        "size": 8
+      },
+      {
+        "fullPath": "백업자료.tar",
+        "isDir": false,
+        "size": 8
+      }
+    ]
+  },
+  "case": {
+    "backend": "libzip",
+    "level": 6,
+    "op": "list",
+    "respond": "overwrite"
+  },
+  "mimeType": "application/zip",
+  "pluginId": "kerfuffle_libzip",
+  "pluginName": "Libzip 插件",
+  "result": {
+    "async": false,
+    "errorType": 0,
+    "finish": 0,
+    "returned": 0,
+    "waitTimedOut": false
+  },
+  "schema": 1,
+  "signals": {
+    "cancelSignals": 0,
+    "curFileCount": 0,
+    "curFiles": [],
+    "finishedSignals": 0,
+    "progressCount": 0,
+    "progressFirst": -1,
+    "progressLast": -1,
+    "progressMonotonic": true,
+    "queries": []
+  }
+}
