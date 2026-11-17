@@ -103,7 +103,7 @@ endif()
 
 
 
-option(USE_OWN_ARCHIVE "build contract + backends from src/archive" OFF)
+option(USE_OWN_ARCHIVE "build contract + backends from src/archive" ON)
 if(USE_OWN_ARCHIVE)
     add_subdirectory(src/archive)
 else()
