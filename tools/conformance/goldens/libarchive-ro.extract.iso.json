@@ -1,0 +1,52 @@
+{
+  "archiveData": {
+    "comment": "",
+    "compressedSize": 0,
+    "entries": [],
+    "entryCount": 0,
+    "isListEncrypted": false,
+    "qSize": 0,
+    "rootEntries": []
+  },
+  "case": {
+    "backend": "libarchive-ro",
+    "level": 6,
+    "op": "extract",
+    "respond": "overwrite"
+  },
+  "fs": [
+    {
+      "mode": "63144",
+      "mtime": 1767225600,
+      "path": "hello.txt",
+      "sha256": "53ba763ae69bfc8853971af5c2528fe7b4f1390ff9e245aab48874e8611aa24e",
+      "size": 12,
+      "type": "file"
+    }
+  ],
+  "mimeType": "application/x-iso9660-image",
+  "pluginId": "kerfuffle_libarchive_readonly",
+  "pluginName": "Libarchive 插件 (只读格式)",
+  "result": {
+    "async": false,
+    "errorType": 0,
+    "finish": 0,
+    "returned": 0,
+    "waitTimedOut": false
+  },
+  "schema": 1,
+  "signals": {
+    "cancelSignals": 0,
+    "curFileCount": 2,
+    "curFiles": [
+      ".",
+      "hello.txt"
+    ],
+    "finishedSignals": 0,
+    "progressCount": 2,
+    "progressFirst": 17.03618646978022,
+    "progressLast": 1,
+    "progressMonotonic": false,
+    "queries": []
+  }
+}

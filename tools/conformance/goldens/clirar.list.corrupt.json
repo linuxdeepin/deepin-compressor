@@ -1,0 +1,39 @@
+{
+  "archiveData": {
+    "comment": "",
+    "compressedSize": 0,
+    "entries": [],
+    "entryCount": 0,
+    "isListEncrypted": false,
+    "qSize": 0,
+    "rootEntries": []
+  },
+  "case": {
+    "backend": "clirar",
+    "level": 6,
+    "op": "list",
+    "respond": "overwrite"
+  },
+  "mimeType": "application/x-chrome-extension",
+  "pluginId": "kerfuffle_clirar",
+  "pluginName": "RAR 插件",
+  "result": {
+    "async": true,
+    "errorType": 0,
+    "finish": 0,
+    "returned": 0,
+    "waitTimedOut": false
+  },
+  "schema": 1,
+  "signals": {
+    "cancelSignals": 0,
+    "curFileCount": 0,
+    "curFiles": [],
+    "finishedSignals": 1,
+    "progressCount": 1,
+    "progressFirst": 100,
+    "progressLast": 100,
+    "progressMonotonic": true,
+    "queries": []
+  }
+}

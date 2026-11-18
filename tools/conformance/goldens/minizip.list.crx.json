@@ -1,0 +1,423 @@
+{
+  "archiveData": {
+    "comment": "",
+    "compressedSize": 364749,
+    "entries": [
+      {
+        "alias": "",
+        "fullPath": "_locales/",
+        "index": -1,
+        "isDir": true,
+        "mtime": 1581798670,
+        "name": "_locales/",
+        "size": 0
+      },
+      {
+        "alias": "",
+        "fullPath": "_locales/en/",
+        "index": -1,
+        "isDir": true,
+        "mtime": 1581798670,
+        "name": "_locales/en/",
+        "size": 0
+      },
+      {
+        "alias": "",
+        "fullPath": "_locales/en/messages.json",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1579975620,
+        "name": "_locales/en/messages.json",
+        "size": 803
+      },
+      {
+        "alias": "",
+        "fullPath": "_locales/zh_CN/",
+        "index": -1,
+        "isDir": true,
+        "mtime": 1581798670,
+        "name": "_locales/zh_CN/",
+        "size": 0
+      },
+      {
+        "alias": "",
+        "fullPath": "_locales/zh_CN/messages.json",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1580255772,
+        "name": "_locales/zh_CN/messages.json",
+        "size": 929
+      },
+      {
+        "alias": "",
+        "fullPath": "_metadata/",
+        "index": -1,
+        "isDir": true,
+        "mtime": 1581800536,
+        "name": "_metadata/",
+        "size": 0
+      },
+      {
+        "alias": "",
+        "fullPath": "_metadata/verified_contents.json",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1581800536,
+        "name": "_metadata/verified_contents.json",
+        "size": 4745
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/",
+        "index": -1,
+        "isDir": true,
+        "mtime": 1581798670,
+        "name": "assets/",
+        "size": 0
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/css/",
+        "index": -1,
+        "isDir": true,
+        "mtime": 1581798670,
+        "name": "assets/css/",
+        "size": 0
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/css/bootstrap-switch.min.css",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1577985058,
+        "name": "assets/css/bootstrap-switch.min.css",
+        "size": 5612
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/css/bootstrap.min.css",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1577985058,
+        "name": "assets/css/bootstrap.min.css",
+        "size": 121200
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/css/common.css",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1577647488,
+        "name": "assets/css/common.css",
+        "size": 6953
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/css/login.css",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1578848534,
+        "name": "assets/css/login.css",
+        "size": 828
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/css/popup.css",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1578409880,
+        "name": "assets/css/popup.css",
+        "size": 260
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/fonts/",
+        "index": -1,
+        "isDir": true,
+        "mtime": 1581798670,
+        "name": "assets/fonts/",
+        "size": 0
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/fonts/glyphicons-halflings-regular.eot",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1580134392,
+        "name": "assets/fonts/glyphicons-halflings-regular.eot",
+        "size": 14079
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/fonts/glyphicons-halflings-regular.svg",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1580134392,
+        "name": "assets/fonts/glyphicons-halflings-regular.svg",
+        "size": 63157
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/fonts/glyphicons-halflings-regular.ttf",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1580134392,
+        "name": "assets/fonts/glyphicons-halflings-regular.ttf",
+        "size": 29512
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/fonts/glyphicons-halflings-regular.woff",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1580134392,
+        "name": "assets/fonts/glyphicons-halflings-regular.woff",
+        "size": 16448
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/img/",
+        "index": -1,
+        "isDir": true,
+        "mtime": 1581798670,
+        "name": "assets/img/",
+        "size": 0
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/img/ghelper-logo-blue.png",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1577390280,
+        "name": "assets/img/ghelper-logo-blue.png",
+        "size": 17406
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/img/ghelper-logo-login.png",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1577390280,
+        "name": "assets/img/ghelper-logo-login.png",
+        "size": 19474
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/img/ghelper-logo.png",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1577390280,
+        "name": "assets/img/ghelper-logo.png",
+        "size": 17164
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/img/icon.png",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1577390280,
+        "name": "assets/img/icon.png",
+        "size": 16631
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/img/icon128.png",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1577390280,
+        "name": "assets/img/icon128.png",
+        "size": 18110
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/img/icon48.png",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1577390280,
+        "name": "assets/img/icon48.png",
+        "size": 16266
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/img/loading.gif",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1577390280,
+        "name": "assets/img/loading.gif",
+        "size": 38920
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/img/logo.png",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1577390280,
+        "name": "assets/img/logo.png",
+        "size": 3143
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/js/",
+        "index": -1,
+        "isDir": true,
+        "mtime": 1581800568,
+        "name": "assets/js/",
+        "size": 0
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/js/background.min.js",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1581798670,
+        "name": "assets/js/background.min.js",
+        "size": 300248
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/js/check.min.js",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1581798670,
+        "name": "assets/js/check.min.js",
+        "size": 131123
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/js/options.min.js",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1581798670,
+        "name": "assets/js/options.min.js",
+        "size": 143334
+      },
+      {
+        "alias": "",
+        "fullPath": "assets/js/popup.min.js",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1581798670,
+        "name": "assets/js/popup.min.js",
+        "size": 145943
+      },
+      {
+        "alias": "",
+        "fullPath": "check.html",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1581798670,
+        "name": "check.html",
+        "size": 1276
+      },
+      {
+        "alias": "",
+        "fullPath": "help.html",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1579881710,
+        "name": "help.html",
+        "size": 1202
+      },
+      {
+        "alias": "",
+        "fullPath": "manifest.json",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1581800536,
+        "name": "manifest.json",
+        "size": 763
+      },
+      {
+        "alias": "",
+        "fullPath": "options.html",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1581798670,
+        "name": "options.html",
+        "size": 738
+      },
+      {
+        "alias": "",
+        "fullPath": "popup.html",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1581798670,
+        "name": "popup.html",
+        "size": 778
+      }
+    ],
+    "entryCount": 38,
+    "isListEncrypted": false,
+    "qSize": 1137045,
+    "rootEntries": [
+      {
+        "fullPath": "_locales/",
+        "isDir": true,
+        "size": 0
+      },
+      {
+        "fullPath": "assets/",
+        "isDir": true,
+        "size": 0
+      },
+      {
+        "fullPath": "check.html",
+        "isDir": false,
+        "size": 1276
+      },
+      {
+        "fullPath": "help.html",
+        "isDir": false,
+        "size": 1202
+      },
+      {
+        "fullPath": "manifest.json",
+        "isDir": false,
+        "size": 763
+      },
+      {
+        "fullPath": "options.html",
+        "isDir": false,
+        "size": 738
+      },
+      {
+        "fullPath": "popup.html",
+        "isDir": false,
+        "size": 778
+      },
+      {
+        "fullPath": "_metadata/",
+        "isDir": true,
+        "size": 0
+      }
+    ]
+  },
+  "case": {
+    "backend": "minizip",
+    "level": 6,
+    "op": "list",
+    "respond": "overwrite"
+  },
+  "mimeType": "application/x-chrome-extension",
+  "pluginId": "kerfuffle_libminizip",
+  "pluginName": "Libminizip 插件",
+  "result": {
+    "async": false,
+    "errorType": 0,
+    "finish": 0,
+    "returned": 0,
+    "waitTimedOut": false
+  },
+  "schema": 1,
+  "signals": {
+    "cancelSignals": 0,
+    "curFileCount": 0,
+    "curFiles": [],
+    "finishedSignals": 0,
+    "progressCount": 0,
+    "progressFirst": -1,
+    "progressLast": -1,
+    "progressMonotonic": true,
+    "queries": []
+  }
+}

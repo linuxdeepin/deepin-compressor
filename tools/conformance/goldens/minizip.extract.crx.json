@@ -1,0 +1,310 @@
+{
+  "archiveData": {
+    "comment": "",
+    "compressedSize": 0,
+    "entries": [],
+    "entryCount": 0,
+    "isListEncrypted": false,
+    "qSize": 0,
+    "rootEntries": []
+  },
+  "case": {
+    "backend": "minizip",
+    "level": 6,
+    "op": "extract",
+    "respond": "overwrite"
+  },
+  "fs": [
+    {
+      "mode": "73565",
+      "path": "_locales",
+      "type": "dir"
+    },
+    {
+      "mode": "73565",
+      "path": "_locales/en",
+      "type": "dir"
+    },
+    {
+      "mode": "63144",
+      "path": "_locales/en/messages.json",
+      "sha256": "c83a6349d58a3dbecdd2ba46c08489450dd2ff98818b8e87f020582523d4a036",
+      "size": 803,
+      "type": "file"
+    },
+    {
+      "mode": "73565",
+      "path": "_locales/zh_CN",
+      "type": "dir"
+    },
+    {
+      "mode": "63144",
+      "path": "_locales/zh_CN/messages.json",
+      "sha256": "f7ad76ce10cc0c0b13119b54ad329a4a2bfae10af3b0494c36628ac84613f452",
+      "size": 929,
+      "type": "file"
+    },
+    {
+      "mode": "73565",
+      "path": "_metadata",
+      "type": "dir"
+    },
+    {
+      "mode": "63144",
+      "path": "_metadata/verified_contents.json",
+      "sha256": "44b2b238de2642c0014d945297c760861bee4b50f8c277029129351dc2d6d734",
+      "size": 4745,
+      "type": "file"
+    },
+    {
+      "mode": "73565",
+      "path": "assets",
+      "type": "dir"
+    },
+    {
+      "mode": "73565",
+      "path": "assets/css",
+      "type": "dir"
+    },
+    {
+      "mode": "63144",
+      "path": "assets/css/bootstrap-switch.min.css",
+      "sha256": "b23dea9114d920bf0a7dfe5f493d535f4105f6512649f1608cdbee8b0d82579c",
+      "size": 5612,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "assets/css/bootstrap.min.css",
+      "sha256": "f75e846cc83bd11432f4b1e21a45f31bc85283d11d372f7b19accd1bf6a2635c",
+      "size": 121200,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "assets/css/common.css",
+      "sha256": "2d7141473dbd92295fdbb9db0b678147357769b7fd3a62ea0e632cf4d220e5a2",
+      "size": 6953,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "assets/css/login.css",
+      "sha256": "3c06578a9643b6adfa799a480f25e80fbd8a94a45b4fc3d79b79920121b592e0",
+      "size": 828,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "assets/css/popup.css",
+      "sha256": "3708b44814941938b3613be935dbc623eedba13dceb3223837d5fc73fbff9b61",
+      "size": 260,
+      "type": "file"
+    },
+    {
+      "mode": "73565",
+      "path": "assets/fonts",
+      "type": "dir"
+    },
+    {
+      "mode": "63144",
+      "path": "assets/fonts/glyphicons-halflings-regular.eot",
+      "sha256": "5ff7c239555476e939e86d457bb78424b945b733b2c23791d9807c2357259d43",
+      "size": 14079,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "assets/fonts/glyphicons-halflings-regular.svg",
+      "sha256": "3a9760d706275d9ffe85a0042f3ee73f8425e3011cac1fa8a3c15a59e4053ffa",
+      "size": 63157,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "assets/fonts/glyphicons-halflings-regular.ttf",
+      "sha256": "cb18b8d11f9698fc8cb3341cb5c882af1103ef8927d34e1602015b5f82eb234f",
+      "size": 29512,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "assets/fonts/glyphicons-halflings-regular.woff",
+      "sha256": "71c12656535e99119c2a952c10554cd6f47c6923d2d96155a7833276e68992af",
+      "size": 16448,
+      "type": "file"
+    },
+    {
+      "mode": "73565",
+      "path": "assets/img",
+      "type": "dir"
+    },
+    {
+      "mode": "63144",
+      "path": "assets/img/ghelper-logo-blue.png",
+      "sha256": "6e19a9835e47ecf2341c8561c52b11d252aec911f63812994851e6e7242d673f",
+      "size": 17406,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "assets/img/ghelper-logo-login.png",
+      "sha256": "7519c17b67f5779fdfce45d7b52377e7f906abe0cad84e7a4545cf21d72691d6",
+      "size": 19474,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "assets/img/ghelper-logo.png",
+      "sha256": "899f9a232f1c12a686621ae291002565aebc6cce4b92fb885fa66a9c306839dd",
+      "size": 17164,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "assets/img/icon.png",
+      "sha256": "a7dd6e7d9bce74b81cc97b508d1f9a97f8496d62351a1ff5d4cf33ce0b67b299",
+      "size": 16631,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "assets/img/icon128.png",
+      "sha256": "76ceb0c0d8242ef2df3b3c7d62270b674ec0275535458abeb9a36fa89647f484",
+      "size": 18110,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "assets/img/icon48.png",
+      "sha256": "6a87943e891cfcaafd2de24b134e4004fe6236f29d0642973655fe77d991dc62",
+      "size": 16266,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "assets/img/loading.gif",
+      "sha256": "e4b0c719e1a380f6fc4f2dfc98cc6813c6fb693a7bdf676814262e63edf3e575",
+      "size": 38920,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "assets/img/logo.png",
+      "sha256": "3c65769082db19cfcd65d365e31037488c86ce8ccd1eb9b90b68ac271897313d",
+      "size": 3143,
+      "type": "file"
+    },
+    {
+      "mode": "73565",
+      "path": "assets/js",
+      "type": "dir"
+    },
+    {
+      "mode": "63144",
+      "path": "assets/js/background.min.js",
+      "sha256": "f2bed04e6f9a0e484aafba48d8af23ab33f96bb8b430f86ded15c5e6fbd1a862",
+      "size": 300248,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "assets/js/check.min.js",
+      "sha256": "20a3f15f9a6c8cfbfefc579d1d9c3a8abf538aaa051b3523a918c5780cabe80c",
+      "size": 131123,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "assets/js/options.min.js",
+      "sha256": "cd5ed69bd8f4114f0ca9f7da72e7141a4ae768651c306af282f0d144371de480",
+      "size": 143334,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "assets/js/popup.min.js",
+      "sha256": "803a792c9dbaaa58d3d60baba214ec620d75cdc4674e20390ce3671e30569206",
+      "size": 145943,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "check.html",
+      "sha256": "0ef663cb57815ff7697b1a2e6e748e231c4b4ce69546ceb6cdaea5837db7c651",
+      "size": 1276,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "help.html",
+      "sha256": "06b823e9ed41697b81f50863aeb410081a67acfefca089eb8eb69c7e3c652fc5",
+      "size": 1202,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "manifest.json",
+      "sha256": "8ef3229b18f361d3163bf2c5df5ad141b19246862091ede4f38a58254365995a",
+      "size": 763,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "options.html",
+      "sha256": "fb13e87793ca2dffe1dc67f86ce4d6518e7455e4a61b11b5af4bcde94bd03e37",
+      "size": 738,
+      "type": "file"
+    },
+    {
+      "mode": "63144",
+      "path": "popup.html",
+      "sha256": "881f22fee58b5b0997121366364bc27d1607434c76a73c0ab8d6eacb07bf7162",
+      "size": 778,
+      "type": "file"
+    }
+  ],
+  "mimeType": "application/x-chrome-extension",
+  "pluginId": "kerfuffle_libminizip",
+  "pluginName": "Libminizip 插件",
+  "result": {
+    "async": false,
+    "errorType": 0,
+    "finish": 0,
+    "returned": 0,
+    "waitTimedOut": false
+  },
+  "schema": 1,
+  "signals": {
+    "cancelSignals": 0,
+    "curFileCount": 38,
+    "curFiles": [
+      "_locales/",
+      "_locales/zh_CN/",
+      "_locales/zh_CN/messages.json",
+      "_locales/en/",
+      "_locales/en/messages.json",
+      "assets/",
+      "assets/css/",
+      "assets/css/bootstrap.min.css",
+      "assets/css/bootstrap-switch.min.css",
+      "assets/css/login.css",
+      "assets/css/common.css",
+      "assets/css/popup.css",
+      "assets/js/",
+      "assets/js/options.min.js",
+      "assets/js/popup.min.js",
+      "assets/js/background.min.js",
+      "assets/js/check.min.js",
+      "assets/img/",
+      "assets/img/icon.png",
+      "assets/img/icon48.png"
+    ],
+    "finishedSignals": 0,
+    "progressCount": 1124,
+    "progressFirst": 0.2502222102512996,
+    "progressLast": 306.25824871387397,
+    "progressMonotonic": true,
+    "queries": []
+  }
+}

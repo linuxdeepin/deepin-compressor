@@ -1,0 +1,69 @@
+{
+  "archiveData": {
+    "comment": "",
+    "compressedSize": 0,
+    "entries": [],
+    "entryCount": 0,
+    "isListEncrypted": false,
+    "qSize": 0,
+    "rootEntries": []
+  },
+  "case": {
+    "backend": "libarchive-ro",
+    "level": 6,
+    "op": "extract",
+    "respond": "overwrite"
+  },
+  "fs": [
+    {
+      "mode": "63104",
+      "mtime": 1767225600,
+      "path": "control.tar.xz",
+      "sha256": "32546a6264ba08dbd318f59937c2a7dab79f9d073071fda5854f2278bd871928",
+      "size": 292,
+      "type": "file"
+    },
+    {
+      "mode": "63104",
+      "mtime": 1767225600,
+      "path": "data.tar.xz",
+      "sha256": "40cfc15eb26cb57d338ff161442933266bd347e5a21886380589db9c25fd1ab1",
+      "size": 252,
+      "type": "file"
+    },
+    {
+      "mode": "63104",
+      "mtime": 1767225600,
+      "path": "debian-binary",
+      "sha256": "d526eb4e878a23ef26ae190031b4efd2d58ed66789ac049ea3dbaf74c9df7402",
+      "size": 4,
+      "type": "file"
+    }
+  ],
+  "mimeType": "application/vnd.debian.binary-package",
+  "pluginId": "kerfuffle_libarchive_readonly",
+  "pluginName": "Libarchive 插件 (只读格式)",
+  "result": {
+    "async": false,
+    "errorType": 0,
+    "finish": 0,
+    "returned": 0,
+    "waitTimedOut": false
+  },
+  "schema": 1,
+  "signals": {
+    "cancelSignals": 0,
+    "curFileCount": 3,
+    "curFiles": [
+      "debian-binary",
+      "control.tar.xz",
+      "data.tar.xz"
+    ],
+    "finishedSignals": 0,
+    "progressCount": 4,
+    "progressFirst": 9.782608695652174,
+    "progressLast": 1,
+    "progressMonotonic": false,
+    "queries": []
+  }
+}

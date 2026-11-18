@@ -1,0 +1,50 @@
+{
+  "archiveData": {
+    "comment": "",
+    "compressedSize": 0,
+    "entries": [],
+    "entryCount": 0,
+    "isListEncrypted": false,
+    "qSize": 0,
+    "rootEntries": []
+  },
+  "case": {
+    "backend": "gz",
+    "level": 6,
+    "op": "extract",
+    "respond": "overwrite"
+  },
+  "fs": [
+    {
+      "mode": "63144",
+      "path": "sample.tar",
+      "sha256": "b9bdaccfbe138786dfd763ce432713c4763db280f2af79b25875cd867083da5d",
+      "size": 10240,
+      "type": "file"
+    }
+  ],
+  "mimeType": "application/x-compressed-tar",
+  "pluginId": "kerfuffle_libgz",
+  "pluginName": "Gzip 插件",
+  "result": {
+    "async": false,
+    "errorType": 0,
+    "finish": 0,
+    "returned": 0,
+    "waitTimedOut": false
+  },
+  "schema": 1,
+  "signals": {
+    "cancelSignals": 0,
+    "curFileCount": 1,
+    "curFiles": [
+      "sample.tar"
+    ],
+    "finishedSignals": 0,
+    "progressCount": 2,
+    "progressFirst": 2892.6553672316386,
+    "progressLast": 2892.6553672316386,
+    "progressMonotonic": true,
+    "queries": []
+  }
+}

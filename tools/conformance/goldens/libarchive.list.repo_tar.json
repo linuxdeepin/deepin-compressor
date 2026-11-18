@@ -1,0 +1,69 @@
+{
+  "archiveData": {
+    "comment": "",
+    "compressedSize": 4096,
+    "entries": [
+      {
+        "alias": "",
+        "fullPath": "test.txt",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1609737812,
+        "name": "test.txt",
+        "size": 4
+      },
+      {
+        "alias": "",
+        "fullPath": "test1.txt",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1609211751,
+        "name": "test1.txt",
+        "size": 4
+      }
+    ],
+    "entryCount": 2,
+    "isListEncrypted": false,
+    "qSize": 8,
+    "rootEntries": [
+      {
+        "fullPath": "test.txt",
+        "isDir": false,
+        "size": 4
+      },
+      {
+        "fullPath": "test1.txt",
+        "isDir": false,
+        "size": 4
+      }
+    ]
+  },
+  "case": {
+    "backend": "libarchive",
+    "level": 6,
+    "op": "list",
+    "respond": "overwrite"
+  },
+  "mimeType": "application/x-tar",
+  "pluginId": "kerfuffle_libarchive",
+  "pluginName": "Libarchive 插件",
+  "result": {
+    "async": false,
+    "errorType": 0,
+    "finish": 0,
+    "returned": 0,
+    "waitTimedOut": false
+  },
+  "schema": 1,
+  "signals": {
+    "cancelSignals": 0,
+    "curFileCount": 0,
+    "curFiles": [],
+    "finishedSignals": 0,
+    "progressCount": 0,
+    "progressFirst": -1,
+    "progressLast": -1,
+    "progressMonotonic": true,
+    "queries": []
+  }
+}

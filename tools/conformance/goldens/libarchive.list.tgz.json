@@ -1,0 +1,152 @@
+{
+  "archiveData": {
+    "comment": "",
+    "compressedSize": 354,
+    "entries": [
+      {
+        "alias": "",
+        "fullPath": "a.txt",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1767225600,
+        "name": "a.txt",
+        "size": 18
+      },
+      {
+        "alias": "",
+        "fullPath": "empty.txt",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1767225600,
+        "name": "empty.txt",
+        "size": 0
+      },
+      {
+        "alias": "",
+        "fullPath": "link.txt",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1767225600,
+        "name": "link.txt",
+        "size": 0
+      },
+      {
+        "alias": "",
+        "fullPath": "run.sh",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1767225600,
+        "name": "run.sh",
+        "size": 18
+      },
+      {
+        "alias": "",
+        "fullPath": "sub/",
+        "index": -1,
+        "isDir": true,
+        "mtime": 1767225600,
+        "name": "sub/",
+        "size": 0
+      },
+      {
+        "alias": "",
+        "fullPath": "sub/b.txt",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1767225600,
+        "name": "sub/b.txt",
+        "size": 7
+      },
+      {
+        "alias": "",
+        "fullPath": "sub/deep/",
+        "index": -1,
+        "isDir": true,
+        "mtime": 1767225600,
+        "name": "sub/deep/",
+        "size": 0
+      },
+      {
+        "alias": "",
+        "fullPath": "sub/deep/c.txt",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1767225600,
+        "name": "sub/deep/c.txt",
+        "size": 5
+      },
+      {
+        "alias": "",
+        "fullPath": "中文名.txt",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1767225600,
+        "name": "中文名.txt",
+        "size": 22
+      }
+    ],
+    "entryCount": 9,
+    "isListEncrypted": false,
+    "qSize": 70,
+    "rootEntries": [
+      {
+        "fullPath": "a.txt",
+        "isDir": false,
+        "size": 18
+      },
+      {
+        "fullPath": "empty.txt",
+        "isDir": false,
+        "size": 0
+      },
+      {
+        "fullPath": "link.txt",
+        "isDir": false,
+        "size": 0
+      },
+      {
+        "fullPath": "run.sh",
+        "isDir": false,
+        "size": 18
+      },
+      {
+        "fullPath": "sub/",
+        "isDir": true,
+        "size": 0
+      },
+      {
+        "fullPath": "中文名.txt",
+        "isDir": false,
+        "size": 22
+      }
+    ]
+  },
+  "case": {
+    "backend": "libarchive",
+    "level": 6,
+    "op": "list",
+    "respond": "overwrite"
+  },
+  "mimeType": "application/x-compressed-tar",
+  "pluginId": "kerfuffle_libarchive",
+  "pluginName": "Libarchive 插件",
+  "result": {
+    "async": false,
+    "errorType": 0,
+    "finish": 0,
+    "returned": 0,
+    "waitTimedOut": false
+  },
+  "schema": 1,
+  "signals": {
+    "cancelSignals": 0,
+    "curFileCount": 0,
+    "curFiles": [],
+    "finishedSignals": 0,
+    "progressCount": 0,
+    "progressFirst": -1,
+    "progressLast": -1,
+    "progressMonotonic": true,
+    "queries": []
+  }
+}

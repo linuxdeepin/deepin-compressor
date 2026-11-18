@@ -1,0 +1,83 @@
+{
+  "archiveData": {
+    "comment": "",
+    "compressedSize": 736,
+    "entries": [
+      {
+        "alias": "",
+        "fullPath": "control.tar.xz",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1767225600,
+        "name": "control.tar.xz",
+        "size": 292
+      },
+      {
+        "alias": "",
+        "fullPath": "data.tar.xz",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1767225600,
+        "name": "data.tar.xz",
+        "size": 252
+      },
+      {
+        "alias": "",
+        "fullPath": "debian-binary",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1767225600,
+        "name": "debian-binary",
+        "size": 4
+      }
+    ],
+    "entryCount": 3,
+    "isListEncrypted": false,
+    "qSize": 548,
+    "rootEntries": [
+      {
+        "fullPath": "debian-binary",
+        "isDir": false,
+        "size": 4
+      },
+      {
+        "fullPath": "control.tar.xz",
+        "isDir": false,
+        "size": 292
+      },
+      {
+        "fullPath": "data.tar.xz",
+        "isDir": false,
+        "size": 252
+      }
+    ]
+  },
+  "case": {
+    "backend": "libarchive-ro",
+    "level": 6,
+    "op": "list",
+    "respond": "overwrite"
+  },
+  "mimeType": "application/vnd.debian.binary-package",
+  "pluginId": "kerfuffle_libarchive_readonly",
+  "pluginName": "Libarchive 插件 (只读格式)",
+  "result": {
+    "async": false,
+    "errorType": 0,
+    "finish": 0,
+    "returned": 0,
+    "waitTimedOut": false
+  },
+  "schema": 1,
+  "signals": {
+    "cancelSignals": 0,
+    "curFileCount": 0,
+    "curFiles": [],
+    "finishedSignals": 0,
+    "progressCount": 0,
+    "progressFirst": -1,
+    "progressLast": -1,
+    "progressMonotonic": true,
+    "queries": []
+  }
+}

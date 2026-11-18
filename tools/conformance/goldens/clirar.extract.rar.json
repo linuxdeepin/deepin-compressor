@@ -1,0 +1,68 @@
+{
+  "archiveData": {
+    "comment": "",
+    "compressedSize": 230,
+    "entries": [
+      {
+        "alias": "",
+        "fullPath": "limerick",
+        "index": -1,
+        "isDir": false,
+        "mtime": 1419651485,
+        "name": "limerick",
+        "size": 191
+      }
+    ],
+    "entryCount": 1,
+    "isListEncrypted": false,
+    "qSize": 191,
+    "rootEntries": [
+      {
+        "fullPath": "limerick",
+        "isDir": false,
+        "size": 191
+      }
+    ]
+  },
+  "case": {
+    "backend": "clirar",
+    "level": 6,
+    "op": "extract",
+    "respond": "overwrite"
+  },
+  "fs": [
+    {
+      "mode": "63104",
+      "mtime": 1419651485,
+      "path": "limerick",
+      "sha256": "b73f646efdd62a1d6f1ac8798a747cabd3d360d6cb20da84732fbae5bc113feb",
+      "size": 191,
+      "type": "file"
+    }
+  ],
+  "mimeType": "application/vnd.rar",
+  "pluginId": "kerfuffle_clirar",
+  "pluginName": "RAR 插件",
+  "result": {
+    "async": true,
+    "errorType": 0,
+    "finish": 0,
+    "returned": 0,
+    "waitTimedOut": false
+  },
+  "schema": 1,
+  "signals": {
+    "cancelSignals": 0,
+    "curFileCount": 2,
+    "curFiles": [
+      "rom /home/ut006116@uos/WorkSpace/deepin-compressor/tests/FuzzyTest/libfuzzer/libfuzzer_in/archives/common/rar/small_archive.rar",
+      "limerick"
+    ],
+    "finishedSignals": 1,
+    "progressCount": 3,
+    "progressFirst": 1,
+    "progressLast": 100,
+    "progressMonotonic": true,
+    "queries": []
+  }
+}

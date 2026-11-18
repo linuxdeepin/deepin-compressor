@@ -1,0 +1,46 @@
+{
+  "archiveData": {
+    "comment": "",
+    "compressedSize": 0,
+    "entries": [],
+    "entryCount": 0,
+    "isListEncrypted": true,
+    "qSize": 0,
+    "rootEntries": []
+  },
+  "case": {
+    "backend": "cli7z",
+    "level": 6,
+    "op": "extract",
+    "respond": "cancel"
+  },
+  "fs": [],
+  "mimeType": "application/x-7z-compressed",
+  "pluginId": "kerfuffle_cli7z",
+  "pluginName": "P7zip 插件",
+  "result": {
+    "async": true,
+    "errorType": 2,
+    "finish": 2,
+    "returned": 0,
+    "waitTimedOut": false
+  },
+  "schema": 1,
+  "signals": {
+    "cancelSignals": 0,
+    "curFileCount": 0,
+    "curFiles": [],
+    "finishedSignals": 1,
+    "progressCount": 3,
+    "progressFirst": 1,
+    "progressLast": 100,
+    "progressMonotonic": true,
+    "queries": [
+      {
+        "file": "",
+        "response": true,
+        "type": "PasswordNeeded"
+      }
+    ]
+  }
+}

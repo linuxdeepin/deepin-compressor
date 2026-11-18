@@ -1,0 +1,54 @@
+{
+  "archiveData": {
+    "comment": "",
+    "compressedSize": 0,
+    "entries": [],
+    "entryCount": 0,
+    "isListEncrypted": false,
+    "qSize": 0,
+    "rootEntries": []
+  },
+  "case": {
+    "backend": "gz",
+    "level": 6,
+    "op": "extract",
+    "respond": "skip"
+  },
+  "fs": [
+    {
+      "mode": "63144",
+      "path": "plain.txt",
+      "sha256": "38709c1ba3e7a2ce5295e87314ca4a1674a6458a077298b344c966331a8148f3",
+      "size": 13,
+      "type": "file"
+    }
+  ],
+  "mimeType": "application/gzip",
+  "pluginId": "kerfuffle_libgz",
+  "pluginName": "Gzip 插件",
+  "result": {
+    "async": false,
+    "errorType": 0,
+    "finish": 1,
+    "returned": 1,
+    "waitTimedOut": false
+  },
+  "schema": 1,
+  "signals": {
+    "cancelSignals": 0,
+    "curFileCount": 0,
+    "curFiles": [],
+    "finishedSignals": 0,
+    "progressCount": 0,
+    "progressFirst": -1,
+    "progressLast": -1,
+    "progressMonotonic": true,
+    "queries": [
+      {
+        "file": "",
+        "response": 1,
+        "type": "Overwrite"
+      }
+    ]
+  }
+}

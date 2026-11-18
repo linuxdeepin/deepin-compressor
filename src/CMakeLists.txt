@@ -72,7 +72,10 @@ include_directories(${HFILES_OUTPUT_PATH})
 
 #源文件、头文件和资源文件
 file(GLOB_RECURSE c_files RELATIVE ${PROJECT_SOURCE_DIR} source/*.cpp source/*.c main.cpp)
-file(GLOB_RECURSE h_files RELATIVE ${PROJECT_SOURCE_DIR} source/*.h *.h)
+file(GLOB_RECURSE h_files RELATIVE ${PROJECT_SOURCE_DIR} source/*.h)
+# 根目录 *.h 只取本层，避免把 src/archive 下的后端头文件卷进主程序目标
+file(GLOB h_files_root RELATIVE ${PROJECT_SOURCE_DIR} *.h)
+list(APPEND h_files ${h_files_root})
 file(GLOB_RECURSE res_files RELATIVE ${PROJECT_SOURCE_DIR} *.qrc)
 
 # 根据Qt版本选择合适的命令
