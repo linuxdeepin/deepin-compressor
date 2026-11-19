@@ -117,6 +117,12 @@ public:
     ErrorType errorType();
 
     /**
+     * @brief resetResult   forget the result of the previous operation; the interface is reused for
+     * later operations on the same archive, so a job starts with this
+     */
+    virtual void resetResult();
+
+    /**
      * @brief pauseOperation    暂停操作
      */
     virtual void pauseOperation() = 0;

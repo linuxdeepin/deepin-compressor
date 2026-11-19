@@ -66,6 +66,12 @@ public:
     explicit CliInterface(QObject *parent, const QVariantList &args);
     ~CliInterface() override;
 
+    /**
+     * @brief resetResult   also forget the previous finish type: an operation that succeeds after a
+     * failed one on the same archive must not end as an error
+     */
+    void resetResult() override;
+
     // ReadOnlyArchiveInterface interface
 public:
     PluginFinishType list() override;

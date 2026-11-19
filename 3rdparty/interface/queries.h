@@ -249,7 +249,19 @@ public:
      */
     QString password();
 
+    /**
+     * @brief setPreviousPasswordWrong  the next password dialog says the previous password was wrong
+     * (set before an extraction or load is restarted after a wrong password)
+     */
+    static void setPreviousPasswordWrong(bool bWrong);
+
+    /**
+     * @brief previousPasswordWrong  true until a password dialog has shown the hint
+     */
+    static bool previousPasswordWrong();
+
 private:
+    static bool s_bPreviousPasswordWrong;
     QString m_strDesText;
     QString m_strFileName;
     int m_iLabelOldHeight = 0;
