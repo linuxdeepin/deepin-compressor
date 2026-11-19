@@ -56,6 +56,10 @@ void SingleJob::start()
         return;
     }
 
+    // The interface is reused for later operations on the same archive: start without the result of
+    // the previous one (errors found during this job, e.g. while listing first, are kept)
+    m_pInterface->resetResult();
+
     // 判断是否通过线程的方式调用
     if (m_pInterface->waitForFinished()) {
         qCDebug(appLog) << "Executing work directly";
@@ -531,6 +535,10 @@ void UpdateJob::start()
         slotFinished(PFT_Error);
         return;
     }
+
+    // The interface is reused for later operations on the same archive: start without the result of
+    // the previous one (errors found during this job, e.g. while listing first, are kept)
+    m_pInterface->resetResult();
 
     d->start(); // 开启线程，执行操作
 }

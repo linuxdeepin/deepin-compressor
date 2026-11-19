@@ -66,6 +66,12 @@ public:
     explicit CliInterface(QObject *parent, const QVariantList &args);
     ~CliInterface() override;
 
+    /**
+     * @brief resetResult   also forget the previous finish type: an operation that succeeds after a
+     * failed one on the same archive must not end as an error
+     */
+    void resetResult() override;
+
     // ReadOnlyArchiveInterface interface
 public:
     PluginFinishType list() override;
@@ -142,6 +148,12 @@ protected:
      * @param emitFinished
      */
     virtual void killProcess(bool emitFinished = true) = 0;
+
+    /**
+     * @brief errorTypeForExitCode  the error of an extraction that exited with this code (2 or more)
+     * although its output showed no error the plugin recognises
+     */
+    virtual ErrorType errorTypeForExitCode(int exitCode) const;
 
     /**
      * @brief handleProgress  解析进度并发送进度信号

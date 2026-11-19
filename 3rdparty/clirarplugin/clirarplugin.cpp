@@ -157,6 +157,19 @@ bool CliRarPlugin::isOpenFileFailed(const QString &line)
     return line.startsWith("Cannot create ");
 }
 
+ErrorType CliRarPlugin::errorTypeForExitCode(int exitCode) const
+{
+    switch (exitCode) {
+    case 5:     // write error
+    case 9:     // cannot create a file
+        return ET_FileWriteError;
+    case 11:    // wrong password
+        return ET_WrongPassword;
+    default:    // 3 checksum error, 2 fatal error, ...
+        return ET_ArchiveDamaged;
+    }
+}
+
 void CliRarPlugin::killProcess(bool emitFinished)
 {
     Q_UNUSED(emitFinished);

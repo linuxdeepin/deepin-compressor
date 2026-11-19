@@ -121,7 +121,8 @@ bool Cli7zPlugin::isCorruptArchiveMsg(const QString &line)
 
 bool Cli7zPlugin::isDiskFullMsg(const QString &line)
 {
-    return line.contains(QLatin1String("No space left on device"));
+    // 7-Zip prints strerror() in the user's language ("errno=28 : 设备上没有空间"); 28 is ENOSPC
+    return line.contains(QLatin1String("No space left on device")) || line.contains(QLatin1String("errno=28 "));
 }
 
 bool Cli7zPlugin::isFileExistsMsg(const QString &line)
@@ -365,7 +366,8 @@ bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
     }
 
     if (isDiskFullMsg(line)) {
-//        m_eErrorType = ;
+        m_eErrorType = ET_InsufficientDiskSpace;
+        m_finishType = PFT_Error;
         return false;
     }
 
