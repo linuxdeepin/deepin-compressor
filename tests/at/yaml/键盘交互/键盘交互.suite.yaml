@@ -1,0 +1,32 @@
+name: 键盘交互_suite
+app: deepin-compressor
+module: 键盘交互
+setup:
+- action: session_start
+  command: deepin-compressor
+  wait: 3.0
+suites:
+- id: suite_键盘交互_001_s1
+  name: 键盘交互-主菜单、子菜单中的交互
+  description: ''
+  steps:
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      name: CompressButton
+      role: push button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: CompressButton
+      role: push button
+teardown:
+- action: session_stop
