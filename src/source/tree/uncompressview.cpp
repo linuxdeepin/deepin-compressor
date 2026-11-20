@@ -702,7 +702,7 @@ void UnCompressView::slotShowRightMenu(const QPoint &pos)
             // 添加菜单选项
             for (int i = 0; i < listOpenType.count(); ++i) {
                 QAction *pOpenAction = openMenu.addAction(QIcon::fromTheme(listOpenType[i].getIcon()), listOpenType[i].getDisplayName(), this, SLOT(slotOpenStyleClicked()));
-                pOpenAction->setData(listOpenType[i].getExec());
+                pOpenAction->setData(listOpenType[i].getFileName());
             }
         }
 

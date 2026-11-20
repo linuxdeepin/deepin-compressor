@@ -236,7 +236,11 @@ void OpenWithDialog::openWithProgram(const QString &strFileName, const QString &
     qCDebug(appLog) << "Opening file:" << strFileName << "with program:" << strExec;
     // 在线程中执行外部应用打开的命令
     ProcessOpenThread *p = new ProcessOpenThread;
-    p->setProgramPath(getProgramPathByExec(strExec));
+    if (strExec.endsWith(".desktop")) {
+        p->setProgramPath(strExec);
+    } else {
+        p->setProgramPath(getProgramPathByExec(strExec));
+    }
     p->setArguments(QStringList() << strFileName);
     p->start();
     qCDebug(appLog) << "Started process thread for opening file";
@@ -568,8 +572,8 @@ void OpenWithDialog::slotOpenFileByApp()
         return;
     }
 
-    qCDebug(appLog) << "User confirmed opening with app:" << m_pCheckedItem->property("exec").toString();
+    qCDebug(appLog) << "User confirmed opening with app:" << m_pCheckedItem->property("app").toString();
     m_bOk = true;
-    m_strAppExecName = m_pCheckedItem->property("exec").toString();
+    m_strAppExecName = m_pCheckedItem->property("app").toString();
     close();
 }
