@@ -6,6 +6,7 @@
 #include "processopenthread.h"
 #include "kprocess.h"
 #include <QDebug>
+#include <QProcess>
 #include "common/ddlog.h"
 
 ProcessOpenThread::ProcessOpenThread(QObject *parent)
@@ -29,13 +30,25 @@ void ProcessOpenThread::setArguments(const QStringList &listArguments)
 void ProcessOpenThread::run()
 {
     qCDebug(appLog) << "Starting external process:" << m_strProgramPath;
-    // 启动外部进程
-    KProcess *cmdprocess = new KProcess;
-    cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
-    cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
-    cmdprocess->setProgram(m_strProgramPath, m_listArguments);
-    cmdprocess->start();
-    cmdprocess->waitForFinished(-1);
-    qCDebug(appLog) << "Process finished with exit code:" << cmdprocess->exitCode();
-    delete cmdprocess;
+    if (m_strProgramPath.endsWith(".desktop")) {
+        // .desktop 文件通过 gio launch 启动，正确处理字段代码替换和 DBus 单例激活
+        qCDebug(appLog) << "Launching via gio launch with desktop file:" << m_strProgramPath;
+        QProcess *process = new QProcess;
+        QStringList args;
+        args << "launch" << m_strProgramPath << m_listArguments;
+        process->start("gio", args);
+        process->waitForFinished(-1);
+        qCDebug(appLog) << "gio launch finished with exit code:" << process->exitCode();
+        delete process;
+    } else {
+        // 启动外部进程
+        KProcess *cmdprocess = new KProcess;
+        cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
+        cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+        cmdprocess->setProgram(m_strProgramPath, m_listArguments);
+        cmdprocess->start();
+        cmdprocess->waitForFinished(-1);
+        qCDebug(appLog) << "Process finished with exit code:" << cmdprocess->exitCode();
+        delete cmdprocess;
+    }
 }

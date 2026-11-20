@@ -496,7 +496,11 @@ void OpenJob::slotFinished(PluginFinishType eType)
         // 在线程中执行外部应用打开的命令
         qCDebug(appLog) << "Starting external process to open file:" << name;
         ProcessOpenThread *p = new ProcessOpenThread;
-        p->setProgramPath(OpenWithDialog::getProgramPathByExec(m_strProgram));
+        if (m_strProgram.isEmpty()) {
+            p->setProgramPath(OpenWithDialog::getProgramPathByExec(m_strProgram));
+        } else {
+            p->setProgramPath(m_strProgram);
+        }
         p->setArguments(QStringList() << name);
         p->start();
     } else {
