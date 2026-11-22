@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -272,6 +272,10 @@ ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool
         }
     }
 
+    // pzip 插件只用于压缩，不用于读取/解压；ZIP 追加时也需要排除 pzip，回到旧版自动选择链路
+    bool removePzipFlag = (mimeType.name() == QString("application/zip"))
+                          && ((!bWrite) || eType == APT_AutoWithoutPzip);
+
     // 创建插件
     ReadOnlyArchiveInterface *pIface = nullptr;
     for (Plugin *plugin : offers) {
@@ -280,9 +284,15 @@ ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool
             continue;
         }
 
+        // 读取 ZIP 时跳过 pzip 插件（pzip 只用于压缩）
+        if (removePzipFlag && plugin->metaData().name().contains("pzip", Qt::CaseInsensitive)) {
+            continue;
+        }
+
         switch (eType) {
         // 自动识别
         case APT_Auto:
+        case APT_AutoWithoutPzip:
             pIface = createInterface(fileName, mimeType, plugin);
             break;
         // cli7zplugin
