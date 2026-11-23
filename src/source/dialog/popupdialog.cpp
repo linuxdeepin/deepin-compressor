@@ -606,15 +606,15 @@ int RenameDialog::showDialog(const QString &strReName, const QString &strAlias, 
 
 
     QVBoxLayout *labelLayout = new QVBoxLayout;
-    labelLayout->addStretch();
     labelLayout->addWidget(m_lineEdit);
-    labelLayout->addStretch();
     labelLayout->setContentsMargins(0, 0, 0, 0);
 
     DWidget *widget = new DWidget();
     widget->setFixedWidth(360);
     widget->setLayout(labelLayout);
+    setContentLayoutContentsMargins(QMargins(0, 0, 0, 0));
     addContent(strlabel, Qt::AlignHCenter); // 使用Qt::AlignHCenter效果最好
+    addSpacing(15);
     addContent(widget, Qt::AlignHCenter);
     // 添加取消和转换按钮
     addButton(tr("Cancel", "button"));
