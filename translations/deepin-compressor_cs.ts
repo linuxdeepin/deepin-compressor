@@ -1293,14 +1293,19 @@
         <translation>Rozbalení</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="14"/>
-        <source>Auto create a folder for multiple extracted files</source>
-        <translation>Pro vícero rozbalených souborů automaticky vytvořit složku</translation>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="15"/>
+        <source>Intelligently create a folder for extracted files</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="15"/>
         <source>Show extracted files when completed</source>
         <translation>Po dokončení ukázat rozbalené soubory</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="17"/>
+        <source>Quit after opening the extracted folder</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="16"/>
