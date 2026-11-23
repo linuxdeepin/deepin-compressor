@@ -269,6 +269,20 @@
                             "default": true
                         },
                         {
+                            "key": "vnd.linglong.layer",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "vnd.linglong.layer(layer)",
+                            "default": true
+                        },
+                        {
+                            "key": "vnd.linyaps.uab",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "vnd.linyaps.uab(uab)",
+                            "default": true
+                        },
+                        {
                             "key": "style",
                             "name": "Font Style",
                             "type": "custom-button",

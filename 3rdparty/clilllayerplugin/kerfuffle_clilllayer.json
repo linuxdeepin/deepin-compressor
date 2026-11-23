@@ -1,0 +1,22 @@
+{
+    "KPlugin": {
+        "Description": "Open and extract linglong layer and uab packages",
+        "Description[zh_CN]": "打开和解压如意玲珑 layer/uab 软件包",
+        "Id": "kerfuffle_clilllayer",
+        "MimeTypes": [
+            "application/vnd.linglong.layer",
+            "application/vnd.linyaps.uab"
+        ],
+        "Name": "Linglong package plugin",
+        "Name[zh_CN]": "玲珑软件包插件",
+        "ServiceTypes": [
+            "Kerfuffle/Plugin"
+        ],
+        "Version": "1.1"
+    },
+    "X-KDE-Kerfuffle-ReadOnlyExecutables": [
+        "fsck.erofs"
+    ],
+    "X-KDE-Kerfuffle-ReadWrite": false,
+    "X-KDE-Priority": 100
+}
