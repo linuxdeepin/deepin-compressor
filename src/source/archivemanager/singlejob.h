@@ -7,9 +7,9 @@
 #define SINGLEJOB_H
 
 #include "archivejob.h"
-#include "archiveinterface.h"
-#include "commonstruct.h"
-#include "queries.h"
+#include "archive_session.h"
+#include "archiveui_types.h"
+#include "archivequeries.h"
 
 #include <QThread>
 #include <QElapsedTimer>
@@ -41,7 +41,7 @@ class SingleJob : public ArchiveJob
 {
     Q_OBJECT
 public:
-    explicit SingleJob(ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
+    explicit SingleJob(dcarchive::ArchiveSession *pInterface, QObject *parent = nullptr);
     ~SingleJob() override;
 
     /**
@@ -93,7 +93,7 @@ protected Q_SLOTS:
 //Q_SIGNALS:
 
 protected:
-    ReadOnlyArchiveInterface *m_pInterface;
+    dcarchive::ArchiveSession *m_pInterface;
     SingleJobThread *const d;   // 线程
     QElapsedTimer jobTimer;     // 操作计时
 };
@@ -103,7 +103,7 @@ class LoadJob : public SingleJob
 {
     Q_OBJECT
 public:
-    explicit LoadJob(ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
+    explicit LoadJob(dcarchive::ArchiveSession *pInterface, QObject *parent = nullptr);
     ~LoadJob() override;
 
     /**
@@ -120,7 +120,7 @@ class AddJob : public SingleJob
 {
     Q_OBJECT
 public:
-    explicit AddJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const CompressOptions &options, QObject *parent = nullptr);
+    explicit AddJob(const QList<FileEntry> &files, dcarchive::ArchiveSession *pInterface, const CompressOptions &options, QObject *parent = nullptr);
     ~AddJob() override;
 
     /**
@@ -139,7 +139,7 @@ class CreateJob : public SingleJob
 {
     Q_OBJECT
 public:
-    explicit CreateJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const CompressOptions &options, QObject *parent = nullptr);
+    explicit CreateJob(const QList<FileEntry> &files, dcarchive::ArchiveSession *pInterface, const CompressOptions &options, QObject *parent = nullptr);
     ~CreateJob() override;
 
     /**
@@ -147,14 +147,6 @@ public:
      */
     void doWork() override;
 
-protected:
-    bool doKill() override;
-
-private:
-    /**
-     * @brief cleanCompressFileCancel 压缩取消时删除临时压缩包
-     */
-    void cleanCompressFileCancel();
 
 private:
     QList<FileEntry> m_vecFiles;
@@ -166,15 +158,13 @@ class ExtractJob : public SingleJob
 {
     Q_OBJECT
 public:
-    explicit ExtractJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const ExtractionOptions &options, QObject *parent = nullptr);
+    explicit ExtractJob(const QList<FileEntry> &files, dcarchive::ArchiveSession *pInterface, const ExtractionOptions &options, QObject *parent = nullptr);
     ~ExtractJob() override;
 
     /**
      * @brief doWork    执行操作
      */
     void doWork() override;
-
-    bool errorcode = true;
 
 private:
     QList<FileEntry> m_vecFiles;
@@ -186,7 +176,7 @@ class DeleteJob : public SingleJob
 {
     Q_OBJECT
 public:
-    explicit DeleteJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
+    explicit DeleteJob(const QList<FileEntry> &files, dcarchive::ArchiveSession *pInterface, QObject *parent = nullptr);
     ~DeleteJob() override;
 
     /**
@@ -204,7 +194,7 @@ class RenameJob : public SingleJob
 {
     Q_OBJECT
 public:
-    explicit RenameJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
+    explicit RenameJob(const QList<FileEntry> &files, dcarchive::ArchiveSession *pInterface, QObject *parent = nullptr);
     ~RenameJob() override;
 
     /**
@@ -222,7 +212,7 @@ class OpenJob: public SingleJob
 {
     Q_OBJECT
 public:
-    explicit OpenJob(const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
+    explicit OpenJob(const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram, dcarchive::ArchiveSession *pInterface, QObject *parent = nullptr);
     ~OpenJob() override;
 
     /**
@@ -240,6 +230,7 @@ protected Q_SLOTS:
 private:
     FileEntry m_stEntry;            // 待打开文件
     QString m_strTempExtractPath;   // 临时解压路径
+    QString m_extractedPath;
     QString m_strProgram;           // 应用程序
 };
 
@@ -248,13 +239,8 @@ class UpdateJob: public SingleJob
 {
     Q_OBJECT
 public:
-    explicit UpdateJob(const UpdateOptions &options, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
+    explicit UpdateJob(const UpdateOptions &options, dcarchive::ArchiveSession *pInterface, QObject *parent = nullptr);
     ~UpdateJob() override;
-
-    /**
-     * @brief start     开始
-     */
-    void start() override;
 
     /**
      * @brief doWork    执行操作
@@ -270,7 +256,7 @@ class CommentJob: public SingleJob
 {
     Q_OBJECT
 public:
-    explicit CommentJob(const QString &strComment, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
+    explicit CommentJob(const QString &strComment, dcarchive::ArchiveSession *pInterface, QObject *parent = nullptr);
     ~CommentJob() override;
 
     /**
@@ -331,7 +317,7 @@ protected Q_SLOTS:
     virtual void slotHandleExtractFinished() = 0;
 
 protected:
-    ReadOnlyArchiveInterface *m_pIface = nullptr;
+    dcarchive::ArchiveSession *m_pIface = nullptr;
     QString m_strOriginalArchiveFullPath;   // 原始压缩包全路径
     int m_iStepNo = 0;
 };

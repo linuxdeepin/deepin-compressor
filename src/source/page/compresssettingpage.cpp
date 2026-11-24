@@ -5,7 +5,6 @@
 
 #include "compresssettingpage.h"
 #include "customwidget.h"
-#include "pluginmanager.h"
 #include "uitools.h"
 #include "uistruct.h"
 #include "popupdialog.h"
@@ -28,6 +27,11 @@
 #include <QMimeDatabase>
 #include <QDebug>
 
+#if QT_CONFIG(accessibility)
+#include <QAccessibleWidget>
+#include <QScrollBar>
+#endif
+
 #include <cmath>
 #include <QProcess>
 #ifdef DTKCORE_CLASS_DConfigFile
@@ -37,6 +41,70 @@ DCORE_USE_NAMESPACE
 
 #define SCROLL_MAX 621
 #define SCROLL_MIN 348
+
+#if QT_CONFIG(accessibility)
+namespace {
+
+constexpr auto kSettingsScrollAreaName = "CompressionSettingsScrollArea";
+
+class AccessibleSettingsScrollArea final : public QAccessibleWidget
+{
+public:
+    explicit AccessibleSettingsScrollArea(QScrollArea *area)
+        : QAccessibleWidget(area)
+    {
+    }
+
+    int childCount() const override
+    {
+        return children().size();
+    }
+
+    QAccessibleInterface *child(int index) const override
+    {
+        // AT-SPI can ask for an index it cached before a page change hid a scrollbar.
+        const auto items = children();
+        return index >= 0 && index < items.size()
+                ? QAccessible::queryAccessibleInterface(items.at(index)) : nullptr;
+    }
+
+    int indexOfChild(const QAccessibleInterface *child) const override
+    {
+        return child ? children().indexOf(child->object()) : -1;
+    }
+
+private:
+    QList<QObject *> children() const
+    {
+        QList<QObject *> items;
+        auto *area = qobject_cast<QScrollArea *>(object());
+        if (!area)
+            return items;
+        if (auto *viewport = area->viewport())
+            items.append(viewport);
+        for (auto *bar : {area->horizontalScrollBar(), area->verticalScrollBar()}) {
+            if (bar && bar->isVisible() && bar->parentWidget())
+                items.append(bar->parentWidget());
+        }
+        if (auto *corner = area->cornerWidget()) {
+            if (corner->isVisible())
+                items.append(corner);
+        }
+        return items;
+    }
+};
+
+QAccessibleInterface *settingsScrollAreaAccessibility(const QString &className, QObject *object)
+{
+    if (className == QLatin1String("QScrollArea") && object->objectName() == QLatin1String(kSettingsScrollAreaName)) {
+        if (auto *area = qobject_cast<QScrollArea *>(object))
+            return new AccessibleSettingsScrollArea(area);
+    }
+    return nullptr;
+}
+
+} // namespace
+#endif
 
 TypeLabel::TypeLabel(QWidget *parent)
     : DFrame(parent)
@@ -154,11 +222,12 @@ void CompressSettingPage::refreshMenu()
     qCDebug(appLog) << "Refreshing compression type menu";
     m_pTypeMenu->clear();
     if (m_listSupportedMimeTypes.empty()) {
-        qCInfo(appLog) << "Loading supported mime types from plugin manager";
-        m_listSupportedMimeTypes = PluginManager::get_instance().supportedWriteMimeTypes(PluginManager::SortByComment);     // 获取支持的压缩格式
+        qCInfo(appLog) << "Loading supported mime types from own archive backends";
+        m_listSupportedMimeTypes = UiTools::supportedWriteMimeTypes();
     }
 
     QAction *pAction = nullptr;
+    QAction *defaultAction = nullptr;
     bool bHas7z = false;
     for (const QString &type : qAsConst(m_listSupportedMimeTypes)) {
         if (QMimeDatabase().mimeTypeForName(type).preferredSuffix() == "7z") {
@@ -168,7 +237,8 @@ void CompressSettingPage::refreshMenu()
         pAction = new QAction(QMimeDatabase().mimeTypeForName(type).preferredSuffix(), m_pTypeMenu);
         pAction->setData(type);
         m_pTypeMenu->addAction(pAction);
-
+        if (type == QLatin1String("application/zip"))
+            defaultAction = pAction;
     }
 
     // 判断是否安装了7z，若安装了7z，则压缩类型添加tar.7z
@@ -197,7 +267,9 @@ void CompressSettingPage::refreshMenu()
 
 
     // 默认选择类型为zip
-    if (pAction != nullptr) {
+    if (defaultAction != nullptr) {
+        slotTypeChanged(defaultAction);
+    } else if (pAction != nullptr) {
         slotTypeChanged(pAction);
     }
 }
@@ -364,7 +436,13 @@ void CompressSettingPage::initUI()
     pRightLayout->setContentsMargins(0, 0, 50, 0);
 
     // 右侧滚动区域
+#if QT_CONFIG(accessibility)
+    QAccessible::installFactory(settingsScrollAreaAccessibility);
+#endif
     m_pRightScroll = new QScrollArea(this);
+#if QT_CONFIG(accessibility)
+    m_pRightScroll->setObjectName(QLatin1String(kSettingsScrollAreaName));
+#endif
     DWidget *pRightWgt = new DWidget(this);
     pRightWgt->setLayout(pRightLayout);
     m_pRightScroll->setFrameShape(QFrame::NoFrame);
@@ -1019,11 +1097,7 @@ void CompressSettingPage::slotCompressClicked()
         qCInfo(appLog) << "Archive file already exists:" << fileInfo.filePath();
         SimpleQueryDialog dialog(this);
         int iResult = dialog.showDialog(tr("Another file with the same name already exists, replace it?"), tr("Cancel", "button"), DDialog::ButtonNormal, tr("Replace", "button"), DDialog::ButtonWarning);
-        if (1 == iResult) {     // 如果点击替换，先移除本地压缩包
-            qCInfo(appLog) << "Replacing existing archive file";
-            QFile file(fileInfo.filePath());
-            file.remove();
-        } else {    // 点击关闭或者取消，不操作
+        if (1 != iResult) {
             qCInfo(appLog) << "User canceled replacing existing file";
             return;
         }

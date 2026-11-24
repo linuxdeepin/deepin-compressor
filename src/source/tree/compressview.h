@@ -7,7 +7,7 @@
 #define COMPRESSVIEW_H
 
 #include "datatreeview.h"
-#include "commonstruct.h"
+#include "archiveui_types.h"
 
 #include <DWidget>
 #include <DFileWatcher>

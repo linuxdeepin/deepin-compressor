@@ -5,7 +5,7 @@
 
 #include "popupdialog.h"
 #include "uitools.h"
-#include "queries.h"
+#include "archivequeries.h"
 #include "common/ddlog.h"
 
 #include <DWidget>

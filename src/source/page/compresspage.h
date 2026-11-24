@@ -7,7 +7,7 @@
 #define COMPRESSPAGE_H
 
 #include <DWidget>
-#include "commonstruct.h"
+#include "archiveui_types.h"
 
 DWIDGET_USE_NAMESPACE
 

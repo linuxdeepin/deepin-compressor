@@ -133,6 +133,17 @@ Error Archiver::walkDirectory(const fs::path& root) {
         }
         
         const auto& entry = *it;
+        bool excluded = false;
+        for (const auto& path : options_.excludedPaths) {
+            if (entry.path().lexically_normal() == path.lexically_normal()) {
+                excluded = true;
+                break;
+            }
+        }
+        if (excluded) {
+            it.disable_recursion_pending();
+            continue;
+        }
         
         // 跳过输出文件本身
         if (fs::equivalent(entry.path(), absoluteArchivePath_, ec)) {
@@ -202,8 +213,10 @@ Error Archiver::encryptFile(FileTask* task) {
 
     // 收集压缩后的数据
     std::vector<uint8_t> compressedData;
-    task->readCompressedData([&compressedData](const uint8_t* data, size_t size) {
+    task->readCompressedData([&](const uint8_t* data, size_t size) {
         compressedData.insert(compressedData.end(), data, data + size);
+        if (task->streamFromSource && options_.onBytesRead)
+            options_.onBytesRead(size);
     });
 
     // 加密压缩后的数据
@@ -418,8 +431,15 @@ Error Archiver::archiveFile(FileTask* task) {
     } else {
         // 普通写入
         err = writer_->createRaw(task->header,
-            [task](std::function<void(const uint8_t*, size_t)> writer) {
-                task->readCompressedData(writer);
+            [this, task](std::function<void(const uint8_t*, size_t)> writer) {
+                if (task->streamFromSource && options_.onBytesRead) {
+                    task->readCompressedData([&](const uint8_t* data, size_t size) {
+                        writer(data, size);
+                        options_.onBytesRead(size);
+                    });
+                } else {
+                    task->readCompressedData(writer);
+                }
             });
     }
 

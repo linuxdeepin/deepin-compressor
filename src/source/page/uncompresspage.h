@@ -6,7 +6,7 @@
 #ifndef UNCOMPRESSPAGE_H
 #define UNCOMPRESSPAGE_H
 
-#include "commonstruct.h"
+#include "archiveui_types.h"
 
 #include <DWidget>
 

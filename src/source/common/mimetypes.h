@@ -6,7 +6,7 @@
 #ifndef MIMETYPES_H
 #define MIMETYPES_H
 
-#include "commonstruct.h"
+#include "archiveui_types.h"
 
 CustomMimeType determineMimeType(const QString &filename);
 

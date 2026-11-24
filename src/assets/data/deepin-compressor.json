@@ -206,6 +206,27 @@
                             "default": true
                         },
                         {
+                            "key": "x-lrzip-compressed-tar",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-lrzip-compressed-tar(tar.lrz)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-lz4-compressed-tar",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-lz4-compressed-tar(tar.lz4)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-zstd-compressed-tar",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-zstd-compressed-tar(tar.zst)",
+                            "default": true
+                        },
+                        {
                             "key": "x-xz-compressed-tar",
                             "name": " ",
                             "type": "checkbox",

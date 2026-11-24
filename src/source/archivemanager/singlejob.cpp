@@ -6,8 +6,9 @@
 #include "singlejob.h"
 #include "processopenthread.h"
 #include "openwithdialog.h"
-#include "datamanager.h"
+#include "archiveviewstate.h"
 #include "uitools.h"
+#include "archive_session.h"
 #include "common/ddlog.h"
 
 #include <linux/limits.h>
@@ -24,7 +25,7 @@ void SingleJobThread::run()
 }
 
 // 单个操作
-SingleJob::SingleJob(ReadOnlyArchiveInterface *pInterface, QObject *parent)
+SingleJob::SingleJob(dcarchive::ArchiveSession *pInterface, QObject *parent)
     : ArchiveJob(parent)
     , m_pInterface(pInterface)
     , d(new SingleJobThread(this))
@@ -56,14 +57,8 @@ void SingleJob::start()
         return;
     }
 
-    // 判断是否通过线程的方式调用
-    if (m_pInterface->waitForFinished()) {
-        qCDebug(appLog) << "Executing work directly";
-        doWork();   // 直接执行操作
-    } else {
-        qCDebug(appLog) << "Starting worker thread";
-        d->start(); // 开启线程，执行操作
-    }
+    m_pInterface->prepareOperation();
+    d->start();
 }
 
 void SingleJob::doPause()
@@ -118,30 +113,17 @@ bool SingleJob::doKill()
         return false;
     }
 
-    const bool killed = m_pInterface->doKill();
-    if (killed) {
-        qCDebug(appLog) << "Job killed successfully";
-        return true;
-    }
-
-    if (d->isRunning()) { //Returns true if the thread is running
-        qCInfo(appLog) << "Requesting graceful thread interruption, will abort in one second otherwise.";
-        d->requestInterruption(); //请求中断线程(建议性)
-        d->wait(1000); //阻塞1s或阻塞到线程结束(取小)
-    }
-
-    qCDebug(appLog) << "Job kill completed";
-    return true;
+    m_pInterface->cancel();
+    return false;
 }
 
 void SingleJob::initConnections()
 {
     qCDebug(appLog) << "Initializing signal connections";
-    connect(m_pInterface, &ReadOnlyArchiveInterface::signalFinished, this, &SingleJob::slotFinished, Qt::ConnectionType::UniqueConnection);
-    connect(m_pInterface, &ReadOnlyArchiveInterface::signalprogress, this, &SingleJob::signalprogress, Qt::ConnectionType::UniqueConnection);
-    connect(m_pInterface, &ReadOnlyArchiveInterface::signalCurFileName, this, &SingleJob::signalCurFileName, Qt::ConnectionType::UniqueConnection);
-    connect(m_pInterface, &ReadOnlyArchiveInterface::signalFileWriteErrorName, this, &SingleJob::signalFileWriteErrorName, Qt::ConnectionType::UniqueConnection);
-    connect(m_pInterface, &ReadOnlyArchiveInterface::signalQuery, this, &SingleJob::signalQuery, Qt::ConnectionType::AutoConnection);
+    connect(m_pInterface, &dcarchive::ArchiveSession::signalprogress, this, &SingleJob::signalprogress, Qt::ConnectionType::UniqueConnection);
+    connect(m_pInterface, &dcarchive::ArchiveSession::signalCurFileName, this, &SingleJob::signalCurFileName, Qt::ConnectionType::UniqueConnection);
+    connect(m_pInterface, &dcarchive::ArchiveSession::signalFileWriteErrorName, this, &SingleJob::signalFileWriteErrorName, Qt::ConnectionType::UniqueConnection);
+    connect(m_pInterface, &dcarchive::ArchiveSession::signalQuery, this, &SingleJob::signalQuery, Qt::ConnectionType::AutoConnection);
     qCDebug(appLog) << "Signal connections initialized";
 }
 
@@ -161,7 +143,7 @@ void SingleJob::slotFinished(PluginFinishType eType)
 }
 
 // 加载操作
-LoadJob::LoadJob(ReadOnlyArchiveInterface *pInterface, QObject *parent)
+LoadJob::LoadJob(dcarchive::ArchiveSession *pInterface, QObject *parent)
     : SingleJob(pInterface, parent)
 {
     qCDebug(appLog) << "LoadJob instance created";
@@ -176,22 +158,11 @@ LoadJob::~LoadJob()
 
 void LoadJob::doWork()
 {
-    qCDebug(appLog) << "LoadJob starting work";
-    if (m_pInterface) {
-        PluginFinishType eType = m_pInterface->list();
-        qCDebug(appLog) << "List operation completed, result:" << eType;
-
-        if (!(m_pInterface->waitForFinished())) {
-            qCDebug(appLog) << "Emitting finished signal";
-            slotFinished(eType);
-        }
-    } else {
-        qCWarning(appLog) << "Interface is null in LoadJob";
-    }
+    slotFinished(m_pInterface ? m_pInterface->list() : PFT_Error);
 }
 
 // 压缩操作
-AddJob::AddJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const CompressOptions &options, QObject *parent)
+AddJob::AddJob(const QList<FileEntry> &files, dcarchive::ArchiveSession *pInterface, const CompressOptions &options, QObject *parent)
     : SingleJob(pInterface, parent)
     , m_vecFiles(files)
     , m_stCompressOptions(options)
@@ -207,25 +178,11 @@ AddJob::~AddJob()
 
 void AddJob::doWork()
 {
-    qCDebug(appLog) << "AddJob starting work, files count:" << m_vecFiles.size();
-    ReadWriteArchiveInterface *pWriteInterface = dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface);
-
-    if (nullptr == pWriteInterface) {
-        qCWarning(appLog) << "Failed to cast to ReadWriteArchiveInterface";
-        return;
-    }
-
-    PluginFinishType eType = pWriteInterface->addFiles(m_vecFiles, m_stCompressOptions);
-    qCDebug(appLog) << "Add files operation completed, result:" << eType;
-
-    if (!(pWriteInterface->waitForFinished())) {
-        qCDebug(appLog) << "Emitting finished signal";
-        slotFinished(eType);
-    }
+    slotFinished(m_pInterface ? m_pInterface->addFiles(m_vecFiles, m_stCompressOptions) : PFT_Error);
 }
 
 // 创建压缩包操作
-CreateJob::CreateJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const CompressOptions &options, QObject *parent)
+CreateJob::CreateJob(const QList<FileEntry> &files, dcarchive::ArchiveSession *pInterface, const CompressOptions &options, QObject *parent)
     : SingleJob(pInterface, parent)
     , m_vecFiles(files)
     , m_stCompressOptions(options)
@@ -241,79 +198,12 @@ CreateJob::~CreateJob()
 
 void CreateJob::doWork()
 {
-    qCDebug(appLog) << "CreateJob starting work, files count:" << m_vecFiles.size();
-    ReadWriteArchiveInterface *pWriteInterface = dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface);
-
-    if (pWriteInterface == nullptr) {
-        qCWarning(appLog) << "Failed to cast to ReadWriteArchiveInterface";
-        return;
-    }
-
-    // 调用压缩接口
-    PluginFinishType eType = pWriteInterface->addFiles(m_vecFiles, m_stCompressOptions);
-    qCDebug(appLog) << "Create archive operation completed, result:" << eType;
-
-    if (!(pWriteInterface->waitForFinished())) {
-        qCDebug(appLog) << "Emitting finished signal";
-        slotFinished(eType);
-    }
-}
-
-bool CreateJob::doKill()
-{
-    qCDebug(appLog) << "CreateJob doKill";
-    if (nullptr == m_pInterface) {
-        qCDebug(appLog) << "CreateJob doKill, interface is null";
-        return false;
-    }
-
-    const bool killed = m_pInterface->doKill();
-    if (killed) {
-        qCDebug(appLog) << "CreateJob doKill, interface killed";
-        cleanCompressFileCancel();
-        return true;
-    }
-
-    if (d->isRunning()) { //Returns true if the thread is running
-        qCInfo(appLog) << "Requesting graceful thread interruption, will abort in one second otherwise.";
-        d->requestInterruption(); //请求中断线程(建议性)
-        d->wait(1000); //阻塞1s或阻塞到线程结束(取小)
-    }
-    cleanCompressFileCancel();
-    return true;
-}
-
-void CreateJob::cleanCompressFileCancel()
-{
-    qCDebug(appLog) << "CreateJob cleanCompressFileCancel";
-    if (m_stCompressOptions.bSplit) {
-        qCDebug(appLog) << "CreateJob cleanCompressFileCancel, split compress";
-        // 判断 7z分卷压缩的 文件名
-        QFileInfo file(dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface)->getArchiveName());
-        QStringList nameFilters;
-        nameFilters << file.fileName() + ".0*";
-        QDir dir(file.path());
-        QFileInfoList files = dir.entryInfoList(nameFilters, QDir::Files | QDir::Readable, QDir::Name);
-
-        foreach (QFileInfo fi, files) {
-            QFile fiRemove(fi.filePath());
-            if (fiRemove.exists()) {
-                qCInfo(appLog) << "取消时删除:" << fiRemove.fileName();
-                fiRemove.remove();
-            }
-        }
-    } else {
-        qCDebug(appLog) << "CreateJob cleanCompressFileCancel, not split compress";
-        QFile fiRemove(dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface)->getArchiveName());  // 没有判断 7z分卷压缩的 文件名
-        if (fiRemove.exists()) {
-            qCInfo(appLog) << "取消时删除:" << fiRemove.fileName();
-            fiRemove.remove();
-        }
-    }
+    m_stCompressOptions.bCreateNew = true;
+    slotFinished(m_pInterface ? m_pInterface->addFiles(m_vecFiles, m_stCompressOptions) : PFT_Error);
 }
 
 // 解压操作
-ExtractJob::ExtractJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const ExtractionOptions &options, QObject *parent)
+ExtractJob::ExtractJob(const QList<FileEntry> &files, dcarchive::ArchiveSession *pInterface, const ExtractionOptions &options, QObject *parent)
     : SingleJob(pInterface, parent)
     , m_vecFiles(files)
     , m_stExtractionOptions(options)
@@ -330,27 +220,11 @@ ExtractJob::~ExtractJob()
 
 void ExtractJob::doWork()
 {
-    qCDebug(appLog) << "ExtractJob starting work, files count:" << m_vecFiles.size();
-    if (m_pInterface) {
-        PluginFinishType eType = m_pInterface->extractFiles(m_vecFiles, m_stExtractionOptions);
-        qCDebug(appLog) << "Extract operation completed, result:" << eType;
-
-        if (!(m_pInterface->waitForFinished())) {
-            qCDebug(appLog) << "Emitting finished signal";
-            slotFinished(eType);
-        } else {
-            if (PFT_Error == eType) {
-                qCWarning(appLog) << "Extract operation failed";
-                errorcode = false;
-            }
-        }
-    } else {
-        qCWarning(appLog) << "Interface is null in ExtractJob";
-    }
+    slotFinished(m_pInterface ? m_pInterface->extractFiles(m_vecFiles, m_stExtractionOptions) : PFT_Error);
 }
 
 // 删除操作
-DeleteJob::DeleteJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent)
+DeleteJob::DeleteJob(const QList<FileEntry> &files, dcarchive::ArchiveSession *pInterface, QObject *parent)
     : SingleJob(pInterface, parent)
     , m_vecFiles(files)
 {
@@ -367,24 +241,11 @@ DeleteJob::~DeleteJob()
 
 void DeleteJob::doWork()
 {
-    qCDebug(appLog) << "DeleteJob starting work, files count:" << m_vecFiles.size();
-    ReadWriteArchiveInterface *pWriteInterface = dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface);
-
-    if (nullptr == pWriteInterface) {
-        qCWarning(appLog) << "Failed to cast to ReadWriteArchiveInterface in DeleteJob";
-        return;
-    }
-
-    PluginFinishType eType = pWriteInterface->deleteFiles(m_vecFiles);
-
-    if (!(pWriteInterface->waitForFinished())) {
-        qCDebug(appLog) << "Emitting finished signal";
-        slotFinished(eType);
-    }
+    slotFinished(m_pInterface ? m_pInterface->deleteFiles(m_vecFiles) : PFT_Error);
 }
 
 // 重命名操作
-RenameJob::RenameJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent)
+RenameJob::RenameJob(const QList<FileEntry> &files, dcarchive::ArchiveSession *pInterface, QObject *parent)
     : SingleJob(pInterface, parent)
     , m_vecFiles(files)
 {
@@ -400,26 +261,10 @@ RenameJob::~RenameJob()
 
 void RenameJob::doWork()
 {
-    qCDebug(appLog) << "RenameJob starting work, files count:" << m_vecFiles.size();
-    ReadWriteArchiveInterface *pWriteInterface = dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface);
-
-    if (nullptr == pWriteInterface) {
-        qCWarning(appLog) << "Failed to cast to ReadWriteArchiveInterface in RenameJob";
-        return;
-    }
-
-    PluginFinishType eType = pWriteInterface->renameFiles(m_vecFiles);
-    qCDebug(appLog) << "Rename operation completed, result:" << eType;
-
-    if (!(pWriteInterface->waitForFinished())) {
-        qCDebug(appLog) << "Emitting finished signal";
-        slotFinished(eType);
-    } else {
-        qCDebug(appLog) << "Rename operation completed synchronously";
-    }
+    slotFinished(m_pInterface ? m_pInterface->renameFiles(m_vecFiles) : PFT_Error);
 }
 
-OpenJob::OpenJob(const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram, ReadOnlyArchiveInterface *pInterface, QObject *parent)
+OpenJob::OpenJob(const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram, dcarchive::ArchiveSession *pInterface, QObject *parent)
     : SingleJob(pInterface, parent)
     , m_stEntry(stEntry)
     , m_strTempExtractPath(strTempExtractPath)
@@ -427,8 +272,7 @@ OpenJob::OpenJob(const FileEntry &stEntry, const QString &strTempExtractPath, co
 {
     qCDebug(appLog) << "OpenJob instance created for file:" << stEntry.strFileName;
     m_eJobType = JT_Open;
-    connect(m_pInterface, &ReadOnlyArchiveInterface::signalFinished, this, &OpenJob::slotFinished, Qt::ConnectionType::UniqueConnection);
-    connect(m_pInterface, &ReadOnlyArchiveInterface::signalQuery, this, &SingleJob::signalQuery, Qt::ConnectionType::AutoConnection);
+    connect(m_pInterface, &dcarchive::ArchiveSession::signalQuery, this, &SingleJob::signalQuery, Qt::ConnectionType::AutoConnection);
 }
 
 OpenJob::~OpenJob()
@@ -453,17 +297,10 @@ void OpenJob::doWork()
         }
         options.qSize = m_stEntry.qSize;
 
-        PluginFinishType eType = m_pInterface->extractFiles(QList<FileEntry>() << m_stEntry, options);
-        qCDebug(appLog) << "Open extraction operation completed, result:" << eType;
-
-        if (!(m_pInterface->waitForFinished())) {
-            qCDebug(appLog) << "Emitting finished signal";
-            slotFinished(eType);
-        } else {
-            qCDebug(appLog) << "Open extraction completed synchronously";
-        }
+        slotFinished(m_pInterface->extractFiles(QList<FileEntry>() << m_stEntry, options,
+                                                &m_extractedPath));
     } else {
-        qCWarning(appLog) << "Interface is null in OpenJob";
+        slotFinished(PFT_Error);
     }
 }
 
@@ -472,25 +309,17 @@ void OpenJob::slotFinished(PluginFinishType eType)
     qCDebug(appLog) << "OpenJob finished with type:" << eType;
     if (PFT_Nomral == eType) {
         qCDebug(appLog) << "Processing file for opening";
-        QString name = m_stEntry.strFileName;
+        QString name = m_extractedPath.isEmpty()
+                ? QDir(m_strTempExtractPath).filePath(m_stEntry.strFileName) : m_extractedPath;
 
-        //对于超长文件打开失败问题处理
-        QString strTempFileName = m_stEntry.strFileName;
-        if (NAME_MAX < QString(strTempFileName).toLocal8Bit().length() && !strTempFileName.endsWith(QDir::separator())) {
-            qCDebug(appLog) << "Handling long filename";
-            QString strTemp = strTempFileName.left(60);
-            name = strTemp + QString("(%1)").arg(1, 3, 10, QChar('0'))+"." + QFileInfo(strTempFileName).completeSuffix();
-        }
-
-        if (name.contains("%")) { // 文件名含有%的时候无法直接双击打开, 创建一个该文件的链接，文件名不含有%，通过打开链接打开源文件
+        QString leaf = QFileInfo(name).fileName();
+        if (leaf.contains(QLatin1Char('%'))) {
             qCDebug(appLog) << "Creating link for file with % in name";
-            name = m_strTempExtractPath + QDir::separator() + name.replace("%", "1"); // 将文件名中的%替换为1;
-            if (!QFile::link(m_stEntry.strFileName, name)) { // 创建链接
+            const QString alias = QFileInfo(name).dir().filePath(leaf.replace(QLatin1Char('%'), QLatin1Char('1')));
+            if (QFile::link(name, alias))
+                name = alias;
+            else
                 qCWarning(appLog) << "Failed to create link for file";
-                return;
-            }
-        } else {
-            name = m_strTempExtractPath + QDir::separator() + name;
         }
 
         // 在线程中执行外部应用打开的命令
@@ -506,13 +335,12 @@ void OpenJob::slotFinished(PluginFinishType eType)
     SingleJob::slotFinished(eType); // 在结束上述操作之后发送job结束信号
 }
 
-UpdateJob::UpdateJob(const UpdateOptions &options, ReadOnlyArchiveInterface *pInterface, QObject *parent)
+UpdateJob::UpdateJob(const UpdateOptions &options, dcarchive::ArchiveSession *pInterface, QObject *parent)
     : SingleJob(pInterface, parent)
     , m_stOptions(options)
 {
     qCDebug(appLog) << "UpdateJob instance created";
     m_eJobType = JT_Update;
-    //connect(m_pInterface, &ReadOnlyArchiveInterface::signalFinished, this, &UpdateJob::slotFinished, Qt::ConnectionType::UniqueConnection);
 }
 
 UpdateJob::~UpdateJob()
@@ -520,41 +348,12 @@ UpdateJob::~UpdateJob()
     qCDebug(appLog) << "UpdateJob instance destroyed";
 }
 
-void UpdateJob::start()
-{
-    qCDebug(appLog) << "Starting UpdateJob";
-    jobTimer.start();
-
-    // 若插件指针为空，立即异常退出
-    if (nullptr == m_pInterface) {
-        qCWarning(appLog) << "Interface is null in UpdateJob";
-        slotFinished(PFT_Error);
-        return;
-    }
-
-    d->start(); // 开启线程，执行操作
-}
-
 void UpdateJob::doWork()
 {
-    qCDebug(appLog) << "UpdateJob starting work";
-    ReadWriteArchiveInterface *pWriteInterface = dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface);
-
-    if (pWriteInterface) {
-        qCDebug(appLog) << "Calling updateArchiveData";
-        // 调用更新函数
-        PluginFinishType eType = pWriteInterface->updateArchiveData(m_stOptions);
-        qCDebug(appLog) << "Update operation completed, result:" << eType;
-
-        //if (!(pWriteInterface->waitForFinished())) {
-        slotFinished(eType);
-        //}
-    } else {
-        qCWarning(appLog) << "Failed to cast to ReadWriteArchiveInterface in UpdateJob";
-    }
+    slotFinished(m_pInterface ? m_pInterface->updateArchiveData(m_stOptions) : PFT_Error);
 }
 
-CommentJob::CommentJob(const QString &strComment, ReadOnlyArchiveInterface *pInterface, QObject *parent)
+CommentJob::CommentJob(const QString &strComment, dcarchive::ArchiveSession *pInterface, QObject *parent)
     : SingleJob(pInterface, parent)
     , m_strComment(strComment)
 {
@@ -562,8 +361,7 @@ CommentJob::CommentJob(const QString &strComment, ReadOnlyArchiveInterface *pInt
     m_eJobType = JT_Comment;
 
     // 进度和结束处理
-    connect(m_pInterface, &ReadOnlyArchiveInterface::signalFinished, this, &CommentJob::slotFinished, Qt::ConnectionType::UniqueConnection);
-    connect(m_pInterface, &ReadOnlyArchiveInterface::signalprogress, this, &CommentJob::signalprogress, Qt::ConnectionType::UniqueConnection);
+    connect(m_pInterface, &dcarchive::ArchiveSession::signalprogress, this, &CommentJob::signalprogress, Qt::ConnectionType::UniqueConnection);
 }
 
 CommentJob::~CommentJob()
@@ -577,23 +375,7 @@ CommentJob::~CommentJob()
 
 void CommentJob::doWork()
 {
-    qCDebug(appLog) << "CommentJob starting work";
-    qCInfo(appLog) << "Adding comment";
-
-    ReadWriteArchiveInterface *pWriteInterface = dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface);
-
-    if (pWriteInterface) {
-        PluginFinishType eType = pWriteInterface->addComment(m_strComment);
-        qCDebug(appLog) << "Add comment operation completed, result:" << eType;
-        if (!(pWriteInterface->waitForFinished())) {
-            qCDebug(appLog) << "Emitting finished signal";
-            slotFinished(eType);
-        } else {
-            qCDebug(appLog) << "Comment operation completed synchronously";
-        }
-    } else {
-        qCWarning(appLog) << "Failed to cast to ReadWriteArchiveInterface in CommentJob";
-    }
+    slotFinished(m_pInterface ? m_pInterface->addComment(m_strComment) : PFT_Error);
 }
 
 ComplexJob::ComplexJob(const QString strOriginalArchiveFullPath, QObject *parent)
@@ -640,7 +422,8 @@ bool ComplexJob::doKill()
 {
     qCDebug(appLog) << "Killing ComplexJob";
     if (m_pIface) {
-        return m_pIface->doKill();
+        m_pIface->cancel();
+        return false;
     }
     qCWarning(appLog) << "Interface is null, cannot kill";
     return false;
@@ -682,7 +465,7 @@ ConvertJob::~ConvertJob()
 void ConvertJob::start()
 {
     qCDebug(appLog) << "Starting ConvertJob";
-    ReadOnlyArchiveInterface *pIface = UiTools::createInterface(m_strOriginalArchiveFullPath);
+    dcarchive::ArchiveSession *pIface = UiTools::createInterface(m_strOriginalArchiveFullPath);
 
     if (pIface) {
         qCInfo(appLog) << "格式转换开始解压";
@@ -725,7 +508,7 @@ void ConvertJob::slotHandleExtractFinished()
             qCInfo(appLog) << "格式转换开始压缩";
             m_iStepNo = 1;
 
-            ReadOnlyArchiveInterface *pIface = UiTools::createInterface(m_strNewArchiveFullPath, true);
+            dcarchive::ArchiveSession *pIface = UiTools::createInterface(m_strNewArchiveFullPath, true);
 
             if (pIface) {
                 qCDebug(appLog) << "Creating interface for compression step";
@@ -748,7 +531,7 @@ void ConvertJob::slotHandleExtractFinished()
                 // 构建压缩参数
                 CompressOptions options;
                 options.iCompressionLevel = 3; // 默认压缩等级为3，其余参数均为默认选项
-                options.qTotalSize = DataManager::get_instance().archiveData().qSize; // list压缩包时存储的压缩包内文件实际总大小
+                options.qTotalSize = ArchiveViewState::instance().archiveData().qSize; // list压缩包时存储的压缩包内文件实际总大小
 
                 // 创建压缩操作
                 qCDebug(appLog) << "Creating CreateJob for compression";
@@ -798,7 +581,7 @@ void StepExtractJob::start()
 {
     qCDebug(appLog) << "Starting StepExtractJob";
     // tar.7z 指定使用cli7zplugin先解压出tar包
-    ReadOnlyArchiveInterface *pIface = UiTools::createInterface(m_strOriginalArchiveFullPath, false);
+    dcarchive::ArchiveSession *pIface = UiTools::createInterface(m_strOriginalArchiveFullPath, false);
 
     if (nullptr != pIface) {
         qCInfo(appLog) << "StepExtractJob: 开始解压tar.7z成tar";
@@ -867,7 +650,7 @@ void StepExtractJob::slotHandleExtractFinished()
                 qCDebug(appLog) << "Found single tar file, proceeding with special handling";
                 QFileInfo fileInfo = list.at(0);
 
-                ReadOnlyArchiveInterface *pIface = UiTools::createInterface(fileInfo.absoluteFilePath(), false);
+                dcarchive::ArchiveSession *pIface = UiTools::createInterface(fileInfo.absoluteFilePath(), false);
 
                 if (nullptr != pIface) {
                     qCInfo(appLog) << "StepExtractJob: 开始解压tar";
@@ -896,7 +679,7 @@ void StepExtractJob::slotHandleExtractFinished()
                 }
             } else {
                 qCDebug(appLog) << "Using fallback extraction method";
-                ReadOnlyArchiveInterface *pIface = UiTools::createInterface(m_strOriginalArchiveFullPath, false);
+                dcarchive::ArchiveSession *pIface = UiTools::createInterface(m_strOriginalArchiveFullPath, false);
 
                 if (nullptr != pIface) {
                     qCInfo(appLog) << "StepExtractJob: 开始直接解压原文件";
@@ -906,7 +689,7 @@ void StepExtractJob::slotHandleExtractFinished()
 
                     // 创建解压参数
                     ExtractionOptions stOptions = m_stExtractionOptions;
-                    stOptions.password = DataManager::get_instance().archiveData().strPassword; // 第二次解压使用第一次保存的密码
+                    stOptions.password = ArchiveViewState::instance().archiveData().strPassword; // 第二次解压使用第一次保存的密码
                     stOptions.bAllExtract = true;
                     stOptions.bTar_7z = false;
 
@@ -946,18 +729,5 @@ void StepExtractJob::slotHandleExtractFinished()
 bool StepExtractJob::doKill()
 {
     qCDebug(appLog) << "Killing StepExtractJob";
-    if (m_pIface) {
-        const bool killed = m_pIface->doKill();
-        if (killed) {
-            qCDebug(appLog) << "StepExtractJob killed successfully";
-            return true;
-        }
-    }
-    if (m_pExtractJob2 && m_pExtractJob2->getdptr()->isRunning()) { //Returns true if the thread is running
-        qCInfo(appLog) << "Requesting graceful thread interruption, will abort in one second otherwise.";
-        m_pExtractJob2->getdptr()->requestInterruption(); //请求中断线程(建议性)
-        m_pExtractJob2->getdptr()->wait(1000); //阻塞1s或阻塞到线程结束(取小)
-    }
-
-    return true;
+    return ComplexJob::doKill();
 }

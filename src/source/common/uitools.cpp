@@ -4,10 +4,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "uitools.h"
+#include "archive_registry.h"
 #include "mimetypes.h"
-#include "kpluginfactory.h"
-#include "kpluginloader.h"
-#include "pluginmanager.h"
+#include "archive_session.h"
 #include "qtcompat.h"
 #include "common/ddlog.h"
 
@@ -31,10 +30,8 @@
 #include <QStorageInfo>
 #include <QProcessEnvironment>
 
-#include <KEncodingProber>
 
 DCORE_USE_NAMESPACE
-Q_DECLARE_METATYPE(KPluginMetaData)
 
 QStringList UiTools::m_associtionlist = QStringList() << "file_association.file_association_type.x-7z-compressed"
                                         << "file_association.file_association_type.x-archive"
@@ -57,6 +54,9 @@ QStringList UiTools::m_associtionlist = QStringList() << "file_association.file_
                                         << "file_association.file_association_type.x-lzip-compressed-tar"
                                         << "file_association.file_association_type.x-lzma-compressed-tar"
                                         << "file_association.file_association_type.x-tzo"
+                                        << "file_association.file_association_type.x-lrzip-compressed-tar"
+                                        << "file_association.file_association_type.x-lz4-compressed-tar"
+                                        << "file_association.file_association_type.x-zstd-compressed-tar"
                                         << "file_association.file_association_type.x-xz-compressed-tar"
                                         << "file_association.file_association_type.x-tarz"
                                         << "file_association.file_association_type.x-xar"
@@ -191,9 +191,15 @@ bool UiTools::isExistMimeType(const QString &strMimeType, bool &bArchive)
             names << alias;
     }
 
+    const bool lrzipTar = names.contains(QStringLiteral("application/x-lrzip-compressed-tar"))
+            || raw == QLatin1String("x-lrzip-compressed-tar");
+    if (lrzipTar && QStandardPaths::findExecutable(QStringLiteral("lrzip")).isEmpty())
+        return false;
+
     QString conf = readConf();
     QStringList confList = conf.split("\n", SKIP_EMPTY_PARTS);
     bool exist = false;
+    bool hasSetting = false;
     for (const QString &line : confList) {
         bool matched = false;
         for (QString name : names) {
@@ -206,10 +212,19 @@ bool UiTools::isExistMimeType(const QString &strMimeType, bool &bArchive)
         if (!matched)
             continue;
 
+        hasSetting = true;
         bArchive = true;
         exist = line.contains("true");
         if (exist)
             break;
+    }
+
+    // An existing config may predate these options. Honor explicit false values.
+    if (!hasSetting && (lrzipTar
+                       || names.contains(QStringLiteral("application/x-lz4-compressed-tar"))
+                       || names.contains(QStringLiteral("application/x-zstd-compressed-tar")))) {
+        bArchive = true;
+        exist = true;
     }
 
     qCDebug(appLog) << "MIME type check result:" << exist;
@@ -268,140 +283,78 @@ QString UiTools::toShortString(QString strSrc, int limitCounts, int left)
     return displayName;
 }
 
-ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool bWrite, AssignPluginType eType/*, bool bUseLibArchive*/)
+namespace {
+dcarchive::BackendPreference backendPreference(UiTools::AssignPluginType type)
+{
+    switch (type) {
+    case UiTools::APT_Cli7z:
+        return dcarchive::BackendPreference::SevenZip;
+    case UiTools::APT_Libarchive:
+        return dcarchive::BackendPreference::Libarchive;
+    case UiTools::APT_Libzip:
+    case UiTools::APT_AutoWithoutPzip:
+        return dcarchive::BackendPreference::Libzip;
+    case UiTools::APT_Libpigz:
+        return dcarchive::BackendPreference::Pigz;
+    case UiTools::APT_Auto:
+        return dcarchive::BackendPreference::Auto;
+    }
+    return dcarchive::BackendPreference::Auto;
+}
+} // namespace
+
+bool UiTools::isWritableArchive(const QString &strFileName)
+{
+    const CustomMimeType mime = determineMimeType(strFileName);
+    std::unique_ptr<dcarchive::ArchiveBackend> backend = dcarchive::ArchiveRegistry::create(
+            QFileInfo(strFileName).absoluteFilePath(), mime.name(),
+            dcarchive::ArchiveOperation::Modify);
+    if (!backend)
+        return false;
+    const dcarchive::BackendCapabilities caps = backend->capabilities();
+    return caps.append || caps.remove || caps.rename || caps.comment;
+}
+
+QStringList UiTools::supportedWriteMimeTypes()
+{
+    QStringList types{
+        QStringLiteral("application/x-7z-compressed"),
+        QStringLiteral("application/java-archive"),
+        QStringLiteral("application/x-tar"),
+        QStringLiteral("application/x-compressed-tar"),
+        QStringLiteral("application/x-bzip-compressed-tar"),
+        QStringLiteral("application/x-tarz"),
+        QStringLiteral("application/x-xz-compressed-tar"),
+        QStringLiteral("application/x-lzma-compressed-tar"),
+        QStringLiteral("application/x-lzip-compressed-tar"),
+        QStringLiteral("application/x-tzo"),
+        QStringLiteral("application/x-zstd-compressed-tar"),
+        QStringLiteral("application/x-lz4-compressed-tar"),
+    };
+    if (!QStandardPaths::findExecutable(QStringLiteral("lrzip")).isEmpty())
+        types.append(QStringLiteral("application/x-lrzip-compressed-tar"));
+    types.append(QStringLiteral("application/zip"));
+    if (!QStandardPaths::findExecutable(QStringLiteral("rar")).isEmpty())
+        types.append(QStringLiteral("application/vnd.rar"));
+    return types;
+}
+
+dcarchive::ArchiveSession *UiTools::createInterface(const QString &fileName, bool bWrite, AssignPluginType eType/*, bool bUseLibArchive*/)
 {
     qCDebug(appLog) << "Creating interface for file:" << fileName << "write mode:" << bWrite << "plugin type:" << eType;
     const CustomMimeType mimeType = determineMimeType(fileName);
     qCDebug(appLog) << "Determined MIME type:" << mimeType.name();
 
-    QVector<Plugin *> offers;
-    if (bWrite) {
-        offers = PluginManager::get_instance().preferredWritePluginsFor(mimeType);
-        qCDebug(appLog) << "Found" << offers.size() << "write plugins for MIME type";
+    dcarchive::ArchiveSession *own = dcarchive::ArchiveSession::create(
+            QFileInfo(fileName).absoluteFilePath(), mimeType.name(), bWrite,
+            backendPreference(eType));
+    if (own) {
+        qCInfo(appLog) << "Using own archive backend:" << fileName << "mime:" << mimeType.name();
     } else {
-        offers = PluginManager::get_instance().preferredPluginsFor(mimeType);
-        qCDebug(appLog) << "Found" << offers.size() << "read plugins for MIME type";
+        qCWarning(appLog) << "No own archive backend for file:" << fileName
+                          << "mime:" << mimeType.name();
     }
-
-    if (offers.isEmpty()) {
-        qCWarning(appLog) << "Could not find a plugin to handle" << fileName;
-        return nullptr;
-    }
-
-    //tar.lzo格式 由P7zip插件压缩mimeFromContent为"application/x-7z-compressed"，由Libarchive插件压缩mimeFromContent为"application/x-lzop"
-    // 若未指定使用cli7z插件，则需要对zip和tar格式的解压屏蔽7z，选用libzip或libarchive插件
-    //删除P7zip插件处理 mimeFromContent为"application/x-lzop" 的情况
-    QMimeDatabase db;
-    QMimeType mimeFromContent = db.mimeTypeForFile(fileName, QMimeDatabase::MatchContent);
-    bool remove7zFlag = false;
-
-    if (eType != APT_Cli7z) {
-        if (((!bWrite) && (mimeType.name() == QString("application/zip") || mimeType.name() == QString("application/x-tar")))
-                || ("application/x-tzo" == mimeType.name() && "application/x-lzop" == mimeFromContent.name())) {
-            qCDebug(appLog) << "Setting flag to remove 7zip plugin for zip/tar/tzo formats";
-            remove7zFlag = true;
-        }
-    }
-
-    // pzip 插件只用于压缩，不用于读取/解压；ZIP 追加时也需要排除 pzip，回到旧版自动选择链路
-    bool removePzipFlag = (mimeType.name() == QString("application/zip"))
-                          && ((!bWrite) || eType == APT_AutoWithoutPzip);
-    if (removePzipFlag) {
-        qCDebug(appLog) << "Setting flag to remove pzip plugin for zip";
-    }
-
-    // 创建插件
-    ReadOnlyArchiveInterface *pIface = nullptr;
-    qCDebug(appLog) << "Iterating through" << offers.size() << "plugins";
-    for (Plugin *plugin : offers) {
-        //删除P7zip插件
-        if (remove7zFlag && plugin->metaData().name().contains("7zip", Qt::CaseInsensitive)) {
-            qCDebug(appLog) << "Skipping 7zip plugin due to remove flag";
-            continue;
-        }
-
-        // 读取 ZIP 时跳过 pzip 插件（pzip 只用于压缩）
-        if (removePzipFlag && plugin->metaData().name().contains("pzip", Qt::CaseInsensitive)) {
-            qCDebug(appLog) << "Skipping pzip plugin for reading (pzip is write-only)";
-            continue;
-        }
-
-        switch (eType) {
-        // 自动识别
-        case APT_Auto:
-        case APT_AutoWithoutPzip:
-            qCDebug(appLog) << "Using auto-detect plugin type";
-            pIface = createInterface(fileName, mimeType, plugin);
-            break;
-        // cli7zplugin
-        case APT_Cli7z:
-            if (plugin->metaData().name().contains("7zip", Qt::CaseInsensitive)) {
-                qCDebug(appLog) << "Using 7zip plugin";
-                pIface = createInterface(fileName, mimeType, plugin);
-            }
-            break;
-        // libarchive
-        case APT_Libarchive:
-            if (plugin->metaData().name().contains("libarchive", Qt::CaseInsensitive)) {
-                qCDebug(appLog) << "Using libarchive plugin";
-                pIface = createInterface(fileName, mimeType, plugin);
-            }
-            break;
-        // libzipplugin
-        case APT_Libzip:
-            if (plugin->metaData().name().contains("libzip", Qt::CaseInsensitive)) {
-                qCDebug(appLog) << "Using libzip plugin";
-                pIface = createInterface(fileName, mimeType, plugin);
-            }
-            break;
-        // libpigzplugin
-        case APT_Libpigz:
-            if (plugin->metaData().name().contains("pigz", Qt::CaseInsensitive)) {
-                qCDebug(appLog) << "Using pigz plugin";
-                pIface = createInterface(fileName, mimeType, plugin);
-            }
-            break;
-        }
-
-        // Use the first valid plugin, according to the priority sorting.
-        if (pIface) {
-            qCInfo(appLog) << "选用插件：" << plugin->metaData().pluginId();
-            qCDebug(appLog) << "Successfully created interface with plugin";
-            break;
-        } else {
-            qCDebug(appLog) << "Failed to create interface with plugin:" << plugin->metaData().pluginId();
-        }
-    }
-
-    if (!pIface) {
-        qCWarning(appLog) << "No suitable plugin found for file:" << fileName;
-    }
-    return pIface;
-}
-
-ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, const CustomMimeType &mimeType, Plugin *plugin)
-{
-    qCDebug(appLog) << "Creating interface with plugin:" << plugin->metaData().pluginId() << "for file:" << fileName;
-    Q_ASSERT(plugin);
-
-    KPluginFactory *factory = KPluginLoader(plugin->metaData().fileName()).factory();
-    if (!factory) {
-        qCWarning(appLog) << "Failed to load plugin factory for:" << plugin->metaData().fileName();
-        return nullptr;
-    }
-
-    const QVariantList args = {QVariant(QFileInfo(fileName).absoluteFilePath()),
-                               QVariant().fromValue(plugin->metaData()),
-                               QVariant::fromValue(mimeType)
-                              };
-
-    ReadOnlyArchiveInterface *iface = factory->create<ReadOnlyArchiveInterface>(nullptr, args);
-    if (iface) {
-        qCDebug(appLog) << "Successfully created interface";
-    } else {
-        qCWarning(appLog) << "Failed to create interface";
-    }
-    return iface;
+    return own;
 }
 
 void UiTools::transSplitFileName(QString &fileName, UnCompressParameter::SplitType &eSplitType)

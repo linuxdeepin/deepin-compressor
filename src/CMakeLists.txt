@@ -36,7 +36,6 @@ endif()
 
 find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS ${qt_required_components})
 find_package(Dtk${DTK_VERSION_MAJOR} REQUIRED COMPONENTS Widget)
-find_package(KF${KF_VERSION_MAJOR}Codecs REQUIRED)
 
 set(LINK_LIBS
     Qt${QT_DESIRED_VERSION}::Core
@@ -45,7 +44,6 @@ set(LINK_LIBS
     Qt${QT_DESIRED_VERSION}::Widgets
     Qt${QT_DESIRED_VERSION}::Concurrent
     Dtk${DTK_VERSION_MAJOR}::Widget
-    KF${KF_VERSION_MAJOR}::Codecs
 )
 
 if (QT_DESIRED_VERSION MATCHES 6)
@@ -68,12 +66,41 @@ include_directories(${PROJECT_SOURCE_DIR}/source/dialog)
 include_directories(${PROJECT_SOURCE_DIR}/source/dialog/openwithdialog)
 include_directories(${PROJECT_SOURCE_DIR}/source/page)
 include_directories(${PROJECT_SOURCE_DIR}/source/tree)
+include_directories(${PROJECT_SOURCE_DIR}/archive/core)
+include_directories(${PROJECT_SOURCE_DIR}/archive/encoding)
+include_directories(${PROJECT_SOURCE_DIR}/archive/backends/singlefile)
+include_directories(${PROJECT_SOURCE_DIR}/archive/backends/libzip)
+include_directories(${PROJECT_SOURCE_DIR}/archive/backends/libarchive)
+include_directories(${PROJECT_SOURCE_DIR}/archive/backends/minizip)
+include_directories(${PROJECT_SOURCE_DIR}/archive/backends/pigz)
+include_directories(${PROJECT_SOURCE_DIR}/archive/backends/sevenzip)
+include_directories(${PROJECT_SOURCE_DIR}/archive/backends/rar)
+include_directories(${PROJECT_SOURCE_DIR}/archive/backends/clipzip)
 include_directories(${HFILES_OUTPUT_PATH})
 
 #源文件、头文件和资源文件
 file(GLOB_RECURSE c_files RELATIVE ${PROJECT_SOURCE_DIR} source/*.cpp source/*.c main.cpp)
 file(GLOB_RECURSE h_files RELATIVE ${PROJECT_SOURCE_DIR} source/*.h *.h)
 file(GLOB_RECURSE res_files RELATIVE ${PROJECT_SOURCE_DIR} *.qrc)
+
+list(APPEND c_files
+    archive/core/archive_registry.cpp
+    archive/core/path_guard.cpp
+    archive/core/extraction_output.cpp
+    archive/core/staging_merge.cpp
+    archive/core/encoding_utils.cpp
+    archive/encoding/encoding_detector.cpp
+    archive/backends/singlefile/singlefile_backend.cpp
+    archive/backends/singlefile/stream_decoder.cpp
+    archive/backends/libzip/libzip_backend.cpp
+    archive/backends/libarchive/libarchive_backend.cpp
+    archive/backends/minizip/minizip_backend.cpp
+    archive/backends/pigz/pigz_backend.cpp
+    archive/backends/sevenzip/sevenzip_backend.cpp
+    archive/backends/rar/rar_backend.cpp
+    archive/backends/clipzip/clipzip_backend.cpp
+)
+
 
 # 根据Qt版本选择合适的命令
 if (QT_VERSION VERSION_GREATER_EQUAL "6.0")
@@ -94,7 +121,12 @@ target_link_libraries(${EXE_NAME}
     ${LINK_LIBS}
     ${GOBJECT_LIBRARIES}
     ${GIO_LIBRARIES}
-    compressor-interface
+    z
+    bz2
+    lzma
+    zip
+    minizip
+    archive
 )
 
 #hw机型增加DConfig配置

@@ -6,9 +6,7 @@
 #ifndef PROCESSOPENTHREAD_H
 #define PROCESSOPENTHREAD_H
 
-#include "archiveinterface.h"
-#include "plugin.h"
-
+#include <QStringList>
 #include <QThread>
 
 class ProcessOpenThread : public QThread

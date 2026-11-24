@@ -11,6 +11,8 @@
  */
 
 #include "pzip/pzip.h"
+#include "pzip/cli_status.h"
+#include <algorithm>
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -35,6 +37,7 @@ void printUsage(const char* progName) {
               << "  -P, --password-file <路径>  从文件读取密码字节（与 libzip 插件编码对齐时由 GUI 写入）\n"
               << "  -e, --encryption <方法> 加密方法: aes128, aes192, aes256（默认: aes256）\n"
               << "      --ui-events        输出给 GUI 解析的事件行（例如当前文件名），格式稳定，适合配合 -q 使用\n"
+              << "      --exclude-path <路径>  排除指定的源文件或目录\n"
               << "  -v, --verbose          显示详细信息\n"
               << "  -q, --quiet            静默模式\n"
               << "  -h, --help             显示帮助信息\n"
@@ -63,6 +66,7 @@ int main(int argc, char* argv[]) {
         {"password-file", required_argument, nullptr, 'P'},
         {"encryption",  required_argument, nullptr, 'e'},
         {"ui-events",   no_argument,       nullptr,  1 },
+        {"exclude-path", required_argument, nullptr, 2},
         {"verbose",     no_argument,       nullptr, 'v'},
         {"quiet",       no_argument,       nullptr, 'q'},
         {"help",        no_argument,       nullptr, 'h'},
@@ -101,6 +105,9 @@ int main(int argc, char* argv[]) {
             case 1:
                 uiEvents = true;
                 break;
+            case 2:
+                options.excludedPaths.emplace_back(optarg);
+                break;
             case 'v':
                 verbose = true;
                 break;
@@ -131,6 +138,22 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    if (argc - optind < 2) {
+        std::cerr << "错误: 需要指定输出文件和输入文件/目录\n";
+        printUsage(argv[0]);
+        return 1;
+    }
+
+    const std::string archivePath = argv[optind];
+    std::vector<pzip::fs::path> inputPaths;
+    for (int index = optind + 1; index < argc; ++index) {
+        inputPaths.emplace_back(argv[index]);
+        if (!pzip::fs::exists(inputPaths.back())) {
+            std::cerr << "错误: 文件不存在: " << argv[index] << "\n";
+            return 1;
+        }
+    }
+
     // --ui-events 可能被 GUI 打开用于“当前文件名 + 进度/速率/剩余时间”显示；
     // 如果直接在压缩线程里打印（尤其是大量小文件），会被 stdout/pty 吞吐拖慢。
     // 因此这里做“异步合并输出”：
@@ -144,16 +167,12 @@ int main(int argc, char* argv[]) {
         std::atomic<uint64_t> inBytes{0};
 
         void pushEntry(std::string s) {
-            {
-                std::lock_guard<std::mutex> lk(mu);
-                pendingEntry = std::move(s); // 合并：只保留最新
-            }
-            cv.notify_one();
+            std::lock_guard<std::mutex> lk(mu);
+            pendingEntry = std::move(s);
         }
 
         void addBytes(uint64_t delta) {
             inBytes.fetch_add(delta, std::memory_order_relaxed);
-            cv.notify_one();
         }
 
         void requestStop() {
@@ -173,20 +192,21 @@ int main(int argc, char* argv[]) {
         uiThread = std::thread([em = ui.get()] {
             std::string lastPrinted;
             uint64_t lastInBytes = 0;
-            while (true) {
+            bool finished = false;
+            while (!finished) {
                 std::optional<std::string> curEntry;
                 {
                     std::unique_lock<std::mutex> lk(em->mu);
-                    em->cv.wait_for(lk, std::chrono::milliseconds(100), [&] {
-                        return em->stop || em->pendingEntry.has_value();
-                    });
-                    if (em->stop && !em->pendingEntry.has_value()) {
-                        break;
-                    }
+                    em->cv.wait_for(lk, std::chrono::milliseconds(100), [&] { return em->stop; });
+                    finished = em->stop;
                     curEntry = std::move(em->pendingEntry);
                     em->pendingEntry.reset();
                 }
 
+                if (curEntry) {
+                    std::replace(curEntry->begin(), curEntry->end(), '\n', ' ');
+                    std::replace(curEntry->begin(), curEntry->end(), '\r', ' ');
+                }
                 if (curEntry && *curEntry != lastPrinted) {
                     std::cout << "[PZIP_UI] entry " << *curEntry << "\n";
                     lastPrinted = *curEntry;
@@ -197,6 +217,7 @@ int main(int argc, char* argv[]) {
                     std::cout << "[PZIP_UI] inbytes " << curInBytes << "\n";
                     lastInBytes = curInBytes;
                 }
+                std::cout.flush();
             }
         });
 
@@ -208,28 +229,6 @@ int main(int argc, char* argv[]) {
                 em->addBytes(delta);
             }
         };
-    }
-    
-    // 检查参数数量
-    if (argc - optind < 2) {
-        std::cerr << "错误: 需要指定输出文件和输入文件/目录\n";
-        printUsage(argv[0]);
-        return 1;
-    }
-    
-    // 获取输出文件和输入文件列表
-    std::string archivePath = argv[optind];
-    std::vector<pzip::fs::path> inputPaths;
-    for (int i = optind + 1; i < argc; ++i) {
-        inputPaths.emplace_back(argv[i]);
-    }
-    
-    // 验证输入文件存在
-    for (const auto& path : inputPaths) {
-        if (!pzip::fs::exists(path)) {
-            std::cerr << "错误: 文件不存在: " << path << "\n";
-            return 1;
-        }
     }
     
     // 设置进度回调
@@ -288,7 +287,7 @@ int main(int argc, char* argv[]) {
     
     if (err) {
         std::cerr << "\n错误: " << err.message << "\n";
-        return 1;
+        return err.code == pzip::ErrorCode::DISK_FULL ? pzip::diskFullExitStatus : 1;
     }
     
     if (!quiet) {

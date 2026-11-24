@@ -6,7 +6,7 @@
 #ifndef DATAMODEL_H
 #define DATAMODEL_H
 
-#include "commonstruct.h"
+#include "archiveui_types.h"
 
 #include <QAbstractTableModel>
 #include <QFileInfoList>

@@ -5,10 +5,17 @@
 
 #include "pzip/zip_writer.h"
 #include "pzip/utils.h"
+#include <cerrno>
 #include <cstring>
 #include <ctime>
 
 namespace pzip {
+
+namespace {
+Error outputError(ErrorCode fallback, int error, const std::string& message) {
+    return Error(error == ENOSPC || error == EDQUOT ? ErrorCode::DISK_FULL : fallback, message);
+}
+}
 
 // ZIP 签名常量
 constexpr uint32_t LOCAL_FILE_HEADER_SIG = 0x04034b50;
@@ -83,15 +90,29 @@ Error ZipWriter::open() {
     writeBuffer_.resize(WRITE_BUFFER_SIZE);
     file_.rdbuf()->pubsetbuf(writeBuffer_.data(), writeBuffer_.size());
     
+    errno = 0;
     file_.open(path_, std::ios::binary | std::ios::out | std::ios::trunc);
     if (!file_.is_open()) {
-        return Error(ErrorCode::FILE_OPEN_ERROR, "Cannot create file: " + path_.string());
+        const int error = errno;
+        return outputError(ErrorCode::FILE_OPEN_ERROR, error, "Cannot create file: " + path_.string());
     }
     
     currentOffset_ = 0;
+    writeError_ = 0;
     centralDir_.clear();
     
     return Error();
+}
+
+void ZipWriter::writeBytes(const char* data, size_t size) {
+    if (writeError_ != 0) {
+        return;
+    }
+    errno = 0;
+    file_.write(data, size);
+    if (!file_) {
+        writeError_ = errno ? errno : EIO;
+    }
 }
 
 void ZipWriter::timeToDos(time_t t, uint16_t& date, uint16_t& dosTime) {
@@ -223,10 +244,10 @@ Error ZipWriter::writeLocalFileHeader(const ZipFileHeader& header) {
     // Extra field
     buf.insert(buf.end(), extra.begin(), extra.end());
 
-    file_.write(reinterpret_cast<const char*>(buf.data()), buf.size());
+    writeBytes(reinterpret_cast<const char*>(buf.data()), buf.size());
 
     if (!file_.good()) {
-        return Error(ErrorCode::FILE_WRITE_ERROR, "Failed to write local file header");
+        return outputError(ErrorCode::FILE_WRITE_ERROR, writeError_, "Failed to write local file header");
     }
 
     currentOffset_ += buf.size();
@@ -278,10 +299,10 @@ Error ZipWriter::writeDataDescriptor(const ZipFileHeader& header) {
         write32(static_cast<uint32_t>(header.uncompressedSize));
     }
     
-    file_.write(reinterpret_cast<const char*>(buf.data()), buf.size());
+    writeBytes(reinterpret_cast<const char*>(buf.data()), buf.size());
     
     if (!file_.good()) {
-        return Error(ErrorCode::FILE_WRITE_ERROR, "Failed to write data descriptor");
+        return outputError(ErrorCode::FILE_WRITE_ERROR, writeError_, "Failed to write data descriptor");
     }
     
     currentOffset_ += buf.size();
@@ -305,12 +326,12 @@ Error ZipWriter::createRaw(const ZipFileHeader& header,
 
     // 写入压缩数据（dataProvider 可能会更新 header 中的 CRC 等字段）
     dataProvider([this](const uint8_t* data, size_t size) {
-        file_.write(reinterpret_cast<const char*>(data), size);
+        writeBytes(reinterpret_cast<const char*>(data), size);
         currentOffset_ += size;
     });
 
     if (!file_.good()) {
-        return Error(ErrorCode::FILE_WRITE_ERROR, "Failed to write compressed data");
+        return outputError(ErrorCode::FILE_WRITE_ERROR, writeError_, "Failed to write compressed data");
     }
 
     // 如果使用数据描述符，写入它（此时 header.crc32 已在 dataProvider 中更新）
@@ -348,7 +369,7 @@ Error ZipWriter::createEncrypted(const ZipFileHeader& header,
     // 写入加密数据格式：salt + passwordVerification + encryptedData + authCode
 
     // 1. 写入 salt
-    file_.write(reinterpret_cast<const char*>(salt.data()), salt.size());
+    writeBytes(reinterpret_cast<const char*>(salt.data()), salt.size());
     currentOffset_ += salt.size();
 
     // 2. 写入 password verification (2 bytes, little endian)
@@ -356,21 +377,21 @@ Error ZipWriter::createEncrypted(const ZipFileHeader& header,
         static_cast<uint8_t>(passwordVerification & 0xFF),
         static_cast<uint8_t>((passwordVerification >> 8) & 0xFF)
     };
-    file_.write(reinterpret_cast<const char*>(pv), WINZIP_AES_PV_SIZE);
+    writeBytes(reinterpret_cast<const char*>(pv), WINZIP_AES_PV_SIZE);
     currentOffset_ += WINZIP_AES_PV_SIZE;
 
     // 3. 写入加密数据
     if (!encryptedData.empty()) {
-        file_.write(reinterpret_cast<const char*>(encryptedData.data()), encryptedData.size());
+        writeBytes(reinterpret_cast<const char*>(encryptedData.data()), encryptedData.size());
         currentOffset_ += encryptedData.size();
     }
 
     // 4. 写入 authentication code (10 bytes)
-    file_.write(reinterpret_cast<const char*>(authCode.data()), WINZIP_AES_AUTH_CODE_SIZE);
+    writeBytes(reinterpret_cast<const char*>(authCode.data()), WINZIP_AES_AUTH_CODE_SIZE);
     currentOffset_ += WINZIP_AES_AUTH_CODE_SIZE;
 
     if (!file_.good()) {
-        return Error(ErrorCode::FILE_WRITE_ERROR, "Failed to write encrypted data");
+        return outputError(ErrorCode::FILE_WRITE_ERROR, writeError_, "Failed to write encrypted data");
     }
 
     // 不使用数据描述符 - WinZip AES 格式直接在本地文件头中写入实际大小
@@ -565,34 +586,34 @@ Error ZipWriter::writeCentralDirectory() {
         }
 
         // 写入固定部分
-        file_.write(reinterpret_cast<const char*>(buf.data()), buf.size());
+        writeBytes(reinterpret_cast<const char*>(buf.data()), buf.size());
         currentOffset_ += buf.size();
 
         // Filename
-        file_.write(h.name.c_str(), h.name.size());
+        writeBytes(h.name.c_str(), h.name.size());
         currentOffset_ += h.name.size();
 
         // 原有 Extra field
         if (!h.extra.empty()) {
-            file_.write(reinterpret_cast<const char*>(h.extra.data()), h.extra.size());
+            writeBytes(reinterpret_cast<const char*>(h.extra.data()), h.extra.size());
             currentOffset_ += h.extra.size();
         }
 
         // WinZip AES Extra Field
         if (!extraFields.empty()) {
-            file_.write(reinterpret_cast<const char*>(extraFields.data()), extraFields.size());
+            writeBytes(reinterpret_cast<const char*>(extraFields.data()), extraFields.size());
             currentOffset_ += extraFields.size();
         }
 
         // ZIP64 extra field
         if (!zip64Extra.empty()) {
-            file_.write(reinterpret_cast<const char*>(zip64Extra.data()), zip64Extra.size());
+            writeBytes(reinterpret_cast<const char*>(zip64Extra.data()), zip64Extra.size());
             currentOffset_ += zip64Extra.size();
         }
     }
     
     if (!file_.good()) {
-        return Error(ErrorCode::FILE_WRITE_ERROR, "Failed to write central directory");
+        return outputError(ErrorCode::FILE_WRITE_ERROR, writeError_, "Failed to write central directory");
     }
     
     return Error();
@@ -689,7 +710,7 @@ Error ZipWriter::writeEndOfCentralDirectory(uint64_t centralDirOffset, uint64_t 
         // Total number of disks
         write32(1);
         
-        file_.write(reinterpret_cast<const char*>(buf.data()), buf.size());
+        writeBytes(reinterpret_cast<const char*>(buf.data()), buf.size());
         currentOffset_ += buf.size();
         
         // 在普通 EOCD 中使用 max 值表示应使用 ZIP64 值
@@ -727,15 +748,15 @@ Error ZipWriter::writeEndOfCentralDirectory(uint64_t centralDirOffset, uint64_t 
     // Comment length
     write16(static_cast<uint16_t>(comment_.size()));
     
-    file_.write(reinterpret_cast<const char*>(buf.data()), buf.size());
+    writeBytes(reinterpret_cast<const char*>(buf.data()), buf.size());
     
     // Comment
     if (!comment_.empty()) {
-        file_.write(comment_.c_str(), comment_.size());
+        writeBytes(comment_.c_str(), comment_.size());
     }
     
     if (!file_.good()) {
-        return Error(ErrorCode::FILE_WRITE_ERROR, "Failed to write end of central directory");
+        return outputError(ErrorCode::FILE_WRITE_ERROR, writeError_, "Failed to write end of central directory");
     }
     
     return Error();
@@ -760,7 +781,11 @@ Error ZipWriter::close() {
     err = writeEndOfCentralDirectory(centralDirOffset, centralDirSize);
     if (err) return err;
     
+    errno = 0;
     file_.close();
+    if (!file_) {
+        return outputError(ErrorCode::FILE_WRITE_ERROR, errno, "Failed to close output archive");
+    }
     return Error();
 }
 

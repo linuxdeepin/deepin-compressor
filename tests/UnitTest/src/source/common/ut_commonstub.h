@@ -7,7 +7,7 @@
 #define UT_COMMONSTUB_H
 
 #include "popupdialog.h"
-#include "libzipplugin.h"
+#include "archive_session.h"
 #include "gtest/src/stub.h"
 
 #include <DGuiApplicationHelper>
@@ -23,7 +23,7 @@ extern bool g_UiTools_isArchiveFile_result;             // UiTools isArchiveFile
 extern QObject *g_QObject_sender_result;                // QObject sender返回值
 extern int g_Dialog_exec_result;                        // DDialog exec返回值
 extern bool g_UiTools_isLocalDeviceFile_result;         // UiTools isLocalDeviceFile返回值
-extern ReadOnlyArchiveInterface *g_UiTools_createInterface_result;         // UiTools createInterface返回值
+extern dcarchive::ArchiveSession *g_UiTools_createInterface_result;         // UiTools createInterface返回值
 extern QString g_QFileDialog_getOpenFileName_result;    // QFileDialog getOpenFileName返回值
 extern bool g_QThread_isRunning_result;                 // QThread isRunning返回值
 extern bool g_QThread_wait_result;                      // QThread wait返回值
@@ -137,13 +137,6 @@ public:
     static void stub_QObject_sender(Stub &stub, QObject *pObject);
 
     /**
-     * @brief stub_KProcess_start     针对KProcess的start打桩
-     * @param stub
-     * @return
-     */
-    static void stub_KProcess_start(Stub &stub);
-
-    /**
      * @brief stub_DDialog_exec     针对DDialog的exec打桩
      * @param stub
      * @param iResult
@@ -224,7 +217,7 @@ public:
      * @param stub
      * @param pInterface
      */
-    static void stub_UiTools_createInterface(Stub &stub, ReadOnlyArchiveInterface *pInterface);
+    static void stub_UiTools_createInterface(Stub &stub, dcarchive::ArchiveSession *pInterface);
 
     /**
      * @brief stub_QFileDialog_getOpenFileName     针对QFileDialog的getOpenFileName打桩
@@ -419,22 +412,6 @@ public:
     static void stub_QFileInfo_completeSuffix(Stub &stub, const QString &strCompleteSuffix);
 
 };
-
-// 针对PluginManager的打桩
-class PluginManagerStub : public QObject
-{
-public:
-    PluginManagerStub();
-    ~PluginManagerStub();
-
-    /**
-     * @brief stub_PluginManager_supportedWriteMimeTypes     针对PluginManager的supportedWriteMimeTypes打桩
-     * @param stub
-     * @return
-     */
-    static void stub_PluginManager_supportedWriteMimeTypes(Stub &stub);
-};
-
 
 // 针对QFile的打桩
 class QFileStub : public QObject

@@ -4,11 +4,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "processopenthread.h"
-#include "ut_commonstub.h"
-
-#include "gtest/src/stub.h"
 #include <gtest/gtest.h>
-#include <QDir>
+#include <QFileInfo>
+#include <QStandardPaths>
+#include <QTemporaryDir>
 
 
 /*******************************函数打桩************************************/
@@ -55,7 +54,13 @@ TEST_F(UT_ProcessOpenThread, test_setArguments)
 
 TEST_F(UT_ProcessOpenThread, testrun)
 {
-    Stub stub;
-    CommonStub::stub_KProcess_start(stub);
+    QTemporaryDir dir;
+    ASSERT_TRUE(dir.isValid());
+    const QString program = QStandardPaths::findExecutable(QStringLiteral("touch"));
+    ASSERT_FALSE(program.isEmpty());
+    const QString filePath = dir.filePath(QStringLiteral("file with spaces.txt"));
+    m_tester->setProgramPath(program);
+    m_tester->setArguments({filePath});
     m_tester->run();
+    EXPECT_TRUE(QFileInfo::exists(filePath));
 }
