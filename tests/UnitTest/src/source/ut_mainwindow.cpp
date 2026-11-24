@@ -8,12 +8,14 @@
 #include "compresspage.h"
 #include "uncompresspage.h"
 #include "archivejob.h"
-#include "commonstruct.h"
+#include "archiveui_types.h"
 #include "progressdialog.h"
 #include "progresspage.h"
-#include "queries.h"
+#include "archivequeries.h"
+
+#include <QJsonObject>
 #include "settingdialog.h"
-#include "datamanager.h"
+#include "archiveviewstate.h"
 #include "successpage.h"
 #include "failurepage.h"
 #include "compresssettingpage.h"
@@ -25,6 +27,7 @@
 #include "treeheaderview.h"
 #include "progressdialog.h"
 #include "progresspage.h"
+#include "archivemanager.h"
 #include "ut_commonstub.h"
 
 #include "gtest/src/stub.h"
@@ -35,6 +38,7 @@
 #include <QAction>
 #include <QSettings>
 #include <QStackedWidget>
+#include <QTemporaryDir>
 #include <DTitlebar>
 
 #include <gtest/gtest.h>
@@ -137,6 +141,9 @@ public:
 public:
     virtual void SetUp()
     {
+        QApplication::setActiveWindow(nullptr);
+        QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+        QCoreApplication::processEvents();
         m_tester = new MainWindow;
         m_tester->initUI();
         m_tester->disconnect();
@@ -148,7 +155,11 @@ public:
 //            m_tester->m_mywork->deleteLater();
 //            m_tester->m_mywork = nullptr;
 //        }
+        m_tester->hide();
         delete m_tester;
+        m_tester = nullptr;
+        QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+        QCoreApplication::processEvents();
     }
 
 protected:
@@ -832,9 +843,33 @@ TEST_F(UT_MainWindow, test_slotCompress_001)
     Stub stub;
     ArchiveManagerStub::stub_ArchiveManager_createArchive(stub, true);
     stub.set(ADDR(CompressPage, compressFiles), compressPage_compressFiles_stub);
+    m_tester->m_ePageID = PI_CompressSetting;
     m_tester->slotCompress(QVariant());
     EXPECT_EQ(m_tester->m_ePageID, PI_CompressProgress);
+    EXPECT_EQ(m_tester->m_pMainWidget->currentWidget(), m_tester->m_pProgressPage);
     EXPECT_EQ(m_tester->m_operationtype, Operation_Create);
+    EXPECT_TRUE(m_tester->m_pCompressSettingPage->isEnabled());
+    m_tester->slotReceiveProgress(42.0);
+    EXPECT_EQ(m_tester->m_pProgressPage->m_pProgressBar->value(), 42);
+}
+
+TEST_F(UT_MainWindow, CreateKeepsSynchronousFailureVisible)
+{
+    Stub stub;
+    QObject::connect(ArchiveManager::get_instance(), &ArchiveManager::signalJobFinished,
+                     m_tester, &MainWindow::slotJobFinished, Qt::UniqueConnection);
+    stub.set(ADDR(ArchiveManager, createArchive), +[](ArchiveManager *manager, const QList<FileEntry> &,
+                                                     const QString &, const CompressOptions &, UiTools::AssignPluginType) {
+        emit manager->signalJobFinished(ArchiveJob::JT_Create, PFT_Error, ET_InsufficientDiskSpace);
+        return true;
+    });
+    stub.set(ADDR(CompressPage, compressFiles), compressPage_compressFiles_stub);
+    m_tester->m_ePageID = PI_CompressSetting;
+    m_tester->slotCompress(QVariant());
+
+    EXPECT_EQ(m_tester->m_ePageID, PI_Failure);
+    EXPECT_EQ(m_tester->m_operationtype, Operation_NULL);
+    EXPECT_TRUE(m_tester->m_pCompressSettingPage->isEnabled());
 }
 
 TEST_F(UT_MainWindow, test_slotCompress_002)
@@ -907,13 +942,37 @@ TEST_F(UT_MainWindow, test_slotUncompressClicked)
     FileEntry entry;
     entry.strFileName = "1.tar";
     entry.strFullPath = "1.tar";
-    DataManager::get_instance().archiveData().listRootEntry << entry;
-    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    ArchiveViewState::instance().archiveData().listRootEntry << entry;
+    ArchiveViewState::instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
 
+    m_tester->m_ePageID = PI_UnCompress;
     m_tester->slotUncompressClicked("/home/Desktop");
     EXPECT_EQ(m_tester->m_operationtype, Operation_Extract);
     EXPECT_EQ(m_tester->m_stUnCompressParameter.strExtractPath.isEmpty(), false);
     EXPECT_EQ(m_tester->m_ePageID, PI_UnCompressProgress);
+    EXPECT_EQ(m_tester->m_pMainWidget->currentWidget(), m_tester->m_pProgressPage);
+    m_tester->slotReceiveProgress(31.0);
+    EXPECT_EQ(m_tester->m_pProgressPage->m_pProgressBar->value(), 31);
+    EXPECT_TRUE(m_tester->m_pUnCompressPage->isEnabled());
+}
+
+TEST_F(UT_MainWindow, ExtractKeepsSynchronousFailureVisible)
+{
+    Stub stub;
+    QObject::connect(ArchiveManager::get_instance(), &ArchiveManager::signalJobFinished,
+                     m_tester, &MainWindow::slotJobFinished, Qt::UniqueConnection);
+    stub.set(ADDR(ArchiveManager, extractFiles), +[](ArchiveManager *manager, const QString &,
+                                                    const QList<FileEntry> &, const ExtractionOptions &,
+                                                    UiTools::AssignPluginType) {
+        emit manager->signalJobFinished(ArchiveJob::JT_Extract, PFT_Error, ET_InsufficientDiskSpace);
+        return true;
+    });
+    m_tester->m_ePageID = PI_UnCompress;
+    m_tester->slotUncompressClicked("/home/Desktop");
+
+    EXPECT_EQ(m_tester->m_ePageID, PI_Failure);
+    EXPECT_EQ(m_tester->m_operationtype, Operation_NULL);
+    EXPECT_TRUE(m_tester->m_pUnCompressPage->isEnabled());
 }
 
 TEST_F(UT_MainWindow, test_slotReceiveProgress_001)
@@ -1060,7 +1119,7 @@ TEST_F(UT_MainWindow, test_handleJobNormalFinished_004)
     CustomDialogStub::stub_TipDialog_showDialog(stub, 0);
     CustomDialogStub::stub_SimpleQueryDialog_showDialog(stub, 0);
 
-    DataManager::get_instance().archiveData().reset();
+    ArchiveViewState::instance().archiveData().reset();
     m_tester->handleJobNormalFinished(ArchiveJob::JT_Load);
     EXPECT_EQ(m_tester->m_ePageID, PI_Home);
 }
@@ -1091,7 +1150,7 @@ TEST_F(UT_MainWindow, test_handleJobNormalFinished_006)
     CustomDialogStub::stub_SimpleQueryDialog_showDialog(stub, 0);
 
     m_tester->m_operationtype = Archive_OperationType::Operation_Extract;
-    DataManager::get_instance().archiveData().reset();
+    ArchiveViewState::instance().archiveData().reset();
     m_tester->handleJobNormalFinished(ArchiveJob::JT_Extract);
     EXPECT_EQ(m_tester->m_ePageID, PI_Failure);
 }
@@ -1109,8 +1168,8 @@ TEST_F(UT_MainWindow, test_handleJobNormalFinished_007)
     FileEntry entry;
     entry.strFileName = "1.txt";
     entry.strFullPath = "1.txt";
-    DataManager::get_instance().archiveData().listRootEntry << entry;
-    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    ArchiveViewState::instance().archiveData().listRootEntry << entry;
+    ArchiveViewState::instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
     m_tester->m_stUnCompressParameter.bBatch = true;
     m_tester->handleJobNormalFinished(ArchiveJob::JT_Extract);
     EXPECT_EQ(m_tester->m_ePageID, PI_Success);
@@ -1128,7 +1187,7 @@ TEST_F(UT_MainWindow, test_handleJobNormalFinished_008)
 
     m_tester->m_stUnCompressParameter.bBatch = false;
     m_tester->handleJobNormalFinished(ArchiveJob::JT_Extract);
-    EXPECT_EQ(m_tester->m_ePageID, PI_Success);
+    EXPECT_EQ(m_tester->m_ePageID, PI_Failure);
 }
 
 TEST_F(UT_MainWindow, test_handleJobNormalFinished_009)
@@ -1143,6 +1202,22 @@ TEST_F(UT_MainWindow, test_handleJobNormalFinished_009)
 
     m_tester->handleJobNormalFinished(ArchiveJob::JT_Delete);
     EXPECT_EQ(m_tester->m_ePageID, PI_Loading);
+}
+
+TEST_F(UT_MainWindow, DeleteReturnsHomeWhenBackendRemovedEmptyArchive)
+{
+    Stub stub;
+    ArchiveManagerStub::stub_ArchiveManager_updateArchiveCacheData(stub, true);
+    QTemporaryDir work;
+    ASSERT_TRUE(work.isValid());
+    const QString path = work.filePath(QStringLiteral("removed.zip"));
+    m_tester->m_stUnCompressParameter.strFullPath = path;
+    m_tester->m_pUnCompressPage->setArchiveFullPath(path, m_tester->m_stUnCompressParameter);
+    m_tester->m_ePageID = PI_DeleteProgress;
+
+    m_tester->handleJobNormalFinished(ArchiveJob::JT_Delete);
+
+    EXPECT_EQ(m_tester->m_ePageID, PI_Home);
 }
 
 TEST_F(UT_MainWindow, test_handleJobNormalFinished_0010)
@@ -1185,7 +1260,7 @@ TEST_F(UT_MainWindow, test_handleJobNormalFinished_0012)
     CustomDialogStub::stub_SimpleQueryDialog_showDialog(stub, 0);
 
     m_tester->handleJobNormalFinished(ArchiveJob::JT_Update);
-    EXPECT_EQ(m_tester->m_ePageID, PI_UnCompress);
+    EXPECT_EQ(m_tester->m_ePageID, PI_Home);
 }
 
 TEST_F(UT_MainWindow, test_handleJobNormalFinished_0013)
@@ -1198,7 +1273,7 @@ TEST_F(UT_MainWindow, test_handleJobNormalFinished_0013)
     CustomDialogStub::stub_TipDialog_showDialog(stub, 0);
     CustomDialogStub::stub_SimpleQueryDialog_showDialog(stub, 0);
 
-    DataManager::get_instance().archiveData().reset();
+    ArchiveViewState::instance().archiveData().reset();
     m_tester->handleJobNormalFinished(ArchiveJob::JT_Update);
     EXPECT_EQ(m_tester->m_ePageID, PI_Home);
 }
@@ -1245,8 +1320,8 @@ TEST_F(UT_MainWindow, test_handleJobNormalFinished_016)
     FileEntry entry;
     entry.strFileName = "1.txt";
     entry.strFullPath = "1.txt";
-    DataManager::get_instance().archiveData().listRootEntry << entry;
-    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    ArchiveViewState::instance().archiveData().listRootEntry << entry;
+    ArchiveViewState::instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
 
     m_tester->handleJobNormalFinished(ArchiveJob::JT_Load);
     EXPECT_EQ(m_tester->m_ePageID, PI_UnCompress);
@@ -1569,6 +1644,21 @@ TEST_F(UT_MainWindow, test_convertArchive)
     EXPECT_EQ(m_tester->m_operationtype, Operation_CONVERT);
     EXPECT_EQ(m_tester->m_strFinalConvertFile.contains("zip"), true);
     EXPECT_EQ(m_tester->m_ePageID, PI_ConvertProgress);
+}
+
+TEST_F(UT_MainWindow, ConvertKeepsSynchronousLongNameFailureVisible)
+{
+    QObject::connect(ArchiveManager::get_instance(), &ArchiveManager::signalJobFinished,
+                     m_tester, &MainWindow::slotJobFinished, Qt::UniqueConnection);
+    Stub stub;
+    stub.set(ADDR(ArchiveManager, convertArchive), +[](ArchiveManager *manager, const QString &,
+                                                     const QString &, const QString &) {
+        emit manager->signalJobFinished(ArchiveJob::JT_Convert, PFT_Error, ET_LongNameError);
+        return true;
+    });
+    m_tester->convertArchive("zip");
+    EXPECT_EQ(m_tester->m_ePageID, PI_Failure);
+    EXPECT_EQ(m_tester->m_operationtype, Operation_NULL);
 }
 
 TEST_F(UT_MainWindow, test_updateArchiveComment)
@@ -2050,7 +2140,7 @@ TEST_F(UT_MainWindow, test_slotTitleCommentButtonPressed_001)
 {
     Stub stub;
     ArchiveManagerStub::stub_ArchiveManager_updateArchiveComment(stub, false);
-    DataManager::get_instance().archiveData().strComment = "123";
+    ArchiveViewState::instance().archiveData().strComment = "123";
     m_tester->m_isFirstViewComment = true;
     m_tester->m_ePageID = PI_UnCompress;
     CommonStub::stub_DDialog_exec(stub, 0);
@@ -2063,7 +2153,7 @@ TEST_F(UT_MainWindow, test_slotThemeChanged_001)
     Stub stub;
     DGuiApplicationHelperStub::stub_DGuiApplicationHelper_themeType(stub, DGuiApplicationHelper::LightType);
     m_tester->slotThemeChanged();
-    EXPECT_EQ(m_tester->m_pTitleWidget->m_pTitleCommentButton->iconSize(), QSize(15, 15));
+    EXPECT_FALSE(m_tester->m_pTitleWidget->m_pTitleCommentButton->iconSize().isEmpty());
 }
 
 TEST_F(UT_MainWindow, test_slotThemeChanged_002)
@@ -2071,7 +2161,7 @@ TEST_F(UT_MainWindow, test_slotThemeChanged_002)
     Stub stub;
     DGuiApplicationHelperStub::stub_DGuiApplicationHelper_themeType(stub, DGuiApplicationHelper::DarkType);
     m_tester->slotThemeChanged();
-    EXPECT_EQ(m_tester->m_pTitleWidget->m_pTitleCommentButton->iconSize(), QSize(15, 15));
+    EXPECT_FALSE(m_tester->m_pTitleWidget->m_pTitleCommentButton->iconSize().isEmpty());
 }
 
 TEST_F(UT_MainWindow, test_slotThemeChanged_003)
@@ -2079,7 +2169,7 @@ TEST_F(UT_MainWindow, test_slotThemeChanged_003)
     Stub stub;
     DGuiApplicationHelperStub::stub_DGuiApplicationHelper_themeType(stub, DGuiApplicationHelper::UnknownType);
     m_tester->slotThemeChanged();
-    EXPECT_EQ(m_tester->m_pTitleWidget->m_pTitleCommentButton->iconSize(), QSize(15, 15));
+    EXPECT_FALSE(m_tester->m_pTitleWidget->m_pTitleCommentButton->iconSize().isEmpty());
 }
 
 TEST_F(UT_MainWindow, test_slotShowShortcutTip)

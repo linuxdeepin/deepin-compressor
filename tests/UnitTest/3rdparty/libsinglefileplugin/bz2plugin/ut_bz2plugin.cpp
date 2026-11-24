@@ -5,7 +5,7 @@
 
 #include "bz2plugin.h"
 #include "gtest/src/stub.h"
-#include "queries.h"
+#include "archivequeries.h"
 #include <gtest/gtest.h>
 
 #include <QFileInfo>

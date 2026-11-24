@@ -5,7 +5,7 @@
 
 #include "libpigzplugin.h"
 #include "gtest/src/stub.h"
-#include "queries.h"
+#include "archivequeries.h"
 #include "datamanager.h"
 
 #include <gtest/gtest.h>
