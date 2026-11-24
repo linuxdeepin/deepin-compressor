@@ -27,7 +27,7 @@
 #define ARCHIVEFORMAT_H
 
 #include "kpluginmetadata.h"
-#include "commonstruct.h"
+#include "archiveui_types.h"
 
 #include <QVariantMap>
 

@@ -65,6 +65,8 @@ protected:
      */
     bool status() override;
 
+    bool doKill() override;
+
 protected:
     ArchiveJob *m_pCurJob = nullptr;              // 当前操作
 

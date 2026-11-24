@@ -8,7 +8,7 @@
 #include "treeheaderview.h"
 #include "openwithdialog.h"
 #include "DebugTimeManager.h"
-#include "datamanager.h"
+#include "archiveviewstate.h"
 #include "popupdialog.h"
 #include "uitools.h"
 #include <DFontSizeManager>
@@ -49,7 +49,7 @@ UnCompressView::~UnCompressView()
 void UnCompressView::refreshArchiveData()
 {
     qCDebug(appLog) << "Refreshing archive data";
-    ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();
+    ArchiveData &stArchiveData =  ArchiveViewState::instance().archiveData();
 
     // 刷新第一层级文件夹子项的数目
     for (int i = 0; i < stArchiveData.listRootEntry.count(); ++i) {
@@ -248,7 +248,7 @@ void UnCompressView::initConnections()
 qlonglong UnCompressView::calDirItemCount(const QString &strFilePath)
 {
     qCDebug(appLog) << "Calculating item count for directory:" << strFilePath;
-    ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();
+    ArchiveData &stArchiveData =  ArchiveViewState::instance().archiveData();
     qlonglong qItemCount = 0;
 
     auto iter = stArchiveData.mapFileEntry.find(strFilePath);
@@ -342,7 +342,7 @@ void UnCompressView::refreshDataByCurrentPathChanged()
         refreshArchiveData();
     } else { //当前目录非第一层
         qCDebug(appLog) << "Current path is not root directory";
-        ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
+        ArchiveData &stArchiveData = ArchiveViewState::instance().archiveData();
 
         // 删除上一级m_mapShowEntry
         if (1 == m_strCurrentPath.count("/")) { //当前目录是第二层
@@ -418,7 +418,7 @@ void UnCompressView::addNewFiles(const QStringList &listFiles)
     strPassword = dialog.password();
 
     // 重复提示
-    ArchiveData stArchiveData = DataManager::get_instance().archiveData();
+    ArchiveData stArchiveData = ArchiveViewState::instance().archiveData();
     bool bApplyAll = false;
     bool bOverwrite = false;
     for (int i = 0; i < listFiles.count(); ++i) {
@@ -523,7 +523,7 @@ void UnCompressView::clear()
     // 重置数据
     m_stRightEntry = FileEntry();
     m_mapShowEntry.clear();
-    DataManager::get_instance().resetArchiveData();
+    ArchiveViewState::instance().resetArchiveData();
     resetLevel();
     m_strUnCompressPath = "";
     m_bModifiable = false;
@@ -534,7 +534,7 @@ void UnCompressView::clear()
 QList<FileEntry> UnCompressView::getCurPathFiles()
 {
     qCDebug(appLog) << "Getting current path files";
-    ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();
+    ArchiveData &stArchiveData =  ArchiveViewState::instance().archiveData();
     QList<FileEntry> listEntry;
 
     auto iter = stArchiveData.mapFileEntry.find(m_strCurrentPath);
@@ -566,7 +566,7 @@ QList<FileEntry> UnCompressView::getCurPathFiles()
 
 //void UnCompressView::getAllFilesByParentPath(const QString &strFullPath, QList<FileEntry> &listEntry, qint64 &qSize)
 //{
-//    ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();
+//    ArchiveData &stArchiveData =  ArchiveViewState::instance().archiveData();
 //    listEntry.clear();
 //    qSize = 0;
 
@@ -631,7 +631,7 @@ void UnCompressView::extract2Path(const QString &strPath)
 void UnCompressView::calEntrySizeByParentPath(const QString &strFullPath, qint64 &qSize)
 {
     qCDebug(appLog) << "Calculating entry size by parent path:" << strFullPath;
-    ArchiveData stArchiveData =  DataManager::get_instance().archiveData();
+    ArchiveData stArchiveData =  ArchiveViewState::instance().archiveData();
     qSize = 0;
 
     auto iter = stArchiveData.mapFileEntry.find(strFullPath);

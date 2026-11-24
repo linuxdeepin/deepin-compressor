@@ -7,8 +7,8 @@
 #define MAINWINDOW_H
 
 #include "uistruct.h"
-#include "queries.h"
-#include "commonstruct.h"
+#include "archivequeries.h"
+#include "archiveui_types.h"
 #include "archivejob.h"
 
 #include <DMainWindow>

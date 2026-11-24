@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "processopenthread.h"
-#include "kprocess.h"
+#include <QProcess>
 #include <QDebug>
 #include "common/ddlog.h"
 
@@ -29,13 +29,9 @@ void ProcessOpenThread::setArguments(const QStringList &listArguments)
 void ProcessOpenThread::run()
 {
     qCDebug(appLog) << "Starting external process:" << m_strProgramPath;
-    // 启动外部进程
-    KProcess *cmdprocess = new KProcess;
-    cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
-    cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
-    cmdprocess->setProgram(m_strProgramPath, m_listArguments);
-    cmdprocess->start();
-    cmdprocess->waitForFinished(-1);
-    qCDebug(appLog) << "Process finished with exit code:" << cmdprocess->exitCode();
-    delete cmdprocess;
+    QProcess process;
+    process.setProcessChannelMode(QProcess::MergedChannels);
+    process.start(m_strProgramPath, m_listArguments, QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+    process.waitForFinished(-1);
+    qCDebug(appLog) << "Process finished with exit code:" << process.exitCode();
 }

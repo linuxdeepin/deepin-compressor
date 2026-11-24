@@ -29,7 +29,7 @@
 #ifndef ARCHIVEINTERFACE_H
 #define ARCHIVEINTERFACE_H
 
-#include "commonstruct.h"
+#include "archiveui_types.h"
 #include "kpluginmetadata.h"
 #include "common.h"
 

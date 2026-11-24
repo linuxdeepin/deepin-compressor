@@ -15,11 +15,6 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
    set(CMAKE_INSTALL_PREFIX /usr)
 endif ()
 
-## 插件安装目录
-if(NOT DEFINED COMPRESSOR_PLUGIN_PATH)
-    set(COMPRESSOR_PLUGIN_PATH ${CMAKE_INSTALL_LIBDIR}/deepin-compressor/plugins)
-endif()
-
 ## 导出头文件路径,非安装时使用
 if(NOT DEFINED HFILES_OUTPUT_PATH)
     set(HFILES_OUTPUT_PATH ${CMAKE_BINARY_DIR}/include)
@@ -35,9 +30,9 @@ set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -std=c++11" )
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--as-needed -fPIE -fPIC") #-Wl,--as-needed 减少无效的库链接，用不到的库需要清理
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIE")
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=../3rdparty/interface:../../3rdparty/interface:${COMPRESSOR_PLUGIN_PATH}")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb")
 else()
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1,-rpath=${COMPRESSOR_PLUGIN_PATH}")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1")
 endif()
 
 #安全编译参数
@@ -51,8 +46,8 @@ endif()
 
 add_definitions("-DQT_MESSAGELOGCONTEXT")
 set(CMAKE_SKIP_BUILD_RPATH FALSE)
-set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 
 
 set(CMAKE_C_STANDARD 11)
@@ -103,9 +98,6 @@ endif()
 
 
 
-add_subdirectory(3rdparty)
-add_subdirectory(src)
-
 #单元测试开关
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
     option(USE_TEST "UT" ON)
@@ -113,24 +105,7 @@ else()
     option(USE_TEST "UT" OFF)
 endif()
 if (USE_TEST)
-    add_subdirectory(tests)
-endif(USE_TEST)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in ${HFILES_OUTPUT_PATH}/config.h @ONLY)
-
-
-install(TARGETS cli7zplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-install(TARGETS clirarplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-install(TARGETS libzipplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-install(TARGETS libpigzplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-install(TARGETS minizipplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-install(TARGETS readwritelibarchiveplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-install(TARGETS readonlylibarchiveplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-install(TARGETS compressor-interface DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-install(TARGETS bz2plugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-install(TARGETS gzplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-install(TARGETS xzplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-
-# pzip 高性能压缩插件（仅 x86/ARM + Qt6 环境）
-if((CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm|x86_64|amd64") AND (QT_VERSION_MAJOR EQUAL 6))
-    install(TARGETS clipzipplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
+    add_subdirectory(3rdparty)
 endif()
+add_subdirectory(src)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in ${HFILES_OUTPUT_PATH}/config.h @ONLY)

@@ -111,6 +111,15 @@ bool BatchJob::status()
     return false;
 }
 
+bool BatchJob::doKill()
+{
+    if (m_pCurJob) {
+        m_pCurJob->kill();
+        return false;
+    }
+    return true;
+}
+
 BatchExtractJob::BatchExtractJob(QObject *parent)
     : BatchJob(parent)
 {
@@ -179,7 +188,7 @@ bool BatchExtractJob::addExtractItem(const QFileInfo &fileInfo)
     UiTools::AssignPluginType ePluginType = (UnCompressParameter::ST_Zip == eType) ?
                                             (UiTools::AssignPluginType::APT_Cli7z) : (UiTools::AssignPluginType::APT_Auto);
     qCDebug(appLog) << "Creating interface for extract item";
-    ReadOnlyArchiveInterface *pIface = UiTools::createInterface(fileInfo.filePath(), false, ePluginType);
+    dcarchive::ArchiveSession *pIface = UiTools::createInterface(fileInfo.filePath(), false, ePluginType);
 
     if (pIface) {
         qCDebug(appLog) << "Interface created successfully, setting up extraction options";

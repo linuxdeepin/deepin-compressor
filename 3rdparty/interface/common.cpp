@@ -28,6 +28,7 @@
 
 #include <KEncodingProber>
 #include "chardet.h"
+#include "encoding_detector.h"
 
 //QByteArray m_codecStr;
 /*static */float Common::codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
@@ -181,42 +182,13 @@ QByteArray Common::detectEncode(const QByteArray &data, const QString &fileName)
 
 int Common::ChartDet_DetectingTextCoding(const char *str, QString &encoding, float &confidence)
 {
-    DetectObj *obj = detect_obj_init();
-
-    if (obj == nullptr) {
-        //qCInfo(ifaceLog) << "Memory Allocation failed\n";
-        return CHARDET_MEM_ALLOCATED_FAIL;
-    }
-
-#ifndef CHARDET_BINARY_SAFE
-    // before 1.0.5. This API is deprecated on 1.0.5
-    switch (detect(str, &obj))
-#else
-    // from 1.0.5
-    switch (detect_r(str, strlen(str), &obj))
-#endif
-    {
-    case CHARDET_OUT_OF_MEMORY :
-        qCInfo(ifaceLog) << "On handle processing, occured out of memory\n";
-        detect_obj_free(&obj);
-        return CHARDET_OUT_OF_MEMORY;
-    case CHARDET_NULL_OBJECT :
-        qCInfo(ifaceLog) << "2st argument of chardet() is must memory allocation with detect_obj_init API\n";
+    if (str == nullptr)
         return CHARDET_NULL_OBJECT;
-    }
 
-#ifndef CHARDET_BOM_CHECK
-    //qCInfo(ifaceLog) << "encoding:" << obj->encoding << "; confidence: " << obj->confidence;
-#else
-    // from 1.0.6 support return whether exists BOM
-    qCInfo(ifaceLog) << "encoding:" << obj->encoding << "; confidence: " << obj->confidence << "; bom: " << obj->bom;
-#endif
-
-    encoding = obj->encoding;
-    confidence = obj->confidence;
-    detect_obj_free(&obj);
-
-    return CHARDET_SUCCESS ;
+    const encdet::Result result = encdet::detect(str, strlen(str));
+    encoding = QString::fromStdString(result.encoding);
+    confidence = result.confidence;
+    return CHARDET_SUCCESS;
 }
 
 QByteArray Common::textCodecDetect(const QByteArray &data, const QString &fileName)

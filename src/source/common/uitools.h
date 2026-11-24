@@ -6,8 +6,7 @@
 #ifndef UITOOLS_H
 #define UITOOLS_H
 
-#include "archiveinterface.h"
-#include "plugin.h"
+#include "archive_session.h"
 #include "uistruct.h"
 #include "mimetypes.h"
 
@@ -94,6 +93,16 @@ public:
     static bool isExistMimeType(const QString &strMimeType, bool &bArchive);
 
     /**
+     * @brief isWritableArchive 判断现有压缩包是否可由自研后端修改
+     */
+    static bool isWritableArchive(const QString &strFileName);
+
+    /**
+     * @brief supportedWriteMimeTypes 返回新建压缩包支持的类型
+     */
+    static QStringList supportedWriteMimeTypes();
+
+    /**
      * @brief readConf   读取配置信息
      * @return  配置信息
      */
@@ -115,8 +124,7 @@ public:
      * @param bUseLibArchive    是否使用LibArchive
      * @return
      */
-    static ReadOnlyArchiveInterface *createInterface(const QString &fileName, bool bWrite = false, AssignPluginType eType = APT_Auto/*bool bUseLibArchive = false*/);
-    static ReadOnlyArchiveInterface *createInterface(const QString &fileName, const CustomMimeType &mimeType, Plugin *plugin);
+    static dcarchive::ArchiveSession *createInterface(const QString &fileName, bool bWrite = false, AssignPluginType eType = APT_Auto/*bool bUseLibArchive = false*/);
 
     /**
      * @brief transSplitFileName 处理7z、rar分卷压缩包名称
