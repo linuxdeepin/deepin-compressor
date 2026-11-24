@@ -6,7 +6,7 @@
 #include "failurepage.h"
 #include "customwidget.h"
 #include "uistruct.h"
-#include "libzipplugin.h"
+#include "archive_session.h"
 
 #include "gtest/src/stub.h"
 

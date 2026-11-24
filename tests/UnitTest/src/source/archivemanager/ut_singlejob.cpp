@@ -4,22 +4,20 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "singlejob.h"
-#include "libzipplugin.h"
-#include "commonstruct.h"
+#include "archive_session.h"
+#include "archiveui_types.h"
 #include "uitools.h"
+#include "archive_session.h"
 #include "ut_commonstub.h"
 
 #include "gtest/src/stub.h"
 
 #include <gtest/gtest.h>
 #include <QTest>
+#include <QFile>
+#include <QTemporaryDir>
 
 /*******************************函数打桩************************************/
-bool libzipPlugin_doKill_stub()
-{
-    return true;
-}
-
 //bool qThread_isRunning_stub()
 //{
 //    return true;
@@ -40,7 +38,7 @@ public:
 public:
     virtual void SetUp()
     {
-        m_pInterface = new LibzipPlugin(m_tester, QVariantList());
+        m_pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, m_tester);
         m_pJob = new LoadJob(m_pInterface, nullptr);
         m_tester = new SingleJobThread(m_pJob);
     }
@@ -53,7 +51,7 @@ public:
     }
 
 protected:
-    LibzipPlugin *m_pInterface = nullptr;
+    dcarchive::ArchiveSession *m_pInterface = nullptr;
     LoadJob *m_pJob;
     SingleJobThread *m_tester;
 };
@@ -77,7 +75,7 @@ public:
 public:
     virtual void SetUp()
     {
-        m_pInterface = new LibzipPlugin(m_tester, QVariantList());
+        m_pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, m_tester);
         m_tester = new LoadJob(m_pInterface, nullptr);
     }
 
@@ -88,7 +86,7 @@ public:
     }
 
 protected:
-    LibzipPlugin *m_pInterface = nullptr;
+    dcarchive::ArchiveSession *m_pInterface = nullptr;
     LoadJob *m_tester;
 };
 
@@ -101,7 +99,6 @@ TEST_F(UT_LoadJob, test_start_001)
 {
     Stub stub;
     CommonStub::stub_QThread_start(stub);
-    m_tester->m_pInterface->m_bWaitForFinished = true;
     m_tester->start();
     EXPECT_NE(m_tester->m_pInterface, nullptr);
 }
@@ -110,7 +107,6 @@ TEST_F(UT_LoadJob, test_start_002)
 {
     Stub stub;
     CommonStub::stub_QThread_start(stub);
-    m_tester->m_pInterface->m_bWaitForFinished = false;
     m_tester->start();
     EXPECT_NE(m_tester->m_pInterface, nullptr);
 }
@@ -157,11 +153,8 @@ TEST_F(UT_LoadJob, test_doKill_001)
 
 TEST_F(UT_LoadJob, test_doKill_002)
 {
-    Stub stub;
-    typedef bool (*fptr)(LibzipPlugin *);
-    fptr A_foo = (fptr)(&LibzipPlugin::doKill);   //获取虚函数地址
-    stub.set(A_foo, libzipPlugin_doKill_stub);
-    EXPECT_EQ(m_tester->doKill(), true);
+    EXPECT_FALSE(m_tester->doKill());
+    EXPECT_TRUE(m_pInterface->m_cancelRequested);
 }
 
 //TEST_F(UT_LoadJob, test_doKill_003)
@@ -182,9 +175,9 @@ TEST_F(UT_LoadJob, test_finishJob)
 
 TEST_F(UT_LoadJob, testkill)
 {
-    m_tester->kill();
-    EXPECT_EQ(m_tester->m_eFinishedType, PFT_Cancel);
-    EXPECT_EQ(m_tester->m_eErrorType, ET_UserCancelOpertion);
+    EXPECT_FALSE(m_tester->kill());
+    EXPECT_EQ(m_tester->m_eFinishedType, PFT_Nomral);
+    EXPECT_EQ(m_tester->m_eErrorType, ET_NoError);
 }
 
 
@@ -197,7 +190,7 @@ public:
 public:
     virtual void SetUp()
     {
-        m_pInterface = new LibzipPlugin(m_tester, QVariantList());
+        m_pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, m_tester);
         m_tester = new AddJob(QList<FileEntry>(), m_pInterface, CompressOptions(), nullptr);
     }
 
@@ -208,7 +201,7 @@ public:
     }
 
 protected:
-    LibzipPlugin *m_pInterface = nullptr;
+    dcarchive::ArchiveSession *m_pInterface = nullptr;
     AddJob *m_tester;
 };
 
@@ -233,7 +226,7 @@ public:
 public:
     virtual void SetUp()
     {
-        m_pInterface = new LibzipPlugin(m_tester, QVariantList());
+        m_pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, m_tester);
         m_tester = new CreateJob(QList<FileEntry>(), m_pInterface, CompressOptions(), nullptr);
     }
 
@@ -244,7 +237,7 @@ public:
     }
 
 protected:
-    LibzipPlugin *m_pInterface = nullptr;
+    dcarchive::ArchiveSession *m_pInterface = nullptr;
     CreateJob *m_tester;
 };
 
@@ -261,21 +254,28 @@ TEST_F(UT_CreateJob, test_doWork)
 
 TEST_F(UT_CreateJob, test_doKill)
 {
-    EXPECT_EQ(m_tester->doKill(), true);
+    EXPECT_EQ(m_tester->doKill(), false);
 }
 
-TEST_F(UT_CreateJob, test_cleanCompressFileCancel_001)
+TEST_F(UT_CreateJob, test_failedReplacementPreservesExistingFile)
 {
-    m_tester->m_stCompressOptions.bSplit = true;
-    m_tester->cleanCompressFileCancel();
-    EXPECT_NE(m_tester->m_pInterface, nullptr);
-}
+    QTemporaryDir workspace;
+    ASSERT_TRUE(workspace.isValid());
+    QFile destination(workspace.filePath(QStringLiteral("existing.tar")));
+    ASSERT_TRUE(destination.open(QIODevice::WriteOnly));
+    ASSERT_EQ(destination.write("original"), 8);
+    destination.close();
 
-TEST_F(UT_CreateJob, test_cleanCompressFileCancel_002)
-{
-    m_tester->m_stCompressOptions.bSplit = false;
-    m_tester->cleanCompressFileCancel();
-    EXPECT_NE(m_tester->m_pInterface, nullptr);
+    QScopedPointer<dcarchive::ArchiveSession> bridge(dcarchive::ArchiveSession::create(
+            destination.fileName(), QStringLiteral("application/x-tar"), true));
+    ASSERT_TRUE(bridge);
+    FileEntry missing;
+    missing.strFullPath = workspace.filePath(QStringLiteral("missing.txt"));
+    CreateJob job({missing}, bridge.data(), CompressOptions());
+    job.doWork();
+    EXPECT_EQ(job.m_eFinishedType, PFT_Error);
+    ASSERT_TRUE(destination.open(QIODevice::ReadOnly));
+    EXPECT_EQ(destination.readAll(), QByteArray("original"));
 }
 
 
@@ -288,7 +288,7 @@ public:
 public:
     virtual void SetUp()
     {
-        m_pInterface = new LibzipPlugin(m_tester, QVariantList());
+        m_pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, m_tester);
         m_tester = new ExtractJob(QList<FileEntry>(), m_pInterface, ExtractionOptions(), nullptr);
     }
 
@@ -299,7 +299,7 @@ public:
     }
 
 protected:
-    LibzipPlugin *m_pInterface = nullptr;
+    dcarchive::ArchiveSession *m_pInterface = nullptr;
     ExtractJob *m_tester;
 };
 
@@ -324,7 +324,7 @@ public:
 public:
     virtual void SetUp()
     {
-        m_pInterface = new LibzipPlugin(m_tester, QVariantList());
+        m_pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, m_tester);
         m_tester = new DeleteJob(QList<FileEntry>(), m_pInterface, nullptr);
     }
 
@@ -335,7 +335,7 @@ public:
     }
 
 protected:
-    LibzipPlugin *m_pInterface = nullptr;
+    dcarchive::ArchiveSession *m_pInterface = nullptr;
     DeleteJob *m_tester;
 };
 
@@ -360,7 +360,7 @@ public:
 public:
     virtual void SetUp()
     {
-        m_pInterface = new LibzipPlugin(m_tester, QVariantList());
+        m_pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, m_tester);
         m_tester = new OpenJob(FileEntry(), "", "", m_pInterface, nullptr);
     }
 
@@ -371,7 +371,7 @@ public:
     }
 
 protected:
-    LibzipPlugin *m_pInterface = nullptr;
+    dcarchive::ArchiveSession *m_pInterface = nullptr;
     OpenJob *m_tester;
 };
 
@@ -404,7 +404,7 @@ public:
 public:
     virtual void SetUp()
     {
-        m_pInterface = new LibzipPlugin(m_tester, QVariantList());
+        m_pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, m_tester);
         m_tester = new UpdateJob(UpdateOptions(), m_pInterface, nullptr);
     }
 
@@ -415,7 +415,7 @@ public:
     }
 
 protected:
-    LibzipPlugin *m_pInterface = nullptr;
+    dcarchive::ArchiveSession *m_pInterface = nullptr;
     UpdateJob *m_tester;
 };
 
@@ -449,7 +449,7 @@ public:
 public:
     virtual void SetUp()
     {
-        LibzipPlugin *pInterface = new LibzipPlugin(m_tester, QVariantList());
+        dcarchive::ArchiveSession *pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, m_tester);
         m_tester = new CommentJob("", pInterface, nullptr);
     }
 
@@ -520,7 +520,7 @@ TEST_F(UT_ConvertJob, initTest)
 
 TEST_F(UT_ConvertJob, test_start)
 {
-    ReadOnlyArchiveInterface *pIface = new LibzipPlugin(m_tester, QVariantList());
+    dcarchive::ArchiveSession *pIface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, m_tester);
     Stub stub;
     CommonStub::stub_UiTools_createInterface(stub, pIface);
     JobStub::stub_ExtractJob_doWork(stub);
@@ -531,7 +531,7 @@ TEST_F(UT_ConvertJob, test_start)
 
 TEST_F(UT_ConvertJob, testslotHandleExtractFinished)
 {
-////    ReadOnlyArchiveInterface *pIface = new LibzipPlugin(nullptr, QVariantList());
+////    dcarchive::ArchiveSession *pIface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, nullptr);
 //    Stub stub;
 ////    CommonStub::stub_UiTools_createInterface(stub, pIface);
 //    JobStub::stub_CreateJob_doWork(stub);
@@ -539,7 +539,7 @@ TEST_F(UT_ConvertJob, testslotHandleExtractFinished)
 //    JobStub::stub_SingleJob_start(stub);
 //    m_tester->start();
 //    m_tester->m_pExtractJob->m_eFinishedType = PluginFinishType::PFT_Nomral;
-////    ReadOnlyArchiveInterface *pIface1 = new LibzipPlugin(nullptr, QVariantList());
+////    dcarchive::ArchiveSession *pIface1 = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, nullptr);
 //    Stub stub1;
 ////    CommonStub::stub_UiTools_createInterface(stub1, pIface1);
 //    m_tester->slotHandleExtractFinished();
@@ -554,7 +554,7 @@ TEST_F(UT_ConvertJob, testslotHandleExtractFinished)
 
 TEST_F(UT_ConvertJob, test_doPause)
 {
-    ReadOnlyArchiveInterface *pIface = new LibzipPlugin(m_tester, QVariantList());
+    dcarchive::ArchiveSession *pIface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, m_tester);
     Stub stub;
     CommonStub::stub_UiTools_createInterface(stub, pIface);
     JobStub::stub_ExtractJob_doWork(stub);
@@ -565,7 +565,7 @@ TEST_F(UT_ConvertJob, test_doPause)
 
 TEST_F(UT_ConvertJob, test_doContinue)
 {
-    ReadOnlyArchiveInterface *pIface = new LibzipPlugin(nullptr, QVariantList());
+    dcarchive::ArchiveSession *pIface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, nullptr);
     Stub stub;
     CommonStub::stub_UiTools_createInterface(stub, pIface);
     JobStub::stub_ExtractJob_doWork(stub);
@@ -576,7 +576,7 @@ TEST_F(UT_ConvertJob, test_doContinue)
 
 TEST_F(UT_ConvertJob, test_doKill)
 {
-    ReadOnlyArchiveInterface *pIface = new LibzipPlugin(nullptr, QVariantList());
+    dcarchive::ArchiveSession *pIface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, nullptr);
     Stub stub;
     CommonStub::stub_UiTools_createInterface(stub, pIface);
     JobStub::stub_ExtractJob_doWork(stub);
@@ -614,7 +614,7 @@ TEST_F(UT_StepExtractJob, initTest)
 
 TEST_F(UT_StepExtractJob, test_start)
 {
-    ReadOnlyArchiveInterface *pIface = new LibzipPlugin(m_tester, QVariantList());
+    dcarchive::ArchiveSession *pIface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, m_tester);
     Stub stub;
     CommonStub::stub_UiTools_createInterface(stub, pIface);
     JobStub::stub_SingleJob_start(stub);
@@ -625,13 +625,13 @@ TEST_F(UT_StepExtractJob, test_start)
 
 TEST_F(UT_StepExtractJob, test_slotHandleExtractFinished_001)
 {
-    ReadOnlyArchiveInterface *pIface = new LibzipPlugin(m_tester, QVariantList());
+    dcarchive::ArchiveSession *pIface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, m_tester);
     Stub stub;
     CommonStub::stub_UiTools_createInterface(stub, pIface);
     JobStub::stub_SingleJob_start(stub);
     m_tester->start();
     m_tester->m_pExtractJob->m_eFinishedType = PluginFinishType::PFT_Nomral;
-    ReadOnlyArchiveInterface *pIface1 = new LibzipPlugin(m_tester, QVariantList());
+    dcarchive::ArchiveSession *pIface1 = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, m_tester);
     Stub stub1;
     CommonStub::stub_UiTools_createInterface(stub1, pIface1);
     m_tester->slotHandleExtractFinished();
@@ -640,13 +640,13 @@ TEST_F(UT_StepExtractJob, test_slotHandleExtractFinished_001)
 
 TEST_F(UT_StepExtractJob, test_slotHandleExtractFinished_002)
 {
-    ReadOnlyArchiveInterface *pIface = new LibzipPlugin(m_tester, QVariantList());
+    dcarchive::ArchiveSession *pIface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, m_tester);
     Stub stub;
     CommonStub::stub_UiTools_createInterface(stub, pIface);
     JobStub::stub_SingleJob_start(stub);
     m_tester->start();
     m_tester->m_pExtractJob->m_eFinishedType = PluginFinishType::PFT_Nomral;
-    ReadOnlyArchiveInterface *pIface1 = new LibzipPlugin(m_tester, QVariantList());
+    dcarchive::ArchiveSession *pIface1 = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, m_tester);
     Stub stub1;
     CommonStub::stub_UiTools_createInterface(stub1, pIface1);
     m_tester->m_pExtractJob->m_eFinishedType = PFT_Cancel;
@@ -656,13 +656,13 @@ TEST_F(UT_StepExtractJob, test_slotHandleExtractFinished_002)
 
 TEST_F(UT_StepExtractJob, test_slotHandleExtractFinished_003)
 {
-    ReadOnlyArchiveInterface *pIface = new LibzipPlugin(m_tester, QVariantList());
+    dcarchive::ArchiveSession *pIface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, m_tester);
     Stub stub;
     CommonStub::stub_UiTools_createInterface(stub, pIface);
     JobStub::stub_SingleJob_start(stub);
     m_tester->start();
     m_tester->m_pExtractJob->m_eFinishedType = PluginFinishType::PFT_Nomral;
-    ReadOnlyArchiveInterface *pIface1 = new LibzipPlugin(m_tester, QVariantList());
+    dcarchive::ArchiveSession *pIface1 = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, m_tester);
     Stub stub1;
     CommonStub::stub_UiTools_createInterface(stub1, pIface1);
     m_tester->m_pExtractJob->m_eFinishedType = PFT_Error;
@@ -672,13 +672,13 @@ TEST_F(UT_StepExtractJob, test_slotHandleExtractFinished_003)
 
 TEST_F(UT_StepExtractJob, test_doKill)
 {
-    ReadOnlyArchiveInterface *pIface = new LibzipPlugin(m_tester, QVariantList());
+    dcarchive::ArchiveSession *pIface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, m_tester);
     Stub stub;
     CommonStub::stub_UiTools_createInterface(stub, pIface);
     JobStub::stub_SingleJob_start(stub);
     m_tester->start();
     m_tester->m_pExtractJob2 = new ExtractJob(QList<FileEntry>(), pIface, ExtractionOptions(), m_tester);
-    EXPECT_EQ(m_tester->doKill(), true);
+    EXPECT_EQ(m_tester->doKill(), false);
 }
 
 

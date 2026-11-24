@@ -7,7 +7,7 @@
 #include <gtest/src/stub.h>
 
 #include "readonlylibarchiveplugin.h"
-#include "queries.h"
+#include "archivequeries.h"
 #include "datamanager.h"
 
 #include <QDir>
@@ -327,5 +327,5 @@ TEST_F(UT_ReadOnlyLibarchivePlugin, test_updateArchiveData)
 
 TEST_F(UT_ReadOnlyLibarchivePlugin, test_extractionFlags)
 {
-    EXPECT_EQ(m_tester->extractionFlags(), 0x0204);
+    EXPECT_EQ(m_tester->extractionFlags(), 0x10304);
 }

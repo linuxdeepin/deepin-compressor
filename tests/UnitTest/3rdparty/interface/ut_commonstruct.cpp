@@ -3,7 +3,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "commonstruct.h"
+#include "archiveui_types.h"
 
 #include "gtest/src/stub.h"
 
