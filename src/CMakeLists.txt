@@ -81,13 +81,6 @@ include_directories(${HFILES_OUTPUT_PATH})
 #源文件、头文件和资源文件
 file(GLOB_RECURSE c_files RELATIVE ${PROJECT_SOURCE_DIR} source/*.cpp source/*.c main.cpp)
 file(GLOB_RECURSE h_files RELATIVE ${PROJECT_SOURCE_DIR} source/*.h *.h)
-# 主程序不再使用旧插件管理器；相关源码只保留给历史插件回归测试。
-list(FILTER c_files EXCLUDE REGEX "^source/common/pluginmanager\\.cpp$")
-list(FILTER c_files EXCLUDE REGEX "^source/common/plugin\\.cpp$")
-list(FILTER h_files EXCLUDE REGEX "^source/common/pluginmanager\\.h$")
-list(FILTER h_files EXCLUDE REGEX "^source/common/plugin\\.h$")
-# 迁移期适配器只用于契约测试，不进主程序 AUTOMOC
-list(FILTER h_files EXCLUDE REGEX "^archive/adapters/")
 file(GLOB_RECURSE res_files RELATIVE ${PROJECT_SOURCE_DIR} *.qrc)
 
 list(APPEND c_files

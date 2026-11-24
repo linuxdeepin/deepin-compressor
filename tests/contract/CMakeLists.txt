@@ -23,30 +23,14 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/source/archivemanager
     ${CMAKE_SOURCE_DIR}/src/source/common
     ${CMAKE_SOURCE_DIR}/src/source/dialog
-    ${CMAKE_SOURCE_DIR}/src/archive/adapters
     ${CMAKE_SOURCE_DIR}/src/archive/backends/singlefile
-    ${CMAKE_SOURCE_DIR}/3rdparty/libzipplugin
     ${CMAKE_SOURCE_DIR}/src/archive/backends/libzip
     ${CMAKE_SOURCE_DIR}/src/archive/backends/libarchive
     ${CMAKE_SOURCE_DIR}/src/archive/backends/minizip
     ${CMAKE_SOURCE_DIR}/src/archive/backends/pigz
     ${CMAKE_SOURCE_DIR}/src/archive/backends/sevenzip
-    ${CMAKE_SOURCE_DIR}/3rdparty/libpigzplugin
-    ${CMAKE_SOURCE_DIR}/3rdparty/cli7zplugin
-    ${CMAKE_SOURCE_DIR}/3rdparty/clirarplugin
-    ${CMAKE_SOURCE_DIR}/3rdparty/clipzipplugin
     ${CMAKE_SOURCE_DIR}/src/archive/backends/clipzip
     ${CMAKE_SOURCE_DIR}/src/archive/backends/rar
-    ${CMAKE_SOURCE_DIR}/3rdparty/libminizipplugin
-    ${CMAKE_SOURCE_DIR}/3rdparty/libarchive/readwritelibarchiveplugin
-    ${CMAKE_SOURCE_DIR}/3rdparty/libarchive/libarchive
-    ${CMAKE_SOURCE_DIR}/3rdparty/interface
-    ${CMAKE_SOURCE_DIR}/3rdparty/interface/archiveinterface
-    ${CMAKE_SOURCE_DIR}/3rdparty/interface/plugin
-    ${CMAKE_SOURCE_DIR}/3rdparty/libsinglefileplugin/singlefile
-    ${CMAKE_SOURCE_DIR}/3rdparty/libsinglefileplugin/gzplugin
-    ${CMAKE_SOURCE_DIR}/3rdparty/libsinglefileplugin/bz2plugin
-    ${CMAKE_SOURCE_DIR}/3rdparty/libsinglefileplugin/xzplugin
     ${HFILES_OUTPUT_PATH}
 )
 
@@ -70,15 +54,11 @@ add_executable(${EXE_NAME}
     ${CMAKE_SOURCE_DIR}/src/archive/core/extraction_output.cpp
     ${CMAKE_SOURCE_DIR}/src/archive/core/staging_merge.cpp
     ${CMAKE_SOURCE_DIR}/src/archive/core/encoding_utils.cpp
+    ${CMAKE_SOURCE_DIR}/src/archive/encoding/encoding_detector.cpp
     ${CMAKE_SOURCE_DIR}/src/archive/core/archive_registry.h
     ${CMAKE_SOURCE_DIR}/src/source/archivemanager/archive_session.cpp
     ${CMAKE_SOURCE_DIR}/src/source/archivemanager/archive_session.h
-    ${CMAKE_SOURCE_DIR}/src/archive/adapters/legacy_singlefile_adapter.cpp
-    ${CMAKE_SOURCE_DIR}/src/archive/adapters/legacy_singlefile_adapter.h
-    ${CMAKE_SOURCE_DIR}/src/archive/adapters/legacy_libzip_adapter.cpp
-    ${CMAKE_SOURCE_DIR}/src/archive/adapters/legacy_libzip_adapter.h
-    ${CMAKE_SOURCE_DIR}/src/archive/adapters/legacy_libarchive_adapter.cpp
-    ${CMAKE_SOURCE_DIR}/src/archive/adapters/legacy_libarchive_adapter.h
+    ${CMAKE_SOURCE_DIR}/src/source/dialog/archivequeries.cpp
     ${CMAKE_SOURCE_DIR}/src/archive/backends/singlefile/singlefile_backend.cpp
     ${CMAKE_SOURCE_DIR}/src/archive/backends/singlefile/singlefile_backend.h
     ${CMAKE_SOURCE_DIR}/src/archive/backends/singlefile/stream_decoder.cpp
@@ -97,16 +77,6 @@ add_executable(${EXE_NAME}
     ${CMAKE_SOURCE_DIR}/src/archive/backends/rar/rar_backend.h
     ${CMAKE_SOURCE_DIR}/src/archive/backends/clipzip/clipzip_backend.cpp
     ${CMAKE_SOURCE_DIR}/src/archive/backends/clipzip/clipzip_backend.h
-    ${CMAKE_SOURCE_DIR}/src/archive/adapters/legacy_clirar_adapter.cpp
-    ${CMAKE_SOURCE_DIR}/src/archive/adapters/legacy_clirar_adapter.h
-    ${CMAKE_SOURCE_DIR}/src/archive/adapters/legacy_clipzip_adapter.cpp
-    ${CMAKE_SOURCE_DIR}/src/archive/adapters/legacy_clipzip_adapter.h
-    ${CMAKE_SOURCE_DIR}/src/archive/adapters/legacy_minizip_adapter.cpp
-    ${CMAKE_SOURCE_DIR}/src/archive/adapters/legacy_minizip_adapter.h
-    ${CMAKE_SOURCE_DIR}/src/archive/adapters/legacy_pigz_adapter.cpp
-    ${CMAKE_SOURCE_DIR}/src/archive/adapters/legacy_pigz_adapter.h
-    ${CMAKE_SOURCE_DIR}/src/archive/adapters/legacy_cli7z_adapter.cpp
-    ${CMAKE_SOURCE_DIR}/src/archive/adapters/legacy_cli7z_adapter.h
 )
 
 target_compile_definitions(${EXE_NAME} PRIVATE
@@ -124,24 +94,12 @@ target_link_libraries(${EXE_NAME}
     Dtk${DTK_VERSION_MAJOR}::Widget
     KF${KF_VERSION_MAJOR}::Codecs
     KF${KF_VERSION_MAJOR}::Archive
-    compressor-interface
-    compressor-singlefile
-    gzplugin
-    bz2plugin
-    xzplugin
     z
     bz2
     lzma
-    libzipplugin
     zip
-    readwritelibarchiveplugin
     archive
-    minizipplugin
     minizip
-    libpigzplugin
-    cli7zplugin
-    clirarplugin
-    clipzipplugin
     ${GTEST_LIBRARIES}
     ${GTEST_MAIN_LIBRARIES}
     pthread

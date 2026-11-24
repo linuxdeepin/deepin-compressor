@@ -6,7 +6,6 @@
 #include "ut_commonstub.h"
 #include "popupdialog.h"
 #include "singlejob.h"
-#include "pluginmanager.h"
 #include "uitools.h"
 #include "processopenthread.h"
 #include "openwithdialog.h"
@@ -588,30 +587,6 @@ void QFileInfoStub::stub_QFileInfo_completeSuffix(Stub &stub, const QString &str
 }
 
 
-/*************************************PluginManagerStub*************************************/
-PluginManagerStub::PluginManagerStub()
-{
-
-}
-
-PluginManagerStub::~PluginManagerStub()
-{
-
-}
-
-QStringList pluginManager_supportedWriteMimeTypes_stub(PluginManager::MimeSortingMode mode)
-{
-    QStringList listMimeTypes = QStringList() << "application/zip" << "application/x-7z-compressed";
-    return listMimeTypes;
-}
-
-void PluginManagerStub::stub_PluginManager_supportedWriteMimeTypes(Stub &stub)
-{
-    stub.set(ADDR(PluginManager, supportedWriteMimeTypes), pluginManager_supportedWriteMimeTypes_stub);
-}
-
-
-/*************************************PluginManagerStub*************************************/
 QFileStub::QFileStub()
 {
 

@@ -47,5 +47,3 @@ include_directories(${HFILES_OUTPUT_PATH})
 
 add_subdirectory(src)
 
-add_subdirectory(3rdparty)
-

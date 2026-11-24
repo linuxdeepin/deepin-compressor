@@ -10,7 +10,7 @@ set( CMAKE_CXX_FLAGS "-std=c++11" )
 set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -g -fsanitize=undefined,address,leak -fsanitize=fuzzer")
 set(CMAKE_C_FLAGS " ${CMAKE_C_FLAGS} -g -fsanitize=undefined,address,leak -fsanitize=fuzzer")
 
-include_directories(${CMAKE_SOURCE_DIR}/../../../3rdparty/ChardetDetector/)
+include_directories(${CMAKE_SOURCE_DIR}/../../../src/archive/encoding/)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/) 
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -19,8 +19,7 @@ set(CMAKE_AUTOMOC ON)
 find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS Core)
 file(GLOB_RECURSE
   c_files
-  ../../../3rdparty/ChardetDetector/*.cpp
-  ../../../3rdparty/ChardetDetector/tables/*.cpp
+  ../../../src/archive/encoding/encoding_detector.cpp
   )
 
 add_executable(${PROJECT_NAME} "main.cpp"  ${c_files})
