@@ -384,8 +384,7 @@ void ProgressPage::displaySpeedAndTime(double dSpeed, qint64 qRemainingTime)
         if (dSpeed < 1024) {
             // 速度小于1024k， 显示速度单位为KB/s
             m_pSpeedLbl->setText(tr("Speed", "compress") + ": " + QString::number(dSpeed, 'f', 2) + "KB/s");
-        } else if (dSpeed > 1024 && dSpeed < 1024 * 300) {
-            // 速度大于1M/S，且小于300MB/s， 显示速度单位为MB/s
+        } else if (dSpeed <= 1024 * 300) {
             m_pSpeedLbl->setText(tr("Speed", "compress") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/s");
         } else {
             // 速度大于300MB/s，显示速度为>300MB/s
@@ -409,7 +408,7 @@ void ProgressPage::displaySpeedAndTime(double dSpeed, qint64 qRemainingTime)
         qCInfo(appLog) << "operation type: uncompress";
         if (dSpeed < 1024) {
             m_pSpeedLbl->setText(tr("Speed", "uncompress") + ": " + QString::number(dSpeed, 'f', 2) + "KB/s");
-        } else if (dSpeed > 1024 && dSpeed < 1024 * 300) {
+        } else if (dSpeed <= 1024 * 300) {
             m_pSpeedLbl->setText(tr("Speed", "uncompress") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/s");
         } else {
             m_pSpeedLbl->setText(tr("Speed", "uncompress") + ": " + ">300MB/s");
@@ -418,7 +417,7 @@ void ProgressPage::displaySpeedAndTime(double dSpeed, qint64 qRemainingTime)
         qCInfo(appLog) << "operation type: convert";
         if (dSpeed < 1024) {
             m_pSpeedLbl->setText(tr("Speed", "convert") + ": " + QString::number(dSpeed, 'f', 2) + "KB/s");
-        } else if (dSpeed > 1024 && dSpeed < 1024 * 300) {
+        } else if (dSpeed <= 1024 * 300) {
             m_pSpeedLbl->setText(tr("Speed", "convert") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/s");
         } else {
             m_pSpeedLbl->setText(tr("Speed", "convert") + ": " + ">300MB/s");

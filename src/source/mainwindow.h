@@ -13,6 +13,7 @@
 
 #include <DMainWindow>
 #include <DFileWatcher>
+#include <QTimer>
 
 class QStackedWidget;
 class QSettings;

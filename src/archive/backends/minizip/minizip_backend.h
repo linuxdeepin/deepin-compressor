@@ -9,6 +9,8 @@
 
 #include <QString>
 
+#include <atomic>
+
 namespace dcarchive {
 
 class MinizipBackend : public ArchiveBackend
@@ -42,8 +44,8 @@ private:
 
     QString m_path;
     QString m_mimeType;
-    bool m_paused = false;
-    bool m_cancelled = false;
+    std::atomic_bool m_paused{false};
+    std::atomic_bool m_cancelled{false};
 };
 
 } // namespace dcarchive

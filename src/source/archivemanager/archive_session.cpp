@@ -12,6 +12,7 @@
 
 #include <QDateTime>
 #include <QDir>
+#include <QElapsedTimer>
 #include <QFileInfo>
 #include <QHash>
 #include <QMetaMethod>
@@ -28,15 +29,28 @@ namespace {
 class SessionObserver : public BackendObserver
 {
 public:
-    explicit SessionObserver(ArchiveSession *session, QString archivePath)
+    explicit SessionObserver(ArchiveSession *session, QString archivePath, qint64 extractBytes = 0)
         : m_session(session)
         , m_archivePath(std::move(archivePath))
+        , m_extractBytes(extractBytes)
     {
     }
 
     void onProgress(const ProgressInfo &progress) override
     {
-        emit m_session->signalprogress(progress.percentage);
+        double percentage = progress.percentage;
+        if (percentage == 0.0 && progress.processedBytes > 0) {
+            const qint64 total = progress.totalBytes > 0 ? progress.totalBytes : m_extractBytes;
+            if (total > 0) {
+                percentage = qMin(99.0, 100.0 * progress.processedBytes / total);
+                if (percentage <= m_lastByteProgress
+                        || (m_byteProgressTimer.isValid() && m_byteProgressTimer.elapsed() < 100))
+                    return;
+                m_lastByteProgress = percentage;
+                m_byteProgressTimer.start();
+            }
+        }
+        emit m_session->signalprogress(percentage);
     }
 
     void onCurrentFile(const QString &path) override
@@ -86,6 +100,9 @@ public:
 private:
     ArchiveSession *m_session;
     QString m_archivePath;
+    qint64 m_extractBytes;
+    double m_lastByteProgress = 0.0;
+    QElapsedTimer m_byteProgressTimer;
 };
 
 } // namespace
@@ -125,6 +142,8 @@ ArchiveSession *ArchiveSession::create(const QString &path,
 ArchiveBackend *ArchiveSession::backendFor(ArchiveOperation operation, const QString &path)
 {
     QMutexLocker lock(&m_backendMutex);
+    if (m_partialRead && operation != ArchiveOperation::Read)
+        return nullptr;
     const QString archivePath = path.isEmpty() ? m_path : path;
     std::unique_ptr<ArchiveBackend> replacement;
     ArchiveBackend *backend = m_backend.get();
@@ -161,7 +180,7 @@ ArchiveBackend *ArchiveSession::backendFor(ArchiveOperation operation, const QSt
 
 PluginFinishType ArchiveSession::applyResult(const ArchiveResult &result)
 {
-    m_error = toErrorType(result.error);
+    m_error = toErrorType(result.ok() ? result.warning : result.error);
     if (result.cancelled || result.error == ArchiveError::Cancelled) {
         prepareOperation();
         return PFT_Cancel;
@@ -182,6 +201,7 @@ ErrorType ArchiveSession::toErrorType(ArchiveError error)
     case ArchiveError::PasswordRequired: return ET_NeedPassword;
     case ArchiveError::LongName: return ET_LongNameError;
     case ArchiveError::DiskFull: return ET_InsufficientDiskSpace;
+    case ArchiveError::MissingVolume: return ET_MissingVolume;
     case ArchiveError::Cancelled: return ET_UserCancelOpertion;
     default: return ET_PluginError;
     }
@@ -292,6 +312,23 @@ PluginFinishType ArchiveSession::list()
         headerEncrypted = true;
         result = backend->list();
     }
+    if (result.result.error == ArchiveError::MissingVolume && !result.info.entries.isEmpty()) {
+        if (!m_partialRead && isSignalConnected(QMetaMethod::fromSignal(&ArchiveSession::signalQuery))) {
+            LoadCorruptQuery query(m_path);
+            emit signalQuery(&query);
+            query.waitForResponse();
+            if (!query.responseYes())
+                return applyResult({ArchiveError::Cancelled, {}, true});
+            QMutexLocker lock(&m_backendMutex);
+            if (m_cancelRequested) {
+                lock.unlock();
+                return applyResult({ArchiveError::Cancelled, {}, true});
+            }
+            m_partialRead = true;
+        }
+        if (m_partialRead)
+            result.result = {};
+    }
     if (result.result.ok()) {
         result.info.encrypted = result.info.encrypted || headerEncrypted;
         populateViewState(result.info);
@@ -300,9 +337,11 @@ PluginFinishType ArchiveSession::list()
 }
 
 PluginFinishType ArchiveSession::extractFiles(const QList<FileEntry> &files,
-                                                     const ExtractionOptions &options)
+                                             const ExtractionOptions &options,
+                                             QString *outputPath)
 {
     if (!QDir().mkpath(options.strTargetPath)) {
+        emit signalFileWriteErrorName(QFileInfo(options.strTargetPath).fileName());
         m_error = ET_FileWriteError;
         return PFT_Error;
     }
@@ -324,11 +363,23 @@ PluginFinishType ArchiveSession::extractFiles(const QList<FileEntry> &files,
     request.targetPath = options.strTargetPath;
     request.destinationPrefix = options.strDestination;
     request.allEntries = options.bAllExtract || files.isEmpty();
+    request.reportOutputPath = outputPath != nullptr;
+    request.allowPartial = m_partialRead;
+    request.keepIncompleteOnCancel = options.keepIncompleteOnCancel;
     for (const FileEntry &file : files)
         request.entries.append(toArchiveEntry(file));
 
-    SessionObserver observer(this, m_path);
-    return applyResult(backend->extractFiles(request, observer).result);
+    const qint64 extractBytes = !options.bExistList && request.allEntries
+            ? ArchiveViewState::instance().archiveData().qSize : options.qSize;
+    SessionObserver observer(this, m_path, extractBytes);
+    const ArchiveResult result = backend->extractFiles(request, observer).result;
+    if (result.error == ArchiveError::PermissionDenied) {
+        const QString path = result.message.isEmpty() ? options.strTargetPath : result.message;
+        emit signalFileWriteErrorName(QFileInfo(QDir::cleanPath(path)).fileName());
+    }
+    if (outputPath && result.ok())
+        *outputPath = result.outputPath;
+    return applyResult(result);
 }
 
 PluginFinishType ArchiveSession::addFiles(const QList<FileEntry> &files,
@@ -374,6 +425,8 @@ PluginFinishType ArchiveSession::addFiles(const QList<FileEntry> &files,
     request.destinationPath = options.strDestination;
     request.password = options.strPassword;
     request.encryptList = options.bHeaderEncryption;
+    request.sourceBytes = operation == ArchiveOperation::Append ? 0 : options.qTotalSize;
+    request.existingBytes = operation == ArchiveOperation::Append ? options.qTotalSize : 0;
     request.compressionLevel = options.iCompressionLevel;
     request.cpuThreads = options.iCPUTheadNum;
     request.splitSize = options.bSplit ? qint64(options.iVolumeSize) * 1024 : 0;
@@ -413,6 +466,8 @@ PluginFinishType ArchiveSession::addFiles(const QList<FileEntry> &files,
             }
         }
     }
+    if (result.ok())
+        observer.onProgress({100.0, 0, 0});
     return applyResult(result);
 }
 
@@ -458,7 +513,8 @@ PluginFinishType ArchiveSession::addComment(const QString &comment)
         m_error = ET_PluginError;
         return PFT_Error;
     }
-    return applyResult(backend->addComment(comment).result);
+    SessionObserver observer(this, m_path);
+    return applyResult(backend->addComment(comment, observer).result);
 }
 
 PluginFinishType ArchiveSession::updateArchiveData(const UpdateOptions &)

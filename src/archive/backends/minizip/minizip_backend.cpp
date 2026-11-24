@@ -5,6 +5,7 @@
 #include "minizip_backend.h"
 
 #include "encoding_utils.h"
+#include "extraction_output.h"
 #include "path_guard.h"
 
 #include <QDateTime>
@@ -61,6 +62,7 @@ VoidResult MinizipBackend::open(const OpenRequest &request)
         m_path = request.path;
     if (!request.mimeType.isEmpty())
         m_mimeType = request.mimeType;
+    m_paused = false;
     m_cancelled = false;
     return {};
 }
@@ -151,14 +153,21 @@ VoidResult MinizipBackend::extractFiles(const ExtractRequest &request, BackendOb
     }
     const bool all = request.allEntries || request.entries.isEmpty();
 
-    m_paused = false;
     bool overwriteAll = false;
     bool skipAll = false;
     qint64 done = 0;
     int index = 0;
     int ret = unzGoToFirstFile(archive);
+    const auto waitForResume = [&] {
+        while (m_paused && !m_cancelled)
+            QThread::msleep(20);
+        if (!m_cancelled)
+            return true;
+        result = {ArchiveError::Cancelled, {}, true};
+        return false;
+    };
 
-    while (ret == UNZ_OK) {
+    while (ret == UNZ_OK && waitForResume()) {
         const int current = index++;
         unz_file_info info;
         char name[4096] = {0};
@@ -178,14 +187,6 @@ VoidResult MinizipBackend::extractFiles(const ExtractRequest &request, BackendOb
             ret = unzGoToNextFile(archive);
             continue;
         }
-        if (m_cancelled) {
-            result.error = ArchiveError::Cancelled;
-            result.cancelled = true;
-            break;
-        }
-        while (m_paused)
-            QThread::msleep(20);
-
         const QString relativePath = archivePathRelativeTo(entryPath, request.destinationPrefix);
         const QString outputPath = safeOutputPath(request.targetPath, relativePath);
         if (outputPath.isEmpty()) {
@@ -239,10 +240,9 @@ VoidResult MinizipBackend::extractFiles(const ExtractRequest &request, BackendOb
             result.message = entryPath;
             break;
         }
-        QDir().mkpath(QFileInfo(outputPath).path());
-        QFile output(outputPath);
-        if (!output.open(QIODevice::WriteOnly)) {
-            result.error = ArchiveError::PermissionDenied;
+        ExtractionOutput output;
+        if (!output.open(outputPath)) {
+            result.error = output.error();
             result.message = outputPath;
             break;
         }
@@ -255,29 +255,39 @@ VoidResult MinizipBackend::extractFiles(const ExtractRequest &request, BackendOb
 
         observer.onCurrentFile(entryPath);
         QByteArray buffer(kChunkSize, '\0');
-        bool failed = false;
-        while (true) {
+        while (waitForResume()) {
             const int read = unzReadCurrentFile(archive, buffer.data(), buffer.size());
             if (read < 0) {
-                failed = true;
+                result.error = ArchiveError::CorruptArchive;
+                result.message = entryPath;
                 break;
             }
             if (read == 0)
                 break;
-            if (output.write(buffer.constData(), read) != read) {
-                failed = true;
+            if (!waitForResume())
+                break;
+            if (!output.write(buffer.constData(), read)) {
+                result.error = output.error();
+                result.message = outputPath;
                 break;
             }
             done += read;
+            if (!waitForResume())
+                break;
             ProgressInfo progress;
             progress.processedBytes = done;
             observer.onProgress(progress);
         }
-        unzCloseCurrentFile(archive);
-        output.close();
-
-        if (failed) {
-            result.error = ArchiveError::DiskFull;
+        const int closeResult = unzCloseCurrentFile(archive);
+        if (!result.ok() || !waitForResume())
+            break;
+        if (closeResult != UNZ_OK) {
+            result.error = ArchiveError::CorruptArchive;
+            result.message = entryPath;
+            break;
+        }
+        if (!output.commit()) {
+            result.error = output.error();
             result.message = outputPath;
             break;
         }

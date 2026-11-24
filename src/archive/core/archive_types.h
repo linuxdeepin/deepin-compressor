@@ -25,12 +25,16 @@ enum class ArchiveError {
     NotSupported,
     Cancelled,
     Unknown,
+    MissingVolume,
 };
 
 struct ArchiveResult {
     ArchiveError error = ArchiveError::None;
     QString message;
     bool cancelled = false;
+    ArchiveError warning = ArchiveError::None;
+    // Populated only when a caller asks to open the extracted file.
+    QString outputPath;
 
     bool ok() const { return error == ArchiveError::None && !cancelled; }
 };
@@ -87,6 +91,9 @@ struct ExtractRequest {
     OverwritePolicy overwrite = OverwritePolicy::Ask;
     bool preserveTimes = true;
     bool allEntries = true;
+    bool reportOutputPath = false;
+    bool allowPartial = false;
+    bool keepIncompleteOnCancel = false;
 };
 
 struct AddRequest {
@@ -102,6 +109,8 @@ struct AddRequest {
     qint64 splitSize = 0;
     QString comment;
     bool tar7z = false;
+    qint64 sourceBytes = 0;
+    qint64 existingBytes = 0;
 };
 
 struct MoveRequest {

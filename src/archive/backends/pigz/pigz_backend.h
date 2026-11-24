@@ -43,6 +43,7 @@ private:
     QString m_path;
     QString m_mimeType;
     std::atomic_bool m_cancelled{false};
+    std::atomic_bool m_paused{false};
 };
 
 } // namespace dcarchive

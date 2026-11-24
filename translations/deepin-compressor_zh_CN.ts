@@ -510,6 +510,11 @@
         <translation>提取失败，文件名超长</translation>
     </message>
     <message>
+        <source>Extraction failed</source>
+        <comment>提取失败</comment>
+        <translation>提取失败</translation>
+    </message>
+    <message>
         <location filename="../src/source/mainwindow.cpp" line="1988"/>
         <location filename="../src/source/mainwindow.cpp" line="2556"/>
         <source>Failed to create &quot;%1&quot;</source>

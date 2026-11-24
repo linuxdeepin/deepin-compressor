@@ -90,6 +90,7 @@ VoidResult SingleFileBackend::open(const OpenRequest &request)
     if (!request.mimeType.isEmpty())
         m_mimeType = request.mimeType;
     m_cancelled = false;
+    m_paused = false;
     configureCodec();
     return {};
 }
@@ -187,30 +188,22 @@ VoidResult SingleFileBackend::extractFiles(const ExtractRequest &request,
     ProgressInfo progress;
     observer.onProgress(progress);
 
-    m_paused = false;
-
     qint64 written = 0;
     QByteArray chunk(kChunkSize, '\0');
     ArchiveResult result;
-
-    while (true) {
-        if (m_cancelled) {
-            result.error = ArchiveError::Cancelled;
-            result.cancelled = true;
-            break;
-        }
-        while (m_paused) {
+    const auto waitForResume = [&] {
+        while (m_paused && !m_cancelled)
             QThread::msleep(20);
-            if (m_cancelled) {
-                result.error = ArchiveError::Cancelled;
-                result.cancelled = true;
-                break;
-            }
-        }
-        if (result.cancelled)
-            break;
+        if (!m_cancelled)
+            return true;
+        result = {ArchiveError::Cancelled, {}, true};
+        return false;
+    };
 
+    while (waitForResume()) {
         const qint64 bytesRead = decoder.read(chunk.data(), chunk.size());
+        if (!waitForResume())
+            break;
         if (bytesRead < 0) {
             result.error = ArchiveError::CorruptArchive;
             break;

@@ -8,6 +8,7 @@
 #include "archive_backend.h"
 
 #include <QString>
+#include <QHash>
 
 #include <atomic>
 #include <functional>
@@ -47,15 +48,20 @@ private:
     };
 
     using OutputCallback = std::function<void(const QString &)>;
+    using DataCallback = std::function<bool(const QByteArray &)>;
 
     RunResult run7z(const QStringList &arguments, const OutputCallback &onOutput = {},
-                    const QString &workingDirectory = {});
+                    const QString &workingDirectory = {}, const DataCallback &onData = {});
     RunResult runArchiveCommand(QStringList switches, const QStringList &entries = {},
                                 const OutputCallback &onOutput = {},
                                 const QString &workingDirectory = {},
-                                const QString &archivePath = {});
+                                const QString &archivePath = {}, const DataCallback &onData = {});
     ArchiveResult resultForRun(const RunResult &run, ArchiveError fallback) const;
-    EntryResult readListing(bool includeTimes);
+    EntryResult readListing(bool includeTimes, QHash<int, quint32> *checksums = nullptr);
+    ArchiveResult extractFromIncompleteZip(const ExtractRequest &request,
+                                           const QVector<ArchiveEntry> &entries,
+                                           const QHash<int, quint32> &checksums,
+                                           BackendObserver &observer);
     void notifyFinished(BackendObserver &observer, const ArchiveResult &result);
 
     QString m_path;

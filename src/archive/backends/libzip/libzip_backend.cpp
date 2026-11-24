@@ -3,8 +3,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "libzip_backend.h"
+#include "extraction_names.h"
+#include "write_progress.h"
 
 #include "encoding_utils.h"
+#include "extraction_output.h"
 #include "path_guard.h"
 
 #include <QDateTime>
@@ -12,21 +15,83 @@
 #include <QDirIterator>
 #include <QFile>
 #include <QFileInfo>
-#include <QSaveFile>
+#include <QHash>
 #include <QSet>
 #include <QTemporaryFile>
 #include <QThread>
 
+#include <archive.h>
+#include <archive_entry.h>
 #include <zip.h>
 
-#include <cstring>
-#include <cerrno>
 #include <algorithm>
+#include <cerrno>
+#include <cstring>
+#include <memory>
 
 namespace dcarchive {
 namespace {
 
 constexpr int kChunkSize = 64 * 1024;
+
+bool needsAesCompatibilityReader(const zip_stat_t &stat)
+{
+    const auto method = stat.encryption_method;
+    return (stat.valid & ZIP_STAT_ENCRYPTION_METHOD)
+            && (method == ZIP_EM_AES_128 || method == ZIP_EM_AES_192 || method == ZIP_EM_AES_256)
+            && (!(stat.valid & ZIP_STAT_CRC) || stat.crc == 0);
+}
+
+// libzip 1.7 treats AE-2's omitted CRC as a real CRC for larger entries.
+// Use libarchive's authenticated ZIP stream for those entries, not a short read
+// that would stop before integrity checks. Output paths remain under libzip's control.
+class AesCompatibilityReader
+{
+public:
+    explicit AesCompatibilityReader(const QString &path) : m_path(QFile::encodeName(path)) {}
+
+    bool seek(const QByteArray &name, qint64 size, const QByteArray &password,
+              const std::atomic_bool &cancelled)
+    {
+        if (m_reader && m_password == password && find(name, size, cancelled))
+            return true;
+        if (cancelled)
+            return false;
+        m_reader.reset(archive_read_new());
+        m_password = password;
+        return m_reader && archive_read_support_format_zip_seekable(m_reader.get()) == ARCHIVE_OK
+                && archive_read_add_passphrase(m_reader.get(), password.constData()) == ARCHIVE_OK
+                && archive_read_open_filename(m_reader.get(), m_path.constData(), kChunkSize) == ARCHIVE_OK
+                && find(name, size, cancelled);
+    }
+
+    qint64 read(char *buffer, size_t size)
+    {
+        const auto count = archive_read_data(m_reader.get(), buffer, size);
+        if (count < 0)
+            m_reader.reset();
+        return count;
+    }
+
+private:
+    bool find(const QByteArray &name, qint64 size, const std::atomic_bool &cancelled)
+    {
+        // A seekable ZIP reader visits entries by local file offset. Reuse it
+        // for entries in that order; a central directory may list them differently.
+        ::archive_entry *entry = nullptr;
+        while (!cancelled && archive_read_next_header(m_reader.get(), &entry) == ARCHIVE_OK) {
+            const char *path = archive_entry_pathname(entry);
+            if (path && name == path)
+                return archive_entry_is_data_encrypted(entry) && archive_entry_size_is_set(entry)
+                        && archive_entry_size(entry) == size;
+        }
+        return false;
+    }
+
+    const QByteArray m_path;
+    QByteArray m_password;
+    std::unique_ptr<::archive, decltype(&archive_read_free)> m_reader{nullptr, &archive_read_free};
+};
 
 ArchiveEntry entryFromStat(const zip_stat_t &stat, int index)
 {
@@ -134,15 +199,21 @@ QString temporaryPathFor(const QString &targetPath)
     return path;
 }
 
-bool closeZipForWrite(zip_t *archive, std::atomic_bool &cancelled, ArchiveResult &result)
+bool closeZipForWrite(zip_t *archive, const std::atomic_bool &paused,
+                      const std::atomic_bool &cancelled, ArchiveResult &result)
 {
-    if (result.ok() && cancelled)
+    struct WriteState {
+        const std::atomic_bool &paused;
+        const std::atomic_bool &cancelled;
+    } state{paused, cancelled};
+    if (result.ok() && !waitForWriteResume(paused, cancelled))
         result = {ArchiveError::Cancelled, {}, true};
     if (result.ok()) {
-        const auto check = [](zip_t *, void *state) -> int {
-            return static_cast<const std::atomic_bool *>(state)->load();
+        const auto check = [](zip_t *, void *context) -> int {
+            const auto &write = *static_cast<const WriteState *>(context);
+            return !waitForWriteResume(write.paused, write.cancelled);
         };
-        if (zip_register_cancel_callback_with_state(archive, check, nullptr, &cancelled) == 0
+        if (zip_register_cancel_callback_with_state(archive, check, nullptr, &state) == 0
                 && zip_close(archive) == 0)
             return true;
         if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_CANCELLED)
@@ -193,6 +264,7 @@ VoidResult LibzipBackend::open(const OpenRequest &request)
         m_mimeType = request.mimeType;
     m_password = request.password.toUtf8();
     m_cancelled = false;
+    m_paused = false;
     return {};
 }
 
@@ -283,12 +355,24 @@ VoidResult LibzipBackend::extractFiles(const ExtractRequest &request, BackendObs
     }
 
     QVector<ArchiveEntry> archiveEntries;
+    QSet<int> aesEntries;
     const zip_int64_t count = zip_get_num_entries(archive, 0);
     for (zip_int64_t index = 0; index < count; ++index) {
         zip_stat_t stat;
         zip_stat_init(&stat);
-        if (zip_stat_index(archive, zip_uint64_t(index), ZIP_FL_ENC_RAW, &stat) == 0)
+        if (zip_stat_index(archive, zip_uint64_t(index), ZIP_FL_ENC_RAW, &stat) == 0) {
             archiveEntries.append(entryFromStat(stat, int(index)));
+            if (needsAesCompatibilityReader(stat))
+                aesEntries.insert(int(index));
+        }
+    }
+
+    QHash<QByteArray, int> rawNameCounts;
+    if (!aesEntries.isEmpty()) {
+        for (const auto &entry : archiveEntries) {
+            if (const char *rawName = zip_get_name(archive, entry.index, ZIP_FL_ENC_RAW))
+                ++rawNameCounts[QByteArray(rawName)];
+        }
     }
 
     QSet<int> selected;
@@ -311,12 +395,14 @@ VoidResult LibzipBackend::extractFiles(const ExtractRequest &request, BackendObs
             entries.append(entry);
     }
 
-    m_paused = false;
     bool overwriteAll = request.overwrite == OverwritePolicy::Overwrite
             || request.overwrite == OverwritePolicy::OverwriteAll;
     bool skipAll = request.overwrite == OverwritePolicy::Skip
             || request.overwrite == OverwritePolicy::SkipAll;
     qint64 done = 0;
+    std::unique_ptr<AesCompatibilityReader> aesReader;
+    ExtractionNames names(ExtractionNames::Suffix::Zip);
+    QByteArray buffer;
 
     for (int i = 0; i < entries.size(); ++i) {
         if (m_cancelled) {
@@ -334,9 +420,23 @@ VoidResult LibzipBackend::extractFiles(const ExtractRequest &request, BackendObs
 
         const ArchiveEntry &entry = entries.at(i);
         const QString relativePath = archivePathRelativeTo(entry.path, request.destinationPrefix);
+        QString outputPath = safeOutputPath(request.targetPath, relativePath);
+        if (outputPath.isEmpty()) {
+            result = {ArchiveError::PermissionDenied, entry.path};
+            break;
+        }
+        const QString diskName = names.outputName(relativePath, entry.type == EntryType::Directory);
+        if (diskName != relativePath) {
+            if (diskName.isEmpty()) {
+                observer.onCurrentFile(entry.path);
+                result = {ArchiveError::LongName, entry.path};
+                break;
+            }
+            outputPath = safeOutputPath(request.targetPath, diskName);
+            observer.onCurrentFile(entry.path);
+        }
         if (entry.type == EntryType::Directory) {
-            const QString dirPath = safeOutputPath(request.targetPath, relativePath);
-            if (dirPath.isEmpty() || !ensureDirectoryWithinRoot(request.targetPath, dirPath)) {
+            if (!ensureDirectoryWithinRoot(request.targetPath, outputPath)) {
                 result.error = ArchiveError::PermissionDenied;
                 result.message = entry.path;
                 break;
@@ -344,16 +444,10 @@ VoidResult LibzipBackend::extractFiles(const ExtractRequest &request, BackendObs
             continue;
         }
 
-        const QString outputPath = safeOutputPath(request.targetPath, relativePath);
-        if (outputPath.isEmpty()) {
-            result.error = ArchiveError::PermissionDenied;
-            result.message = entry.path;
-            break;
-        }
-
-        if (QFile::exists(outputPath) && skipAll)
+        const bool hasExistingOutput = !overwriteAll && QFile::exists(outputPath);
+        if (hasExistingOutput && skipAll)
             continue;
-        if (QFile::exists(outputPath) && !overwriteAll) {
+        if (hasExistingOutput) {
             FileConflictRequest conflict;
             conflict.path = outputPath;
             observer.onFileConflict(conflict);
@@ -416,17 +510,36 @@ VoidResult LibzipBackend::extractFiles(const ExtractRequest &request, BackendObs
             break;
         }
 
-        QSaveFile output(outputPath);
-        if (!output.open(QIODevice::WriteOnly)) {
+        const bool useAesReader = aesEntries.contains(entry.index);
+        if (useAesReader) {
+            // libzip has checked the password verifier. libarchive checks the
+            // full authentication tag as we stream this same entry to disk.
             zip_fclose(zipFile);
-            result.error = output.error() == QFileDevice::ResourceError
-                    ? ArchiveError::DiskFull : ArchiveError::PermissionDenied;
+            zipFile = nullptr;
+            const QByteArray rawName(zip_get_name(archive, entry.index, ZIP_FL_ENC_RAW));
+            if (!aesReader)
+                aesReader.reset(new AesCompatibilityReader(m_path));
+            if (rawName.isEmpty() || rawNameCounts.value(rawName) != 1
+                    || !aesReader->seek(rawName, entry.size, m_password, m_cancelled)) {
+                result = m_cancelled ? ArchiveResult{ArchiveError::Cancelled, {}, true}
+                                     : ArchiveResult{ArchiveError::CorruptArchive, entry.path};
+                break;
+            }
+        }
+
+        ExtractionOutput output;
+        if (!output.open(outputPath)) {
+            if (zipFile)
+                zip_fclose(zipFile);
+            result.error = output.error();
             result.message = outputPath;
             break;
         }
 
         observer.onCurrentFile(entry.path);
-        QByteArray buffer(kChunkSize, '\0');
+        if (buffer.isEmpty())
+            buffer.resize(kChunkSize);
+        qint64 entryBytes = 0;
         while (true) {
             while (m_paused && !m_cancelled)
                 QThread::msleep(20);
@@ -435,7 +548,8 @@ VoidResult LibzipBackend::extractFiles(const ExtractRequest &request, BackendObs
                 result.cancelled = true;
                 break;
             }
-            const zip_int64_t read = zip_fread(zipFile, buffer.data(), buffer.size());
+            const qint64 read = useAesReader ? aesReader->read(buffer.data(), buffer.size())
+                                            : zip_fread(zipFile, buffer.data(), buffer.size());
             if (read < 0) {
                 result.error = ArchiveError::CorruptArchive;
                 result.message = entry.path;
@@ -443,33 +557,50 @@ VoidResult LibzipBackend::extractFiles(const ExtractRequest &request, BackendObs
             }
             if (read == 0)
                 break;
-            if (output.write(buffer.constData(), read) != read) {
-                result.error = output.error() == QFileDevice::ResourceError
-                        ? ArchiveError::DiskFull : ArchiveError::PermissionDenied;
+            if (!output.write(buffer.constData(), read)) {
+                result.error = output.error();
                 result.message = outputPath;
                 break;
             }
+            entryBytes += read;
             done += read;
             ProgressInfo progress;
             progress.processedBytes = done;
             observer.onProgress(progress);
         }
-        if (zip_fclose(zipFile) != 0 && result.ok()) {
+        const bool closeFailed = zipFile && zip_fclose(zipFile) != 0;
+        if (result.error == ArchiveError::Cancelled && request.keepIncompleteOnCancel
+                && request.allEntries && !request.reportOutputPath
+                && entryBytes > 0 && entryBytes < entry.size) {
+            zip_stat_t stat;
+            zip_stat_init(&stat);
+            if (zip_stat_index(archive, zip_uint64_t(entry.index), ZIP_FL_ENC_RAW, &stat) == 0
+                    && (stat.valid & ZIP_STAT_ENCRYPTION_METHOD) && stat.encryption_method == ZIP_EM_NONE)
+                output.keepIncompleteFile();
+        }
+        if (result.ok() && (closeFailed || (useAesReader && entryBytes != entry.size))) {
             result.error = ArchiveError::CorruptArchive;
             result.message = entry.path;
         }
         if (!result.ok())
             break;
+        if (m_cancelled) {
+            result = {ArchiveError::Cancelled, {}, true};
+            break;
+        }
         if (!output.commit()) {
-            result.error = output.error() == QFileDevice::ResourceError
-                    ? ArchiveError::DiskFull : ArchiveError::PermissionDenied;
+            result.error = output.error();
             result.message = outputPath;
             break;
         }
+        if (request.reportOutputPath)
+            result.outputPath = outputPath;
     }
 
     zip_close(archive);
     if (result.ok()) {
+        if (names.shortened())
+            result.warning = ArchiveError::LongName;
         ProgressInfo progress;
         progress.percentage = 100.0;
         progress.processedBytes = done;
@@ -511,7 +642,7 @@ VoidResult LibzipBackend::addFiles(const AddRequest &request, BackendObserver &o
     excludedPaths << QFileInfo(m_path).absoluteFilePath() << tempPath;
     for (const ArchiveEntry &entry : request.entries) {
         observer.onCurrentFile(entry.path);
-        if (m_cancelled) {
+        if (!waitForWriteResume(m_paused, m_cancelled)) {
             result.error = ArchiveError::Cancelled;
             result.cancelled = true;
             break;
@@ -536,7 +667,13 @@ VoidResult LibzipBackend::addFiles(const AddRequest &request, BackendObserver &o
         result.error = ArchiveError::Cancelled;
         result.cancelled = true;
     }
-    closeZipForWrite(archive, m_cancelled, result);
+    WriteProgress progress(observer);
+    if (result.ok()) {
+        zip_register_progress_callback_with_state(archive, 0.001, [](zip_t *, double fraction, void *state) {
+            static_cast<WriteProgress *>(state)->report(fraction * 100.0);
+        }, nullptr, &progress);
+    }
+    closeZipForWrite(archive, m_paused, m_cancelled, result);
     if (result.ok() && m_cancelled) {
         result.error = ArchiveError::Cancelled;
         result.cancelled = true;
@@ -606,7 +743,7 @@ VoidResult LibzipBackend::deleteFiles(const DeleteRequest &request)
     }
     if (result.ok() && !changed && !m_cancelled)
         result.error = ArchiveError::NotFound;
-    closeZipForWrite(archive, m_cancelled, result);
+    closeZipForWrite(archive, m_paused, m_cancelled, result);
     return {result};
 }
 
@@ -639,11 +776,17 @@ VoidResult LibzipBackend::renameFiles(const RenameRequest &request)
     }
     if (result.ok() && !changed && !m_cancelled)
         result.error = ArchiveError::NotFound;
-    closeZipForWrite(archive, m_cancelled, result);
+    closeZipForWrite(archive, m_paused, m_cancelled, result);
     return {result};
 }
 
 VoidResult LibzipBackend::addComment(const QString &comment)
+{
+    BackendObserver observer;
+    return addComment(comment, observer);
+}
+
+VoidResult LibzipBackend::addComment(const QString &comment, BackendObserver &observer)
 {
     ArchiveResult result;
     zip_t *archive = openArchive(ZIP_CREATE, result);
@@ -653,12 +796,20 @@ VoidResult LibzipBackend::addComment(const QString &comment)
     const QByteArray bytes = comment.toUtf8();
     if (zip_set_archive_comment(archive, bytes.constData(), zip_uint16_t(bytes.size())) != 0) {
         result.error = ArchiveError::Unknown;
-        result.message = comment;
+        result.message = QString::fromLocal8Bit(zip_strerror(archive));
+        zip_discard(archive);
+        return {result};
     }
 
-    if (zip_close(archive) != 0 && result.ok()) {
+    WriteProgress progress(observer);
+    zip_register_progress_callback_with_state(archive, 0.001, [](zip_t *, double fraction, void *state) {
+        static_cast<WriteProgress *>(state)->report(fraction * 100.0);
+    }, nullptr, &progress);
+    observer.onProgress({});
+    if (zip_close(archive) != 0) {
         result.error = ArchiveError::Unknown;
-        result.message = m_path;
+        result.message = QString::fromLocal8Bit(zip_strerror(archive));
+        zip_discard(archive);
     }
     return {result};
 }

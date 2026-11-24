@@ -230,6 +230,7 @@ protected Q_SLOTS:
 private:
     FileEntry m_stEntry;            // 待打开文件
     QString m_strTempExtractPath;   // 临时解压路径
+    QString m_extractedPath;
     QString m_strProgram;           // 应用程序
 };
 
