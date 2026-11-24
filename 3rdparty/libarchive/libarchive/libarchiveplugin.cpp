@@ -27,7 +27,7 @@
  */
 
 #include "libarchiveplugin.h"
-#include "../../interface/queries.h"
+#include "archivequeries.h"
 #include "datamanager.h"
 #include "common.h"
 #include "../../interface/ddlog.h"

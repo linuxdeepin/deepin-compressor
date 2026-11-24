@@ -6,7 +6,7 @@
 #ifndef OPENFILEWATCHER_H
 #define OPENFILEWATCHER_H
 
-#include "commonstruct.h"
+#include "archiveui_types.h"
 
 #include <QObject>
 

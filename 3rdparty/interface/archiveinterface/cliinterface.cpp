@@ -28,7 +28,7 @@
  */
 
 #include "cliinterface.h"
-#include "queries.h"
+#include "archivequeries.h"
 #include "datamanager.h"
 #include "ddlog.h"
 

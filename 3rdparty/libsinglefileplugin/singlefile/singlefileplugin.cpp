@@ -24,7 +24,7 @@
  */
 
 #include "singlefileplugin.h"
-#include "queries.h"
+#include "archivequeries.h"
 #include "datamanager.h"
 
 #include <QFile>

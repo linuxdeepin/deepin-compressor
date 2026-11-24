@@ -5,7 +5,7 @@
 
 #include "libminizipplugin.h"
 #include "common.h"
-#include "queries.h"
+#include "archivequeries.h"
 #include "datamanager.h"
 
 #include <QDebug>

@@ -107,6 +107,15 @@ VoidResult ClipzipBackend::addFiles(const AddRequest &request, BackendObserver &
         arguments << QStringLiteral("-c") << QString::number(request.cpuThreads);
     arguments << QStringLiteral("-l")
               << QString::number(request.compressionLevel >= 0 ? request.compressionLevel : 1);
+    for (const QString &path : request.excludedSourcePaths) {
+        for (const ArchiveEntry &entry : request.entries) {
+            const QFileInfo source(entry.path);
+            if (source.isDir() && path.startsWith(source.absoluteFilePath() + QLatin1Char('/'))) {
+                arguments << QStringLiteral("--exclude-path") << QDir::cleanPath(path);
+                break;
+            }
+        }
+    }
     QTemporaryFile passwordFile;
     if (!request.password.isEmpty()) {
         const QByteArray password = request.password.toUtf8();

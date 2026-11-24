@@ -35,6 +35,7 @@ void printUsage(const char* progName) {
               << "  -P, --password-file <路径>  从文件读取密码字节（与 libzip 插件编码对齐时由 GUI 写入）\n"
               << "  -e, --encryption <方法> 加密方法: aes128, aes192, aes256（默认: aes256）\n"
               << "      --ui-events        输出给 GUI 解析的事件行（例如当前文件名），格式稳定，适合配合 -q 使用\n"
+              << "      --exclude-path <路径>  排除指定的源文件或目录\n"
               << "  -v, --verbose          显示详细信息\n"
               << "  -q, --quiet            静默模式\n"
               << "  -h, --help             显示帮助信息\n"
@@ -63,6 +64,7 @@ int main(int argc, char* argv[]) {
         {"password-file", required_argument, nullptr, 'P'},
         {"encryption",  required_argument, nullptr, 'e'},
         {"ui-events",   no_argument,       nullptr,  1 },
+        {"exclude-path", required_argument, nullptr, 2},
         {"verbose",     no_argument,       nullptr, 'v'},
         {"quiet",       no_argument,       nullptr, 'q'},
         {"help",        no_argument,       nullptr, 'h'},
@@ -100,6 +102,9 @@ int main(int argc, char* argv[]) {
                 break;
             case 1:
                 uiEvents = true;
+                break;
+            case 2:
+                options.excludedPaths.emplace_back(optarg);
                 break;
             case 'v':
                 verbose = true;

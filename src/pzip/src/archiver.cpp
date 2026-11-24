@@ -133,6 +133,17 @@ Error Archiver::walkDirectory(const fs::path& root) {
         }
         
         const auto& entry = *it;
+        bool excluded = false;
+        for (const auto& path : options_.excludedPaths) {
+            if (entry.path().lexically_normal() == path.lexically_normal()) {
+                excluded = true;
+                break;
+            }
+        }
+        if (excluded) {
+            it.disable_recursion_pending();
+            continue;
+        }
         
         // 跳过输出文件本身
         if (fs::equivalent(entry.path(), absoluteArchivePath_, ec)) {

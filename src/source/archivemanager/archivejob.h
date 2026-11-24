@@ -7,7 +7,7 @@
 #define ARCHIVEJOB_H
 
 #include <QObject>
-#include "commonstruct.h"
+#include "archiveui_types.h"
 
 class Query;
 
@@ -59,7 +59,7 @@ public:
     /**
      * @brief kill  强行结束job
      */
-    virtual void kill();
+    virtual bool kill();
 
     /**
      * @brief status 状态

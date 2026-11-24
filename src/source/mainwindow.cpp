@@ -13,13 +13,12 @@
 #include "progresspage.h"
 #include "successpage.h"
 #include "failurepage.h"
-#include "pluginmanager.h"
 #include "settingdialog.h"
 #include "archivemanager.h"
 #include "DebugTimeManager.h"
 #include "popupdialog.h"
 #include "progressdialog.h"
-#include "datamanager.h"
+#include "archiveviewstate.h"
 #include "ddesktopservicesthread.h"
 #include "openFileWatcher.h"
 #include "mimetypes.h"
@@ -591,7 +590,6 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
     //处理分卷包名称
     QString transFile = strArchiveFullPath;
     qCDebug(appLog) << "Processing split archive name";
-    QStringList listSupportedMimeTypes = PluginManager::get_instance().supportedWriteMimeTypes(PluginManager::SortByComment);     // 获取支持的压缩格式
     CustomMimeType mimeType = determineMimeType(transFile);
     qCDebug(appLog) << "Archive mime type:" << mimeType.name();
 
@@ -609,7 +607,7 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
 
     m_stUnCompressParameter.bCommentModifiable = (mimeType.name() == "application/zip") ? true : false;
     m_stUnCompressParameter.bMultiplePassword = (mimeType.name() == "application/zip") ? true : false;
-    m_stUnCompressParameter.bModifiable = (listSupportedMimeTypes.contains(mimeType.name()) && fileinfo.isWritable()
+    m_stUnCompressParameter.bModifiable = (UiTools::isWritableArchive(transFile) && fileinfo.isWritable()
                                            && m_stUnCompressParameter.eSplitVolume == UnCompressParameter::ST_No); // 支持压缩且文件可写的非分卷格式才能修改数据
     qCDebug(appLog) << "Archive properties - modifiable:" << m_stUnCompressParameter.bModifiable 
             << ", commentModifiable:" << m_stUnCompressParameter.bCommentModifiable
@@ -1369,7 +1367,7 @@ void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
 
     QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();
     ExtractionOptions options;
-    ArchiveData stArchiveData = DataManager::get_instance().archiveData();
+    ArchiveData stArchiveData = ArchiveViewState::instance().archiveData();
 
     // 构建解压参数
     options.strTargetPath = strUncompressPath;
@@ -1585,7 +1583,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
         m_pLoadingPage->stopLoading();
 
         // 判断压缩包是否有数据
-        if (DataManager::get_instance().archiveData().listRootEntry.count() == 0) {
+        if (ArchiveViewState::instance().archiveData().listRootEntry.count() == 0) {
             // 回到首页
             m_ePageID = PI_Home;
             m_pMainWidget->setCurrentIndex(0);
@@ -1612,7 +1610,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
             m_pProgressdialog->setFinished();
         } else {
             qCInfo(appLog) << "解压结束";
-            ArchiveData stArchiveData = DataManager::get_instance().archiveData();
+            ArchiveData stArchiveData = ArchiveViewState::instance().archiveData();
 
             if (stArchiveData.listRootEntry.count() == 0) {
                 // 压缩包无数据的情况下，跳转到错误界面，提示解压失败，无数据
@@ -1746,7 +1744,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
         qCInfo(appLog) << "更新结束";
         m_pLoadingPage->stopLoading();      // 停止更新
 
-        if (DataManager::get_instance().archiveData().listRootEntry.count() == 0) {
+        if (ArchiveViewState::instance().archiveData().listRootEntry.count() == 0) {
             QFile::remove(m_stUnCompressParameter.strFullPath); // 删除原始压缩包
             m_pUnCompressPage->clear(); // 清空解压界面
             // 压缩包数据为空时，回到首页，且删除原始压缩包
@@ -2152,7 +2150,7 @@ void MainWindow::addFiles2Archive(const QStringList &listFiles, const QString &s
     CompressOptions options;
     options.strDestination = m_pUnCompressPage->getCurPath();   // 获取追加目录
     options.strPassword = strPassword;
-    ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
+    ArchiveData &stArchiveData = ArchiveViewState::instance().archiveData();
     options.qTotalSize = stArchiveData.qSize; // 原压缩包内文件总大小，供libarchive追加进度使用
 
     // 构建压缩文件数据
@@ -2699,7 +2697,7 @@ void MainWindow::convertArchive(const QString &convertType)
     // 创建格式转换的job
     if (ArchiveManager::get_instance()->convertArchive(oldArchivePath, TEMPPATH + QDir::separator() + m_strProcessID + createTempPath(), newArchivePath)) {
         m_pProgressPage->setProgressType(PT_Convert);
-        m_pProgressPage->setTotalSize(oldArchive.size() + DataManager::get_instance().archiveData().qSize);
+        m_pProgressPage->setTotalSize(oldArchive.size() + ArchiveViewState::instance().archiveData().qSize);
         m_pProgressPage->setArchiveName(newArchivePath);
         m_pProgressPage->restartTimer();
 
@@ -2913,10 +2911,7 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
         if (archiveInfo.exists()) {
             SimpleQueryDialog dialog(this);
             int iResult = dialog.showDialog(tr("Another file with the same name already exists, replace it?"), tr("Cancel", "button"), DDialog::ButtonNormal, tr("Replace", "button"), DDialog::ButtonWarning);
-            if (1 == iResult) {     // 如果点击替换，先移除本地压缩包
-                QFile file(archiveInfo.filePath());
-                file.remove();
-            } else {    // 点击关闭或者取消，不操作
+            if (1 != iResult) {
                 return false;
             }
         }
@@ -3059,14 +3054,13 @@ bool MainWindow::handleArguments_Append(const QStringList &listParam)
         return false;
     }
 
-    QStringList listSupportedMimeTypes = PluginManager::get_instance().supportedWriteMimeTypes(PluginManager::SortByComment);     // 获取支持的压缩格式
     CustomMimeType mimeType = determineMimeType(transFile);
     // 构建压缩包加载之后的数据
     m_stUnCompressParameter.strFullPath = archiveName;
     QFileInfo fileinfo(transFile);
     m_stUnCompressParameter.bCommentModifiable = (mimeType.name() == "application/zip") ? true : false;
     m_stUnCompressParameter.bMultiplePassword = false;
-    m_stUnCompressParameter.bModifiable = (listSupportedMimeTypes.contains(mimeType.name()) && fileinfo.isWritable()
+    m_stUnCompressParameter.bModifiable = (UiTools::isWritableArchive(transFile) && fileinfo.isWritable()
                                            && m_stUnCompressParameter.eSplitVolume == UnCompressParameter::ST_No); // 支持压缩且文件可写的非分卷格式才能修改数据
     if (!m_stUnCompressParameter.bModifiable) { // 不支持修改数据的压缩包进行提示
         TipDialog dialog(this);
@@ -3320,7 +3314,7 @@ void MainWindow::slotRenameFile(const FileEntry &SelEntry, qint64 qTotalSize)
     CompressOptions options;
     options.strDestination = m_pUnCompressPage->getCurPath();   // 获取追加目录
     options.strPassword = ArchiveManager::get_instance()->getCurFilePassword();
-    ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
+    ArchiveData &stArchiveData = ArchiveViewState::instance().archiveData();
     options.qTotalSize = stArchiveData.qSize; // 原压缩包内文件总大小，供libarchive追加进度使用
     QList<FileEntry> sListEntry;
     sListEntry << SelEntry;
@@ -3573,7 +3567,7 @@ void MainWindow::slotTitleCommentButtonPressed()
 
     if (m_isFirstViewComment) {
         // 记录修改前压缩包本身的注释
-        m_comment = DataManager::get_instance().archiveData().strComment;
+        m_comment = ArchiveViewState::instance().archiveData().strComment;
     }
 
     if (PI_UnCompress == m_ePageID) {

@@ -18,7 +18,7 @@ ArchiveJob::~ArchiveJob()
     qCDebug(appLog) << "ArchiveJob object destroyed";
 }
 
-void ArchiveJob::kill()
+bool ArchiveJob::kill()
 {
     if (doKill()) {
         // 设置结束标志
@@ -26,7 +26,9 @@ void ArchiveJob::kill()
         m_eErrorType = ET_UserCancelOpertion;
         qCWarning(appLog) << "Archive job cancelled by user";
         finishJob();
+        return true;
     }
+    return false;
 }
 
 bool ArchiveJob::status()

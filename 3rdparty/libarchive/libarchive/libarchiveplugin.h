@@ -29,7 +29,7 @@
 #define LIBARCHIVEPLUGIN_H
 
 #include "archiveinterface.h"
-#include "commonstruct.h"
+#include "archiveui_types.h"
 
 #include <archive.h>
 #include <QSet>

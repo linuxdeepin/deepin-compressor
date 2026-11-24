@@ -3,8 +3,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#ifndef COMMONSTRUCT_H
-#define COMMONSTRUCT_H
+#ifndef ARCHIVEUI_TYPES_H
+#define ARCHIVEUI_TYPES_H
 
 #include <QDateTime>
 #include <QString>
@@ -163,6 +163,7 @@ struct CompressOptions {
     bool bHeaderEncryption;     // 是否列表加密
     bool bSplit;        // 是否分卷
     bool bTar_7z;       // 是否是tar.7z格式（补充）
+    bool bCreateNew = false;
     int iCPUTheadNum;        // CPU线程数
 };
 Q_DECLARE_METATYPE(CompressOptions)
@@ -269,4 +270,4 @@ public:
 };
 Q_DECLARE_METATYPE(CustomMimeType)
 
-#endif // COMMONSTRUCT_H
+#endif // ARCHIVEUI_TYPES_H

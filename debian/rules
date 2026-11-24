@@ -34,5 +34,4 @@ override_dh_auto_configure:
 	-DAPP_VERSION=$(DEB_VERSION_UPSTREAM) \
 	-DVERSION=$(DEB_VERSION_UPSTREAM) \
 	-DCMAKE_INSTALL_LIBDIR=/usr/lib/$(DEB_HOST_MULTIARCH) \
-	-DCOMPRESSOR_PLUGIN_PATH=/usr/lib/deepin-compressor/plugins \
 	-DQT_DIR=$(QT_DIR)

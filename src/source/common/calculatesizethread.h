@@ -6,7 +6,7 @@
 #ifndef CALCULATESIZETHREAD_H
 #define CALCULATESIZETHREAD_H
 
-#include "commonstruct.h"
+#include "archiveui_types.h"
 #include <QThread>
 
 /**
