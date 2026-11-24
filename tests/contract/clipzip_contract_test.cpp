@@ -4,7 +4,6 @@
 
 #include "clipzip_backend.h"
 #include "fakes.h"
-#include "legacy_clipzip_adapter.h"
 #include "libzip_backend.h"
 
 #include <gtest/gtest.h>
@@ -25,7 +24,6 @@ QString testSourceDir()
 }
 
 enum class BackendKind {
-    Legacy,
     New,
 };
 
@@ -33,9 +31,7 @@ std::unique_ptr<dcarchive::ArchiveBackend> createBackend(BackendKind kind,
                                                          const QString &path,
                                                          const QString &mime)
 {
-    if (kind == BackendKind::Legacy)
-        return std::unique_ptr<dcarchive::ArchiveBackend>(
-                new dcarchive::LegacyClipzipAdapter(path, mime));
+    Q_UNUSED(kind);
     return std::unique_ptr<dcarchive::ArchiveBackend>(
             new dcarchive::ClipzipBackend(path, mime));
 }
@@ -174,9 +170,10 @@ TEST(ClipzipRoundTripTest, SmallFilesRoundTripAtAllCompressionLevels)
 
 INSTANTIATE_TEST_SUITE_P(ClipzipBackends,
                          ClipzipContractTest,
-                         ::testing::Values(BackendKind::Legacy, BackendKind::New),
+                         ::testing::Values(BackendKind::New),
                          [](const ::testing::TestParamInfo<BackendKind> &info) {
-                             return info.param == BackendKind::Legacy ? "legacy" : "new";
+                             Q_UNUSED(info);
+                             return std::string("new");
                          });
 
 } // namespace

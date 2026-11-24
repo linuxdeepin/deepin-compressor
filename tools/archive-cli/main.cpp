@@ -3,14 +3,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "archive_registry.h"
-#include "legacy_cli7z_adapter.h"
-#include "legacy_clirar_adapter.h"
-#include "legacy_clipzip_adapter.h"
-#include "legacy_libarchive_adapter.h"
-#include "legacy_libzip_adapter.h"
-#include "legacy_minizip_adapter.h"
-#include "legacy_pigz_adapter.h"
-#include "legacy_singlefile_adapter.h"
 
 #include <QCoreApplication>
 #include <QDir>
@@ -28,7 +20,6 @@ namespace {
 
 struct Options
 {
-    QString mode = QStringLiteral("new");
     QString op;
     QString path;
     QString mime;
@@ -69,70 +60,8 @@ QString guessMime(const QString &path)
     return QStringLiteral("application/octet-stream");
 }
 
-std::unique_ptr<dcarchive::ArchiveBackend> createLegacyBackend(const Options &options)
-{
-    const QString mime = options.mime;
-    const QString lower = options.path.toLower();
-    const bool create = options.op == QLatin1String("create");
-
-    if (mime == QLatin1String("application/gzip")
-            || mime == QLatin1String("application/x-gzip")
-            || mime == QLatin1String("application/x-bzip")
-            || mime == QLatin1String("application/x-bzip2")
-            || mime == QLatin1String("application/x-xz")
-            || mime == QLatin1String("application/x-lzma")) {
-        return std::unique_ptr<dcarchive::ArchiveBackend>(
-                new dcarchive::LegacySingleFileAdapter(options.path, mime));
-    }
-    if (mime == QLatin1String("application/x-chrome-extension") || mime == QLatin1String("application/x-crx")) {
-        return std::unique_ptr<dcarchive::ArchiveBackend>(
-                new dcarchive::LegacyMinizipAdapter(options.path, mime));
-    }
-    if (mime == QLatin1String("application/x-7z-compressed")) {
-        const QString meta = QStringLiteral(ARCHIVE_SOURCE_DIR)
-                + QStringLiteral("/3rdparty/cli7zplugin/kerfuffle_cli7z.json");
-        return std::unique_ptr<dcarchive::ArchiveBackend>(
-                new dcarchive::LegacyCli7zAdapter(options.path, mime, meta));
-    }
-    if (mime == QLatin1String("application/vnd.rar")
-            || mime == QLatin1String("application/x-rar-compressed")) {
-        const QString meta = QStringLiteral(ARCHIVE_SOURCE_DIR)
-                + QStringLiteral("/3rdparty/clirarplugin/kerfuffle_clirar.json");
-        return std::unique_ptr<dcarchive::ArchiveBackend>(
-                new dcarchive::LegacyCliRarAdapter(options.path, mime, meta));
-    }
-    if (mime == QLatin1String("application/zip")
-            || mime == QLatin1String("application/x-zip-compressed")
-            || mime == QLatin1String("application/java-archive")) {
-        if (create) {
-            return std::unique_ptr<dcarchive::ArchiveBackend>(
-                    new dcarchive::LegacyClipzipAdapter(options.path, mime));
-        }
-        return std::unique_ptr<dcarchive::ArchiveBackend>(
-                new dcarchive::LegacyLibzipAdapter(options.path, mime));
-    }
-    if (lower.endsWith(QLatin1String(".tar.gz")) || lower.endsWith(QLatin1String(".tgz"))) {
-        if (create) {
-            return std::unique_ptr<dcarchive::ArchiveBackend>(
-                    new dcarchive::LegacyPigzAdapter(options.path, mime));
-        }
-        return std::unique_ptr<dcarchive::ArchiveBackend>(
-                new dcarchive::LegacyLibarchiveAdapter(options.path, mime));
-    }
-    if (mime.startsWith(QLatin1String("application/x-tar"))
-            || mime == QLatin1String("application/x-compressed-tar")
-            || mime == QLatin1String("application/x-bzip-compressed-tar")
-            || mime == QLatin1String("application/x-xz-compressed-tar")) {
-        return std::unique_ptr<dcarchive::ArchiveBackend>(
-                new dcarchive::LegacyLibarchiveAdapter(options.path, mime));
-    }
-    return nullptr;
-}
-
 std::unique_ptr<dcarchive::ArchiveBackend> createBackend(const Options &options)
 {
-    if (options.mode == QLatin1String("legacy"))
-        return createLegacyBackend(options);
     return dcarchive::ArchiveRegistry::create(options.path, options.mime,
                                               options.op == QLatin1String("create"));
 }
@@ -193,8 +122,7 @@ int main(int argc, char *argv[])
     for (int i = 0; i < args.size(); ++i) {
         const QString &arg = args.at(i);
         auto next = [&]() -> QString { return i + 1 < args.size() ? args.at(++i) : QString(); };
-        if (arg == QLatin1String("--mode")) options.mode = next();
-        else if (arg == QLatin1String("--op")) options.op = next();
+        if (arg == QLatin1String("--op")) options.op = next();
         else if (arg == QLatin1String("--path")) options.path = next();
         else if (arg == QLatin1String("--mime")) options.mime = next();
         else if (arg == QLatin1String("--target")) options.target = next();
@@ -208,7 +136,7 @@ int main(int argc, char *argv[])
 
     if (options.path.isEmpty() || options.op.isEmpty()) {
         std::cerr << "usage: archive-cli --op list|extract|create --path <archive> "
-                     "[--mode new|legacy] [--mime <mime>] [--target <dir>] "
+                     "[--mime <mime>] [--target <dir>] "
                      "[--destination <path>] [--input <file>]... [--level N] "
                      "[--threads N] [--overwrite] [--tar7z]\n";
         return 2;
@@ -279,7 +207,6 @@ int main(int argc, char *argv[])
     }
 
     QJsonObject output;
-    output.insert(QStringLiteral("mode"), options.mode);
     output.insert(QStringLiteral("op"), options.op);
     output.insert(QStringLiteral("path"), options.path);
     output.insert(QStringLiteral("mime"), options.mime);

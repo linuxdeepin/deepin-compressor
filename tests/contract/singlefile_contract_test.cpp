@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "fakes.h"
-#include "legacy_singlefile_adapter.h"
 #include "singlefile_backend.h"
 
 #include <gtest/gtest.h>
@@ -22,7 +21,6 @@ namespace {
 const QByteArray kExpectedContent = "testdfkogjkdsgnl sdnglksdjjkf ";
 
 enum class BackendKind {
-    Legacy,
     New,
 };
 
@@ -39,15 +37,9 @@ std::vector<SingleFileCase> singleFileCases()
     const QString base = QStringLiteral(CONTRACT_TEST_SOURCE_DIR);
     return {
         {base + QStringLiteral("/test_sources/gz/test.gz"),
-         QStringLiteral("application/gzip"), QStringLiteral("test"), QStringLiteral("gz_legacy"), BackendKind::Legacy},
-        {base + QStringLiteral("/test_sources/gz/test.gz"),
          QStringLiteral("application/gzip"), QStringLiteral("test"), QStringLiteral("gz_new"), BackendKind::New},
         {base + QStringLiteral("/test_sources/bz2/test.txt.bz2"),
-         QStringLiteral("application/x-bzip"), QStringLiteral("test.txt"), QStringLiteral("bz2_legacy"), BackendKind::Legacy},
-        {base + QStringLiteral("/test_sources/bz2/test.txt.bz2"),
          QStringLiteral("application/x-bzip"), QStringLiteral("test.txt"), QStringLiteral("bz2_new"), BackendKind::New},
-        {base + QStringLiteral("/test_sources/xz/test.xz"),
-         QStringLiteral("application/x-xz"), QStringLiteral("test"), QStringLiteral("xz_legacy"), BackendKind::Legacy},
         {base + QStringLiteral("/test_sources/xz/test.xz"),
          QStringLiteral("application/x-xz"), QStringLiteral("test"), QStringLiteral("xz_new"), BackendKind::New},
     };
@@ -59,11 +51,7 @@ protected:
     void SetUp() override
     {
         ASSERT_TRUE(m_workspace.isValid());
-        if (GetParam().kind == BackendKind::Legacy) {
-            m_backend.reset(new dcarchive::LegacySingleFileAdapter(GetParam().path, GetParam().mime));
-        } else {
-            m_backend.reset(new dcarchive::SingleFileBackend(GetParam().path, GetParam().mime));
-        }
+        m_backend.reset(new dcarchive::SingleFileBackend(GetParam().path, GetParam().mime));
     }
 
     void TearDown() override
@@ -205,8 +193,6 @@ TEST_P(LegacySingleFileContractTest, UnsupportedCreateReturnsNotSupported)
 TEST(SingleFileExtractionTest, WaitsForResumeWhenPausedBeforeDecoding)
 {
     for (const auto &format : singleFileCases()) {
-        if (format.kind != BackendKind::New)
-            continue;
         SCOPED_TRACE(format.label.toStdString());
         QTemporaryDir output;
         ASSERT_TRUE(output.isValid());

@@ -6,15 +6,6 @@ Files: *
 Copyright: 2017 Deepin Technology Co., Ltd.
 License: GPL-3+
  
-Files: 3rdparty
-Copyright: 1989, 1991 Free Software Foundation Co., Ltd.
-License: GPL-2+
-
-Files: 3rdparty/ChardetDetector/*
-Copyright (c) 2019 JoungKyun.Kim http://oops.org All rights reserved.
-License: MPL 1.1 or LGPL 2.1
-
-
 License: GPL-3+
  This package is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

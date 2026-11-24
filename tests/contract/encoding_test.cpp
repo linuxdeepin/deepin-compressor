@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "common.h"
 #include "encoding_detector.h"
 
 #include <gtest/gtest.h>
@@ -88,16 +87,4 @@ TEST(EncodingDetectorTest, DetectsAscii)
     const char data[] = "hello world";
     const encdet::Result result = detectBytes(data, sizeof(data) - 1);
     EXPECT_EQ(result.encoding, "ASCII");
-}
-
-TEST(CommonEncodingTest, ChartDetIntegrationUsesOwnDetector)
-{
-    Common common;
-    const char data[] = {char(0xd6), char(0xd0), char(0xce), char(0xc4),
-                         char(0xb2), char(0xe2), char(0xca), char(0xd4)};
-    QString encoding;
-    float confidence = 0.0f;
-    EXPECT_EQ(common.ChartDet_DetectingTextCoding(data, encoding, confidence), 0);
-    EXPECT_EQ(encoding, QStringLiteral("gb18030"));
-    EXPECT_GT(confidence, 0.5f);
 }

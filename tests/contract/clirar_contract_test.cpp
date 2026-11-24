@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "fakes.h"
-#include "legacy_clirar_adapter.h"
 #include "rar_backend.h"
 
 #include <gtest/gtest.h>
@@ -26,7 +25,6 @@ QString rarSource()
 }
 
 enum class BackendKind {
-    Legacy,
     New,
 };
 
@@ -34,12 +32,7 @@ std::unique_ptr<dcarchive::ArchiveBackend> createBackend(BackendKind kind,
                                                          const QString &path,
                                                          const QString &mime)
 {
-    if (kind == BackendKind::Legacy) {
-        const QString metaData = QStringLiteral(CONTRACT_TEST_SOURCE_DIR)
-                + QStringLiteral("/../../3rdparty/clirarplugin/kerfuffle_clirar.json");
-        return std::unique_ptr<dcarchive::ArchiveBackend>(
-                new dcarchive::LegacyCliRarAdapter(path, mime, metaData));
-    }
+    Q_UNUSED(kind);
     return std::unique_ptr<dcarchive::ArchiveBackend>(
             new dcarchive::RarBackend(path, mime));
 }
@@ -240,9 +233,10 @@ TEST(RarWriteTest, CreateAppendRenameCommentAndDelete)
 
 INSTANTIATE_TEST_SUITE_P(CliRarBackends,
                          CliRarContractTest,
-                         ::testing::Values(BackendKind::Legacy, BackendKind::New),
+                         ::testing::Values(BackendKind::New),
                          [](const ::testing::TestParamInfo<BackendKind> &info) {
-                             return info.param == BackendKind::Legacy ? "legacy" : "new";
+                             Q_UNUSED(info);
+                             return std::string("new");
                          });
 
 } // namespace

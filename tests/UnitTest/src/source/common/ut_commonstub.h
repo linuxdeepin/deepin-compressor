@@ -413,22 +413,6 @@ public:
 
 };
 
-// 针对PluginManager的打桩
-class PluginManagerStub : public QObject
-{
-public:
-    PluginManagerStub();
-    ~PluginManagerStub();
-
-    /**
-     * @brief stub_PluginManager_supportedWriteMimeTypes     针对PluginManager的supportedWriteMimeTypes打桩
-     * @param stub
-     * @return
-     */
-    static void stub_PluginManager_supportedWriteMimeTypes(Stub &stub);
-};
-
-
 // 针对QFile的打桩
 class QFileStub : public QObject
 {
