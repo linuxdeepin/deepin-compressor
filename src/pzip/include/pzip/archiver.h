@@ -20,6 +20,7 @@ struct ArchiverOptions {
     size_t concurrency = 0;         // 并发数（0 = 自动使用全部 CPU 核心）
     int compressionLevel = 1;       // 压缩级别（1 = 最快，默认值）
     bool preservePermissions = true; // 保留文件权限
+    std::vector<fs::path> excludedPaths;
     ProgressCallback progress;       // 进度回调
     std::function<void(const std::string& nameInArchive)> onEntryStart; // 当前处理的条目（用于 UI 事件）
     std::function<void(uint64_t deltaBytesRead)> onBytesRead; // 输入字节增量（用于 UI 进度/速率）

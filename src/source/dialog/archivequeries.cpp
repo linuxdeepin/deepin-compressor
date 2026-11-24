@@ -2,8 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "queries.h"
-#include "ddlog.h"
+#include "archivequeries.h"
 
 #include <DMainWindow>
 #include <DDialog>
@@ -134,15 +133,13 @@ void Query::setParent(QWidget *pParent)
 void Query::waitForResponse()
 {
     QMutexLocker locker(&m_responseMutex);
-    // 如果没有任何选择，等待响应
-    if (!m_data.contains(QStringLiteral("response"))) {
+    while (!m_data.contains(QStringLiteral("response")))
         m_responseCondition.wait(&m_responseMutex);
-    }
 }
 
 void Query::setResponse(const QVariant &response)
 {
-    // 唤醒响应
+    QMutexLocker locker(&m_responseMutex);
     m_data[QStringLiteral("response")] = response;
     m_responseCondition.wakeAll();
 }
@@ -615,7 +612,6 @@ LoadCorruptQuery::~LoadCorruptQuery()
 
 void LoadCorruptQuery::execute()
 {
-    qCInfo(ifaceLog) << "Executing prompt";
 
     if (m_pParent == nullptr) {
         m_pParent = getMainWindow();

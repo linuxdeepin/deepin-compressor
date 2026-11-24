@@ -4,10 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "archivemanager.h"
-#include "kpluginfactory.h"
-#include "kpluginloader.h"
 #include "mimetypes.h"
-#include "pluginmanager.h"
 #include "singlejob.h"
 #include "batchjob.h"
 #include "common/ddlog.h"
@@ -189,7 +186,7 @@ bool ArchiveManager::extractFiles(const QString &strArchiveFullPath, const QList
             m_pArchiveJob = pExtractJob;
             pExtractJob->start();
 
-            return pExtractJob->errorcode;
+            return true;
         } else {
             qCDebug(appLog) << "Creating StepExtractJob for tar.7z archive";
             // tar.7z包使用分步解压流程
@@ -380,7 +377,7 @@ bool ArchiveManager::updateArchiveCacheData(const UpdateOptions &stOptions)
 bool ArchiveManager::updateArchiveComment(const QString &strArchiveFullPath, const QString &strComment)
 {
     qCDebug(appLog) << "Starting updateArchiveComment operation for archive:" << strArchiveFullPath;
-    ReadOnlyArchiveInterface *pInterface = UiTools::createInterface(strArchiveFullPath, true, UiTools::APT_Libzip); // zip添加注释使用libzipplugin
+    dcarchive::ArchiveSession *pInterface = UiTools::createInterface(strArchiveFullPath, true, UiTools::APT_Libzip); // zip添加注释使用libzipplugin
 
     if (pInterface) {
         qCDebug(appLog) << "Creating CommentJob";
@@ -455,7 +452,10 @@ bool ArchiveManager::cancelOperation()
     if (m_pArchiveJob) {
         qCDebug(appLog) << "Canceling archive job";
         ArchiveJob *job = m_pArchiveJob;
-        m_pArchiveJob->kill();
+        if (!m_pArchiveJob->kill()) {
+            // 异步任务会自行返回 PFT_Cancel 并触发 job 完成信号。
+            return true;
+        }
         if (m_pArchiveJob == job) {
             m_pArchiveJob->deleteLater();
             m_pArchiveJob = nullptr;

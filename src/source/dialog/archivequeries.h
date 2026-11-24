@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#ifndef QUERIES_H
-#define QUERIES_H
+#ifndef ARCHIVEQUERIES_H
+#define ARCHIVEQUERIES_H
 
 #include <DGuiApplicationHelper>
 #include <DPaletteHelper>
@@ -282,4 +282,4 @@ private:
     int m_iDialogOldHeight = 0;
 };
 
-#endif // QUERIES_H
+#endif // ARCHIVEQUERIES_H

@@ -6,11 +6,10 @@
 #ifndef ARCHIVEMANAGER_H
 #define ARCHIVEMANAGER_H
 
-#include "commonstruct.h"
+#include "archiveui_types.h"
 #include "archivejob.h"
-#include "archiveinterface.h"
-#include "plugin.h"
-#include "queries.h"
+#include "archive_session.h"
+#include "archivequeries.h"
 #include "uitools.h"
 
 #include <QObject>
@@ -226,8 +225,8 @@ private Q_SLOTS:
 private:
     ArchiveJob *m_pArchiveJob = nullptr;     // 当前操作指针
 
-    ReadOnlyArchiveInterface *m_pInterface = nullptr;   // 当前插件指针（只存储load操作的interface，方便解压等操作）
-    ReadOnlyArchiveInterface *m_pTempInterface = nullptr;   // 存储job结束即需要删除的interface
+    dcarchive::ArchiveSession *m_pInterface = nullptr;   // 当前插件指针（只存储load操作的interface，方便解压等操作）
+    dcarchive::ArchiveSession *m_pTempInterface = nullptr;   // 存储job结束即需要删除的interface
 
     static QMutex m_mutex;//实例互斥锁。
     static QAtomicPointer<ArchiveManager> m_instance;   /*!<使用原子指针,默认初始化为0。*/

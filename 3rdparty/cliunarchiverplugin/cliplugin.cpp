@@ -22,7 +22,7 @@
 
 #include "cliplugin.h"
 #include "kprocess.h"
-#include "../interface/queries.h"
+#include "archivequeries.h"
 
 #include <QJsonArray>
 #include <QJsonParseError>

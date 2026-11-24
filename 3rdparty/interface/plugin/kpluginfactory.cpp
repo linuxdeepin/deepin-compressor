@@ -17,7 +17,7 @@
 
 #include "kpluginfactory.h"
 #include "kpluginfactory_p.h"
-#include "commonstruct.h"
+#include "archiveui_types.h"
 
 #include <QObjectCleanupHandler>
 #include <QDebug>

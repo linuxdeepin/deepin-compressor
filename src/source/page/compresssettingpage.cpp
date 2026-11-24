@@ -5,7 +5,6 @@
 
 #include "compresssettingpage.h"
 #include "customwidget.h"
-#include "pluginmanager.h"
 #include "uitools.h"
 #include "uistruct.h"
 #include "popupdialog.h"
@@ -154,11 +153,12 @@ void CompressSettingPage::refreshMenu()
     qCDebug(appLog) << "Refreshing compression type menu";
     m_pTypeMenu->clear();
     if (m_listSupportedMimeTypes.empty()) {
-        qCInfo(appLog) << "Loading supported mime types from plugin manager";
-        m_listSupportedMimeTypes = PluginManager::get_instance().supportedWriteMimeTypes(PluginManager::SortByComment);     // 获取支持的压缩格式
+        qCInfo(appLog) << "Loading supported mime types from own archive backends";
+        m_listSupportedMimeTypes = UiTools::supportedWriteMimeTypes();
     }
 
     QAction *pAction = nullptr;
+    QAction *defaultAction = nullptr;
     bool bHas7z = false;
     for (const QString &type : qAsConst(m_listSupportedMimeTypes)) {
         if (QMimeDatabase().mimeTypeForName(type).preferredSuffix() == "7z") {
@@ -168,7 +168,8 @@ void CompressSettingPage::refreshMenu()
         pAction = new QAction(QMimeDatabase().mimeTypeForName(type).preferredSuffix(), m_pTypeMenu);
         pAction->setData(type);
         m_pTypeMenu->addAction(pAction);
-
+        if (type == QLatin1String("application/zip"))
+            defaultAction = pAction;
     }
 
     // 判断是否安装了7z，若安装了7z，则压缩类型添加tar.7z
@@ -197,7 +198,9 @@ void CompressSettingPage::refreshMenu()
 
 
     // 默认选择类型为zip
-    if (pAction != nullptr) {
+    if (defaultAction != nullptr) {
+        slotTypeChanged(defaultAction);
+    } else if (pAction != nullptr) {
         slotTypeChanged(pAction);
     }
 }
@@ -1019,11 +1022,7 @@ void CompressSettingPage::slotCompressClicked()
         qCInfo(appLog) << "Archive file already exists:" << fileInfo.filePath();
         SimpleQueryDialog dialog(this);
         int iResult = dialog.showDialog(tr("Another file with the same name already exists, replace it?"), tr("Cancel", "button"), DDialog::ButtonNormal, tr("Replace", "button"), DDialog::ButtonWarning);
-        if (1 == iResult) {     // 如果点击替换，先移除本地压缩包
-            qCInfo(appLog) << "Replacing existing archive file";
-            QFile file(fileInfo.filePath());
-            file.remove();
-        } else {    // 点击关闭或者取消，不操作
+        if (1 != iResult) {
             qCInfo(appLog) << "User canceled replacing existing file";
             return;
         }

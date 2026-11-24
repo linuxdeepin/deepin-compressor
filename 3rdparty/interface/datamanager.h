@@ -6,7 +6,7 @@
 #ifndef DATAMANAGER_H
 #define DATAMANAGER_H
 
-#include "commonstruct.h"
+#include "archiveui_types.h"
 
 #include <QObject>
 #include <QMutex>

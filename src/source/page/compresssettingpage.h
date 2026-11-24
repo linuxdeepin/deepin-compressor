@@ -23,8 +23,6 @@ class CustomSwitchButton;
 class CustomCheckBox;
 class CustomPushButton;
 class CustomCombobox;
-class PluginManager;
-
 // 类型控件
 class TypeLabel: public DFrame
 {

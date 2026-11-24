@@ -9,8 +9,7 @@
 #include "popupdialog.h"
 #include "DebugTimeManager.h"
 #include "mimetypes.h"
-#include "pluginmanager.h"
-#include "datamanager.h"
+#include "archiveviewstate.h"
 #include "common/ddlog.h"
 
 #include <DFontSizeManager>
