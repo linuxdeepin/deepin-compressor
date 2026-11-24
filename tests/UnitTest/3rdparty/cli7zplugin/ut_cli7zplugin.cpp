@@ -4,9 +4,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "cli7zplugin.h"
-#include "commonstruct.h"
+#include "archiveui_types.h"
 #include "datamanager.h"
-#include "queries.h"
+#include "archivequeries.h"
 #include "gtest/src/stub.h"
 #include <gtest/gtest.h>
 
@@ -234,26 +234,29 @@ TEST_F(UT_Cli7zPlugin, test_setupCliProperties)
     EXPECT_EQ(m_tester->m_cliProps->property("captureProgress"), false);
     EXPECT_EQ(m_tester->m_cliProps->property("addProgram"), QStringLiteral("7z"));
 
-    EXPECT_EQ(m_tester->m_cliProps->property("addSwitch"), QStringList({QStringLiteral("a"), QStringLiteral("-l")}));
+    EXPECT_EQ(m_tester->m_cliProps->property("addSwitch").toStringList(),
+              QStringList({QStringLiteral("a"), QStringLiteral("-snl")}));
     EXPECT_EQ(m_tester->m_cliProps->property("deleteProgram"), QStringLiteral("7z"));
     EXPECT_EQ(m_tester->m_cliProps->property("deleteSwitch"), QStringLiteral("d"));
 
     EXPECT_EQ(m_tester->m_cliProps->property("extractProgram"), QStringLiteral("7z"));
-    EXPECT_EQ(m_tester->m_cliProps->property("extractSwitch"), QStringLiteral("x"));
-    EXPECT_EQ(m_tester->m_cliProps->property("progressarg"), QStringLiteral("-bsp1"));
-    EXPECT_EQ(m_tester->m_cliProps->property("extractSwitchNoPreserve"), QStringList{QStringLiteral("e")});
+    EXPECT_EQ(m_tester->m_cliProps->property("extractSwitch").toStringList(), QStringList{QStringLiteral("x")});
+    EXPECT_EQ(m_tester->m_cliProps->property("progressarg").toStringList(), QStringList{QStringLiteral("-bsp1")});
+    EXPECT_EQ(m_tester->m_cliProps->property("extractSwitchNoPreserve").toStringList(), QStringList{QStringLiteral("e")});
 
     EXPECT_EQ(m_tester->m_cliProps->property("listProgram"), QStringLiteral("7z"));
-    EXPECT_EQ(m_tester->m_cliProps->property("listSwitch"), QStringList({QStringLiteral("l"), QStringLiteral("-slt")}));
+    EXPECT_EQ(m_tester->m_cliProps->property("listSwitch").toStringList(),
+              QStringList({QStringLiteral("l"), QStringLiteral("-slt")}));
 
     EXPECT_EQ(m_tester->m_cliProps->property("moveProgram"), QStringLiteral("7z"));
     EXPECT_EQ(m_tester->m_cliProps->property("moveSwitch"), QStringLiteral("rn"));
 
     EXPECT_EQ(m_tester->m_cliProps->property("testProgram"), QStringLiteral("7z")) ;
-    EXPECT_EQ(m_tester->m_cliProps->property("testSwitch"), QStringLiteral("t")) ;
+    EXPECT_EQ(m_tester->m_cliProps->property("testSwitch").toString(), QStringLiteral("t")) ;
 
-    EXPECT_EQ(m_tester->m_cliProps->property("passwordSwitch"), QStringLiteral("-p$Password")) ;
-    EXPECT_EQ(m_tester->m_cliProps->property("passwordSwitchHeaderEnc"), QStringList({QStringLiteral("-p$Password"), QStringLiteral("-mhe=on")})) ;
+    EXPECT_EQ(m_tester->m_cliProps->property("passwordSwitch").toStringList(), QStringList{QStringLiteral("-p$Password")}) ;
+    EXPECT_EQ(m_tester->m_cliProps->property("passwordSwitchHeaderEnc").toStringList(),
+              QStringList({QStringLiteral("-p$Password"), QStringLiteral("-mhe=on")})) ;
 
     EXPECT_EQ(m_tester->m_cliProps->property("compressionLevelSwitch"), QStringLiteral("-mx=$CompressionLevel")) ;
 
@@ -588,6 +591,11 @@ TEST_F(UT_Cli7zPlugin, test_extractFiles_001)
 {
     Stub stub;
     stub.set(ADDR(CliInterface, runProcess), cliInterface_runProcess_stub);
+    DataManager::get_instance().resetArchiveData();
+    FileEntry rootEntry;
+    rootEntry.strFullPath = QStringLiteral("1.txt");
+    rootEntry.strFileName = QStringLiteral("1.txt");
+    DataManager::get_instance().archiveData().listRootEntry.append(rootEntry);
 
     ExtractionOptions options;
     options.strTargetPath = _UTSOURCEDIR;
@@ -602,6 +610,11 @@ TEST_F(UT_Cli7zPlugin, test_extractFiles_002)
 {
     Stub stub;
     stub.set(ADDR(CliInterface, runProcess), cliInterface_runProcess_stub);
+    DataManager::get_instance().resetArchiveData();
+    FileEntry rootEntry;
+    rootEntry.strFullPath = QStringLiteral("1.txt");
+    rootEntry.strFileName = QStringLiteral("1.txt");
+    DataManager::get_instance().archiveData().listRootEntry.append(rootEntry);
 
     FileEntry entry;
     entry.strFullPath = "1.txt";
@@ -1075,7 +1088,7 @@ TEST_F(UT_Cli7zPlugin, test_processFinished)
     m_tester->m_workStatus = WT_List;
     m_tester->processFinished(0, QProcess::NormalExit);
     EXPECT_EQ(m_tester->m_eErrorType, ET_MissingVolume);
-    EXPECT_EQ(m_tester->m_finishType, PFT_Nomral);
+    EXPECT_EQ(m_tester->m_finishType, PFT_Cancel);
     EXPECT_EQ(m_tester->m_isCorruptArchive, false);
 }
 

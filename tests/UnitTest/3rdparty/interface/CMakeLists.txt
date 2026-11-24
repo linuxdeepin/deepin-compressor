@@ -21,7 +21,11 @@ endif()
 
 include(FindPkgConfig)
 
-pkg_search_module(DtkWidget REQUIRED dtkwidget)
+if(DTK_VERSION_MAJOR)
+    pkg_search_module(DtkWidget REQUIRED dtk${DTK_VERSION_MAJOR}widget)
+else()
+    pkg_search_module(DtkWidget REQUIRED dtkwidget)
+endif()
 pkg_search_module(GOBJECT REQUIRED gobject-2.0)
 pkg_search_module(MOUNT REQUIRED mount)
 
@@ -32,6 +36,7 @@ include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/archiveinterface)
 include_directories(${PROJECT_SOURCE_DIR}/plugin)
 include_directories(${PROJECT_SOURCE_DIR}/process)
+include_directories(${CMAKE_SOURCE_DIR}/src/archive/encoding)
 include_directories(${HFILES_OUTPUT_PATH})
 include_directories(${PROJECT_SOURCE_DIR}/${3RDPARTYRELATIVEPATH}/interface)
 include_directories(${PROJECT_SOURCE_DIR}/${3RDPARTYRELATIVEPATH}/interface/archiveinterface)
@@ -65,6 +70,8 @@ file(GLOB_RECURSE h_files
 )
 
 #生成可执行文件
+list(APPEND c_files ${CMAKE_SOURCE_DIR}/src/archive/encoding/encoding_detector.cpp)
+list(APPEND c_files ${CMAKE_SOURCE_DIR}/src/source/dialog/archivequeries.cpp)
 add_executable(${EXE_NAME}_test ${c_files} ${h_files})
 
 #链接动静态库

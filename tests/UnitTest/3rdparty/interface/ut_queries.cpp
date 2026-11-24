@@ -3,7 +3,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "queries.h"
+#include "archivequeries.h"
 
 #include "gtest/src/stub.h"
 

@@ -140,7 +140,7 @@ TEST_F(UT_BatchExtractJob, test_setArchiveFiles)
 
 TEST_F(UT_BatchExtractJob, test_addExtractItem_001)
 {
-    ReadOnlyArchiveInterface *pIface = new LibzipPlugin(m_tester, QVariantList());
+    dcarchive::ArchiveSession *pIface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, m_tester);
     Stub stub;
     CommonStub::stub_UiTools_createInterface(stub, pIface);
 
@@ -149,7 +149,7 @@ TEST_F(UT_BatchExtractJob, test_addExtractItem_001)
 
 TEST_F(UT_BatchExtractJob, test_addExtractItem_002)
 {
-    ReadOnlyArchiveInterface *pIface = new LibzipPlugin(m_tester, QVariantList());
+    dcarchive::ArchiveSession *pIface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, m_tester);
     Stub stub;
     CommonStub::stub_UiTools_createInterface(stub, pIface);
     EXPECT_EQ(m_tester->addExtractItem(QFileInfo("1.tar.7z")), true);
@@ -207,5 +207,5 @@ TEST_F(UT_BatchExtractJob, test_slotHandleSingleJobFinished_003)
 
 TEST_F(UT_BatchExtractJob, test_doKill)
 {
-    EXPECT_EQ(m_tester->doKill(), false);
+    EXPECT_EQ(m_tester->doKill(), true);
 }

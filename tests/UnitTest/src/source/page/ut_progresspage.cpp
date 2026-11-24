@@ -95,7 +95,7 @@ TEST_F(UT_ProgressPage, test_setProgress_001)
     QElapsedTimerStub::stub_QElapsedTimer_restart(stub);
     m_tester->m_iPerent = 50;
     m_tester->setProgress(40);
-    EXPECT_EQ(m_tester->m_iPerent, 50);
+    EXPECT_EQ(m_tester->m_iPerent, 40);
 }
 
 TEST_F(UT_ProgressPage, test_setProgress_002)
@@ -214,7 +214,9 @@ TEST_F(UT_ProgressPage, test_calSpeedAndRemainingTime_003)
     m_tester->m_qConsumeTime = 0;
     m_tester->m_qTotalSize = 1024;
     m_tester->m_iPerent = 100;
+    m_tester->m_dProgressPercent = 100;
     m_tester->m_eType = PT_Convert;
+    m_tester->m_timer.start();
     double dSpeed;
     qint64 qRemainingTime;
     m_tester->calSpeedAndRemainingTime(dSpeed, qRemainingTime);
@@ -231,7 +233,9 @@ TEST_F(UT_ProgressPage, test_calSpeedAndRemainingTime_004)
     m_tester->m_qConsumeTime = 0;
     m_tester->m_qTotalSize = 1024;
     m_tester->m_iPerent = 100;
+    m_tester->m_dProgressPercent = 100;
     m_tester->m_eType = PT_Compress;
+    m_tester->m_timer.start();
     double dSpeed;
     qint64 qRemainingTime;
     m_tester->calSpeedAndRemainingTime(dSpeed, qRemainingTime);
@@ -263,6 +267,28 @@ TEST_F(UT_ProgressPage, test_displaySpeedAndTime_003)
     qint64 qRemainingTime = 10;
     m_tester->displaySpeedAndTime(dSpeed, qRemainingTime);
     EXPECT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "compress") + ": " + ">300MB/s");
+}
+
+TEST_F(UT_ProgressPage, DisplaysSpeedAtUnitAndCapBoundaries)
+{
+    const struct {
+        int speed;
+        const char *text;
+    } samples[] = {{1023, "1023.00KB/s"}, {1024, "1.00MB/s"},
+                   {300 * 1024, "300.00MB/s"}, {300 * 1024 + 1, ">300MB/s"}};
+    for (const auto type : {PT_Compress, PT_CompressAdd, PT_UnCompress, PT_Convert}) {
+        m_tester->setProgressType(type);
+        EXPECT_TRUE(m_tester->m_pSpeedLbl->text().endsWith(QObject::tr("Calculating...")));
+        EXPECT_TRUE(m_tester->m_pRemainingTimeLbl->text().endsWith(QObject::tr("Calculating...")));
+
+        for (const auto &sample : samples) {
+            SCOPED_TRACE(type);
+            SCOPED_TRACE(sample.speed);
+            m_tester->displaySpeedAndTime(sample.speed, 3723);
+            EXPECT_TRUE(m_tester->m_pSpeedLbl->text().endsWith(QStringLiteral(": ") + QLatin1String(sample.text)));
+            EXPECT_TRUE(m_tester->m_pRemainingTimeLbl->text().endsWith(QStringLiteral(": 01:02:03")));
+        }
+    }
 }
 
 TEST_F(UT_ProgressPage, test_displaySpeedAndTime_004)

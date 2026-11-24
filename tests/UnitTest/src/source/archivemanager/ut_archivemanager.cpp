@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "archivemanager.h"
-#include "libzipplugin.h"
+#include "archive_session.h"
 #include "batchjob.h"
 #include "singlejob.h"
 #include "ut_commonstub.h"
@@ -61,8 +61,8 @@ TEST_F(UT_ArchiveManager, test_destory_instance)
 
 TEST_F(UT_ArchiveManager, test_createArchive_001)
 {
-    m_tester->m_pInterface = new LibzipPlugin(nullptr, QVariantList());
-    LibzipPlugin *pInterface = new LibzipPlugin(nullptr, QVariantList());
+    m_tester->m_pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, nullptr);
+    dcarchive::ArchiveSession *pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, nullptr);
     Stub stub;
     CommonStub::stub_UiTools_createInterface(stub, pInterface);
     JobStub::stub_SingleJob_start(stub);
@@ -82,8 +82,8 @@ TEST_F(UT_ArchiveManager, test_createArchive_002)
 
 TEST_F(UT_ArchiveManager, test_loadArchive_001)
 {
-    m_tester->m_pInterface = new LibzipPlugin(nullptr, QVariantList());
-    LibzipPlugin *pInterface = new LibzipPlugin(nullptr, QVariantList());
+    m_tester->m_pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, nullptr);
+    dcarchive::ArchiveSession *pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, nullptr);
     Stub stub;
     CommonStub::stub_UiTools_createInterface(stub, pInterface);
     JobStub::stub_SingleJob_start(stub);
@@ -100,7 +100,7 @@ TEST_F(UT_ArchiveManager, test_loadArchive_002)
 
 TEST_F(UT_ArchiveManager, test_addFiles_001)
 {
-    LibzipPlugin *pInterface = new LibzipPlugin(nullptr, QVariantList());
+    dcarchive::ArchiveSession *pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, nullptr);
     Stub stub;
     CommonStub::stub_UiTools_createInterface(stub, pInterface);
     JobStub::stub_SingleJob_start(stub);
@@ -119,7 +119,7 @@ TEST_F(UT_ArchiveManager, test_addFiles_002)
 
 TEST_F(UT_ArchiveManager, test_extractFiles_001)
 {
-    LibzipPlugin *pInterface = new LibzipPlugin(nullptr, QVariantList());
+    dcarchive::ArchiveSession *pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, nullptr);
     Stub stub;
     JobStub::stub_SingleJob_start(stub);
     JobStub::stub_StepExtractJob_start(stub);
@@ -133,7 +133,7 @@ TEST_F(UT_ArchiveManager, test_extractFiles_001)
 
 TEST_F(UT_ArchiveManager, test_extractFiles_002)
 {
-    LibzipPlugin *pInterface = new LibzipPlugin(nullptr, QVariantList());
+    dcarchive::ArchiveSession *pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, nullptr);
     Stub stub;
     CommonStub::stub_UiTools_createInterface(stub, pInterface);
     JobStub::stub_SingleJob_start(stub);
@@ -156,7 +156,7 @@ TEST_F(UT_ArchiveManager, test_extractFiles_003)
 
 TEST_F(UT_ArchiveManager, test_extractFiles2Path_001)
 {
-    LibzipPlugin *pInterface = new LibzipPlugin(nullptr, QVariantList());
+    dcarchive::ArchiveSession *pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, nullptr);
     Stub stub;
     CommonStub::stub_UiTools_createInterface(stub, pInterface);
     JobStub::stub_SingleJob_start(stub);
@@ -173,7 +173,7 @@ TEST_F(UT_ArchiveManager, test_extractFiles2Path_002)
 
 TEST_F(UT_ArchiveManager, test_deleteFiles_001)
 {
-    LibzipPlugin *pInterface = new LibzipPlugin(nullptr, QVariantList());
+    dcarchive::ArchiveSession *pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, nullptr);
     Stub stub;
     CommonStub::stub_UiTools_createInterface(stub, pInterface);
     JobStub::stub_SingleJob_start(stub);
@@ -207,7 +207,7 @@ TEST_F(UT_ArchiveManager, test_batchExtractFiles_002)
 
 TEST_F(UT_ArchiveManager, test_openFile_001)
 {
-    LibzipPlugin *pInterface = new LibzipPlugin(nullptr, QVariantList());
+    dcarchive::ArchiveSession *pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, nullptr);
     Stub stub;
     CommonStub::stub_UiTools_createInterface(stub, pInterface);
     JobStub::stub_SingleJob_start(stub);
@@ -227,7 +227,7 @@ TEST_F(UT_ArchiveManager, test_updateArchiveCacheData_001)
     Stub stub;
     JobStub::stub_UpdateJob_start(stub);
 
-    m_tester->m_pInterface = new LibzipPlugin(nullptr, QVariantList());
+    m_tester->m_pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, nullptr);
     EXPECT_EQ(m_tester->updateArchiveCacheData(UpdateOptions()), true);
 }
 
@@ -241,7 +241,7 @@ TEST_F(UT_ArchiveManager, test_updateArchiveCacheData_002)
 
 TEST_F(UT_ArchiveManager, test_updateArchiveComment_001)
 {
-    LibzipPlugin *pInterface = new LibzipPlugin(nullptr, QVariantList());
+    dcarchive::ArchiveSession *pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, nullptr);
     Stub stub;
     CommonStub::stub_UiTools_createInterface(stub, pInterface);
     JobStub::stub_SingleJob_start(stub);
@@ -308,8 +308,8 @@ TEST_F(UT_ArchiveManager, test_cancelOperation_002)
 
 TEST_F(UT_ArchiveManager, test_getCurFilePassword_001)
 {
-    m_tester->m_pInterface = new LibzipPlugin(nullptr, QVariantList());
-    m_tester->m_pInterface->m_strPassword = "123";
+    m_tester->m_pInterface = new dcarchive::ArchiveSession({}, {}, dcarchive::BackendPreference::Auto, nullptr);
+    m_tester->m_pInterface->setPassword(QStringLiteral("123"));
     EXPECT_EQ(m_tester->getCurFilePassword(), "123");
 }
 

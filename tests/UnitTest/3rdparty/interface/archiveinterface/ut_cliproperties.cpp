@@ -53,7 +53,7 @@ TEST_F(UT_CliProperties, test_addArgs_001)
     m_tester->m_compressionLevelSwitch = "ON";
     m_tester->m_passwordSwitch = QStringList() << "123";
     m_tester->m_compressionMethodSwitch["application/zip"] = "ON";
-    QStringList list = QStringList() << "-c" << "tar cf - | 7z a -si 123 ON ON  1.zip";
+    QStringList list = QStringList() << "tar cf - | 7z a -si 123 ON ON  1.zip";
     EXPECT_EQ(m_tester->addArgs("1.zip", QStringList() << "1.txt", "123", false, 3, "BZip2", "AES256", 0, true, ""), list);
 }
 

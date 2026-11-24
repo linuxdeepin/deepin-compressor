@@ -33,6 +33,7 @@ include_directories(${PROJECT_SOURCE_DIR}/${3RDPARTYRELATIVEPATH}/interface)
 include_directories(${PROJECT_SOURCE_DIR}/${3RDPARTYRELATIVEPATH}/interface/archiveinterface)
 include_directories(${PROJECT_SOURCE_DIR}/${3RDPARTYRELATIVEPATH}/interface/plugin)
 include_directories(${PROJECT_SOURCE_DIR}/${3RDPARTYRELATIVEPATH}/interface/process)
+include_directories(${CMAKE_SOURCE_DIR}/src/archive/encoding)
 
 
 #源文件、头文件和资源文件
@@ -44,6 +45,8 @@ file(GLOB_RECURSE c_files
     ${3RDPARTYRELATIVEPATH}/interface/plugin/*.cpp
     ${3RDPARTYRELATIVEPATH}/interface/process/*.cpp
 )
+list(APPEND c_files ${CMAKE_SOURCE_DIR}/src/archive/encoding/encoding_detector.cpp)
+list(APPEND c_files ${CMAKE_SOURCE_DIR}/src/source/dialog/archivequeries.cpp)
 
 file(GLOB_RECURSE h_files
     ${3RDPARTYRELATIVEPATH}/cli7zplugin/*.h

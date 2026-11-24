@@ -12,27 +12,39 @@
 
 
 /*******************************函数打桩************************************/
+void DTitlebar_setTitle_stub(DTitlebar *, const QString &)
+{
+}
 
 /*******************************单元测试************************************/
 // 测试ProgressDialog
 class UT_ProgressDialog : public ::testing::Test
 {
 public:
-    UT_ProgressDialog(): m_tester(nullptr) {}
+    UT_ProgressDialog(): m_parent(nullptr), m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
-        m_tester = new ProgressDialog;
+        QCoreApplication::processEvents();
+        m_stub.set(ADDR(DTitlebar, setTitle), DTitlebar_setTitle_stub);
+        m_parent = new QWidget;
+        m_tester = new ProgressDialog(m_parent);
         m_tester->disconnect();
     }
 
     virtual void TearDown()
     {
-        delete m_tester;
+        m_tester->hide();
+        delete m_parent;
+        m_parent = nullptr;
+        m_tester = nullptr;
+        QCoreApplication::processEvents();
     }
 
 protected:
+    Stub m_stub;
+    QWidget *m_parent;
     ProgressDialog *m_tester;
 };
 

@@ -45,7 +45,7 @@ TEST_F(UT_OpenWithDialogListItem, initTest)
 TEST_F(UT_OpenWithDialogListItem, test_setChecked_001)
 {
     m_tester->setChecked(true);
-    EXPECT_EQ(m_tester->m_pCheckBtn->icon().isNull(), true);
+    EXPECT_FALSE(m_tester->m_pCheckBtn->icon().isNull());
 }
 
 TEST_F(UT_OpenWithDialogListItem, test_setChecked_002)

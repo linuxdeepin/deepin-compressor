@@ -19,7 +19,6 @@ project(${PROJECT_NAME_TEST})
 #endif ()
 
 set(SRCRELATIVEPATH ../../../src) #相对于源码路径
-set(LIBZIPPLUGINPATH ../../../3rdparty/libzipplugin) #相对于源码路径
 
 #查找依赖关系的包信息
 find_package(PkgConfig REQUIRED)
@@ -68,7 +67,16 @@ include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/source/dialog)
 include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/source/dialog/openwithdialog)
 include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/source/page)
 include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/source/tree)
-include_directories(${PROJECT_SOURCE_DIR}/${LIBZIPPLUGINPATH})
+include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/archive/core)
+include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/archive/encoding)
+include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/archive/backends/singlefile)
+include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/archive/backends/libzip)
+include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/archive/backends/libarchive)
+include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/archive/backends/minizip)
+include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/archive/backends/pigz)
+include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/archive/backends/sevenzip)
+include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/archive/backends/rar)
+include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/archive/backends/clipzip)
 
 #源文件、头文件和资源文件
 include_directories(${PROJECT_SOURCE_DIR}/source/common)
@@ -80,7 +88,6 @@ file(GLOB_RECURSE c_files
     ${SRCRELATIVEPATH}/source/dialog/openwithdialog/*.cpp
     ${SRCRELATIVEPATH}/source/page/*.cpp
     ${SRCRELATIVEPATH}/source/tree/*.cpp
-    ${LIBZIPPLUGINPATH}/*.cpp
 
     ./source/*.cpp
     ./source/archivemanager/*.cpp
@@ -100,7 +107,6 @@ file(GLOB_RECURSE h_files
     ${SRCRELATIVEPATH}/source/dialog/openwithdialog/*.h
     ${SRCRELATIVEPATH}/source/page/*.h
     ${SRCRELATIVEPATH}/source/tree/*.h
-    ${LIBZIPPLUGINPATH}/*.h
 
     ./source/*.h
     ./source/archivemanager/*.h
@@ -130,6 +136,23 @@ FILE (GLOB allTestSource
     "./src/*.cpp" "./src/*.c")
 
 #10.生成可执行程序
+list(APPEND c_files
+    ${SRCRELATIVEPATH}/archive/core/archive_registry.cpp
+    ${SRCRELATIVEPATH}/archive/core/path_guard.cpp
+    ${SRCRELATIVEPATH}/archive/core/extraction_output.cpp
+    ${SRCRELATIVEPATH}/archive/core/staging_merge.cpp
+    ${SRCRELATIVEPATH}/archive/core/encoding_utils.cpp
+    ${SRCRELATIVEPATH}/archive/backends/singlefile/singlefile_backend.cpp
+    ${SRCRELATIVEPATH}/archive/backends/singlefile/stream_decoder.cpp
+    ${SRCRELATIVEPATH}/archive/backends/libzip/libzip_backend.cpp
+    ${SRCRELATIVEPATH}/archive/backends/libarchive/libarchive_backend.cpp
+    ${SRCRELATIVEPATH}/archive/backends/minizip/minizip_backend.cpp
+    ${SRCRELATIVEPATH}/archive/backends/pigz/pigz_backend.cpp
+    ${SRCRELATIVEPATH}/archive/backends/sevenzip/sevenzip_backend.cpp
+    ${SRCRELATIVEPATH}/archive/backends/rar/rar_backend.cpp
+    ${SRCRELATIVEPATH}/archive/backends/clipzip/clipzip_backend.cpp
+)
+
 add_executable(${PROJECT_NAME_TEST}  ${c_files} ${h_files} ${QRC_MOC} ${APP_TS_FILES} ${APP_QM_FILES})
 
 # 生成测试可执行程序的依赖库
@@ -147,5 +170,10 @@ target_link_libraries(${PROJECT_NAME_TEST}
     ${GTEST_MAIN_LIBRARIES}
     pthread
     zip
+    z
+    bz2
+    lzma
+    minizip
+    archive
 )
 

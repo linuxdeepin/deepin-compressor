@@ -11,9 +11,8 @@
 #include "processopenthread.h"
 #include "openwithdialog.h"
 #include "ddesktopservices.h"
-#include "kprocess.h"
 #include "archivemanager.h"
-#include "queries.h"
+#include "archivequeries.h"
 #include "batchjob.h"
 
 #include <DFileDialog>
@@ -30,7 +29,7 @@ bool g_UiTools_isArchiveFile_result = false;            // UiTools isArchiveFile
 QObject *g_QObject_sender_result = nullptr;             // QObject sender返回值
 int g_Dialog_exec_result = 0;                         // DDialog exec返回值
 bool g_UiTools_isLocalDeviceFile_result;         // UiTools isLocalDeviceFile返回值
-ReadOnlyArchiveInterface *g_UiTools_createInterface_result = nullptr;         // UiTools createInterface返回值
+dcarchive::ArchiveSession *g_UiTools_createInterface_result = nullptr;         // UiTools createInterface返回值
 QString g_QFileDialog_getOpenFileName_result = "";      // QFileDialog getOpenFileName返回值
 bool g_QThread_isRunning_result = false;                 // QThread isRunning返回值
 bool g_QThread_wait_result = false;                      // QThread wait返回值
@@ -141,11 +140,6 @@ void processOpenThread_start_stub(void *obj)
     return;
 }
 
-void kProcess_start_stub()
-{
-    return;
-}
-
 QObject *qObject_sender_stub()
 {
     return g_QObject_sender_result;
@@ -196,7 +190,7 @@ QString qFileDialog_getOpenFileName_stub(QWidget *, const QString &, const QStri
     return g_QFileDialog_getOpenFileName_result;
 }
 
-ReadOnlyArchiveInterface *uiTools_createInterface_stub(const QString &, bool, UiTools::AssignPluginType)
+dcarchive::ArchiveSession *uiTools_createInterface_stub(const QString &, bool, UiTools::AssignPluginType)
 {
     return g_UiTools_createInterface_result;
 }
@@ -234,11 +228,6 @@ void CommonStub::stub_QObject_sender(Stub &stub, QObject *pObject)
 {
     g_QObject_sender_result = pObject;
     stub.set(ADDR(QObject, sender), qObject_sender_stub);
-}
-
-void CommonStub::stub_KProcess_start(Stub &stub)
-{
-    stub.set(ADDR(KProcess, start), kProcess_start_stub);
 }
 
 void CommonStub::stub_DDialog_exec(Stub &stub, int iResult)
@@ -317,10 +306,10 @@ void CommonStub::stub_QProcess_startDetached(Stub &stub)
 #endif
 }
 
-void CommonStub::stub_UiTools_createInterface(Stub &stub, ReadOnlyArchiveInterface *pInterface)
+void CommonStub::stub_UiTools_createInterface(Stub &stub, dcarchive::ArchiveSession *pInterface)
 {
     g_UiTools_createInterface_result = pInterface;
-    stub.set((ReadOnlyArchiveInterface * (*)(const QString &, bool bWrite, UiTools::AssignPluginType))ADDR(UiTools, createInterface), uiTools_createInterface_stub);
+    stub.set((dcarchive::ArchiveSession * (*)(const QString &, bool bWrite, UiTools::AssignPluginType))ADDR(UiTools, createInterface), uiTools_createInterface_stub);
 }
 
 void CommonStub::stub_QFileDialog_getOpenFileName(Stub &stub, const QString &strFileName)
@@ -1117,9 +1106,9 @@ void job_start_stub()
     return;
 }
 
-void job_kill_stub()
+bool job_kill_stub()
 {
-    return;
+    return true;
 }
 
 bool singleJob_doPause_stub()
@@ -1179,7 +1168,7 @@ void JobStub::stub_UpdateJob_start(Stub &stub)
 
 void JobStub::stub_ArchiveJob_kill(Stub &stub)
 {
-    typedef void (*fptr)(ArchiveJob *);
+    typedef bool (*fptr)(ArchiveJob *);
     fptr A_foo = (fptr)(&ArchiveJob::kill);   //获取虚函数地址
     stub.set(A_foo, job_kill_stub);
 }

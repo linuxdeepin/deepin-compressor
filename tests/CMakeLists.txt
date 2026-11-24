@@ -9,13 +9,17 @@ set(EXE_NAME test)
 project(${EXE_NAME})
 
 add_subdirectory(UnitTest)
+add_subdirectory(contract)
 
 add_custom_target(test
     COMMAND echo " =================== TEST BEGIN ==================== "
+    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/archive_contract_test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/bz2plugin_test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/cli7zplugin_test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/clirarplugin_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/deepin-compressor_test
+    COMMAND python3 ${CMAKE_SOURCE_DIR}/tools/test/run_isolated_gtest.py
+            ${CMAKE_BINARY_DIR}/bin/tests/deepin-compressor_test
+            --isolate-suite UT_MainWindow.
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/gzplugin_test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/interface_test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/libminizipplugin_test

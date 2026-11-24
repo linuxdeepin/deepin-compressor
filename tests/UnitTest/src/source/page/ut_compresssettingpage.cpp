@@ -14,6 +14,11 @@
 #include <gtest/gtest.h>
 #include <QTest>
 #include <QAction>
+#include <QAccessible>
+#include <QMenu>
+#include <QScrollArea>
+#include <QScrollBar>
+#include <QStackedWidget>
 
 bool g_checkFileNameVaild_result = false;
 bool g_checkCompressOptionValid_result = false;
@@ -114,6 +119,49 @@ TEST_F(UT_CompressSettingPage, initTest)
 
 }
 
+#if QT_CONFIG(accessibility)
+TEST_F(UT_CompressSettingPage, accessibleScrollAreaRejectsStaleChildAfterPageSwitch)
+{
+    QStackedWidget stack;
+    auto *page = new CompressSettingPage;
+    auto *progress = new QWidget;
+    stack.addWidget(page);
+    stack.addWidget(progress);
+    stack.resize(700, 400);
+
+    auto *scroll = page->m_pRightScroll;
+    scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    stack.show();
+    QCoreApplication::processEvents();
+
+    auto *accessible = QAccessible::queryAccessibleInterface(scroll);
+    ASSERT_NE(accessible, nullptr);
+    ASSERT_TRUE(scroll->verticalScrollBar()->isVisible());
+    ASSERT_EQ(accessible->childCount(), 2);
+    ASSERT_NE(accessible->child(0), nullptr);
+    EXPECT_EQ(accessible->child(0)->object(), scroll->viewport());
+    constexpr int scrollBarIndex = 1;
+    auto *scrollBarContainer = accessible->child(scrollBarIndex);
+    ASSERT_NE(scrollBarContainer, nullptr);
+    EXPECT_EQ(scrollBarContainer->object(), scroll->verticalScrollBar()->parentWidget());
+    EXPECT_EQ(accessible->indexOfChild(scrollBarContainer), scrollBarIndex);
+
+    stack.setCurrentWidget(progress);
+    QCoreApplication::processEvents();
+    ASSERT_FALSE(scroll->verticalScrollBar()->isVisible());
+    ASSERT_EQ(accessible->childCount(), 1);
+    EXPECT_EQ(accessible->child(scrollBarIndex), nullptr);
+    EXPECT_EQ(accessible->child(-1), nullptr);
+    EXPECT_EQ(accessible->indexOfChild(scrollBarContainer), -1);
+
+    stack.setCurrentWidget(page);
+    QCoreApplication::processEvents();
+    ASSERT_EQ(accessible->childCount(), 2);
+    EXPECT_EQ(accessible->child(scrollBarIndex), scrollBarContainer);
+}
+#endif
+
 TEST_F(UT_CompressSettingPage, test_setFileSize_001)
 {
     Stub stub;
@@ -171,11 +219,13 @@ TEST_F(UT_CompressSettingPage, test_setFileSize_004)
 
 TEST_F(UT_CompressSettingPage, test_refreshMenu)
 {
-    Stub stub;
-    PluginManagerStub::stub_PluginManager_supportedWriteMimeTypes(stub);
-
     m_tester->refreshMenu();
-    EXPECT_EQ(m_tester->m_listSupportedMimeTypes.isEmpty(), false);
+    QStringList formats;
+    for (const auto *action : m_tester->m_pTypeMenu->actions())
+        formats.append(action->text());
+    EXPECT_TRUE(formats.contains(QStringLiteral("jar")));
+    EXPECT_TRUE(formats.contains(QStringLiteral("tar.Z")));
+    EXPECT_TRUE(formats.contains(QStringLiteral("zip")));
 }
 
 TEST_F(UT_CompressSettingPage, test_getClickLbl)
