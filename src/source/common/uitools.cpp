@@ -54,6 +54,9 @@ QStringList UiTools::m_associtionlist = QStringList() << "file_association.file_
                                         << "file_association.file_association_type.x-lzip-compressed-tar"
                                         << "file_association.file_association_type.x-lzma-compressed-tar"
                                         << "file_association.file_association_type.x-tzo"
+                                        << "file_association.file_association_type.x-lrzip-compressed-tar"
+                                        << "file_association.file_association_type.x-lz4-compressed-tar"
+                                        << "file_association.file_association_type.x-zstd-compressed-tar"
                                         << "file_association.file_association_type.x-xz-compressed-tar"
                                         << "file_association.file_association_type.x-tarz"
                                         << "file_association.file_association_type.x-xar"
@@ -188,9 +191,15 @@ bool UiTools::isExistMimeType(const QString &strMimeType, bool &bArchive)
             names << alias;
     }
 
+    const bool lrzipTar = names.contains(QStringLiteral("application/x-lrzip-compressed-tar"))
+            || raw == QLatin1String("x-lrzip-compressed-tar");
+    if (lrzipTar && QStandardPaths::findExecutable(QStringLiteral("lrzip")).isEmpty())
+        return false;
+
     QString conf = readConf();
     QStringList confList = conf.split("\n", SKIP_EMPTY_PARTS);
     bool exist = false;
+    bool hasSetting = false;
     for (const QString &line : confList) {
         bool matched = false;
         for (QString name : names) {
@@ -203,10 +212,19 @@ bool UiTools::isExistMimeType(const QString &strMimeType, bool &bArchive)
         if (!matched)
             continue;
 
+        hasSetting = true;
         bArchive = true;
         exist = line.contains("true");
         if (exist)
             break;
+    }
+
+    // An existing config may predate these options. Honor explicit false values.
+    if (!hasSetting && (lrzipTar
+                       || names.contains(QStringLiteral("application/x-lz4-compressed-tar"))
+                       || names.contains(QStringLiteral("application/x-zstd-compressed-tar")))) {
+        bArchive = true;
+        exist = true;
     }
 
     qCDebug(appLog) << "MIME type check result:" << exist;
@@ -301,18 +319,21 @@ QStringList UiTools::supportedWriteMimeTypes()
 {
     QStringList types{
         QStringLiteral("application/x-7z-compressed"),
+        QStringLiteral("application/java-archive"),
         QStringLiteral("application/x-tar"),
         QStringLiteral("application/x-compressed-tar"),
         QStringLiteral("application/x-bzip-compressed-tar"),
+        QStringLiteral("application/x-tarz"),
         QStringLiteral("application/x-xz-compressed-tar"),
         QStringLiteral("application/x-lzma-compressed-tar"),
         QStringLiteral("application/x-lzip-compressed-tar"),
         QStringLiteral("application/x-tzo"),
         QStringLiteral("application/x-zstd-compressed-tar"),
         QStringLiteral("application/x-lz4-compressed-tar"),
-        QStringLiteral("application/x-lrzip-compressed-tar"),
-        QStringLiteral("application/zip"),
     };
+    if (!QStandardPaths::findExecutable(QStringLiteral("lrzip")).isEmpty())
+        types.append(QStringLiteral("application/x-lrzip-compressed-tar"));
+    types.append(QStringLiteral("application/zip"));
     if (!QStandardPaths::findExecutable(QStringLiteral("rar")).isEmpty())
         types.append(QStringLiteral("application/vnd.rar"));
     return types;

@@ -407,7 +407,6 @@ void MainWindow::refreshPage()
         qCDebug(appLog) << "Switching to Compress Progress page";
         m_pMainWidget->setCurrentIndex(4);
         setTitleButtonStyle(false, false);
-        m_pProgressPage->resetProgress();
         titlebar()->setTitle(tr("Compressing"));
     }
     break;
@@ -415,7 +414,6 @@ void MainWindow::refreshPage()
         qCDebug(appLog) << "Switching to Uncompress Progress page";
         m_pMainWidget->setCurrentIndex(4);
         setTitleButtonStyle(false, false);
-        m_pProgressPage->resetProgress();
         titlebar()->setTitle(tr("Extracting"));
     }
     break;
@@ -1198,8 +1196,9 @@ void MainWindow::slotCompressNext()
 
 void MainWindow::slotCompress(const QVariant &val)
 {
+    if (m_operationtype == Operation_Create)
+        return;
     qCInfo(appLog) << "Compression started";
-    m_operationtype = Operation_Create;
 
     m_stCompressParameter = val.value<CompressParameter>();    // 获取压缩参数
     qCDebug(appLog) << "Compression parameters:" 
@@ -1298,14 +1297,13 @@ void MainWindow::slotCompress(const QVariant &val)
         }
     }
 
-    // 必须先切换进度界面再启动压缩：cli7z 等同步插件在 MTP 目标下的完成链会在
-    // createArchive() 调用内部同步执行并切至成功/失败页，若之后才切进度页，
-    // 会把结果页覆盖回进度页，导致界面永久停留在"正在压缩"
     m_pProgressPage->setProgressType(PT_Compress);
     m_pProgressPage->setTotalSize(m_stCompressParameter.qSize);
     m_pProgressPage->setArchiveName(m_stCompressParameter.strArchiveName);
+    m_pProgressPage->resetProgress();
     m_pProgressPage->restartTimer();
 
+    // Show progress before starting a job that may finish synchronously.
     m_operationtype = Operation_Create;
     m_ePageID = PI_CompressProgress;
     refreshPage();
@@ -1362,6 +1360,8 @@ void MainWindow::slotJobFinished(ArchiveJob::JobType eJobType, PluginFinishType 
 
 void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
 {
+    if (m_operationtype == Operation_Extract)
+        return;
     qCDebug(appLog) << "Starting extraction to path:" << strUncompressPath;
     m_operationtype = Operation_Extract; //解压操作
 
@@ -1372,6 +1372,7 @@ void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
     // 构建解压参数
     options.strTargetPath = strUncompressPath;
     options.bAllExtract = true;
+    options.keepIncompleteOnCancel = true;
     options.qSize = stArchiveData.qSize;
     options.qComressSize = stArchiveData.qComressSize;
 
@@ -1397,20 +1398,22 @@ void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
 
     m_stUnCompressParameter.strExtractPath = options.strTargetPath;
 
-    // 调用解压函数
-    if (ArchiveManager::get_instance()->extractFiles(strArchiveFullPath, QList<FileEntry>(), options)) {
-        // 设置进度界面参数
-        m_pProgressPage->setProgressType(PT_UnCompress);
-        m_pProgressPage->setTotalSize(options.qSize);
-        m_pProgressPage->setArchiveName(strArchiveFullPath);
-        m_pProgressPage->restartTimer(); // 重启计时器
-        m_ePageID = PI_UnCompressProgress;
+    m_pProgressPage->setProgressType(PT_UnCompress);
+    m_pProgressPage->setTotalSize(options.qSize);
+    m_pProgressPage->setArchiveName(strArchiveFullPath);
+    m_pProgressPage->resetProgress();
+    m_pProgressPage->restartTimer();
 
+    const bool started = ArchiveManager::get_instance()->extractFiles(strArchiveFullPath, QList<FileEntry>(), options);
+    // A synchronous completion may already have selected the result page.
+    if (m_operationtype != Operation_Extract)
+        return;
+    if (started) {
+        m_ePageID = PI_UnCompressProgress;
         refreshPage();
-    } /*else {
-        // 无可用插件
+    } else {
         showErrorMessage(FI_Uncompress, EI_NoPlugin);
-    }*/
+    }
 }
 
 void MainWindow::slotReceiveProgress(double dPercentage)
@@ -1426,11 +1429,9 @@ void MainWindow::slotReceiveProgress(double dPercentage)
         m_pProgressdialog->setProcess(dPercentage);
     } else if (Operation_Update_Comment == m_operationtype) { // 更新压缩包注释的进度
         qCDebug(appLog) << "Comment update operation progress";
-        if (!m_commentProgressDialog->isVisible()) {
-            m_commentProgressDialog->exec();
-        }
-
         m_commentProgressDialog->setProgress(dPercentage);
+        if (!m_commentProgressDialog->isVisible())
+            m_commentProgressDialog->open();
     } else {
         qCDebug(appLog) << "Main operation progress";
         m_pProgressPage->setProgress(dPercentage);
@@ -1684,9 +1685,16 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
     }
     break;
 // 删除
-    case ArchiveJob::JT_Delete:
-	{
+    case ArchiveJob::JT_Delete: {
         qCInfo(appLog) << "删除结束";
+        // libzip can remove the archive itself when its final entry is deleted.
+        const QString path = m_pUnCompressPage->archiveFullPath();
+        if (!path.isEmpty() && !QFileInfo::exists(path)) {
+            ArchiveViewState::instance().archiveData().reset();
+            m_pUnCompressPage->clear();
+            resetMainwindow();
+            break;
+        }
         // 追加完成更新压缩包数据
         m_operationtype = Operation_UpdateData;
         if (ArchiveManager::get_instance()->updateArchiveCacheData(m_stUpdateOptions)) {
@@ -1963,37 +1971,9 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
                 break;
             }
             default:
+                sendMessage(new CustomFloatingMessage(icon, tr("Extraction failed", "提取失败"), 1000, this));
                 break;
             }
-
-#if 0 // 提取失败详细提示
-            // 提取出错
-            switch (eErrorType) {
-            // 压缩包损坏
-            case ET_ArchiveDamaged : {
-                sendMessage(new CustomFloatingMessage(icon, tr("The archive is damaged"), 1000, this));
-                break;
-            }
-            // 密码错误
-            case ET_WrongPassword: {
-                sendMessage(new CustomFloatingMessage(icon, tr("Wrong password"), 1000, this));
-                break;
-            }
-            // 文件名过长
-            case ET_LongNameError: {
-                sendMessage(new CustomFloatingMessage(icon, tr("File name too long"), 1000, this));
-                break;
-            }
-            // 创建文件失败
-            case ET_FileWriteError: {
-                sendMessage(new CustomFloatingMessage(icon, tr("Failed to create \"%1\"").arg(UiTools::toShortString(m_fileWriteErrorName)), 1000, this));
-                break;
-            }
-            default:
-                break;
-            }
-#endif
-//            sendMessage(new CustomFloatingMessage(icon, tr("Extraction failed", "提取失败"), 1000, this)); // 提取失败提示
         } else {
             // 解压出错
             switch (eErrorType) {
@@ -2694,16 +2674,18 @@ void MainWindow::convertArchive(const QString &convertType)
 
     m_strFinalConvertFile = newArchivePath;  // 记录格式转换后的文件名，在转换成功之后打开文件使用
 
-    // 创建格式转换的job
-    if (ArchiveManager::get_instance()->convertArchive(oldArchivePath, TEMPPATH + QDir::separator() + m_strProcessID + createTempPath(), newArchivePath)) {
-        m_pProgressPage->setProgressType(PT_Convert);
-        m_pProgressPage->setTotalSize(oldArchive.size() + ArchiveViewState::instance().archiveData().qSize);
-        m_pProgressPage->setArchiveName(newArchivePath);
-        m_pProgressPage->restartTimer();
+    const QString targetPath = TEMPPATH + QDir::separator() + m_strProcessID + createTempPath();
+    // A synchronous conversion can finish inside convertArchive().
+    m_pProgressPage->setProgressType(PT_Convert);
+    m_pProgressPage->setTotalSize(oldArchive.size() + ArchiveViewState::instance().archiveData().qSize);
+    m_pProgressPage->setArchiveName(newArchivePath);
+    m_pProgressPage->restartTimer();
 
-        m_ePageID = PI_ConvertProgress;
-        refreshPage();
-    }
+    m_ePageID = PI_ConvertProgress;
+    refreshPage();
+
+    if (!ArchiveManager::get_instance()->convertArchive(oldArchivePath, targetPath, newArchivePath))
+        showErrorMessage(FI_Convert, EI_NoPlugin);
 }
 
 void MainWindow::updateArchiveComment()
@@ -2747,8 +2729,9 @@ void MainWindow::watcherArchiveFile(const QString &strFullPath)
         refreshPage();
     });
 
-    connect(m_pFileWatcher, &DFileWatcher::fileDeleted, this, [ = ]() { //监控压缩包，重命名时提示
-        QTimer::singleShot(1000, this, [=]()
+    auto *watcher = m_pFileWatcher;
+    connect(watcher, &DFileWatcher::fileDeleted, watcher, [this, watcher, strFullPath]() {
+        QTimer::singleShot(1000, watcher, [this, strFullPath]()
         {
             if(QFile::exists(strFullPath)) {
                 return;
@@ -2939,6 +2922,7 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
         m_stCompressParameter.strArchiveName = archiveInfo.fileName();
         m_pProgressPage->setProgressType(PT_Compress);
         m_pProgressPage->setArchiveName(m_stCompressParameter.strArchiveName);
+        m_pProgressPage->resetProgress();
         m_pProgressPage->setPushButtonCheckable(false, false);
 
         // 计算大小
@@ -3001,6 +2985,7 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
                 m_pProgressPage->setProgressType(PT_UnCompress);
                 m_pProgressPage->setTotalSize(qSize);
                 m_pProgressPage->setArchiveName(listFiles[0]);
+                m_pProgressPage->resetProgress();
                 m_pProgressPage->restartTimer(); // 重启计时器
                 m_ePageID = PI_UnCompressProgress;
             } else {
@@ -3196,6 +3181,7 @@ void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFil
                 m_pProgressPage->setProgressType(PT_UnCompress);
                 m_pProgressPage->setTotalSize(options.qComressSize);
                 m_pProgressPage->setArchiveName(listTransFiles[0]);
+                m_pProgressPage->resetProgress();
                 m_pProgressPage->restartTimer(); // 重启计时器
                 m_ePageID = PI_UnCompressProgress;
             }
@@ -3222,6 +3208,7 @@ void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFil
             m_pProgressPage->setProgressType(PT_UnCompress);
             m_pProgressPage->setTotalSize(qSize);
             m_pProgressPage->setArchiveName(listTransFiles[0]);
+            m_pProgressPage->resetProgress();
             m_pProgressPage->restartTimer(); // 重启计时器
             m_ePageID = PI_UnCompressProgress;
         } else {
@@ -3573,6 +3560,7 @@ void MainWindow::slotTitleCommentButtonPressed()
     if (PI_UnCompress == m_ePageID) {
         DDialog *dialog = new DDialog(this);
         dialog->setWindowTitle(tr("File info"));
+        dialog->setCloseButtonVisible(true);
         dialog->setFixedWidth(300);
         DFontSizeManager::instance()->bind(dialog, DFontSizeManager::T6, QFont::Medium);
 

@@ -4,9 +4,11 @@
 
 #include "rar_backend.h"
 
+#include "cli_long_extraction.h"
 #include "path_guard.h"
 #include "argument_chunks.h"
 #include "staging_merge.h"
+#include "write_progress.h"
 
 #include <QDateTime>
 #include <QDir>
@@ -21,9 +23,11 @@
 #include <QTemporaryDir>
 #include <QVector>
 
+#include <algorithm>
 #include <csignal>
 #include <cerrno>
 #include <cstring>
+#include <memory>
 
 namespace dcarchive {
 namespace {
@@ -171,7 +175,7 @@ RarBackend::RunResult RarBackend::runTool(const QString &tool, const QStringList
 
     QProcess process;
     QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
-    environment.insert(QStringLiteral("LC_ALL"), QStringLiteral("C"));
+    environment.insert(QStringLiteral("LC_ALL"), QStringLiteral("C.UTF-8"));
     process.setProcessEnvironment(environment);
     if (!workingDirectory.isEmpty())
         process.setWorkingDirectory(workingDirectory);
@@ -183,31 +187,38 @@ RarBackend::RunResult RarBackend::runTool(const QString &tool, const QStringList
     process.closeWriteChannel();
     m_processId = process.processId();
     result.started = true;
+    QByteArray output;
+    QByteArray errors;
+    const auto readOutput = [&]() {
+        const auto stdoutChunk = process.readAllStandardOutput();
+        const auto stderrChunk = process.readAllStandardError();
+        output += stdoutChunk;
+        errors += stderrChunk;
+        if (onOutput && (!stdoutChunk.isEmpty() || !stderrChunk.isEmpty()))
+            onOutput(QString::fromUtf8(stdoutChunk + stderrChunk));
+    };
     while (process.state() != QProcess::NotRunning) {
         if (m_cancelled)
             process.kill();
         process.waitForFinished(50);
-        const QString stdoutChunk = QString::fromLocal8Bit(process.readAllStandardOutput());
-        const QString stderrChunk = QString::fromLocal8Bit(process.readAllStandardError());
-        result.output += stdoutChunk;
-        result.errors += stderrChunk;
-        if (onOutput && (!stdoutChunk.isEmpty() || !stderrChunk.isEmpty()))
-            onOutput(stdoutChunk + stderrChunk);
+        readOutput();
     }
     m_processId = 0;
     if (process.exitStatus() == QProcess::NormalExit)
         result.exitCode = process.exitCode();
-    result.output += QString::fromLocal8Bit(process.readAllStandardOutput());
-    result.errors += QString::fromLocal8Bit(process.readAllStandardError());
+    readOutput();
+    result.output = QString::fromUtf8(output);
+    result.errors = QString::fromUtf8(errors);
     return result;
 }
 
 RarBackend::RunResult RarBackend::runReadCommand(QStringList options, const QStringList &entries,
-                                                const OutputCallback &onOutput)
+                                                const OutputCallback &onOutput,
+                                                const QString &archivePath)
 {
     options << QStringLiteral("-cfg-") << QStringLiteral("-@-")
             << (m_password.isEmpty() ? QStringLiteral("-p-") : QStringLiteral("-p") + m_password)
-            << QStringLiteral("--") << m_path;
+            << QStringLiteral("--") << (archivePath.isEmpty() ? m_path : archivePath);
     options += entries;
     return runTool(QStringLiteral("unrar"), options, onOutput);
 }
@@ -215,14 +226,15 @@ RarBackend::RunResult RarBackend::runReadCommand(QStringList options, const QStr
 RarBackend::RunResult RarBackend::runWriteCommand(QStringList options, const QStringList &entries,
                                                  bool encryptHeaders,
                                                  const QString &workingDirectory,
-                                                 const QString &archivePath)
+                                                 const QString &archivePath,
+                                                 const OutputCallback &onOutput)
 {
     options << QStringLiteral("-cfg-") << QStringLiteral("-@-");
     if (!m_password.isEmpty())
         options << (encryptHeaders ? QStringLiteral("-hp") : QStringLiteral("-p")) + m_password;
     options << QStringLiteral("--") << (archivePath.isEmpty() ? m_path : archivePath);
     options += entries;
-    return runTool(QStringLiteral("rar"), options, {}, workingDirectory);
+    return runTool(QStringLiteral("rar"), options, onOutput, workingDirectory);
 }
 
 ArchiveResult RarBackend::resultForRun(const RunResult &run, ArchiveError fallback) const
@@ -318,6 +330,16 @@ VoidResult RarBackend::extractFiles(const ExtractRequest &request, BackendObserv
         }
     }
 
+    const bool hasLongPaths = std::any_of(includedEntries.cbegin(), includedEntries.cend(),
+                                         [](const ArchiveEntry &entry) { return hasOversizedComponent(entry.path); });
+    std::unique_ptr<CliLongExtraction> longPaths;
+    if (hasLongPaths && !QStandardPaths::findExecutable(QStringLiteral("rar")).isEmpty()) {
+        longPaths.reset(new CliLongExtraction(request.targetPath, listed.info.entries));
+        if (request.allEntries)
+            std::stable_sort(includedEntries.begin(), includedEntries.end(),
+                             [](const auto &a, const auto &b) { return a.path < b.path; });
+    }
+
     bool overwriteAll = request.overwrite == OverwritePolicy::Overwrite
             || request.overwrite == OverwritePolicy::OverwriteAll;
     bool skipAll = request.overwrite == OverwritePolicy::Skip
@@ -326,7 +348,19 @@ VoidResult RarBackend::extractFiles(const ExtractRequest &request, BackendObserv
     QStringList entries;
     for (const ArchiveEntry &entry : includedEntries) {
         const QString relativePath = archivePathRelativeTo(entry.path, request.destinationPrefix);
-        const QString outputPath = safeOutputPath(request.targetPath, relativePath);
+        QString outputPath = safeOutputPath(request.targetPath, relativePath);
+        if (longPaths && !outputPath.isEmpty()) {
+            const QString diskName = longPaths->diskName(relativePath, entry.type == EntryType::Directory);
+            if (diskName != relativePath) {
+                if (diskName.isEmpty()) {
+                    observer.onCurrentFile(entry.path);
+                    result = {ArchiveError::LongName, entry.path};
+                    notifyFinished(observer, result);
+                    return {result};
+                }
+                outputPath = safeOutputPath(request.targetPath, diskName);
+            }
+        }
         if (outputPath.isEmpty()) {
             result.error = ArchiveError::PermissionDenied;
             result.message = entry.path;
@@ -340,11 +374,16 @@ VoidResult RarBackend::extractFiles(const ExtractRequest &request, BackendObserv
             notifyFinished(observer, result);
             return {result};
         }
-        if (entry.type == EntryType::Directory)
+        if (entry.type == EntryType::Directory) {
+            if (longPaths)
+                longPaths->addDirectory(outputPath);
             continue;
-        if (QFileInfo::exists(outputPath) && skipAll)
+        }
+        const bool exists = QFileInfo::exists(outputPath)
+                || (longPaths && longPaths->hasFileDestination(outputPath));
+        if (exists && skipAll)
             continue;
-        if (QFileInfo::exists(outputPath) && !overwriteAll) {
+        if (exists && !overwriteAll) {
             FileConflictRequest conflict;
             conflict.path = outputPath;
             observer.onFileConflict(conflict);
@@ -366,39 +405,61 @@ VoidResult RarBackend::extractFiles(const ExtractRequest &request, BackendObserv
                 break;
             }
         }
-        acceptedEntries.append(entry);
-        entries << entry.path;
-    }
-    for (const ArchiveEntry &entry : includedEntries) {
-        if (entry.type != EntryType::Directory)
-            continue;
-        bool hasDescendant = false;
-        for (const ArchiveEntry &candidate : listed.info.entries) {
-            if (candidate.index != entry.index && archivePathWithin(candidate.path, entry.path)) {
-                hasDescendant = true;
-                break;
-            }
-        }
-        if (!hasDescendant) {
+        if (longPaths) {
+            entries << longPaths->addFile(entry, outputPath);
+        } else {
             acceptedEntries.append(entry);
             entries << entry.path;
         }
     }
-    if (entries.isEmpty()) {
+    if (!longPaths) {
+        for (const ArchiveEntry &entry : includedEntries) {
+            if (entry.type != EntryType::Directory)
+                continue;
+            bool hasDescendant = false;
+            for (const ArchiveEntry &candidate : listed.info.entries) {
+                if (candidate.index != entry.index && archivePathWithin(candidate.path, entry.path)) {
+                    hasDescendant = true;
+                    break;
+                }
+            }
+            if (!hasDescendant) {
+                acceptedEntries.append(entry);
+                entries << entry.path;
+            }
+        }
+    }
+    if (entries.isEmpty() && !(longPaths && longPaths->hasOutput())) {
+        if (longPaths && longPaths->shortened())
+            result.warning = ArchiveError::LongName;
         notifyFinished(observer, result);
         return {result};
     }
 
-    QTemporaryDir staging;
+    std::unique_ptr<QTemporaryDir> staging;
     QString extractionTarget = request.targetPath;
-    if (!request.destinationPrefix.isEmpty()) {
-        staging.setAutoRemove(true);
-        if (!staging.isValid() || !QDir().mkpath(staging.path())) {
+    QString workingArchive;
+    if (longPaths) {
+        result = longPaths->prepare(m_path, m_cancelled, [&](const QString &archive, const QStringList &pairs) {
+            return resultForRun(runWriteCommand({QStringLiteral("rn"), QStringLiteral("-y")},
+                                                pairs, false, {}, archive), ArchiveError::LongName);
+        });
+        if (!result.ok()) {
+            if (result.error == ArchiveError::LongName)
+                observer.onCurrentFile(result.message);
+            notifyFinished(observer, result);
+            return {result};
+        }
+        extractionTarget = longPaths->targetPath();
+        workingArchive = longPaths->archivePath();
+    } else if (!request.destinationPrefix.isEmpty()) {
+        staging.reset(new QTemporaryDir);
+        if (!staging->isValid()) {
             result.error = ArchiveError::PermissionDenied;
             notifyFinished(observer, result);
             return {result};
         }
-        extractionTarget = staging.path();
+        extractionTarget = staging->path();
     }
     QStringList switches{QStringLiteral("x"), QStringLiteral("-idp")};
     switches << QStringLiteral("-o+");
@@ -426,8 +487,25 @@ VoidResult RarBackend::extractFiles(const ExtractRequest &request, BackendObserv
         QStringList chunk = chunks.at(chunkIndex);
         chunk << QDir(extractionTarget).absolutePath() + QLatin1Char('/');
         for (;;) {
-            result = resultForRun(runReadCommand(switches, chunk, reportProgress),
-                                  ArchiveError::Unknown);
+            const RunResult run = runReadCommand(switches, chunk, reportProgress, workingArchive);
+            result = resultForRun(run, ArchiveError::Unknown);
+            if (result.error == ArchiveError::Unknown) {
+                const QStringList lines = (run.errors + QLatin1Char('\n') + run.output).split(QLatin1Char('\n'));
+                for (qsizetype i = 0; i < lines.size(); ++i) {
+                    const auto prefix = QLatin1String("Cannot create ");
+                    const QString line = lines.at(i).trimmed();
+                    if (!line.startsWith(prefix))
+                        continue;
+                    const QString path = line.mid(prefix.size());
+                    if (!hasOversizedComponent(path) && (i + 1 == lines.size()
+                            || lines.at(i + 1).trimmed() != QLatin1String("File name too long")))
+                        continue;
+                    result.error = ArchiveError::LongName;
+                    result.message = archivePathRelativeTo(path, QDir(extractionTarget).absolutePath());
+                    observer.onCurrentFile(result.message);
+                    break;
+                }
+            }
             if (result.error != ArchiveError::PasswordRequired
                     && result.error != ArchiveError::WrongPassword)
                 break;
@@ -445,11 +523,15 @@ VoidResult RarBackend::extractFiles(const ExtractRequest &request, BackendObserv
         if (!result.ok())
             break;
     }
-    if (result.ok() && !request.destinationPrefix.isEmpty()) {
-        mergeStagedEntries(staging.path(), request.targetPath,
+    if (result.ok() && longPaths) {
+        result = longPaths->publish(request.reportOutputPath, m_cancelled);
+    } else if (result.ok() && staging) {
+        mergeStagedEntries(staging->path(), request.targetPath,
                            acceptedEntries, request.destinationPrefix, result);
     }
     if (result.ok()) {
+        if (longPaths && longPaths->shortened())
+            result.warning = ArchiveError::LongName;
         ProgressInfo progress;
         progress.percentage = 100.0;
         observer.onProgress(progress);
@@ -526,8 +608,10 @@ VoidResult RarBackend::addFiles(const AddRequest &request, BackendObserver &obse
             for (const QString &path : relativeSourceExclusions(inputs, excluded))
                 switches << QStringLiteral("-x") + path;
         }
+        WriteProgress progress(observer);
+        const auto reportProgress = [&](const QString &output) { progress.toolOutput(output); };
         result = resultForRun(runWriteCommand(switches, inputs, request.encryptList,
-                                              workingDirectory, writePath),
+                                              workingDirectory, writePath, reportProgress),
                               ArchiveError::Unknown);
         if (request.splitSize <= 0) {
             if (!result.ok()) {

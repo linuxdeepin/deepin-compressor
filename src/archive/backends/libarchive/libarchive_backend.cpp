@@ -4,14 +4,16 @@
 
 #include "libarchive_backend.h"
 
+#include "extraction_names.h"
 #include "path_guard.h"
+#include "extraction_output.h"
+#include "write_progress.h"
 
 #include <QDateTime>
 #include <QDir>
 #include <QDirIterator>
 #include <QFile>
 #include <QFileInfo>
-#include <QSaveFile>
 #include <QSet>
 #include <QTemporaryFile>
 #include <QThread>
@@ -74,6 +76,7 @@ bool applyWriterFormat(::archive *writer, const QString &path, const QString &mi
         return false;
 
     int ret = ARCHIVE_OK;
+    bool externalFilter = false;
     if (lower.endsWith(QLatin1String(".tar.gz")) || lower.endsWith(QLatin1String(".tgz")))
         ret = archive_write_add_filter_gzip(writer);
     else if (lower.endsWith(QLatin1String(".tar.bz2")) || lower.endsWith(QLatin1String(".tbz2")))
@@ -84,11 +87,13 @@ bool applyWriterFormat(::archive *writer, const QString &path, const QString &mi
         ret = archive_write_add_filter_lzma(writer);
     else if (lower.endsWith(QLatin1String(".tar.lz")))
         ret = archive_write_add_filter_lzip(writer);
-    else if (lower.endsWith(QLatin1String(".tar.lzo")) || lower.endsWith(QLatin1String(".tzo")))
+    else if (lower.endsWith(QLatin1String(".tar.lzo")) || lower.endsWith(QLatin1String(".tzo"))) {
         ret = archive_write_add_filter_lzop(writer);
-    else if (lower.endsWith(QLatin1String(".tar.lrz")) || lower.endsWith(QLatin1String(".tar.lrzip")))
+        externalFilter = true;
+    } else if (lower.endsWith(QLatin1String(".tar.lrz")) || lower.endsWith(QLatin1String(".tar.lrzip"))) {
         ret = archive_write_add_filter_lrzip(writer);
-    else if (lower.endsWith(QLatin1String(".tar.lz4")))
+        externalFilter = true;
+    } else if (lower.endsWith(QLatin1String(".tar.lz4")))
         ret = archive_write_add_filter_lz4(writer);
     else if (lower.endsWith(QLatin1String(".tar.zst"))
              || lower.endsWith(QLatin1String(".tar.zstd"))
@@ -98,7 +103,8 @@ bool applyWriterFormat(::archive *writer, const QString &path, const QString &mi
         ret = archive_write_add_filter_compress(writer);
     else
         ret = archive_write_add_filter_none(writer);
-    return ret == ARCHIVE_OK;
+    // Libarchive registers these external filters and returns a warning by design.
+    return ret == ARCHIVE_OK || (externalFilter && ret == ARCHIVE_WARN);
 }
 
 
@@ -114,7 +120,8 @@ bool copyWriteResult(::archive *writer, const QByteArray &buffer, la_ssize_t siz
 }
 
 bool copyExistingEntries(::archive *reader, ::archive *writer, ArchiveResult &result,
-                         const std::atomic_bool &cancelled)
+                         const std::atomic_bool &paused, const std::atomic_bool &cancelled,
+                         WriteProgress &progress)
 {
     ::archive_entry *entry = nullptr;
     while (true) {
@@ -126,7 +133,7 @@ bool copyExistingEntries(::archive *reader, ::archive *writer, ArchiveResult &re
             result.message = QString::fromUtf8(archive_error_string(reader));
             return false;
         }
-        if (cancelled) {
+        if (!waitForWriteResume(paused, cancelled)) {
             result.error = ArchiveError::Cancelled;
             result.cancelled = true;
             return false;
@@ -151,7 +158,7 @@ bool copyExistingEntries(::archive *reader, ::archive *writer, ArchiveResult &re
             }
             if (read == 0)
                 break;
-            if (cancelled) {
+            if (!waitForWriteResume(paused, cancelled)) {
                 result.error = ArchiveError::Cancelled;
                 result.cancelled = true;
                 archive_entry_free(copy);
@@ -161,6 +168,7 @@ bool copyExistingEntries(::archive *reader, ::archive *writer, ArchiveResult &re
                 archive_entry_free(copy);
                 return false;
             }
+            progress.addBytes(read);
         }
         archive_entry_free(copy);
     }
@@ -168,7 +176,8 @@ bool copyExistingEntries(::archive *reader, ::archive *writer, ArchiveResult &re
 
 bool writeLocalFile(::archive *writer, const QString &sourcePath,
                     const QString &archiveName, ArchiveResult &result,
-                    const std::atomic_bool &cancelled)
+                    const std::atomic_bool &paused, const std::atomic_bool &cancelled,
+                    WriteProgress &progress)
 {
     QFile source(sourcePath);
     if (!source.open(QIODevice::ReadOnly)) {
@@ -200,7 +209,7 @@ bool writeLocalFile(::archive *writer, const QString &sourcePath,
         }
         if (read == 0)
             break;
-        if (cancelled) {
+        if (!waitForWriteResume(paused, cancelled)) {
             result.error = ArchiveError::Cancelled;
             result.cancelled = true;
             archive_entry_free(item);
@@ -210,6 +219,7 @@ bool writeLocalFile(::archive *writer, const QString &sourcePath,
             archive_entry_free(item);
             return false;
         }
+        progress.addBytes(read);
     }
     archive_entry_free(item);
     return true;
@@ -253,7 +263,8 @@ bool writeSymlinkEntry(::archive *writer, const QString &sourcePath,
 
 bool writeLocalDirectory(::archive *writer, const QString &sourceDir,
                          const QString &archiveName, ArchiveResult &result,
-                         const std::atomic_bool &cancelled, const QStringList &excludedPaths)
+                         const std::atomic_bool &paused, const std::atomic_bool &cancelled, const QStringList &excludedPaths,
+                         WriteProgress &progress)
 {
     if (!writeDirectoryEntry(writer, archiveName, result))
         return false;
@@ -263,7 +274,7 @@ bool writeLocalDirectory(::archive *writer, const QString &sourceDir,
                     QDir::AllEntries | QDir::Readable | QDir::Hidden | QDir::NoDotAndDotDot,
                     QDirIterator::Subdirectories);
     while (it.hasNext()) {
-        if (cancelled) {
+        if (!waitForWriteResume(paused, cancelled)) {
             result.error = ArchiveError::Cancelled;
             result.cancelled = true;
             return false;
@@ -284,7 +295,7 @@ bool writeLocalDirectory(::archive *writer, const QString &sourceDir,
         } else if (it.fileInfo().isSymLink()) {
             if (!writeSymlinkEntry(writer, it.filePath(), targetName, result))
                 return false;
-        } else if (!writeLocalFile(writer, it.filePath(), targetName, result, cancelled)) {
+        } else if (!writeLocalFile(writer, it.filePath(), targetName, result, paused, cancelled, progress)) {
             return false;
         }
     }
@@ -304,12 +315,12 @@ QString joinArchivePath(const QString &prefix, const QString &name)
 
 bool writeNewEntries(::archive *writer, const QVector<ArchiveEntry> &entries,
                      const QString &destinationPath, ArchiveResult &result,
-                     const std::atomic_bool &cancelled, const QStringList &excludedPaths,
-                     BackendObserver &observer)
+                     const std::atomic_bool &paused, const std::atomic_bool &cancelled, const QStringList &excludedPaths,
+                     BackendObserver &observer, WriteProgress &progress)
 {
     for (const ArchiveEntry &entry : entries) {
         observer.onCurrentFile(entry.path);
-        if (cancelled) {
+        if (!waitForWriteResume(paused, cancelled)) {
             result.error = ArchiveError::Cancelled;
             result.cancelled = true;
             return false;
@@ -323,12 +334,12 @@ bool writeNewEntries(::archive *writer, const QVector<ArchiveEntry> &entries,
         }
         const QString name = joinArchivePath(destinationPath, sourceName);
         if (entry.type == EntryType::Directory) {
-            if (!writeLocalDirectory(writer, entry.path, name, result, cancelled, excludedPaths))
+            if (!writeLocalDirectory(writer, entry.path, name, result, paused, cancelled, excludedPaths, progress))
                 return false;
         } else if (QFileInfo(entry.path).isSymLink()) {
             if (!writeSymlinkEntry(writer, entry.path, name, result))
                 return false;
-        } else if (!writeLocalFile(writer, entry.path, name, result, cancelled)) {
+        } else if (!writeLocalFile(writer, entry.path, name, result, paused, cancelled, progress)) {
             return false;
         }
     }
@@ -386,6 +397,7 @@ VoidResult LibarchiveBackend::open(const OpenRequest &request)
     if (!request.mimeType.isEmpty())
         m_mimeType = request.mimeType;
     m_cancelled = false;
+    m_paused = false;
     return {};
 }
 
@@ -493,7 +505,6 @@ VoidResult LibarchiveBackend::extractFiles(const ExtractRequest &request, Backen
     }
     const bool all = request.allEntries;
 
-    m_paused = false;
     bool overwriteAll = request.overwrite == OverwritePolicy::Overwrite
             || request.overwrite == OverwritePolicy::OverwriteAll;
     bool skipAll = request.overwrite == OverwritePolicy::Skip
@@ -501,6 +512,7 @@ VoidResult LibarchiveBackend::extractFiles(const ExtractRequest &request, Backen
     qint64 done = 0;
     ::archive_entry *entry = nullptr;
     int index = 0;
+    ExtractionNames names;
 
     int headerStatus;
     while ((headerStatus = archive_read_next_header(reader, &entry)) == ARCHIVE_OK
@@ -525,11 +537,20 @@ VoidResult LibarchiveBackend::extractFiles(const ExtractRequest &request, Backen
             continue;
 
         const QString relativePath = archivePathRelativeTo(item.path, request.destinationPrefix);
-        const QString outputPath = safeOutputPath(request.targetPath, relativePath);
+        QString outputPath = safeOutputPath(request.targetPath, relativePath);
         if (outputPath.isEmpty()) {
             result.error = ArchiveError::PermissionDenied;
             result.message = item.path;
             break;
+        }
+        const QString diskName = names.outputName(relativePath, item.type == EntryType::Directory);
+        if (diskName != relativePath) {
+            if (diskName.isEmpty()) {
+                observer.onCurrentFile(item.path);
+                result = {ArchiveError::LongName, item.path};
+                break;
+            }
+            outputPath = safeOutputPath(request.targetPath, diskName);
         }
 
         if (item.type == EntryType::Directory) {
@@ -588,10 +609,9 @@ VoidResult LibarchiveBackend::extractFiles(const ExtractRequest &request, Backen
             continue;
         }
 
-        QSaveFile output(outputPath);
-        if (!output.open(QIODevice::WriteOnly)) {
-            result.error = output.error() == QFileDevice::ResourceError
-                    ? ArchiveError::DiskFull : ArchiveError::PermissionDenied;
+        ExtractionOutput output;
+        if (!output.open(outputPath)) {
+            result.error = output.error();
             result.message = outputPath;
             break;
         }
@@ -614,9 +634,8 @@ VoidResult LibarchiveBackend::extractFiles(const ExtractRequest &request, Backen
             }
             if (read == 0)
                 break;
-            if (output.write(buffer.constData(), read) != read) {
-                result.error = output.error() == QFileDevice::ResourceError
-                        ? ArchiveError::DiskFull : ArchiveError::PermissionDenied;
+            if (!output.write(buffer.constData(), read)) {
+                result.error = output.error();
                 result.message = outputPath;
                 break;
             }
@@ -627,12 +646,17 @@ VoidResult LibarchiveBackend::extractFiles(const ExtractRequest &request, Backen
         }
         if (!result.ok())
             break;
+        if (m_cancelled) {
+            result = {ArchiveError::Cancelled, {}, true};
+            break;
+        }
         if (!output.commit()) {
-            result.error = output.error() == QFileDevice::ResourceError
-                    ? ArchiveError::DiskFull : ArchiveError::PermissionDenied;
+            result.error = output.error();
             result.message = outputPath;
             break;
         }
+        if (request.reportOutputPath)
+            result.outputPath = outputPath;
     }
 
     if (result.ok() && headerStatus != ARCHIVE_EOF) {
@@ -641,6 +665,8 @@ VoidResult LibarchiveBackend::extractFiles(const ExtractRequest &request, Backen
     }
     archive_read_free(reader);
     if (result.ok()) {
+        if (names.shortened())
+            result.warning = ArchiveError::LongName;
         ProgressInfo progress;
         progress.percentage = 100.0;
         progress.processedBytes = done;
@@ -671,7 +697,13 @@ VoidResult LibarchiveBackend::addFiles(const AddRequest &request, BackendObserve
         return {result};
     }
 
-    if (QFileInfo::exists(m_path)) {
+    const QFileInfo destination(m_path);
+    QStringList excludedPaths = request.excludedSourcePaths;
+    excludedPaths << destination.absoluteFilePath() << tempPath;
+    const qint64 previousSize = destination.exists()
+            ? (request.existingBytes > 0 ? request.existingBytes : destination.size()) : 0;
+    WriteProgress progress(observer, previousSize + compressionSourceBytes(request, excludedPaths, m_cancelled));
+    if (destination.exists()) {
         ::archive *reader = archive_read_new();
         archive_read_support_filter_all(reader);
         archive_read_support_format_all(reader);
@@ -685,7 +717,7 @@ VoidResult LibarchiveBackend::addFiles(const AddRequest &request, BackendObserve
             notifyFinished(observer, result);
             return {result};
         }
-        const bool copied = copyExistingEntries(reader, writer, result, m_cancelled);
+        const bool copied = copyExistingEntries(reader, writer, result, m_paused, m_cancelled, progress);
         archive_read_free(reader);
         if (!copied) {
             archive_write_fail(writer);
@@ -696,9 +728,8 @@ VoidResult LibarchiveBackend::addFiles(const AddRequest &request, BackendObserve
         }
     }
 
-    QStringList excludedPaths = request.excludedSourcePaths;
-    excludedPaths << QFileInfo(m_path).absoluteFilePath() << tempPath;
-    if (!writeNewEntries(writer, request.entries, request.destinationPath, result, m_cancelled, excludedPaths, observer)) {
+    if (!writeNewEntries(writer, request.entries, request.destinationPath, result,
+                         m_paused, m_cancelled, excludedPaths, observer, progress)) {
         archive_write_fail(writer);
         archive_write_free(writer);
         QFile::remove(tempPath);
@@ -716,7 +747,7 @@ VoidResult LibarchiveBackend::addFiles(const AddRequest &request, BackendObserve
     }
     archive_write_free(writer);
 
-    if (m_cancelled) {
+    if (!waitForWriteResume(m_paused, m_cancelled)) {
         QFile::remove(tempPath);
         result = {ArchiveError::Cancelled, {}, true};
         notifyFinished(observer, result);

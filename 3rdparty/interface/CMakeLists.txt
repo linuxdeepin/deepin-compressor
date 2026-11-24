@@ -53,7 +53,10 @@ set(output_h_files
     ${PROJECT_SOURCE_DIR}/process/kptydevice.h
     ${PROJECT_SOURCE_DIR}/process/kptyprocess.h
 )
-file(COPY ${output_h_files} DESTINATION ${HFILES_OUTPUT_PATH})
+foreach(header IN LISTS output_h_files)
+    get_filename_component(header_name "${header}" NAME)
+    configure_file("${header}" "${HFILES_OUTPUT_PATH}/${header_name}" COPYONLY)
+endforeach()
 
 #链接库路径
 link_directories(${LIBRARY_OUTPUT_PATH})

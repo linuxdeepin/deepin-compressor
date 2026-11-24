@@ -297,7 +297,8 @@ void OpenJob::doWork()
         }
         options.qSize = m_stEntry.qSize;
 
-        slotFinished(m_pInterface->extractFiles(QList<FileEntry>() << m_stEntry, options));
+        slotFinished(m_pInterface->extractFiles(QList<FileEntry>() << m_stEntry, options,
+                                                &m_extractedPath));
     } else {
         slotFinished(PFT_Error);
     }
@@ -308,25 +309,17 @@ void OpenJob::slotFinished(PluginFinishType eType)
     qCDebug(appLog) << "OpenJob finished with type:" << eType;
     if (PFT_Nomral == eType) {
         qCDebug(appLog) << "Processing file for opening";
-        QString name = m_stEntry.strFileName;
+        QString name = m_extractedPath.isEmpty()
+                ? QDir(m_strTempExtractPath).filePath(m_stEntry.strFileName) : m_extractedPath;
 
-        //对于超长文件打开失败问题处理
-        QString strTempFileName = m_stEntry.strFileName;
-        if (NAME_MAX < QString(strTempFileName).toLocal8Bit().length() && !strTempFileName.endsWith(QDir::separator())) {
-            qCDebug(appLog) << "Handling long filename";
-            QString strTemp = strTempFileName.left(60);
-            name = strTemp + QString("(%1)").arg(1, 3, 10, QChar('0'))+"." + QFileInfo(strTempFileName).completeSuffix();
-        }
-
-        if (name.contains("%")) { // 文件名含有%的时候无法直接双击打开, 创建一个该文件的链接，文件名不含有%，通过打开链接打开源文件
+        QString leaf = QFileInfo(name).fileName();
+        if (leaf.contains(QLatin1Char('%'))) {
             qCDebug(appLog) << "Creating link for file with % in name";
-            name = m_strTempExtractPath + QDir::separator() + name.replace("%", "1"); // 将文件名中的%替换为1;
-            if (!QFile::link(m_stEntry.strFileName, name)) { // 创建链接
+            const QString alias = QFileInfo(name).dir().filePath(leaf.replace(QLatin1Char('%'), QLatin1Char('1')));
+            if (QFile::link(name, alias))
+                name = alias;
+            else
                 qCWarning(appLog) << "Failed to create link for file";
-                return;
-            }
-        } else {
-            name = m_strTempExtractPath + QDir::separator() + name;
         }
 
         // 在线程中执行外部应用打开的命令

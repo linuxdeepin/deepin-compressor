@@ -10,15 +10,6 @@
 namespace dcarchive {
 namespace {
 
-bool ensureRoot(const QString &root, QString &canonicalRoot)
-{
-    const QFileInfo info(root);
-    if (!info.exists() || !info.isDir())
-        return false;
-    canonicalRoot = info.canonicalFilePath();
-    return !canonicalRoot.isEmpty();
-}
-
 bool isWithin(const QString &canonicalRoot, const QString &canonicalPath)
 {
     return canonicalPath == canonicalRoot
@@ -38,8 +29,8 @@ QString safeOutputPath(const QString &targetDir, const QString &entryPath)
 
 bool ensureDirectoryWithinRoot(const QString &root, const QString &directory)
 {
-    QString canonicalRoot;
-    if (!ensureRoot(root, canonicalRoot))
+    const QFileInfo rootInfo(root);
+    if (!rootInfo.isDir())
         return false;
 
     const QDir rootDir(root);
@@ -47,6 +38,10 @@ bool ensureDirectoryWithinRoot(const QString &root, const QString &directory)
     if (relative == QLatin1String("."))
         return true;
     if (relative.startsWith(QLatin1String("../")) || relative == QLatin1String(".."))
+        return false;
+
+    const QString canonicalRoot = rootInfo.canonicalFilePath();
+    if (canonicalRoot.isEmpty())
         return false;
 
     QDir current(root);

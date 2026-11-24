@@ -64,7 +64,8 @@ enum class ErrorCode {
     DECRYPTION_ERROR,               // 解密失败
     WRONG_PASSWORD,                 // 密码错误
     MISSING_PASSWORD,               // 缺少密码
-    AUTHENTICATION_FAILED           // 认证码校验失败
+    AUTHENTICATION_FAILED,          // 认证码校验失败
+    DISK_FULL
 };
 
 // 加密方法枚举

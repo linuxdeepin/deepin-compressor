@@ -93,6 +93,7 @@ file(GLOB_RECURSE res_files RELATIVE ${PROJECT_SOURCE_DIR} *.qrc)
 list(APPEND c_files
     archive/core/archive_registry.cpp
     archive/core/path_guard.cpp
+    archive/core/extraction_output.cpp
     archive/core/staging_merge.cpp
     archive/core/encoding_utils.cpp
     archive/encoding/encoding_detector.cpp

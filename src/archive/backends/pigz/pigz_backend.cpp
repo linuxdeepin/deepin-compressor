@@ -4,6 +4,8 @@
 
 #include "pigz_backend.h"
 #include "path_guard.h"
+#include "process_pause.h"
+#include "write_progress.h"
 
 #include <QDir>
 #include <QFile>
@@ -16,6 +18,7 @@
 #include <cerrno>
 #include <cstdio>
 #include <cstring>
+#include <limits>
 
 namespace dcarchive {
 namespace {
@@ -39,6 +42,8 @@ BackendCapabilities PigzBackend::capabilities() const
 {
     BackendCapabilities caps;
     caps.create = true;
+    caps.pause = true;
+    caps.progress = true;
     caps.cancel = true;
     return caps;
 }
@@ -50,6 +55,7 @@ VoidResult PigzBackend::open(const OpenRequest &request)
     if (!request.mimeType.isEmpty())
         m_mimeType = request.mimeType;
     m_cancelled = false;
+    m_paused = false;
     return {};
 }
 
@@ -90,6 +96,9 @@ VoidResult PigzBackend::addFiles(const AddRequest &request, BackendObserver &obs
 
     QStringList tarArgs{QStringLiteral("-cf"), QStringLiteral("-"),
                         QStringLiteral("--anchored"), QStringLiteral("--no-wildcards")};
+    tarArgs << QStringLiteral("--blocking-factor=20")
+            << QStringLiteral("--checkpoint=64")
+            << QStringLiteral("--checkpoint-action=echo=DC_TAR %u");
     QStringList sources;
     for (const ArchiveEntry &entry : request.entries)
         sources << entry.path;
@@ -103,6 +112,8 @@ VoidResult PigzBackend::addFiles(const AddRequest &request, BackendObserver &obs
         tarArgs << QStringLiteral("-C") << info.absolutePath()
                 << (name.startsWith(QLatin1Char('-')) ? QStringLiteral("./") + name : name);
     }
+
+    WriteProgress progress(observer, compressionSourceBytes(request, excluded, m_cancelled));
 
     const int threads = request.cpuThreads > 0 ? request.cpuThreads : 1;
     const int level = request.compressionLevel >= 0 ? request.compressionLevel : 6;
@@ -132,21 +143,50 @@ VoidResult PigzBackend::addFiles(const AddRequest &request, BackendObserver &obs
         notifyFinished(observer, result);
         return {result};
     }
+    QByteArray tarErrors;
+    QByteArray pending;
+    const QByteArray checkpointPrefix(": DC_TAR ");
+    const auto readCheckpoints = [&]() {
+        pending += tar.readAllStandardError();
+        qsizetype start = 0;
+        for (qsizetype end = pending.indexOf('\n'); end >= 0; end = pending.indexOf('\n', start)) {
+            const QByteArray line = pending.mid(start, end - start);
+            start = end + 1;
+            const qsizetype marker = line.indexOf(checkpointPrefix);
+            if (marker >= 0) {
+                bool valid = false;
+                const qint64 record = line.mid(marker + checkpointPrefix.size()).toLongLong(&valid);
+                if (valid && record > 1 && record <= std::numeric_limits<qint64>::max() / (20 * 512))
+                    progress.setBytes((record - 1) * (20 * 512));
+            } else if (tarErrors.size() < 8192) {
+                tarErrors += line + '\n';
+            }
+        }
+        pending.remove(0, start);
+    };
+    bool tarPaused = false;
+    bool pigzPaused = false;
     while (tar.state() != QProcess::NotRunning || pigz.state() != QProcess::NotRunning) {
         if (m_cancelled) {
             tar.kill();
             pigz.kill();
+        } else {
+            const bool requested = m_paused;
+            syncProcessPause(tar, requested, tarPaused);
+            syncProcessPause(pigz, requested, pigzPaused);
         }
         if (tar.state() != QProcess::NotRunning)
             tar.waitForFinished(50);
         if (pigz.state() != QProcess::NotRunning)
             pigz.waitForFinished(50);
+        readCheckpoints();
     }
+    readCheckpoints();
     if (m_cancelled) {
         result.error = ArchiveError::Cancelled;
         result.cancelled = true;
     } else if (!succeeded(tar) || !succeeded(pigz)) {
-        result.message = QString::fromLocal8Bit(tar.readAllStandardError() + pigz.readAllStandardError()).trimmed();
+        result.message = QString::fromLocal8Bit(tarErrors + pending + pigz.readAllStandardError()).trimmed();
         result.error = result.message.contains(QLatin1String("No space left on device"))
                 ? ArchiveError::DiskFull : ArchiveError::Unknown;
     } else if (destination.exists() && !QFile::setPermissions(temporaryArchive, destination.permissions())) {
@@ -195,10 +235,12 @@ VoidResult PigzBackend::updateArchiveData(const UpdateRequest &)
 
 void PigzBackend::pause()
 {
+    m_paused = true;
 }
 
 void PigzBackend::resume()
 {
+    m_paused = false;
 }
 
 void PigzBackend::cancel()

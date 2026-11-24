@@ -31,7 +31,8 @@ public:
                                   QObject *parent = nullptr);
 
     PluginFinishType list();
-    PluginFinishType extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options);
+    PluginFinishType extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options,
+                                  QString *outputPath = nullptr);
     PluginFinishType addFiles(const QList<FileEntry> &files, const CompressOptions &options);
     PluginFinishType deleteFiles(const QList<FileEntry> &files);
     PluginFinishType renameFiles(const QList<FileEntry> &files);
@@ -74,6 +75,7 @@ private:
     QMutex m_backendMutex;
     bool m_reopen = true;
     bool m_cancelRequested = false;
+    bool m_partialRead = false;
 };
 
 } // namespace dcarchive
