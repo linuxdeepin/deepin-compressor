@@ -186,7 +186,6 @@ void PZIP_HOT FastEncL1::encode(Tokens* dst, const uint8_t* src, size_t len) {
     int32_t s = addBlock(src, len);
     
     if (static_cast<int>(len) < minNonLiteralBlockSize) {
-        dst->n = static_cast<uint16_t>(len);
         return;
     }
     
@@ -336,7 +335,6 @@ void PZIP_HOT FastEncL4::encode(Tokens* dst, const uint8_t* src, size_t len) {
     int32_t s = addBlock(src, len);
     
     if (static_cast<int>(len) < minNonLiteralBlockSize) {
-        dst->n = static_cast<uint16_t>(len);
         return;
     }
     

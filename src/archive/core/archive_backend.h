@@ -30,6 +30,7 @@ public:
     virtual VoidResult deleteFiles(const DeleteRequest &request) = 0;
     virtual VoidResult renameFiles(const RenameRequest &request) = 0;
     virtual VoidResult addComment(const QString &comment) = 0;
+    virtual VoidResult addComment(const QString &comment, BackendObserver &) { return addComment(comment); }
     virtual VoidResult updateArchiveData(const UpdateRequest &request) = 0;
 
     virtual void pause() = 0;

@@ -191,6 +191,7 @@ struct ExtractionOptions {
     bool bBatchExtract;         // 是否批量解压
     bool bTar_7z;               // 是否是tar.7z格式（补充）
     bool bOpen;                 // 是否是用来打开
+    bool keepIncompleteOnCancel = false;
 };
 Q_DECLARE_METATYPE(ExtractionOptions)
 

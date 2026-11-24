@@ -4,9 +4,12 @@
 
 #include "sevenzip_backend.h"
 
+#include "cli_long_extraction.h"
+#include "extraction_output.h"
 #include "path_guard.h"
 #include "argument_chunks.h"
 #include "staging_merge.h"
+#include "write_progress.h"
 
 #include <QDateTime>
 #include <QDir>
@@ -21,14 +24,18 @@
 #include <QTimeZone>
 #include <QVector>
 
+#include <algorithm>
 #include <csignal>
 #include <cerrno>
 #include <cstring>
+#include <memory>
+#include <zlib.h>
 
 namespace dcarchive {
 namespace {
 
-QVector<ArchiveEntry> parseSltOutput(const QString &output, bool includeTimes)
+QVector<ArchiveEntry> parseSltOutput(const QString &output, bool includeTimes,
+                                     QHash<int, quint32> *checksums)
 {
     QVector<ArchiveEntry> entries;
     bool inEntries = false;
@@ -60,6 +67,13 @@ QVector<ArchiveEntry> parseSltOutput(const QString &output, bool includeTimes)
                         ? EntryType::Directory : EntryType::File;
             }
             entry.index = entries.size();
+            if (checksums && entry.type == EntryType::File) {
+                bool crcValid = false;
+                const QString crc = fields.value(QStringLiteral("CRC"));
+                const quint32 value = crc.toUInt(&crcValid, 16);
+                if (crcValid && crc.size() == 8)
+                    checksums->insert(entry.index, value);
+            }
             entries.append(entry);
         }
         fields.clear();
@@ -84,6 +98,12 @@ QVector<ArchiveEntry> parseSltOutput(const QString &output, bool includeTimes)
     }
     flush();
     return entries;
+}
+
+bool hasZipVolumeError(const QString &report)
+{
+    return report.contains(QLatin1String("\nUnexpected end of archive\n"))
+            || report.contains(QLatin1String("\nERROR = Missing volume :"));
 }
 
 } // namespace
@@ -128,7 +148,8 @@ VoidResult SevenZipBackend::open(const OpenRequest &request)
 
 SevenZipBackend::RunResult SevenZipBackend::run7z(const QStringList &arguments,
                                                   const OutputCallback &onOutput,
-                                                  const QString &workingDirectory)
+                                                  const QString &workingDirectory,
+                                                  const DataCallback &onData)
 {
     RunResult result;
     const QString executable = QStandardPaths::findExecutable(QStringLiteral("7z"));
@@ -151,22 +172,31 @@ SevenZipBackend::RunResult SevenZipBackend::run7z(const QStringList &arguments,
     process.closeWriteChannel();
     m_processId = process.processId();
     result.started = true;
-    while (process.state() != QProcess::NotRunning) {
-        if (m_cancelled)
-            process.kill();
-        process.waitForFinished(50);
-        const QString stdoutChunk = QString::fromUtf8(process.readAllStandardOutput());
+    bool readData = true;
+    const auto drain = [&] {
+        const QByteArray bytes = process.readAllStandardOutput();
+        const QString stdoutChunk = onData ? QString() : QString::fromUtf8(bytes);
+        if (onData && readData && !bytes.isEmpty())
+            readData = onData(bytes);
         const QString stderrChunk = QString::fromUtf8(process.readAllStandardError());
         result.output += stdoutChunk;
         result.errors += stderrChunk;
         if (onOutput && (!stdoutChunk.isEmpty() || !stderrChunk.isEmpty()))
             onOutput(stdoutChunk + stderrChunk);
+    };
+    while (process.state() != QProcess::NotRunning) {
+        if (m_cancelled || !readData)
+            process.kill();
+        if (onData)
+            process.waitForReadyRead(50);
+        else
+            process.waitForFinished(50);
+        drain();
     }
     m_processId = 0;
-    if (process.exitStatus() == QProcess::NormalExit)
+    drain();
+    if (readData && process.exitStatus() == QProcess::NormalExit)
         result.exitCode = process.exitCode();
-    result.output += QString::fromUtf8(process.readAllStandardOutput());
-    result.errors += QString::fromUtf8(process.readAllStandardError());
     return result;
 }
 
@@ -174,14 +204,15 @@ SevenZipBackend::RunResult SevenZipBackend::runArchiveCommand(QStringList switch
                                                             const QStringList &entries,
                                                             const OutputCallback &onOutput,
                                                             const QString &workingDirectory,
-                                                            const QString &archivePath)
+                                                            const QString &archivePath,
+                                                            const DataCallback &onData)
 {
     if (!m_password.isEmpty())
         switches << QStringLiteral("-p") + m_password;
     switches << QStringLiteral("-sccUTF-8") << QStringLiteral("--")
              << (archivePath.isEmpty() ? m_path : archivePath);
     switches += entries;
-    return run7z(switches, onOutput, workingDirectory);
+    return run7z(switches, onOutput, workingDirectory, onData);
 }
 
 ArchiveResult SevenZipBackend::resultForRun(const RunResult &run, ArchiveError fallback) const
@@ -211,14 +242,22 @@ EntryResult SevenZipBackend::list()
     return readListing(true);
 }
 
-EntryResult SevenZipBackend::readListing(bool includeTimes)
+EntryResult SevenZipBackend::readListing(bool includeTimes, QHash<int, quint32> *checksums)
 {
     EntryResult result;
     const RunResult run = runArchiveCommand({QStringLiteral("l"), QStringLiteral("-slt")});
     result.result = resultForRun(run, ArchiveError::CorruptArchive);
-    if (!result.result.ok())
+    const bool splitZip = m_path.endsWith(QLatin1String(".zip.001"), Qt::CaseInsensitive)
+            || (m_path.endsWith(QLatin1String(".zip"), Qt::CaseInsensitive)
+                && QFileInfo::exists(m_path.chopped(2) + QStringLiteral("01")));
+    const bool incompleteZip = result.result.error == ArchiveError::CorruptArchive && splitZip
+            && run.output.contains(QLatin1String("\nType = zip\n"))
+            && (hasZipVolumeError(run.output) || hasZipVolumeError(run.errors));
+    if (!result.result.ok() && !incompleteZip)
         return result;
-    result.info.entries = parseSltOutput(run.output, includeTimes);
+    result.info.entries = parseSltOutput(run.output, includeTimes, incompleteZip ? checksums : nullptr);
+    if (incompleteZip && !result.info.entries.isEmpty())
+        result.result.error = ArchiveError::MissingVolume;
     for (const ArchiveEntry &entry : result.info.entries) {
         result.info.totalSize += entry.size;
         result.info.compressedSize += entry.compressedSize;
@@ -231,6 +270,72 @@ VoidResult SevenZipBackend::testArchive()
     return {resultForRun(runArchiveCommand({QStringLiteral("t")}), ArchiveError::CorruptArchive)};
 }
 
+ArchiveResult SevenZipBackend::extractFromIncompleteZip(const ExtractRequest &request,
+                                                       const QVector<ArchiveEntry> &entries,
+                                                       const QHash<int, quint32> &checksums,
+                                                       BackendObserver &observer)
+{
+    ArchiveResult result;
+    bool incomplete = request.allEntries;
+    for (const ArchiveEntry &entry : entries) {
+        if (m_cancelled)
+            return {ArchiveError::Cancelled, {}, true};
+        const QString relativePath = archivePathRelativeTo(entry.path, request.destinationPrefix);
+        if (!checksums.contains(entry.index) || entry.size < 0 || hasOversizedComponent(relativePath)) {
+            incomplete = true;
+            continue;
+        }
+        const QString path = safeOutputPath(request.targetPath, relativePath);
+        if (path.isEmpty() || !ensureParentWithinRoot(request.targetPath, path))
+            return {ArchiveError::PermissionDenied, entry.path};
+
+        // Stream only the selected member. 7z may report a volume error even
+        // for an intact member, so don't publish data until size and CRC match.
+        ExtractionOutput output;
+        if (!output.open(path))
+            return {output.error(), path};
+        observer.onCurrentFile(entry.path);
+        qint64 written = 0;
+        uLong crc = crc32(0, Z_NULL, 0);
+        const auto receive = [&](const QByteArray &bytes) {
+            if (m_cancelled || bytes.size() > entry.size - written)
+                return false;
+            if (!output.write(bytes.constData(), bytes.size()))
+                return false;
+            crc = crc32(crc, reinterpret_cast<const Bytef *>(bytes.constData()), uInt(bytes.size()));
+            written += bytes.size();
+            return true;
+        };
+        const auto run = runArchiveCommand({QStringLiteral("x"), QStringLiteral("-so"),
+                                             QStringLiteral("-bso0"), QStringLiteral("-bsp0"),
+                                             QStringLiteral("-spd"), QStringLiteral("-ssc"),
+                                             QStringLiteral("-i!") + entry.path}, {}, {}, {}, {}, receive);
+        if (m_cancelled)
+            return {ArchiveError::Cancelled, {}, true};
+        if (output.error() != ArchiveError::None)
+            return {output.error(), path};
+        const ArchiveResult extracted = resultForRun(run, ArchiveError::CorruptArchive);
+        if (extracted.error == ArchiveError::PasswordRequired || extracted.error == ArchiveError::WrongPassword
+                || extracted.error == ArchiveError::ToolMissing)
+            return extracted;
+        const bool onlyVolumeError = run.exitCode == 2 && hasZipVolumeError(run.errors)
+                && !run.errors.contains(QLatin1String("\nERROR:"));
+        if ((!extracted.ok() && !onlyVolumeError) || written != entry.size
+                || crc != checksums.value(entry.index)) {
+            incomplete = true;
+            continue;
+        }
+        if (!output.commit())
+            return {output.error(), path};
+        if (request.reportOutputPath)
+            result.outputPath = path;
+    }
+    if (incomplete)
+        return {ArchiveError::MissingVolume, m_path};
+    observer.onProgress({100.0, 0, 0});
+    return result;
+}
+
 VoidResult SevenZipBackend::extractFiles(const ExtractRequest &request, BackendObserver &observer)
 {
     ArchiveResult result;
@@ -241,8 +346,9 @@ VoidResult SevenZipBackend::extractFiles(const ExtractRequest &request, BackendO
     }
 
     EntryResult listed;
+    QHash<int, quint32> checksums;
     for (;;) {
-        listed = readListing(false);
+        listed = readListing(false, request.allowPartial ? &checksums : nullptr);
         if (listed.result.error != ArchiveError::PasswordRequired
                 && listed.result.error != ArchiveError::WrongPassword)
             break;
@@ -258,7 +364,8 @@ VoidResult SevenZipBackend::extractFiles(const ExtractRequest &request, BackendO
             break;
         m_password = password.password;
     }
-    if (!listed.result.ok()) {
+    const bool partial = request.allowPartial && listed.result.error == ArchiveError::MissingVolume;
+    if (!listed.result.ok() && !partial) {
         notifyFinished(observer, listed.result);
         return {listed.result};
     }
@@ -285,6 +392,15 @@ VoidResult SevenZipBackend::extractFiles(const ExtractRequest &request, BackendO
         }
     }
 
+    const bool hasLongPaths = !partial && std::any_of(includedEntries.cbegin(), includedEntries.cend(),
+                                         [](const ArchiveEntry &entry) { return hasOversizedComponent(entry.path); });
+    std::unique_ptr<CliLongExtraction> longPaths;
+    if (hasLongPaths) {
+        longPaths.reset(new CliLongExtraction(request.targetPath, listed.info.entries));
+        if (request.allEntries)
+            std::stable_sort(includedEntries.begin(), includedEntries.end(),
+                             [](const auto &a, const auto &b) { return a.path < b.path; });
+    }
     bool overwriteAll = request.overwrite == OverwritePolicy::Overwrite
             || request.overwrite == OverwritePolicy::OverwriteAll;
     bool skipAll = request.overwrite == OverwritePolicy::Skip
@@ -293,7 +409,19 @@ VoidResult SevenZipBackend::extractFiles(const ExtractRequest &request, BackendO
     QStringList entries;
     for (const ArchiveEntry &entry : includedEntries) {
         const QString relativePath = archivePathRelativeTo(entry.path, request.destinationPrefix);
-        const QString outputPath = safeOutputPath(request.targetPath, relativePath);
+        QString outputPath = safeOutputPath(request.targetPath, relativePath);
+        if (longPaths && !outputPath.isEmpty()) {
+            const QString diskName = longPaths->diskName(relativePath, entry.type == EntryType::Directory);
+            if (diskName != relativePath) {
+                if (diskName.isEmpty()) {
+                    observer.onCurrentFile(entry.path);
+                    result = {ArchiveError::LongName, entry.path};
+                    notifyFinished(observer, result);
+                    return {result};
+                }
+                outputPath = safeOutputPath(request.targetPath, diskName);
+            }
+        }
         if (outputPath.isEmpty()) {
             result.error = ArchiveError::PermissionDenied;
             result.message = entry.path;
@@ -307,11 +435,16 @@ VoidResult SevenZipBackend::extractFiles(const ExtractRequest &request, BackendO
             notifyFinished(observer, result);
             return {result};
         }
-        if (entry.type == EntryType::Directory)
+        if (entry.type == EntryType::Directory) {
+            if (longPaths)
+                longPaths->addDirectory(outputPath);
             continue;
-        if (QFileInfo::exists(outputPath) && skipAll)
+        }
+        const bool exists = QFileInfo::exists(outputPath)
+                || (longPaths && longPaths->hasFileDestination(outputPath));
+        if (exists && skipAll)
             continue;
-        if (QFileInfo::exists(outputPath) && !overwriteAll) {
+        if (exists && !overwriteAll) {
             FileConflictRequest conflict;
             conflict.path = outputPath;
             observer.onFileConflict(conflict);
@@ -333,44 +466,77 @@ VoidResult SevenZipBackend::extractFiles(const ExtractRequest &request, BackendO
                 break;
             }
         }
-        acceptedEntries.append(entry);
-        entries << entry.path;
-    }
-    for (const ArchiveEntry &entry : includedEntries) {
-        if (entry.type != EntryType::Directory)
-            continue;
-        bool hasDescendant = false;
-        for (const ArchiveEntry &candidate : listed.info.entries) {
-            if (candidate.index != entry.index && archivePathWithin(candidate.path, entry.path)) {
-                hasDescendant = true;
-                break;
-            }
-        }
-        if (!hasDescendant) {
+        if (longPaths) {
+            entries << longPaths->addFile(entry, outputPath);
+        } else {
             acceptedEntries.append(entry);
             entries << entry.path;
         }
     }
-    if (entries.isEmpty()) {
+    if (partial) {
+        result = extractFromIncompleteZip(request, acceptedEntries, checksums, observer);
+        notifyFinished(observer, result);
+        return {result};
+    }
+    if (!hasLongPaths) {
+        for (const ArchiveEntry &entry : includedEntries) {
+            if (entry.type != EntryType::Directory)
+                continue;
+            bool hasDescendant = false;
+            for (const ArchiveEntry &candidate : listed.info.entries) {
+                if (candidate.index != entry.index && archivePathWithin(candidate.path, entry.path)) {
+                    hasDescendant = true;
+                    break;
+                }
+            }
+            if (!hasDescendant) {
+                acceptedEntries.append(entry);
+                entries << entry.path;
+            }
+        }
+    }
+    if (entries.isEmpty() && !(longPaths && longPaths->hasOutput())) {
+        if (longPaths && longPaths->shortened())
+            result.warning = ArchiveError::LongName;
         notifyFinished(observer, result);
         return {result};
     }
 
-    QTemporaryDir staging;
+    std::unique_ptr<QTemporaryDir> staging;
     QString extractionTarget = request.targetPath;
-    if (!request.destinationPrefix.isEmpty()) {
-        staging.setAutoRemove(true);
-        if (!staging.isValid() || !QDir().mkpath(staging.path())) {
+    QString workingArchive;
+    if (longPaths) {
+        result = longPaths->prepare(m_path, m_cancelled, [&](const QString &archive, const QStringList &pairs) {
+            return resultForRun(runArchiveCommand({QStringLiteral("rn"), QStringLiteral("-spd"),
+                                                   QStringLiteral("-ssc")}, pairs, {}, {}, archive),
+                                ArchiveError::LongName);
+        });
+        if (!result.ok()) {
+            if (result.error == ArchiveError::LongName)
+                observer.onCurrentFile(result.message);
+            notifyFinished(observer, result);
+            return {result};
+        }
+        extractionTarget = longPaths->targetPath();
+        workingArchive = longPaths->archivePath();
+    } else if (!request.destinationPrefix.isEmpty()) {
+        staging.reset(new QTemporaryDir);
+        if (!staging->isValid()) {
             result.error = ArchiveError::PermissionDenied;
             notifyFinished(observer, result);
             return {result};
         }
-        extractionTarget = staging.path();
+        extractionTarget = staging->path();
     }
     QStringList switches = {QStringLiteral("x"), QStringLiteral("-y"), QStringLiteral("-spd"),
                                   QStringLiteral("-bsp1"),
                                   QStringLiteral("-o") + extractionTarget};
+    if (hasLongPaths)
+        switches << QStringLiteral("-ssc");
 
+    const bool sevenZipFormat = m_mimeType == QLatin1String("application/x-7z-compressed")
+            || m_path.endsWith(QLatin1String(".7z"), Qt::CaseInsensitive)
+            || m_path.endsWith(QLatin1String(".7z.001"), Qt::CaseInsensitive);
     QVector<QStringList> chunks = splitArgumentChunks(entries);
     QTemporaryFile selectionFile;
     if (chunks.size() > 1 && writeArgumentList(selectionFile, entries)) {
@@ -393,10 +559,11 @@ VoidResult SevenZipBackend::extractFiles(const ExtractRequest &request, BackendO
             }
         };
         for (;;) {
-            result = resultForRun(runArchiveCommand(switches, chunks.at(chunkIndex), reportProgress),
+            result = resultForRun(runArchiveCommand(switches, chunks.at(chunkIndex), reportProgress,
+                                                    {}, workingArchive),
                                   ArchiveError::Unknown);
             if (result.error != ArchiveError::PasswordRequired
-                    && result.error != ArchiveError::WrongPassword)
+                    && (result.error != ArchiveError::WrongPassword || sevenZipFormat))
                 break;
 
             PasswordRequest password;
@@ -413,11 +580,18 @@ VoidResult SevenZipBackend::extractFiles(const ExtractRequest &request, BackendO
         if (!result.ok())
             break;
     }
-    if (result.ok() && !request.destinationPrefix.isEmpty()) {
-        mergeStagedEntries(staging.path(), request.targetPath,
+    if (result.ok() && hasLongPaths) {
+        result = longPaths->publish(request.reportOutputPath, m_cancelled);
+    } else if (result.ok() && staging) {
+        mergeStagedEntries(staging->path(), request.targetPath,
                            acceptedEntries, request.destinationPrefix, result);
     }
     if (result.ok()) {
+        if (request.reportOutputPath && !hasLongPaths && acceptedEntries.size() == 1)
+            result.outputPath = safeOutputPath(request.targetPath,
+                    archivePathRelativeTo(acceptedEntries.first().path, request.destinationPrefix));
+        if (longPaths && longPaths->shortened())
+            result.warning = ArchiveError::LongName;
         ProgressInfo progress;
         progress.percentage = 100.0;
         observer.onProgress(progress);
@@ -447,7 +621,8 @@ VoidResult SevenZipBackend::addFiles(const AddRequest &request, BackendObserver 
         notifyFinished(observer, result);
         return {result};
     }
-    QStringList switches = {QStringLiteral("a"), QStringLiteral("-y"), QStringLiteral("-spd")};
+    QStringList switches = {QStringLiteral("a"), QStringLiteral("-y"), QStringLiteral("-spd"),
+                            QStringLiteral("-bsp2")};
     if (zip) {
         switches << QStringLiteral("-tzip");
         if (!request.password.isEmpty())
@@ -562,7 +737,10 @@ VoidResult SevenZipBackend::addFiles(const AddRequest &request, BackendObserver 
         for (const QString &path : relativeSourceExclusions(entries, excluded))
             switches << QStringLiteral("-x!") + path;
     }
-    result = resultForRun(runArchiveCommand(switches, entries, {}, workingDirectory, writePath),
+    WriteProgress progress(observer);
+    const auto reportProgress = [&](const QString &output) { progress.toolOutput(output); };
+    result = resultForRun(runArchiveCommand(switches, entries, reportProgress,
+                                           workingDirectory, writePath),
                           ArchiveError::Unknown);
     if (request.splitSize <= 0) {
         if (!result.ok()) {

@@ -10,6 +10,8 @@
 
 #include <QStringList>
 
+#include <atomic>
+
 namespace dcarchive {
 
 // 自有单文件压缩后端：gz / bz2 / xz / lzma。
@@ -49,8 +51,8 @@ private:
     QString m_mimeType;
     SingleFileCodec m_codec = SingleFileCodec::Gzip;
     QStringList m_suffixes;
-    bool m_paused = false;
-    bool m_cancelled = false;
+    std::atomic_bool m_paused{false};
+    std::atomic_bool m_cancelled{false};
 };
 
 } // namespace dcarchive

@@ -3,6 +3,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "clipzip_backend.h"
+#include "process_pause.h"
+#include "write_progress.h"
+#include "../../../pzip/include/pzip/cli_status.h"
 
 #include <QCoreApplication>
 #include <QDir>
@@ -25,9 +28,11 @@ ClipzipBackend::~ClipzipBackend() = default;
 BackendCapabilities ClipzipBackend::capabilities() const
 {
     BackendCapabilities caps;
+    caps.progress = true;
     caps.create = true;
     caps.password = true;
     caps.cancel = true;
+    caps.pause = true;
     return caps;
 }
 
@@ -38,6 +43,7 @@ VoidResult ClipzipBackend::open(const OpenRequest &request)
     if (!request.mimeType.isEmpty())
         m_mimeType = request.mimeType;
     m_cancelled = false;
+    m_paused = false;
     return {};
 }
 
@@ -46,8 +52,13 @@ QString ClipzipBackend::resolvePzip() const
 #ifdef DC_BUILT_PZIP
     return QStringLiteral(DC_BUILT_PZIP);
 #else
+    const QString bundled = QCoreApplication::applicationDirPath()
+            + QStringLiteral("/../lib/deepin-compressor/pzip");
+    if (QFileInfo(bundled).isExecutable())
+        return bundled;
+
     const QString installed = QStringLiteral("/usr/lib/deepin-compressor/pzip");
-    if (QFileInfo::exists(installed))
+    if (QFileInfo(installed).isExecutable())
         return installed;
 
     const QString fromPath = QStandardPaths::findExecutable(QStringLiteral("pzip"));
@@ -102,7 +113,7 @@ VoidResult ClipzipBackend::addFiles(const AddRequest &request, BackendObserver &
         return {result};
     }
 
-    QStringList arguments;
+    QStringList arguments{QStringLiteral("--ui-events"), QStringLiteral("-q")};
     if (request.cpuThreads > 1)
         arguments << QStringLiteral("-c") << QString::number(request.cpuThreads);
     arguments << QStringLiteral("-l")
@@ -133,6 +144,29 @@ VoidResult ClipzipBackend::addFiles(const AddRequest &request, BackendObserver &
     for (const ArchiveEntry &entry : request.entries)
         arguments << entry.path;
 
+    WriteProgress progress(observer, compressionSourceBytes(request, request.excludedSourcePaths, m_cancelled));
+    QByteArray pending;
+    QByteArray diagnostics;
+    const auto consumeOutput = [&](const QByteArray &chunk) {
+        pending += chunk;
+        qsizetype start = 0;
+        for (qsizetype end = pending.indexOf('\n'); end >= 0; end = pending.indexOf('\n', start)) {
+            const QByteArray line = pending.mid(start, end - start);
+            start = end + 1;
+            if (line.startsWith("[PZIP_UI] entry ")) {
+                observer.onCurrentFile(QString::fromUtf8(line.mid(16)));
+            } else if (line.startsWith("[PZIP_UI] inbytes ")) {
+                bool valid = false;
+                const qint64 bytes = line.mid(18).toLongLong(&valid);
+                if (valid && bytes >= 0)
+                    progress.setBytes(bytes);
+            } else if (diagnostics.size() < 8192) {
+                diagnostics += line + '\n';
+            }
+        }
+        pending.remove(0, start);
+    };
+
     QProcess process;
     QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
     environment.insert(QStringLiteral("LC_ALL"), QStringLiteral("C"));
@@ -145,18 +179,24 @@ VoidResult ClipzipBackend::addFiles(const AddRequest &request, BackendObserver &
         notifyFinished(observer, result);
         return {result};
     }
+    bool paused = false;
     while (process.state() != QProcess::NotRunning) {
         if (m_cancelled)
             process.kill();
+        else
+            syncProcessPause(process, m_paused, paused);
         process.waitForFinished(100);
+        consumeOutput(process.readAll());
     }
+    consumeOutput(process.readAll() + '\n');
 
     if (m_cancelled) {
         result.error = ArchiveError::Cancelled;
         result.cancelled = true;
     } else if (process.exitStatus() != QProcess::NormalExit || process.exitCode() != 0) {
-        result.error = ArchiveError::Unknown;
-        result.message = QString::fromLocal8Bit(process.readAll());
+        result.error = process.exitStatus() == QProcess::NormalExit
+                && process.exitCode() == pzip::diskFullExitStatus ? ArchiveError::DiskFull : ArchiveError::Unknown;
+        result.message = QString::fromLocal8Bit(diagnostics).trimmed();
     }
     notifyFinished(observer, result);
     return {result};
@@ -194,10 +234,12 @@ VoidResult ClipzipBackend::updateArchiveData(const UpdateRequest &)
 
 void ClipzipBackend::pause()
 {
+    m_paused = true;
 }
 
 void ClipzipBackend::resume()
 {
+    m_paused = false;
 }
 
 void ClipzipBackend::cancel()

@@ -113,12 +113,14 @@ private:
     Error writeDataDescriptor(const ZipFileHeader& header);
     Error writeCentralDirectory();
     Error writeEndOfCentralDirectory(uint64_t centralDirOffset, uint64_t centralDirSize);
+    void writeBytes(const char* data, size_t size);
 
     // DOS 时间转换
     static void timeToDos(time_t t, uint16_t& date, uint16_t& time);
 
     fs::path path_;
     std::ofstream file_;
+    int writeError_ = 0;
     std::vector<CentralDirEntry> centralDir_;
     std::string comment_;
     uint64_t currentOffset_ = 0;

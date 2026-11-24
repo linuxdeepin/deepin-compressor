@@ -32,6 +32,7 @@ public:
     VoidResult deleteFiles(const DeleteRequest &request) override;
     VoidResult renameFiles(const RenameRequest &request) override;
     VoidResult addComment(const QString &comment) override;
+    VoidResult addComment(const QString &comment, BackendObserver &observer) override;
     VoidResult updateArchiveData(const UpdateRequest &request) override;
 
     void pause() override;

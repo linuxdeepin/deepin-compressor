@@ -52,11 +52,13 @@ private:
                       const OutputCallback &onOutput = {},
                       const QString &workingDirectory = {});
     RunResult runReadCommand(QStringList options, const QStringList &entries = {},
-                             const OutputCallback &onOutput = {});
+                             const OutputCallback &onOutput = {},
+                             const QString &archivePath = {});
     RunResult runWriteCommand(QStringList options, const QStringList &entries = {},
                               bool encryptHeaders = false,
                               const QString &workingDirectory = {},
-                              const QString &archivePath = {});
+                              const QString &archivePath = {},
+                              const OutputCallback &onOutput = {});
     ArchiveResult resultForRun(const RunResult &run, ArchiveError fallback) const;
     void notifyFinished(BackendObserver &observer, const ArchiveResult &result);
 
