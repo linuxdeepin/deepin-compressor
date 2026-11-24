@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "fakes.h"
-#include "legacy_pigz_adapter.h"
 #include "libarchive_backend.h"
 #include "pigz_backend.h"
 
@@ -27,7 +26,6 @@ QString testSourceDir()
 }
 
 enum class BackendKind {
-    Legacy,
     New,
 };
 
@@ -35,9 +33,7 @@ std::unique_ptr<dcarchive::ArchiveBackend> createBackend(BackendKind kind,
                                                          const QString &path,
                                                          const QString &mime)
 {
-    if (kind == BackendKind::Legacy)
-        return std::unique_ptr<dcarchive::ArchiveBackend>(
-                new dcarchive::LegacyPigzAdapter(path, mime));
+    Q_UNUSED(kind);
     return std::unique_ptr<dcarchive::ArchiveBackend>(
             new dcarchive::PigzBackend(path, mime));
 }
@@ -184,9 +180,10 @@ TEST(PigzWriteTest, TemporaryArchiveIsNotPackedWhenOutputIsInsideSource)
 
 INSTANTIATE_TEST_SUITE_P(PigzBackends,
                          PigzContractTest,
-                         ::testing::Values(BackendKind::Legacy, BackendKind::New),
+                         ::testing::Values(BackendKind::New),
                          [](const ::testing::TestParamInfo<BackendKind> &info) {
-                             return info.param == BackendKind::Legacy ? "legacy" : "new";
+                             Q_UNUSED(info);
+                             return std::string("new");
                          });
 
 } // namespace

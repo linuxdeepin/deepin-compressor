@@ -142,6 +142,7 @@ list(APPEND c_files
     ${SRCRELATIVEPATH}/archive/core/extraction_output.cpp
     ${SRCRELATIVEPATH}/archive/core/staging_merge.cpp
     ${SRCRELATIVEPATH}/archive/core/encoding_utils.cpp
+    ${SRCRELATIVEPATH}/archive/encoding/encoding_detector.cpp
     ${SRCRELATIVEPATH}/archive/backends/singlefile/singlefile_backend.cpp
     ${SRCRELATIVEPATH}/archive/backends/singlefile/stream_decoder.cpp
     ${SRCRELATIVEPATH}/archive/backends/libzip/libzip_backend.cpp
@@ -165,7 +166,6 @@ target_link_libraries(${PROJECT_NAME_TEST}
     ${LINK_LIBS}
     ${GOBJECT_LIBRARIES}
     ${GIO_LIBRARIES}
-    compressor-interface
     ${GTEST_LIBRARIES}
     ${GTEST_MAIN_LIBRARIES}
     pthread

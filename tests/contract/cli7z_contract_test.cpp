@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "fakes.h"
-#include "legacy_cli7z_adapter.h"
 #include "sevenzip_backend.h"
 
 #include <gtest/gtest.h>
@@ -30,18 +29,14 @@ bool have7z()
 }
 
 enum class BackendKind {
-    Legacy,
     New,
 };
 
 std::unique_ptr<dcarchive::ArchiveBackend> createBackend(BackendKind kind,
                                                          const QString &archive,
-                                                         const QString &mime,
-                                                         const QString &metaData)
+                                                         const QString &mime)
 {
-    if (kind == BackendKind::Legacy)
-        return std::unique_ptr<dcarchive::ArchiveBackend>(
-                new dcarchive::LegacyCli7zAdapter(archive, mime, metaData));
+    Q_UNUSED(kind);
     return std::unique_ptr<dcarchive::ArchiveBackend>(
             new dcarchive::SevenZipBackend(archive, mime));
 }
@@ -69,7 +64,7 @@ protected:
         m_sourcePath = testSourceDir() + QStringLiteral("/test_sources/tar/compress/test.txt");
         ASSERT_TRUE(create7zArchive(m_archivePath, m_sourcePath));
         m_backend = createBackend(GetParam(), m_archivePath,
-                                  QStringLiteral("application/x-7z-compressed"), metaDataPath());
+                                  QStringLiteral("application/x-7z-compressed"));
         dcarchive::OpenRequest request;
         request.path = m_archivePath;
         request.mimeType = QStringLiteral("application/x-7z-compressed");
@@ -79,12 +74,6 @@ protected:
     void TearDown() override
     {
         m_backend.reset();
-    }
-
-    static QString metaDataPath()
-    {
-        return QStringLiteral(CONTRACT_TEST_SOURCE_DIR)
-                + QStringLiteral("/../../3rdparty/cli7zplugin/kerfuffle_cli7z.json");
     }
 
     QString targetPath() const { return m_workspace.path(); }
@@ -376,7 +365,7 @@ TEST_P(Cli7zContractTest, AddCreatesArchive)
     const QString archivePath = QDir(m_workspace.path()).filePath(QStringLiteral("created.7z"));
     std::unique_ptr<dcarchive::ArchiveBackend> created =
             createBackend(GetParam(), archivePath,
-                          QStringLiteral("application/x-7z-compressed"), metaDataPath());
+                          QStringLiteral("application/x-7z-compressed"));
     dcarchive::OpenRequest openRequest;
     openRequest.path = archivePath;
     openRequest.mimeType = QStringLiteral("application/x-7z-compressed");
@@ -518,9 +507,10 @@ TEST(SevenZipOptionsTest, EncryptedHeaderAndSplitVolumeRoundTrip)
 
 INSTANTIATE_TEST_SUITE_P(Cli7zBackends,
                          Cli7zContractTest,
-                         ::testing::Values(BackendKind::Legacy, BackendKind::New),
+                         ::testing::Values(BackendKind::New),
                          [](const ::testing::TestParamInfo<BackendKind> &info) {
-                             return info.param == BackendKind::Legacy ? "legacy" : "new";
+                             Q_UNUSED(info);
+                             return std::string("new");
                          });
 
 } // namespace

@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "fakes.h"
-#include "legacy_libzip_adapter.h"
 #include "libarchive_backend.h"
 #include "libzip_backend.h"
 
@@ -33,7 +32,6 @@ QString zipSource()
 }
 
 enum class BackendKind {
-    Legacy,
     New,
 };
 
@@ -41,8 +39,7 @@ std::unique_ptr<dcarchive::ArchiveBackend> createBackend(BackendKind kind,
                                                        const QString &path,
                                                        const QString &mime)
 {
-    if (kind == BackendKind::Legacy)
-        return std::unique_ptr<dcarchive::ArchiveBackend>(new dcarchive::LegacyLibzipAdapter(path, mime));
+    Q_UNUSED(kind);
     return std::unique_ptr<dcarchive::ArchiveBackend>(new dcarchive::LibzipBackend(path, mime));
 }
 
@@ -679,9 +676,10 @@ INSTANTIATE_TEST_SUITE_P(ZipAndTarGz, ExtractionOutputTest, ::testing::Bool());
 
 INSTANTIATE_TEST_SUITE_P(LibzipBackends,
                          LibzipContractTest,
-                         ::testing::Values(BackendKind::Legacy, BackendKind::New),
+                         ::testing::Values(BackendKind::New),
                          [](const ::testing::TestParamInfo<BackendKind> &info) {
-                             return info.param == BackendKind::Legacy ? "legacy" : "new";
+                             Q_UNUSED(info);
+                             return std::string("new");
                          });
 
 } // namespace

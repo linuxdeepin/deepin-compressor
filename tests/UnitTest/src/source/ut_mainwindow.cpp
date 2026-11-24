@@ -1820,8 +1820,6 @@ TEST_F(UT_MainWindow, test_handleArguments_Append_001)
     Stub stub;
     CustomDialogStub::stub_TipDialog_showDialog(stub, 0);
     CommonStub::stub_QThread_start(stub);
-    PluginManagerStub::stub_PluginManager_supportedWriteMimeTypes(stub);
-
     EXPECT_EQ(m_tester->handleArguments_Append(QStringList() << "1.zip" << "dragdropadd"), false);
 }
 
@@ -1830,7 +1828,6 @@ TEST_F(UT_MainWindow, test_handleArguments_Append_002)
     Stub stub;
     CustomDialogStub::stub_TipDialog_showDialog(stub, 0);
     CommonStub::stub_QThread_start(stub);
-    PluginManagerStub::stub_PluginManager_supportedWriteMimeTypes(stub);
     EXPECT_EQ(m_tester->handleArguments_Append(QStringList() << "1.zip" << "1.zip" << "dragdropadd"), false);
     EXPECT_EQ(m_tester->m_stUnCompressParameter.bCommentModifiable, false);
     EXPECT_EQ(m_tester->m_stUnCompressParameter.bMultiplePassword, false);
@@ -1841,7 +1838,6 @@ TEST_F(UT_MainWindow, test_handleArguments_Append_003)
     Stub stub;
     CustomDialogStub::stub_TipDialog_showDialog(stub, 0);
     CommonStub::stub_QThread_start(stub);
-    PluginManagerStub::stub_PluginManager_supportedWriteMimeTypes(stub);
     QFileInfoStub::stub_QFileInfo_isWritable(stub, false);
     EXPECT_EQ(m_tester->handleArguments_Append(QStringList() << "1.zip" << "1.zip" << "dragdropadd"), false);
     EXPECT_EQ(m_tester->m_stUnCompressParameter.bCommentModifiable, false);
@@ -1853,7 +1849,6 @@ TEST_F(UT_MainWindow, test_handleArguments_Append_004)
     Stub stub;
     CustomDialogStub::stub_TipDialog_showDialog(stub, 0);
     CommonStub::stub_QThread_start(stub);
-    PluginManagerStub::stub_PluginManager_supportedWriteMimeTypes(stub);
     QFileInfoStub::stub_QFileInfo_isWritable(stub, true);
     EXPECT_EQ(m_tester->handleArguments_Append(QStringList() << "1.zip" << "1.txt" << "dragdropadd"), true);
     EXPECT_EQ(m_tester->m_stUnCompressParameter.bCommentModifiable, true);
