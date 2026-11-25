@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 
 <!--
-SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
@@ -15,8 +15,9 @@ SPDX-License-Identifier: GPL-3.0-or-later
 	<mime-type type="application/zip">
 		<comment>Zip split archive</comment>
 		<generic-icon name="deepin-compressor"/>
-		<glob pattern="*.zip.[0-9][0-9][0-9]" weight="80"/>
-		<glob pattern="*.z[0-9][0-9]" weight="80"/>
+		<!-- Glob patterns end with '*' so that QMimeType::preferredSuffix() falls back to "zip" instead of deriving a suffix like "zip.001" or "z01". -->
+		<glob pattern="*.zip.*" weight="80"/>
+		<glob pattern="*.z[0-9][0-9]*" weight="80"/>
 	</mime-type>
 </mime-info>
 
